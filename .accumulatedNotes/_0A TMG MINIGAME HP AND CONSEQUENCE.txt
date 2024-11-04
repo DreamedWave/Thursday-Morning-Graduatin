@@ -1,0 +1,30 @@
+Player Info:
+- Starts with 100 Health
+- Health Indicator similar to that of upturned (except maybe it's a bar that goes in and out of screen)
+- Cards provide you with buffs or nerfs to HP (either adding/subtracting to - or providing resistance to health)
+- Dying will reset the map to a new seed
+
+Failing Platforming:
+- Subtracts 5 Health
+- Brings Player back to the start of the room
+- If the player loses all their health, they trigger a game over and have to start back with a regenerated map.
+
+Triggering Max Clatter:
+- Player will have to rush back at the end of the level because the last clatter they pressed would've triggered a premature escape sequence.
+- Upon a successful return, the players will "clutch" the level, and get to keep the same seed and try again. They would receive some clutch points the first time they do so.
+- The player will have 3 strikes to do so. Each consecutive strike lowering the timer even more until the third one instaspawns the time's up enemy beside you.
+- The default clatter you start with will also not be completely reset - which means it will take less clatter to start the sequence again.
+
+Small Enemies:
+- Can deal 1-10 Damage
+- Can influence player's movement, apply status effects or generate clatter
+
+Medium Enemies:
+- Can deal 10-50 Damage
+- The "Baboon Hawks (from Lethal Company)" of TMG's Minigames
+
+Large Enemies:
+- Can deal 50-75 Damage
+- May or may not stun the player - im not sure about this yet
+- The "Eyeless Dogs (from Lethal Company)" and/or "Fat Pajama Man (from The Upturned)" of TMG's Minigames
+- Can consist of strong mobs with big weaknesses - must be not too complicated to avoid.

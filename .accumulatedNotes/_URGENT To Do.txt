@@ -1,0 +1,40 @@
+To Do:
+
+!!!URGENT!!!
+- Alpha of arrows not following parent alpha
+- Increase Gun Volume in pico parts
+- Restore old camshake it looks cooler lol
+- Fix Lag compensation not turning off (turtle not fading out)
+- Game doing that weird doubletime speed thingy again
+- Try out removing soundgroups (or check soundgroup assigning and stop(); code lol)
+- Make it so that Miscs reset to 1 when selfsert dies in sprouting
+
++ Reexport everything you mixed (weeks 1-3) to unleveled
++ Mix everything in mastered
++ Render
++ add in game
+- chart
+! Enable all miscs in chart
+! Increase Sudden Confrontation Inst Volume by 1 or so DB (that or reduce voc colume by negative that)
+! Increase Sprouting Irritation Inst and voc volume in drop (actually increase inst in general)
+! Make Striking Tribulation vocals more snappy like Sprouting (increase highs in voc) - Reexport Striking (some instruments were lost due to the sidechaining - Reduce volume of those fuckAss kicks lol)
+! Add a tapestop effect to 2nd song in 4th part :3
+
+- make mockups of stages in Minecraft
+- draw stages
+
+- fix save system (different saves for story progress/scores, and settings
+- fix file system (proposal: AmieeGames/ThursdayMorningGraduatin/[options.sol, saves/[save1.sol, save2.sol, save3.sol, etc]]
+
+- animate characters
+
+- plan minigames
+- draw minigame stages/tiles
+- animate minigames
+
+- optimize game
+
+- make main menus better
+  - Import newLogo
+  - story menu
+  - resultsscreen
