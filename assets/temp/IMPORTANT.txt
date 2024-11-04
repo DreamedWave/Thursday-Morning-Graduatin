@@ -1,0 +1,14 @@
+
+
+
+Hello, if you are reading this please don't put any files in this folder, especially the important ones, just DON'T at all costs unless you want those files to have a risk of being DELETED.
+
+This folder automatically clears itself after you exit the results screen, the charting state (only clears stuff within '/_autosavedCharts'), or the game itself. I coded in some stuff to make sure that it only deletes autosaves and replay data but we can never be too sure!
+
+So go have fun, play the game, and snoop around the files! Just DON'T put your VERY IMPORTANT research within this folder, or else it has a chance of being deleted if my code is wrong, like gonezo. kapoof. zilch.
+
+YOU HAVE BEEN WARNED, OK BYEEEEEE~!
+
+
+
+-DreamedWave

@@ -1,0 +1,15 @@
+idle 0 0
+idleAfterSing 0 0
+singUP -4 0
+singRIGHT -12 1
+singLEFT 0 1
+singDOWN 3 2
+singUPmiss -4 0
+singRIGHTmiss -12 1
+singLEFTmiss 0 1
+singDOWNmiss 3 2
+awkward 0 0
+firstDeath -20 3
+deathLoop -20 3
+deathConfirm -20 3
+scared 0 0

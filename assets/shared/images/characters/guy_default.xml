@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="guy_default.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="GUY Dead Loop0000" x="0" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0001" x="439" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0002" x="439" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0003" x="878" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0004" x="878" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0005" x="1317" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0006" x="1317" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0007" x="1756" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0008" x="1756" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0009" x="2195" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0010" x="2195" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0011" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0012" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0013" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0014" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0015" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead Loop0016" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0000" x="439" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0001" x="439" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0002" x="878" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0003" x="1317" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0004" x="1756" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0005" x="2195" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0006" x="0" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0007" x="439" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0008" x="878" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0009" x="1317" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0010" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0011" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0012" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0013" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0014" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0015" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0016" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0017" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0018" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0019" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0020" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0021" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0022" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0023" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0024" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0025" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0026" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0027" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0028" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0029" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0030" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0031" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY Dead confirm0032" x="1756" y="870" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0000" x="2634" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0001" x="2634" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0002" x="3073" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0003" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0004" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0005" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0006" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0007" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0008" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0009" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0010" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0011" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0012" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0013" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0014" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0015" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY HEY!!0016" x="3512" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0000" x="4829" y="0" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0001" x="2634" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0002" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0003" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0004" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0005" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0006" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0007" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0008" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY Awkward0009" x="3073" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0000" x="3512" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0001" x="3512" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0002" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0003" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0004" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0005" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0006" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0007" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0008" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0009" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN0010" x="3951" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0000" x="4390" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0001" x="4390" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0002" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0003" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0004" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0005" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0006" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0007" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0008" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0009" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0010" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0011" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0012" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0013" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0014" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0015" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0016" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0017" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0018" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0019" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0020" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0021" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0022" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0023" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0024" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0025" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0026" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0027" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0028" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0029" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0030" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE DOWN MISS0031" x="4829" y="435" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0000" x="4390" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0001" x="4390" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0002" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0003" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0004" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0005" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0006" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0007" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0008" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0009" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT0010" x="4829" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0000" x="2635" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0001" x="2635" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0002" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0003" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0004" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0005" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0006" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0007" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0008" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0009" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0010" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0011" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0012" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0013" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0014" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0015" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0016" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0017" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0018" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0019" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0020" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0021" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0022" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0023" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0024" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0025" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0026" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0027" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0028" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0029" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0030" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE LEFT MISS0031" x="3073" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0000" x="2634" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0001" x="2634" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0002" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0003" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0004" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0005" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0006" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0007" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0008" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0009" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT0010" x="3073" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0000" x="3512" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0001" x="3512" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0002" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0003" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0004" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0005" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0006" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0007" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0008" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0009" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0010" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0011" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0012" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0013" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0014" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0015" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0016" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0017" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0018" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0019" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0020" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0021" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0022" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0023" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0024" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0025" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0026" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0027" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0028" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0029" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0030" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE RIGHT MISS0031" x="3951" y="870" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0000" x="3512" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0001" x="3512" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0002" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0003" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0004" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0005" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0006" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0007" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0008" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0009" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP0010" x="3951" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0000" x="4390" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0001" x="4390" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0002" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0003" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0004" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0005" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0006" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0007" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0008" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0009" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0010" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0011" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0012" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0013" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0014" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0015" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0016" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0017" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0018" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0019" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0020" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0021" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0022" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0023" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0024" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0025" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0026" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0027" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0028" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0029" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0030" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY NOTE UP MISS0031" x="4829" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0000" x="0" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0001" x="0" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0002" x="439" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0003" x="878" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0004" x="1317" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0005" x="1756" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0006" x="2195" y="1305" width="439" height="435"/>
+	<SubTexture name="GUY dies0007" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0008" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0009" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0010" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0011" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0012" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0013" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0014" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0015" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0016" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0017" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0018" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0019" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0020" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0021" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0022" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0023" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0024" x="2195" y="870" width="439" height="435"/>
+	<SubTexture name="GUY dies0025" x="0" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0026" x="0" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0027" x="439" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0028" x="878" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0029" x="1317" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0030" x="1756" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0031" x="2195" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0032" x="2195" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY dies0033" x="0" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0034" x="0" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0035" x="0" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0036" x="439" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0037" x="439" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0038" x="439" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY dies0039" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0040" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0041" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0042" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0043" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0044" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0045" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0046" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0047" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0048" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0049" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0050" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0051" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0052" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0053" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0054" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0055" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0056" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0057" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0058" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY dies0059" x="0" y="435" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0000" x="2634" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0001" x="3073" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0002" x="3512" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0003" x="3951" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0004" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0005" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0006" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0007" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle dance0008" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle hold0000" x="2634" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle hold0001" x="3073" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle hold0002" x="3512" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle hold0003" x="3951" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle hold0004" x="4390" y="0" width="439" height="435"/>
+	<SubTexture name="GUY idle shaking0000" x="878" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY idle shaking0001" x="1317" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY idle shaking0002" x="1756" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY idle shaking0003" x="2195" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY shaking hold0000" x="2195" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY shaking hold0001" x="2195" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0000" x="3951" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0001" x="3951" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0002" x="4390" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0003" x="4829" y="1740" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0004" x="2634" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0005" x="3073" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0006" x="3512" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0007" x="3951" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0008" x="4390" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0009" x="4390" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0010" x="4390" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0011" x="4390" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY gotShot0012" x="4390" y="2175" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0000" x="0" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0001" x="439" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0002" x="878" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0003" x="878" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0004" x="1317" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0005" x="1756" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0006" x="2195" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0007" x="2634" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0008" x="3073" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0009" x="3512" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge A0010" x="3951" y="2610" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0000" x="0" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0001" x="439" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0002" x="878" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0003" x="878" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0004" x="1317" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0005" x="1756" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0006" x="2195" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0007" x="2634" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0008" x="3073" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0009" x="3512" y="3045" width="439" height="435"/>
+	<SubTexture name="GUY Dodge B0010" x="3951" y="3045" width="439" height="435"/>
+</TextureAtlas>

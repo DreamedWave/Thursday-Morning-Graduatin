@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="portalWind.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="portalWindBLOW0000" x="0" y="0" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0001" x="1280" y="0" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0002" x="2560" y="0" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0003" x="3840" y="0" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0004" x="0" y="720" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0005" x="1280" y="720" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0006" x="2560" y="720" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0007" x="3840" y="720" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0008" x="0" y="1440" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0009" x="1280" y="1440" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0010" x="2560" y="1440" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0011" x="3840" y="1440" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0012" x="0" y="2160" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0013" x="1280" y="2160" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0014" x="2560" y="2160" width="1280" height="720"/>
+	<SubTexture name="portalWindBLOW0015" x="3840" y="2160" width="1280" height="720"/>
+</TextureAtlas>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mineNOTE_assets.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+
+	<SubTexture name="blue alone0000" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0001" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0002" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0003" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue camouflage0000" x="0" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue hold0000" x="980" y="306" width="50" height="44"/>
+	<SubTexture name="blue tail0000"  x="980" y="10" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="green alone0000" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0001" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0002" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0003" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green camouflage0000" x="720" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green hold0000" x="980" y="360" width="50" height="44"/>
+	<SubTexture name="green tail0000" x="980" y="84" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="purple alone0000" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0001" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0002" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0003" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple camouflage0000" x="240" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple hold0000" x="980" y="414" width="50" height="44"/>
+	<SubTexture name="purple tail0000" x="980" y="158" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="red alone0000" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0001" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0002" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0003" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red camouflage0000" x="480" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red hold0000" x="980" y="468" width="50" height="44"/>
+	<SubTexture name="red tail0000" x="980" y="232" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+</TextureAtlas>

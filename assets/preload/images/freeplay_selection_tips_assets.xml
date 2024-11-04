@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="freeplay_selection_tips_assets.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="blue none0000" x="0" y="0" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+	<SubTexture name="blue tip0000" x="0" y="400" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+	<SubTexture name="blue tip0001" x="800" y="400" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+	
+	<SubTexture name="orange none0000" x="800" y="0" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+	<SubTexture name="orange tip0000" x="0" y="800" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+	<SubTexture name="orange tip0001" x="800" y="800" width="800" height="400" frameX="-50" frameY="0" frameWidth="800" frameHeight="400"/>
+</TextureAtlas>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="closeButton.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="closebutton PRESSED0000" x="0" y="0" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0001" x="300" y="0" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0002" x="0" y="130" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0003" x="300" y="130" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0004" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0005" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0006" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0007" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0008" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0009" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0010" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0011" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0012" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0013" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0014" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0015" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0016" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0017" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0018" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0019" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0020" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0021" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0022" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0023" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0024" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0025" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0026" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0027" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0028" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0029" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0030" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0031" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0032" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0033" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0034" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0035" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0036" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0037" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0038" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0039" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0040" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0041" x="300" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton PRESSED0042" x="0" y="260" width="300" height="130"/>
+	<SubTexture name="closebutton to exit0000" x="0" y="0" width="300" height="130"/>
+</TextureAtlas>

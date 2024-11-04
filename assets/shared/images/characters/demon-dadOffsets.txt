@@ -1,0 +1,7 @@
+idle 0 0
+singUP -8 52
+singRIGHT -2 28
+singLEFT -8 10
+singDOWN 3 -30
+badFingerStart -6 50
+badFingerHold -6 50

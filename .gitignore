@@ -1,0 +1,11 @@
+export/
+.vscode/
+.sourceBackups/
+.uncensoredVideos/
+.uncensoredCharacters/
+.ununcensored Videos/
+.ununcensoredCharacters/
+assets/exclude/
+source - Copy/
+source - PreTempoTween/
+art/flashFiles/

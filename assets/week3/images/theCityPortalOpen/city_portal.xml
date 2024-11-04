@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="city_portal.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="portal_CityIdle0000" x="0" y="0" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0001" x="1729" y="0" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0002" x="3458" y="0" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0003" x="0" y="955" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0004" x="1729" y="955" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0005" x="3458" y="955" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0006" x="0" y="1910" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0007" x="1729" y="1910" width="1729" height="955"/>
+	<SubTexture name="portal_CityIdle0008" x="3458" y="1910" width="1729" height="955"/>
+</TextureAtlas>

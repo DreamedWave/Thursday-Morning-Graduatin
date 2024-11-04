@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="priest_theBorderAngry.png">
+	<!-- Created with Adobe Animate version 20.0.0.17400 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="Sing Left0000" x="0" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0001" x="0" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0002" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0003" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0004" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0005" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0006" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0007" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0008" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0009" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0010" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0011" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0012" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0013" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Left0014" x="600" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0000" x="1200" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0001" x="1200" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0002" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0003" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0004" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0005" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0006" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0007" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0008" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0009" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0010" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0011" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0012" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0013" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0014" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0015" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0016" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0017" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0018" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0019" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0020" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0021" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0022" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0023" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Down0024" x="1800" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Up0000" x="2400" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Up0001" x="2400" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Up0002" x="3000" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Up0003" x="3000" y="600" width="600" height="600"/>
+	<SubTexture name="Sing Up0004" x="3000" y="600" width="600" height="600"/>
+	
+	<SubTexture name="Scared Normal0000" x="1200" y="1200" width="600" height="600"/>
+	<SubTexture name="Scared Normal0001" x="1800" y="1200" width="600" height="600"/>
+	<SubTexture name="Scared Normal0002" x="2400" y="1200" width="600" height="600"/>
+	<SubTexture name="Scared Normal0003" x="3000" y="1200" width="600" height="600"/>
+	
+	<SubTexture name="Midsong Loop0000" x="1200" y="1800" width="600" height="600"/>
+	<SubTexture name="Midsong Loop0001" x="1800" y="1800" width="600" height="600"/>
+	<SubTexture name="Midsong Loop0002" x="2400" y="1800" width="600" height="600"/>
+	<SubTexture name="Midsong Loop0003" x="3000" y="1800" width="600" height="600"/>
+	
+	<SubTexture name="Got Pissed0000" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Got Pissed0001" x="600" y="1800" width="600" height="600"/>
+	<SubTexture name="Got Pissed0002" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Got Pissed0003" x="600" y="1800" width="600" height="600"/>
+	
+	<SubTexture name="Angry Loop0000" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0001" x="600" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0002" x="600" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0003" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0004" x="600" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0005" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0006" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0007" x="600" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0008" x="0" y="1800" width="600" height="600"/>
+	<SubTexture name="Angry Loop0009" x="600" y="1800" width="600" height="600"/>
+	
+	<SubTexture name="Endsong Cutscene A0000" x="1200" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0001" x="1800" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0002" x="2400" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0003" x="2400" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0004" x="3000" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0005" x="3000" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0006" x="3000" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0007" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0008" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0009" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene A0010" x="1200" y="0" width="600" height="600"/>
+	
+	<SubTexture name="Endsong Cutscene B0000" x="1200" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene B0001" x="1800" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene B0002" x="1200" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene B0003" x="1800" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene B0004" x="1200" y="1800" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene B0005" x="1800" y="1800" width="600" height="600"/>
+	
+	<SubTexture name="Endsong Cutscene C0000" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0001" x="1200" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0002" x="1200" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0003" x="1200" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0004" x="1800" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0005" x="2400" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0006" x="3000" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0007" x="2400" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0008" x="3000" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0009" x="1800" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0010" x="2400" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0011" x="3000" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0012" x="1800" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0013" x="2400" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0014" x="3000" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0015" x="1800" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0016" x="2400" y="3000" width="600" height="600"/>
+	<SubTexture name="Endsong Cutscene C0017" x="3000" y="3000" width="600" height="600"/>
+	
+	<SubTexture name="Sing Angry Left0000" x="0" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0001" x="0" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0002" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0003" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0004" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0005" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0006" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0007" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0008" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0009" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0010" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0011" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0012" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0013" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Left0014" x="600" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0000" x="1200" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0001" x="1200" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0002" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0003" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0004" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0005" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0006" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0007" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0008" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0009" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0010" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0011" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0012" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0013" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0014" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0015" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0016" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0017" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0018" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0019" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0020" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0021" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0022" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0023" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Down0024" x="1800" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Up0000" x="2400" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Up0001" x="2400" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Up0002" x="3000" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Up0003" x="3000" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Up0004" x="3000" y="2400" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0000" x="0" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0001" x="0" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0002" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0003" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0004" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0005" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0006" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0007" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0008" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0009" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0010" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0011" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0012" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0013" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0014" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0015" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0016" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0017" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0018" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0019" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0020" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0021" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0022" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0023" x="600" y="3000" width="600" height="600"/>
+	<SubTexture name="Sing Angry Right0024" x="600" y="3000" width="600" height="600"/>
+	
+	<SubTexture name="Idle0000" x="0" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0001" x="0" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0002" x="600" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0003" x="600" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0004" x="600" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0005" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0006" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0007" x="1800" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0008" x="3000" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0009" x="3000" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0010" x="2400" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0011" x="2400" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0012" x="2400" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0013" x="1800" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0014" x="1800" y="0" width="600" height="600"/>
+	<SubTexture name="Idle0015" x="1200" y="0" width="600" height="600"/>
+	<SubTexture name="Sing Right0000" x="0" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0001" x="0" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0002" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0003" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0004" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0005" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0006" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0007" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0008" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0009" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0010" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0011" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0012" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0013" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0014" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0015" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0016" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0017" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0018" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0019" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0020" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0021" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0022" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0023" x="600" y="1200" width="600" height="600"/>
+	<SubTexture name="Sing Right0024" x="600" y="1200" width="600" height="600"/>
+</TextureAtlas>
