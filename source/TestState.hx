@@ -73,7 +73,8 @@ class TestState extends MusicBeatState
 
 	var defaultCamZoom:Float = 1;
 
-	private var camFollowSpeed:Float = 0.02; //The higher the number is, the faster the camera moves
+	private var camFollowSpeed:Float = 1; //The higher the number is, the faster the camera moves
+	var frameRateCap:Int = 1;
 
 	public static var instance:TestState;
 
@@ -147,7 +148,7 @@ class TestState extends MusicBeatState
 		add(instructionsLOL);
 		
 		tauntRating = new FlxText(0, 0);
-		tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+		tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
 		tauntRating.antialiasing = FlxG.save.data.antialiasing;
 		tauntRating.setFormat(Paths.font("playtime.ttf"), 20, LEFT);
 		tauntRating.color = FlxColor.YELLOW;
@@ -179,7 +180,7 @@ class TestState extends MusicBeatState
 	{
 		FlxG.sound.play(Paths.sound("optionsSliderDown"), 1);
 		var styleRating:String = Ratings.CalculateRating(ms);
-		tauntRating.text = "Taunt Rating: " + FlxMath.roundDecimal(ms,5) + "ms ("+ styleRating + ")\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+		tauntRating.text = "Taunt Rating: " + FlxMath.roundDecimal(ms,5) + "ms ("+ styleRating + ")\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite  + "\nFrameRateHold(60): " + frameRateCap;
 	}
 
 	var loseControl:Bool = false;
@@ -207,6 +208,23 @@ class TestState extends MusicBeatState
 					defaultCamZoom -= 0.025;
 				loseControl = true;
 			}
+
+			if (FlxG.keys.justPressed.COMMA)
+			{
+				if (frameRateCap > 1)
+				{
+					frameRateCap--;
+					tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+				}
+			}
+			else if (FlxG.keys.justPressed.PERIOD)
+			{
+				if (frameRateCap < 10)
+				{
+					frameRateCap++;
+					tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+				}
+			}
 			
 			if (FlxG.keys.justPressed.ONE)
 			{
@@ -221,7 +239,7 @@ class TestState extends MusicBeatState
 					stageOverlay.scrollFactor.y -= 0.1;
 				}
 				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
 			}
 			else if (FlxG.keys.justPressed.TWO)
 			{
@@ -236,7 +254,7 @@ class TestState extends MusicBeatState
 					stageOverlay.scrollFactor.y += 0.1;
 				}
 				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
 			}
 
 			if (FlxG.keys.justPressed.THREE)
@@ -247,7 +265,7 @@ class TestState extends MusicBeatState
 					stageBG.scrollFactor.y -= 0.1;
 				}
 				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
 			}
 			else if (FlxG.keys.justPressed.FOUR)
 			{
@@ -257,7 +275,8 @@ class TestState extends MusicBeatState
 					stageBG.scrollFactor.y += 0.1;
 				}
 				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap
+				;
 			}
 
 			if (FlxG.keys.justPressed.FIVE)
@@ -361,9 +380,9 @@ class TestState extends MusicBeatState
 		switch (camToShake)
 		{
 			case 'camGame':
-				camGame.shake(intensity, duration, force, decay, axis);
+				camGame.shake(frameRateCap, intensity, duration, force, decay, axis);
 			case 'camHUD':
-				camHUD.shake(intensity, duration, force, decay, axis);
+				camHUD.shake(frameRateCap, intensity, duration, force, decay, axis);
 		}
 	}
 }

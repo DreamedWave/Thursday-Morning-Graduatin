@@ -1822,7 +1822,7 @@ class PlayState extends MusicBeatState
 						blackScreen.alpha = 0;
 						camGame.zoom += 0.45;
 						FlxTween.tween(camGame, {zoom: camGame.zoom - 0.45}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.expoOut});
-						camShake(true, true, 'camGame', 0.015, Conductor.crochet * 2 / 1000);
+						camShake(true, true, 'camGame', 2, 0.015, Conductor.crochet * 2 / 1000);
 						videoMusic.fadeOut(0.8);
 						skipCountdown = true;
 						
@@ -1946,7 +1946,7 @@ class PlayState extends MusicBeatState
 					gf.playAnim('fall', true);
 					new FlxTimer().start(0.15, function(swagTimer:FlxTimer)
 					{
-						camShake(true, true, 'camGame', 0.15, 0.55);
+						camShake(true, true, 'camGame', 2, 0.15, 0.55);
 						boyfriend.playAnim('scared', true);
 						dad.playAnim('scared', true);
 						new FlxTimer().start(0.3, function(swagTimer:FlxTimer)
@@ -2186,9 +2186,7 @@ class PlayState extends MusicBeatState
 			FlxTween.tween(loadingIcon, {alpha: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepIn, startDelay: 0.1});*/
 
 		if (blackScreen.alpha != blackScreenFadeTo)
-		{
 			FlxTween.tween(blackScreen, {alpha: blackScreenFadeTo}, 0.8, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: 0.3});
-		}
 
 		if (!PlayStateChangeables.Optimize)
 		{
@@ -2251,10 +2249,11 @@ class PlayState extends MusicBeatState
 
 							boyfriend.playAnim('scaredHOLD');
 						case "variegated-skylines":
-							camShake(false, false, 'camGame', 0.0015, idleCamShakeTimer);
-							camShake(false, false, 'camHUD', 0.0005, idleCamShakeTimer);
+							camShake(false, false, 'camGame', 2, 0.01, idleCamShakeTimer);
+							camShake(false, false, 'camHUD', 2, 0.0015, idleCamShakeTimer);
 							if (swagCounter == 0 || swagCounter == 2)
 								createStageParticle('theCityPortalOpen/effects/stageParticle');
+							
 							if (gfSpeed > 0 && swagCounter % gfSpeed == 0)
 								gf.dance();
 
@@ -2438,7 +2437,7 @@ class PlayState extends MusicBeatState
 				{
 					//Ghost Tapping Antimash
 					mashPresses++;
-					trace('mash increased');
+					trace('mash detection increased');
 				
 					if (mashPresses > mashPressThreshold)
 					{
@@ -3066,7 +3065,7 @@ class PlayState extends MusicBeatState
 			//babyArrow.scrollFactor.set();
 
 
-			if ((storyProgress <= 0 && !hasReset) || forceIntro)
+			if (forceIntro||(storyProgress <= 0 && !hasReset))
 			{
 				babyArrow.alpha = 0;
 				FlxTween.tween(babyArrow, {y: babyArrow.y + (!PlayStateChangeables.useDownscroll ? 10 : -10), alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.circOut, startDelay: Conductor.crochet / 1000 + (0.2 * i)});
@@ -3097,7 +3096,7 @@ class PlayState extends MusicBeatState
 					var strumlineBG:FlxSprite = new FlxSprite(babyArrow.x - 1, (!PlayStateChangeables.useDownscroll ? -10 : 10)).loadGraphic(Paths.image('strumline', 'week' + (storyWeek > 0 ? storyWeek : 1)));
 					strumlineBG.antialiasing = FlxG.save.data.antialiasing;
 
-					if ((storyProgress <= 0 && !hasReset) || forceIntro)
+					if (forceIntro || (storyProgress <= 0 && !hasReset))
 					{
 						strumlineBG.alpha = 0;
 						FlxTween.tween(strumlineBG, {y: 0, alpha: 0.5}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.crochet / 500 + (0.2 * i)});
@@ -3526,7 +3525,9 @@ class PlayState extends MusicBeatState
 	{
 		if (FlxG.mouse.visible && !paused)
 			FlxG.mouse.visible = false;
-		
+
+		super.update(elapsed);
+
 		if (!showedResults && !endedSong && FlxG.sound.music.playing)
 		{				
 			if (SONG.eventObjects != null && SONG.eventObjects.length != 0)
@@ -3629,8 +3630,6 @@ class PlayState extends MusicBeatState
 			safeVignette.visible = false;
 		else if (!endedSong && canPause)
 			safeVignette.visible = true;
-
-		super.update(elapsed);
 
 		if (controls.PAUSE && !skippingIntro && !video.isPlaying && crashPrevBool && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
 			pauseGame();
@@ -4014,21 +4013,7 @@ class PlayState extends MusicBeatState
 									switch (daNote.noteType)
 									{
 										case 'mine':
-											if (!PlayStateChangeables.Optimize)
-											{
-												if (stageOverlay1 != null)
-													stageOverlay1.animation.play('static');
-													dad.playAnim('gunSHOOT', true);
-													switch (daNote.noteData)
-													{
-														case 0 | 2:
-															boyfriend.playAnim('dodgeB', true);
-														case 1 | 3:
-															boyfriend.playAnim('dodgeA', true);
-													}
-											}
-											camShake(true, true, 0.05, Conductor.crochet / 1000);
-											camShake(true, true, 'camHUD', 0.005, Conductor.crochet / 500);
+											dodgeFuckingShot(daNote.noteData);
 											//la health none for mine
 											//if (FlxG.save.data.accuracyMod == 0)
 											totalNotesHit += 1;
@@ -4138,35 +4123,9 @@ class PlayState extends MusicBeatState
 									switch (daNote.noteType)
 									{
 										case 'mine':
-											if (!PlayStateChangeables.Optimize)
-											{
-												if (stageOverlay1 != null)
-													stageOverlay1.animation.play('static');
-												dad.playAnim('gunSHOOT', true);
-												//placeholder for deflect anim
-												switch (daNote.noteData)
-												{
-													case 0 | 2:
-														boyfriend.playAnim('dodgeB', true);
-													case 1 | 3:
-														boyfriend.playAnim('dodgeA', true);
-												}
-											}
-											camShake(true, true, 0.05, Conductor.crochet / 1000);
-											camShake(true, true, 'camHUD', 0.005, Conductor.crochet / 500);
+											dodgeFuckingShot(daNote.noteData);
 										case 'trigger':
-											dad.playAnim('gunSHOOT', true);
-											if (stageOverlay1 != null && !PlayStateChangeables.Optimize)
-												stageOverlay1.animation.play('static');
-											if (allowHealthModifiers && !daNote.withinCompensation && hurtVignette.alpha < 0.2)
-											{
-												specilNoteSFXGroup.stop();
-												FlxG.sound.play(Paths.sound('Note_Mine'), 1, false, specilNoteSFXGroup);
-												if (!PlayStateChangeables.Optimize)
-													boyfriend.playAnim('hurt', true);
-												camShake(true, false, 'camGame', 0.125, Conductor.crochet / 1000);
-												camShake(true, true, 'camHUD', 0.05, Conductor.crochet / 500, X);
-											}
+											getFuckingShot(true);
 									}
 								}
 		
@@ -4239,7 +4198,7 @@ class PlayState extends MusicBeatState
 				if (!startingSong && songStarted && !inCutscene)
 					keyShit();
 			}	
-		
+
 			//Do this like parappa/scratchin where you have a bar you need to follow on top of the health bar
 			/*if (!endedSong && !showedResults && !startingSong && !PlayStateChangeables.botPlay)
 			{
@@ -4350,22 +4309,9 @@ class PlayState extends MusicBeatState
 			{
 				//Least Audio Volume during Low Health
 				//FIX THIS SHIT
+				//Yes this is song dependent :3
 				switch (songLowercase)
 				{
-					/*case 'retaliation':
-						if (health < 1)
-						{
-							FlxG.sound.music.volume = FlxMath.lerp((health - 0.3) * musicVolume, FlxG.sound.music.volume, calculateLerpTime(elapsed, 15));
-							instLowHP.volume = FlxMath.lerp((lowHealthEffectVolume + 0.3) * musicVolume, instLowHP.volume, calculateLerpTime(elapsed, 15));
-							miscs.volume = FlxMath.lerp((lowHealthEffectVolume + 0.25) * sfxVolume, miscs.volume, calculateLerpTime(elapsed, 15));
-						}
-						else if (health >= 1 && FlxG.sound.music.volume < musicVolume)
-						{
-							FlxG.sound.music.volume = musicVolume;
-							instLowHP.volume = 0;
-							miscs.volume = 0.5 * sfxVolume;
-							lowHPOverlay.alpha = 0;
-						}*/
 					default:
 						if (health < 1)
 						{
@@ -4657,7 +4603,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function camShake(force:Bool = true, decay:Bool = false, camToShake:String = 'camGame', intensity:Float = 0.03, duration:Float = 0.25, axis:FlxAxes = XY):Void
+	function camShake(force:Bool = true, decay:Bool = false, camToShake:String = 'camGame', ?holdFor:Int = 1, intensity:Float = 0.03, duration:Float = 0.25, axis:FlxAxes = XY):Void
 	{
 		if (decay)
 		{
@@ -4668,9 +4614,9 @@ class PlayState extends MusicBeatState
 		switch (camToShake)
 		{
 			case 'camGame':
-				camGame.shake(intensity, duration, force, decay, axis);
+				camGame.shake(holdFor, intensity, duration, force, decay, axis);
 			case 'camHUD':
-				camHUD.shake(intensity, duration, force, decay, axis);
+				camHUD.shake(holdFor, intensity, duration, force, decay, axis);
 		}
 	}
 
@@ -4682,7 +4628,8 @@ class PlayState extends MusicBeatState
 
 	var vignetteChecker:Int = 0;
 	var gotShotBlurVal:Float = 0;
-	function getFuckingShot():Void
+	//Turned them into functions for consistency's sake :3
+	function getFuckingShot(purelyVisual:Bool = false):Void
 	{
 		vocals.volume = 0;
 		if (!PlayStateChangeables.Optimize)
@@ -4692,10 +4639,15 @@ class PlayState extends MusicBeatState
 			if (stageOverlay1 != null && stageOverlay1.animation.curAnim.name.toLowerCase() == 'warning')
 				stageOverlay1.animation.play('static');
 		}
+		specilNoteSFXGroup.stop();
+		FlxG.sound.play(Paths.sound('Note_Mine'), 1, false, specilNoteSFXGroup);
+		camShake(true, false, 'camGame', 0.2, Conductor.crochet / 1000);
+		camShake(true, true, 'camHUD', 0.075, Conductor.crochet / 500, X);
+		
 		//mmm complex system ahf h
-		if (allowHealthModifiers)
+		if (!purelyVisual && allowHealthModifiers)
 		{
-			iconP1.playAnimation('lowHP');
+			iconP1.playAnimation('lowHP'); //PlaceholderAnim
 			if (health >= 0.5)
 			{
 				iconTrail1.active = true;
@@ -4715,10 +4667,6 @@ class PlayState extends MusicBeatState
 			gotShotBlurVal = 2;
 			if (hurtDelay < 8)
 				hurtDelay += 2;
-			specilNoteSFXGroup.stop();
-			FlxG.sound.play(Paths.sound('Note_Mine'), 1, false, specilNoteSFXGroup);
-			camShake(true, false, 'camGame', 0.125, Conductor.crochet / 1000);
-			camShake(true, true, 'camHUD', 0.05, Conductor.crochet / 500, X);
 
 			if (gotShotBlurTwn != null)
 				gotShotBlurTwn.cancel();
@@ -4795,10 +4743,29 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		else
-		{
-			camShake(true, false);
-		}
+	}
+
+	function dodgeFuckingShot(?playDodgeSound:Bool = true, arrowDir:Int):Void
+	{
+		if (!PlayStateChangeables.Optimize)
+			{
+				if (stageOverlay1 != null)
+					stageOverlay1.animation.play('static');
+				dad.playAnim('gunSHOOT', true);
+				switch (arrowDir)
+				{
+					case 0 | 1:
+						boyfriend.playAnim('dodgeB', true);
+						singFollowOffset = [-15, -2];
+					case 2 | 3:
+						boyfriend.playAnim('dodgeA', true);
+						singFollowOffset = [15, 2];
+				}
+			}
+			camShake(true, false, 2, 0.075, Conductor.crochet / 1000);
+			camShake(true, true, 'camHUD', 2, 0.01, Conductor.crochet / 500);
+			if (playDodgeSound)
+				FlxG.sound.play(Paths.sound('Note_Trigger'), 1, false, hitSFXGroup);
 	}
 
 	var loadingNextSong:Bool = false;
@@ -5266,14 +5233,17 @@ class PlayState extends MusicBeatState
 					if (combo <= 0)
 						return;
 					
-					grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
+					if (showNumShit)
 					{
-						prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
-						if (prevNum.color != FlxColor.RED)
-							prevNum.color = 0xFFd7d1e6;
-						else
-							prevNum.color = 0xFFEA417C;
-					});
+						grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
+						{
+							prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
+							if (prevNum.color != FlxColor.RED)
+								prevNum.color = 0xFFd7d1e6;
+							else
+								prevNum.color = 0xFFEA417C;
+						});
+					}
 
 					var separatedScore:Array<Int> = [];
 					var daLoop2:Int = 0;
@@ -5640,7 +5610,7 @@ class PlayState extends MusicBeatState
 			var daPoop:Int = 0;
 			for (i in separatedScore)
 			{
-				trace('what??? ' + i);
+				//trace('what??? ' + i);
 				var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image('num' + Std.int(i)));
 				numScore.x = FlxG.save.data.changedHitX + (37 * daPoop);
 				numScore.y = FlxG.save.data.changedHitY + 95 - 10;
@@ -5656,12 +5626,12 @@ class PlayState extends MusicBeatState
 				grpRatingsMG.add(numScore);
 
 				//Not affected by ratingStartDelay
-				FlxTween.tween(numScore, {alpha: 0}, 0.175, {type: ONESHOT, 
+				FlxTween.tween(numScore, {alpha: 0}, 0.15, {type: ONESHOT,
 					onComplete: function(tween:FlxTween)
 					{
 						numScore.destroy();
 					},
-					startDelay: Conductor.crochet * 0.00125
+					startDelay: Conductor.stepCrochet / 2
 				});
 				daPoop++;
 			}
@@ -6588,32 +6558,10 @@ class PlayState extends MusicBeatState
 						return;
 					}
 				case 'trigger':
-					if (!PlayStateChangeables.Optimize)
-					{
-						if (stageOverlay1 != null)
-							stageOverlay1.animation.play('static');
-						dad.playAnim('gunSHOOT', true);
-						switch (note.noteData)
-						{
-							case 0 | 1:
-								boyfriend.playAnim('dodgeB', true);
-								singFollowOffset = [-15, -2];
-							case 2 | 3:
-								boyfriend.playAnim('dodgeA', true);
-								singFollowOffset = [15, 2];
-						}
-					}
-					camShake(true, true, 0.05, Conductor.crochet / 1000);
-					camShake(true, true, 'camHUD', 0.005, Conductor.crochet / 500);
-					FlxG.sound.play(Paths.sound('Note_Trigger'), 1, false, hitSFXGroup);
+					dodgeFuckingShot(note.noteData);
 					if (timesShot > 0 && note.rating == 'sick')
 						timesShot--;
-					//la health gain for trigger notes
 					targetHealth += calculateHealth(12, targetHealth, accuracy);
-					//dodge anims (REPLACE WITH DEFLECT ANIMS)
-					//if (boyfriend.animation.curAnim.curFrame >= 5)
-					//{}
-					//trace("Dodge Anim/s (6119)");
 				default:
 					if (allowNoteHitSounds && FlxG.save.data.notesfx)
 						playNoteHitSound(note);
@@ -9342,8 +9290,8 @@ class PlayState extends MusicBeatState
 
 								if (inSongClimax)
 								{
-									camShake(true, false, 'camGame', 0.005, idleCamShakeTimer);
-									camShake(false, false, 'camHUD', 0.0025, idleCamShakeTimer);
+									camShake(true, false, 'camGame', 2, 0.005, idleCamShakeTimer);
+									camShake(false, false, 'camHUD', 2, 0.0025, idleCamShakeTimer);
 								}
 
 							case 'Kid With a Gun':
@@ -9508,8 +9456,8 @@ class PlayState extends MusicBeatState
 										boyfriend.playAnim('scared', true);
 										dad.playAnim('gunWARNING', true);
 										gf.playAnim('scared', true);
-										camShake(true, false, 'camGame', 0.05);
-										camShake(true, true, 'camHUD', 0.005, Conductor.crochet / 800);
+										camShake(true, false, 'camGame', 0.25);
+										camShake(true, true, 'camHUD', 0.015, Conductor.crochet / 800);
 										//gf getting scared cause pico shoots a warning shot
 									case 308:
 										defaultCamZoom = 0.85;
@@ -9620,13 +9568,13 @@ class PlayState extends MusicBeatState
 								{
 									if (!inSongClimax)
 									{
-										camShake(false, false, 'camGame', 0.005, idleCamShakeTimer);
-										camShake(false, false, 'camHUD', 0.0012, idleCamShakeTimer);
+										camShake(false, false, 'camGame', 2, 0.01, idleCamShakeTimer);
+										camShake(false, false, 'camHUD', 2, 0.0015, idleCamShakeTimer);
 									}
 									else
 									{
-										camShake(false, false, 'camGame', 0.01, idleCamShakeTimer);
-										camShake(false, false, 'camHUD', 0.0025, idleCamShakeTimer);
+										camShake(false, false, 'camGame', 2, 0.025, idleCamShakeTimer);
+										camShake(false, false, 'camHUD', 2, 0.0035, idleCamShakeTimer);
 									}
 									
 									if (skipActive || (curBeat > (skipTo / Conductor.crochet)) && curBeat % 2 == 0)

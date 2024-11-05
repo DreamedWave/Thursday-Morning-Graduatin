@@ -481,9 +481,14 @@ class FlxCamera extends FlxBasic
 	var _fxShakeIntensity:Float = 0;
 
 	/**
+	 * Custom, Internal, how much frames the `shake()` effect holds for (with the base being 60FPS).
+	 */
+	var _fxShakeHoldFor:Int = 1;
+
+	/**
 	 * Internal, duration of the `shake()` effect.
 	 */
-	var _fxShakeDuration:Float = 0;
+	 var _fxShakeDuration:Float = 0;
 
 	/**
 	 * Internal, `shake()` effect complete callback.
@@ -1066,7 +1071,7 @@ class FlxCamera extends FlxBasic
 		x = X;
 		y = Y;
 
-		frameRateCap = Math.round((FlxG.save.data.fpsCap / 60) - 1);
+		frameRateCap = Math.round((FlxG.save.data.fpsCap / 60) * _fxShakeHoldFor);
 
 		// Use the game dimensions if width / height are <= 0
 		width = (Width <= 0) ? FlxG.width : Width;
@@ -1355,6 +1360,8 @@ class FlxCamera extends FlxBasic
 	var scrollShakeY:Float = 0;
 	var shakeBaseDuration:Float = 0;
 	var frameRateCap:Int = 0;
+	//didnt wanna do this but DGBDJOHJMSNHFNJ
+	var scrollShakeTween:FlxTween;
 
 	function updateShake(elapsed:Float):Void
 	{
@@ -1364,8 +1371,20 @@ class FlxCamera extends FlxBasic
 			_fxShakeDuration -= elapsed;
 			if (_fxShakeDuration <= 0)
 			{
-				scrollShakeX = 0;
-				scrollShakeY = 0;
+				if (!shakeFlashSprite)
+				{
+					if (scrollShakeTween != null)
+						scrollShakeTween.cancel();
+
+					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.25, {type: ONESHOT, ease: FlxEase.circOut, 
+						onComplete: function (twn:FlxTween){scrollShakeTween = null;}});
+				}
+				else
+				{
+					scrollShakeX = 0;
+					scrollShakeY = 0;					
+				}
+
 				if (shakeDecayTween != null)
 				{
 					shakeDecayTween.cancel();
@@ -1373,24 +1392,28 @@ class FlxCamera extends FlxBasic
 				}
 				isShakingCam = false;
 				decayCamShake = false;
+				_fxShakeHoldFor = 1;
 				if (_fxShakeComplete != null)
 					_fxShakeComplete();
 			}
 			else 
 			{
-				if (frameRateCap > 0)
+				if (target != null && !shakeFlashSprite)
 				{
-					frameRateCap--;
-					//Different Lerp for camShake
-					//im going through it ok dont judge me
-					scrollShakeX = FlxMath.lerp(0, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (followLerp * 10)), 0, 1));
-					scrollShakeY = FlxMath.lerp(0, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (followLerp * 10)), 0, 1));
-				}
-				else
-				{
-					frameRateCap = Math.round((FlxG.save.data.fpsCap / 60) - 1);
-					if (target != null && !shakeFlashSprite)
+					if (scrollShakeTween != null && scrollShakeTween.active)
+						scrollShakeTween.cancel();
+
+					if (frameRateCap > 0)
 					{
+						frameRateCap--;
+						//Different Lerp for camShake
+						//im going through it ok dont judge me
+						scrollShakeX = FlxMath.lerp(0, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (100 / _fxShakeHoldFor)), 0, 1));
+						scrollShakeY = FlxMath.lerp(0, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (100 / _fxShakeHoldFor)), 0, 1));
+					}
+					else
+					{
+						frameRateCap = Math.round((FlxG.save.data.fpsCap / 60) * _fxShakeHoldFor);
 						if (_fxShakeAxes != FlxAxes.Y)
 						{
 							if (scrollShakeX < 0)
@@ -1413,14 +1436,14 @@ class FlxCamera extends FlxBasic
 							scrollShakeY *= FlxG.height / 720;
 						}
 					}
-					else
-					{
-						if (_fxShakeAxes != FlxAxes.Y)
-							flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * width, _fxShakeIntensity * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
+				}
+				else
+				{
+					if (_fxShakeAxes != FlxAxes.Y)
+						flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * width, _fxShakeIntensity * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
 
-						if (_fxShakeAxes != FlxAxes.X)
-							flashSprite.y += (FlxG.random.float(-_fxShakeIntensity * height, _fxShakeIntensity * height) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.height / 720);
-					}
+					if (_fxShakeAxes != FlxAxes.X)
+						flashSprite.y += (FlxG.random.float(-_fxShakeIntensity * height, _fxShakeIntensity * height) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.height / 720);
 				}
 			}
 		}
@@ -1650,7 +1673,7 @@ class FlxCamera extends FlxBasic
 	 * @param   Force        Force the effect to reset (default = `true`, unlike `flash()` and `fade()`!).
 	 * @param   Axes         On what axes to shake. Default value is `FlxAxes.XY` / both.
 	 */
-	public function shake(Intensity:Float = 0.05, Duration:Float = 0.5, Force:Bool = true, Decay:Bool = false, ?Axes:FlxAxes, ?OnComplete:Void->Void):Void
+	public function shake(HoldFor:Int = 1, Intensity:Float = 0.05, Duration:Float = 0.5, Force:Bool = true, Decay:Bool = false, ?Axes:FlxAxes, ?OnComplete:Void->Void):Void
 	{
 		//trace ('didCamShake!!');
 		//trace ('Intensity: ' + Intensity + '\nDuration: ' + Duration + '\nForce: ' + Force + '\nDecay: ' + Decay + '\nAxes: ' + Axes);
@@ -1669,6 +1692,7 @@ class FlxCamera extends FlxBasic
 		decayCamShake = Decay;
 		_fxShakeIntensity = Intensity;
 		_fxShakeDuration = Duration;
+		_fxShakeHoldFor = HoldFor;
 		shakeBaseDuration = Duration;
 		_fxShakeComplete = OnComplete;
 		_fxShakeAxes = Axes;
@@ -1709,6 +1733,7 @@ class FlxCamera extends FlxBasic
 				scrollShakeX = 0;
 				scrollShakeY = 0;
 				_fxShakeDuration = 0;
+				_fxShakeHoldFor = 1;
 				shakeBaseDuration = 0;
 				decayCamShake = false;
 				if (shakeDecayTween != null)
@@ -1722,6 +1747,7 @@ class FlxCamera extends FlxBasic
 				scrollShakeX = 0;
 				scrollShakeY = 0;
 				_fxFadeDuration = 0.0;
+				_fxShakeHoldFor = 1;
 				_fxShakeDuration = 0;
 				shakeBaseDuration = 0;
 				decayCamShake = false;

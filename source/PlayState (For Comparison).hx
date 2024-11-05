@@ -57,7 +57,7 @@ import openfl.display.BlendMode;
 //#if shaders_supported
 import openfl.filters.BitmapFilter;
 import openfl.filters.BlurFilter;
-//import openfl.filters.GlowFilter;
+import openfl.filters.GlowFilter;
 //Indie Cross ShaderShit
 import IndieCrossShaders;
 //#end
@@ -1176,7 +1176,7 @@ class PlayState extends MusicBeatState
 					windEffect.alpha = 0.05;
 					windEffect.antialiasing = FlxG.save.data.antialiasing;
 					stageOverlayGroup.add(windEffect);
-					FlxTween.tween(windEffect, {alpha: 1}, Conductor.crochet * 256 / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.crochet * 4 / 1000});
+					FlxTween.tween(windEffect, {alpha: 1}, Conductor.crochet * 256 / 1000, {type: ONESHOT, ease: expoOut, startDelay: Conductor.crochet * 4 / 1000});
 					stageOverlayGroup.add(stageOverlay2);
 					stageOverlayGroup.add(stageOverlay1);
 					stageOverlayGroup.cameras = [camHUD];
@@ -1822,7 +1822,7 @@ class PlayState extends MusicBeatState
 						camEXT.flash(FlxColor.WHITE, Conductor.crochet * 2 / 1000);
 						blackScreen.alpha = 0;
 						camGame.zoom += 0.45;
-						FlxTween.tween(camGame, {zoom: camGame.zoom - 0.45}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.expoOut});
+						FlxTween.tween(camGame, {zoom: camGame.zoom - 0.45}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: expoOut});
 						camShake(true, true, 'camGame', 0.015, Conductor.crochet * 2 / 1000);
 						videoMusic.fadeOut(0.8);
 						skipCountdown = true;
@@ -1908,8 +1908,8 @@ class PlayState extends MusicBeatState
 		
 		if (blackScreen.alpha > 0 || camHUD.alpha <= 0)
 		{
-			FlxTween.tween(camHUD, {alpha: 1}, 1, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: 0.3});
-			FlxTween.tween(blackScreen, {alpha: (!Main.nightMode && !FlxG.save.data.nightmode ? 0 : 0.25)}, 1, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: 0.3});
+			FlxTween.tween(camHUD, {alpha: 1}, 1, {type: ONESHOT, ease: quadOut, startDelay: 0.3});
+			FlxTween.tween(blackScreen, {alpha: (!Main.nightMode && !FlxG.save.data.nightmode ? 0 : 0.25)}, 1, {type: ONESHOT, ease: quadOut, startDelay: 0.3});
 		}
 		inCutscene = true;
 		canPause = false;
@@ -1933,7 +1933,7 @@ class PlayState extends MusicBeatState
 				ready.antialiasing = FlxG.save.data.antialiasing;
 				add(ready);
 				FlxTween.tween(ready, {y: ready.y + 5, alpha: 0}, Conductor.crochet / 1000, {type: ONESHOT, 
-					ease: FlxEase.cubeInOut,
+					ease: cubeInOut,
 					onComplete: function(twn:FlxTween)
 					{
 						ready.destroy();
@@ -2035,7 +2035,7 @@ class PlayState extends MusicBeatState
 	
 				if (subTxtXTween != null)
 					subTxtXTween.cancel();
-				subTxtXTween = FlxTween.tween(subtitleText, {x: subTxtTargetX}, 0.2, {type: ONESHOT, ease: FlxEase.quartOut, onComplete:
+				subTxtXTween = FlxTween.tween(subtitleText, {x: subTxtTargetX}, 0.2, {type: ONESHOT, ease: quartOut, onComplete:
 					function (twn:FlxTween)
 					{
 						subTxtXTween = null;
@@ -2047,7 +2047,7 @@ class PlayState extends MusicBeatState
 					subBGWidthTween.cancel();
 					subtitleBackground.updateHitbox();
 				}
-				subBGWidthTween = FlxTween.tween(subtitleBackground.scale, {x: subBGTargetWidth}, 0.03, {type: ONESHOT, ease: FlxEase.quartOut, onComplete:
+				subBGWidthTween = FlxTween.tween(subtitleBackground.scale, {x: subBGTargetWidth}, 0.03, {type: ONESHOT, ease: quartOut, onComplete:
 					function (twn:FlxTween)
 					{
 						subBGWidthTween = null;
@@ -2058,7 +2058,7 @@ class PlayState extends MusicBeatState
 	
 				if (subBGXTween != null)
 					subBGXTween.cancel();
-				subBGXTween = FlxTween.tween(subtitleBackground, {x: subTxtTargetX - 10}, 0.25, {type: ONESHOT, ease: FlxEase.quartOut, onComplete:
+				subBGXTween = FlxTween.tween(subtitleBackground, {x: subTxtTargetX - 10}, 0.25, {type: ONESHOT, ease: quartOut, onComplete:
 					function (twn:FlxTween)
 					{
 						subBGXTween = null;
@@ -2178,11 +2178,11 @@ class PlayState extends MusicBeatState
 		}
 
 		/*if (loadingIcon.alpha != 0)
-			FlxTween.tween(loadingIcon, {alpha: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepIn, startDelay: 0.1});*/
+			FlxTween.tween(loadingIcon, {alpha: 0}, 0.3, {type: ONESHOT, ease: smootherStepIn, startDelay: 0.1});*/
 
 		if (blackScreen.alpha != blackScreenFadeTo)
 		{
-			FlxTween.tween(blackScreen, {alpha: blackScreenFadeTo}, 0.8, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: 0.3});
+			FlxTween.tween(blackScreen, {alpha: blackScreenFadeTo}, 0.8, {type: ONESHOT, ease: quadOut, startDelay: 0.3});
 		}
 
 		camGame.followLerp = camFollowSpeed * (60 / FlxG.updateFramerate);
@@ -2221,7 +2221,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (health != 1 && prevHealth != 1)
-			prevHealthTwn = FlxTween.tween(this, {health: 1}, Conductor.crochet * 3.75 / 1000, {ease: FlxEase.expoOut});
+			prevHealthTwn = FlxTween.tween(this, {health: 1}, Conductor.crochet * 3.75 / 1000, {ease: expoOut});
 
 		startTimer = new FlxTimer().start(startTimerTime, function(tmr:FlxTimer)
 		{
@@ -2287,7 +2287,7 @@ class PlayState extends MusicBeatState
 						add(ready);
 
 						FlxTween.tween(ready, {y: ready.y + 5, alpha: 0}, Conductor.crochet / 1000, {type: ONESHOT, 
-							ease: FlxEase.cubeInOut,
+							ease: cubeInOut,
 							onComplete: function(twn:FlxTween)
 							{
 								ready.destroy();
@@ -2302,7 +2302,7 @@ class PlayState extends MusicBeatState
 						add(set);
 
 						FlxTween.tween(set, {y: set.y + 5, alpha: 0}, Conductor.crochet / 1000, {type: ONESHOT, 
-							ease: FlxEase.cubeInOut,
+							ease: cubeInOut,
 							onComplete: function(twn:FlxTween)
 							{
 								set.destroy();
@@ -2317,7 +2317,7 @@ class PlayState extends MusicBeatState
 						add(go);
 
 						FlxTween.tween(go, {y: go.y + 5, alpha: 0}, Conductor.crochet / 1000, {type: ONESHOT, 
-							ease: FlxEase.cubeInOut,
+							ease: cubeInOut,
 							onComplete: function(twn:FlxTween)
 							{
 								go.destroy();
@@ -2689,7 +2689,7 @@ class PlayState extends MusicBeatState
 			{
 				blep.alpha = 0;
 				blep.y -= 15;
-				FlxTween.tween(blep, {alpha: 1, y: blep.y + 15}, 1, {type: ONESHOT, ease: FlxEase.elasticOut});
+				FlxTween.tween(blep, {alpha: 1, y: blep.y + 15}, 1, {type: ONESHOT, ease: elasticOut});
 			});
 		}
 		else
@@ -2747,7 +2747,7 @@ class PlayState extends MusicBeatState
 			skipButton.cameras = [camEXT];
 			skipButton.alpha = 0;
 			add(skipButton);
-			FlxTween.tween(skipButton, {alpha: 1, y: skipButton.y - 5}, 0.2, {type: ONESHOT, ease: FlxEase.sineInOut});
+			FlxTween.tween(skipButton, {alpha: 1, y: skipButton.y - 5}, 0.2, {type: ONESHOT, ease: sineInOut});
 		}
 	}
 
@@ -3066,7 +3066,7 @@ class PlayState extends MusicBeatState
 			if (forceCoolIntro || (storyProgress <= 0 && !hasReset && campaignDeaths == 0))
 			{
 				babyArrow.alpha = 0;
-				FlxTween.tween(babyArrow, {y: babyArrow.y + (!PlayStateChangeables.useDownscroll ? 10 : -10), alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.circOut, startDelay: Conductor.crochet / 1000 + (0.2 * i)});
+				FlxTween.tween(babyArrow, {y: babyArrow.y + (!PlayStateChangeables.useDownscroll ? 10 : -10), alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: circOut, startDelay: Conductor.crochet / 1000 + (0.2 * i)});
 			}
 			else 
 				babyArrow.y += (!PlayStateChangeables.useDownscroll ? 10 : -10);
@@ -3097,7 +3097,7 @@ class PlayState extends MusicBeatState
 					if (forceCoolIntro || (storyProgress <= 0 && !hasReset && campaignDeaths == 0))
 					{
 						strumlineBG.alpha = 0;
-						FlxTween.tween(strumlineBG, {y: 0, alpha: 0.5}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.crochet / 500 + (0.2 * i)});
+						FlxTween.tween(strumlineBG, {y: 0, alpha: 0.5}, Conductor.crochet / 1000, {type: ONESHOT, ease: expoOut, startDelay: Conductor.crochet / 500 + (0.2 * i)});
 					}
 					else
 					{
@@ -3145,7 +3145,7 @@ class PlayState extends MusicBeatState
 		{
 			healthAndScoreGroup.alpha = 0;
 			healthAndScoreGroup.y += 100;
-			FlxTween.tween(healthAndScoreGroup, {alpha: 1, y: healthAndScoreGroup.y - 100}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.stepCrochet / 1000});
+			FlxTween.tween(healthAndScoreGroup, {alpha: 1, y: healthAndScoreGroup.y - 100}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: expoOut, startDelay: Conductor.stepCrochet / 1000});
 		}
 	}
 
@@ -3166,7 +3166,7 @@ class PlayState extends MusicBeatState
 				babyArrow.acceleration.y = 900;
 				babyArrow.velocity.y -= FlxG.random.int(20, 75);
 				babyArrow.velocity.x += FlxG.random.int(-20, 20); 
-				FlxTween.tween(babyArrow, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: 0.75});
+				FlxTween.tween(babyArrow, {alpha: 0}, 0.5, {type: ONESHOT, ease: quadOut, startDelay: 0.75});
 			}
 		});
 
@@ -3178,15 +3178,15 @@ class PlayState extends MusicBeatState
 					strumlineBG.acceleration.y = 1100;
 					strumlineBG.velocity.y -= FlxG.random.int(20, 75);
 					strumlineBG.velocity.x -= FlxG.random.int(-20, 20); 
-					FlxTween.tween(strumlineBG, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.expoIn});
+					FlxTween.tween(strumlineBG, {alpha: 0}, 0.5, {type: ONESHOT, ease: expoIn});
 				}
 			});
-		FlxTween.tween(healthBarBG, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(healthBar, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(iconP1, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(iconP2, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(scoreTxt, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(songNameTXT, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
+		FlxTween.tween(healthBarBG, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
+		FlxTween.tween(healthBar, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
+		FlxTween.tween(iconP1, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
+		FlxTween.tween(iconP2, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
+		FlxTween.tween(scoreTxt, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
+		FlxTween.tween(songNameTXT, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: quadOut});
 		finishedHUDFadeOutFunction = true;
 	}
 
@@ -3451,9 +3451,9 @@ class PlayState extends MusicBeatState
 	private function tweenScroll():Void
 	{
 		if (songSpeedTween != null)
-			songSpeedTween.cancel(true);
+			songSpeedTween.cancel();
 
-		songSpeedTween = FlxTween.tween(this, {curScroll: newScroll}, Conductor.crochet * 2 / 1000, {ease: FlxEase.smootherStepOut,
+		songSpeedTween = FlxTween.tween(this, {curScroll: newScroll}, Conductor.crochet * 2 / 1000, {ease: smootherStepOut,
 			onUpdate: function(twn:FlxTween)
 			{
 				for (note in notes) 
@@ -3482,32 +3482,36 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	private function tweenBPM(givenValues:Array<Float>, tweenType:FlxEase):Void
+	private function tweenBPM(givenValues:Array<Float>, tweenType:String):Void
 	{
-		if (songBPMTween != null)
-			songBPMTween.cancel(true);
-
 		//These aren't necessary but they're for clarity's sake-!
 		var curBPM:Float = Conductor.bpm;
 		var newBPM:Float = givenValues[0];
 		var tweenDuration:Float = givenValues[1];
+		
+		if (songBPMTween != null)
+			songBPMTween.cancel();
 
-		songBPMTween = FlxTween.tween(this, {curBPM: newBPM}, tweenDuration, {ease: tweenType,
+		songBPMTween = FlxTween.tween(this, {curBPM: newBPM}, tweenDuration, {ease: smootherStepOut,
 			onUpdate: function(twn:FlxTween)
 			{
 				Conductor.changeBPM(curBPM, false);
-				fakeCrochet = (60 / curBPM) * 1000;
+				fakeCrochet = (60 / timingSegBpm) * 1000;
 				idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
 				compensationTime = Conductor.crochet * 2 / 1000;
 			},
 			
 			onComplete: function(twn:FlxTween) 
 			{
-				//Failsafe
-				Conductor.changeBPM(newBPM, false);
-				fakeCrochet = (60 / curBPM) * 1000;
-				idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-				compensationTime = Conductor.crochet * 2 / 1000;
+				for (note in notes) 
+				{
+					note.scrollSpeed = newScroll;
+				}
+				for (note in unspawnNotes) 
+				{
+					note.scrollSpeed = newScroll;
+				}
+				curScroll = newScroll; //Failsafe
 				songBPMTween = null;
 			}
 		});
@@ -3542,7 +3546,7 @@ class PlayState extends MusicBeatState
 									tweenScroll();
 								case "BPM Change":
 									Conductor.changeBPM(i.value, false);
-									fakeCrochet = (60 / curBPM) * 1000;
+									fakeCrochet = (60 / timingSegBpm) * 1000;
 									idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
 									compensationTime = Conductor.crochet * 2 / 1000;
 									
@@ -3581,17 +3585,11 @@ class PlayState extends MusicBeatState
 									}*/
 								case "BPM Tween":
 									var tweenType:FlxEase;
-									var foundTweenNames:String = i.name;
-									foundTweenNames.toLowerCase();
-									//Not gonna code the other tweens cuz realistically, I'll just use either linear or sine bpm tweens cuz syncing it would be hella painful if it's anything else.
-									if (StringTools.contains(foundTweenNames, "sineIn"))
-										tweenType = FlxEase.sineIn;
-									else if (StringTools.contains(foundTweenNames, "sineOut"))
-										tweenType = FlxEase.sineOut;
-									else if (StringTools.contains(foundTweenNames, "sineInOut"))
-										tweenType = FlxEase.sineInOut;
-									else
-										tweenType = FlxEase.linear;
+									switch (i.name)
+									{
+										default:
+											tweenType = linear;
+									}
 									tweenBPM(i.value, tweenType);
 							}
 						}
@@ -3661,7 +3659,7 @@ class PlayState extends MusicBeatState
 									resetText.borderColor = 0xFF000000;
 									resetButtonTimer.active = false;
 									resetButtonFailSafe = 0;
-									resetTextTwn = FlxTween.tween(resetText, {alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.sineInOut, onComplete:
+									resetTextTwn = FlxTween.tween(resetText, {alpha: 0}, 1, {type: ONESHOT, ease: sineInOut, onComplete:
 										function (twn:FlxTween)
 										{
 											resetTextTwn = null;
@@ -3966,11 +3964,11 @@ class PlayState extends MusicBeatState
 								}
 							}
 						}
-						//if (!daNote.isSustainNote)
-							//daNote.modAngle = playerStrums.members[daNote.noteData].angle;
+						if (!daNote.isSustainNote)
+							daNote.modAngle = playerStrums.members[daNote.noteData].angle;
 						if (daNote.sustainActive && !daNote.withinCompensation)
 							daNote.alpha = daNote.baseAlpha * playerStrums.members[daNote.noteData].alpha;
-						//daNote.modAngle = playerStrums.members[daNote.noteData].angle;
+						daNote.modAngle = playerStrums.members[daNote.noteData].angle;
 					}
 					//otherwise, update until a good hit. don't stop updating if it's a forcemiss
 					else if (!daNote.wasGoodHit || daNote.forceMiss)
@@ -3992,11 +3990,11 @@ class PlayState extends MusicBeatState
 								}
 							}
 						}
-						//if (!daNote.isSustainNote)
-							//daNote.modAngle = strumLineNotes.members[daNote.noteData].angle;
+						if (!daNote.isSustainNote)
+							daNote.modAngle = strumLineNotes.members[daNote.noteData].angle;
 						if (daNote.sustainActive && !daNote.withinCompensation)
 							daNote.alpha = daNote.baseAlpha * strumLineNotes.members[daNote.noteData].alpha;
-						//daNote.modAngle = strumLineNotes.members[daNote.noteData].angle;
+						daNote.modAngle = strumLineNotes.members[daNote.noteData].angle;
 					}
 					
 					if (daNote.mustPress && daNote.toggledSurpriseNote && !daNote.triggeredNoteEvent)
@@ -4443,7 +4441,7 @@ class PlayState extends MusicBeatState
 		{
 			skipActive = false;
 			FlxTween.tween(skipButton, {alpha: 0, y: skipButton.y + 10}, Conductor.crochet / 1000,
-			{type: ONESHOT, ease: FlxEase.sineInOut,
+			{type: ONESHOT, ease: sineInOut,
 				onComplete: function(tw)
 				{
 					if (skipButton != null)
@@ -4518,7 +4516,7 @@ class PlayState extends MusicBeatState
 					camHUD.visible = true;
 				}
 				if (songPosClock != null)
-					FlxTween.shake(songPosClock, 0.05, Conductor.crochet / 1000, XY, {ease: FlxEase.sineOut});
+					FlxTween.shake(songPosClock, 0.05, Conductor.crochet / 1000, XY, {ease: sineOut});
 				setSongTime(skipTo);
 				clearNotesBefore(skipTo);
 				FlxG.sound.music.volume = 1;
@@ -4727,7 +4725,7 @@ class PlayState extends MusicBeatState
 				gotShotBlurTwn.cancel();
 			gotShotBlurTwn = FlxTween.tween(this, {gotShotBlurVal: 0}, Conductor.crochet * 8 / 1000,
 			{
-				ease: FlxEase.cubeOut,
+				ease: cubeOut,
 				onUpdate: function(twn:FlxTween) 
 				{
 					gotShotBlurLol.blurX = gotShotBlurVal;
@@ -5006,7 +5004,7 @@ class PlayState extends MusicBeatState
 				songDeaths = 0;
 				hasReset = false;
 
-				FlxTween.tween(loadingIcon, {alpha: 1}, 0.25, {type: ONESHOT, ease: FlxEase.smootherStepIn, onComplete: function(twn:FlxTween)
+				FlxTween.tween(loadingIcon, {alpha: 1}, 0.25, {type: ONESHOT, ease: smootherStepIn, onComplete: function(twn:FlxTween)
 				{
 					// adjusting the song name to be compatible
 					var songFormat = StringTools.replace(storyPlaylist[0], " ", "-");
@@ -6818,7 +6816,7 @@ class PlayState extends MusicBeatState
 			{
 				if (camTween != null)
 					camTween.cancel();
-				camTween = FlxTween.tween(camGame, {zoom: 1.2}, (Conductor.crochet / 1000), {type: ONESHOT, ease: FlxEase.elasticInOut, onComplete:
+				camTween = FlxTween.tween(camGame, {zoom: 1.2}, (Conductor.crochet / 1000), {type: ONESHOT, ease: elasticInOut, onComplete:
 					function (twn:FlxTween)
 					{
 						camTween = null;
@@ -6832,7 +6830,7 @@ class PlayState extends MusicBeatState
 			{
 				if (camTween != null)
 					camTween.cancel();
-				camTween = FlxTween.tween(camGame, {zoom: 1.5}, (Conductor.crochet / 1000), {type: ONESHOT, ease: FlxEase.elasticInOut, onComplete:
+				camTween = FlxTween.tween(camGame, {zoom: 1.5}, (Conductor.crochet / 1000), {type: ONESHOT, ease: elasticInOut, onComplete:
 					function (twn:FlxTween)
 					{
 						camTween = null;
@@ -6865,7 +6863,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = false;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 1}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: FlxEase.smootherStepOut, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 1}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: smootherStepOut, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -6880,7 +6878,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = true;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.7}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.7}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -7059,14 +7057,14 @@ class PlayState extends MusicBeatState
 							clearSubtitles();
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicA, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								FlxTween.tween(tutorialGraphicA, {alpha: 1}, 0.3, {type: ONESHOT, ease: smoothStepOut});
 								for (i in 0...4)
-									FlxTween.tween(tutorialText.members[i], {alpha: 1}, 0.35, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+									FlxTween.tween(tutorialText.members[i], {alpha: 1}, 0.35, {type: ONESHOT, ease: smoothStepOut});
 							}
 						case 20:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicA, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								FlxTween.tween(tutorialGraphicA, {alpha: 0}, 0.5, {type: ONESHOT, ease: smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
 										if (tutorialGraphicA != null)
@@ -7106,11 +7104,11 @@ class PlayState extends MusicBeatState
 						case 24:
 							clearSubtitles();
 							if (!preventTutorialTips)
-								FlxTween.tween(tutorialGraphicB, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								FlxTween.tween(tutorialGraphicB, {alpha: 1}, 0.3, {type: ONESHOT, ease: smoothStepOut});
 						case 39:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicB, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								FlxTween.tween(tutorialGraphicB, {alpha: 0}, 0.5, {type: ONESHOT, ease: smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
 										if (tutorialGraphicB != null)
@@ -7120,11 +7118,11 @@ class PlayState extends MusicBeatState
 							}
 						case 40:
 							if (!preventTutorialTips)
-								FlxTween.tween(tutorialGraphicC, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								FlxTween.tween(tutorialGraphicC, {alpha: 1}, 0.3, {type: ONESHOT, ease: smoothStepOut});
 						case 52:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicC, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								FlxTween.tween(tutorialGraphicC, {alpha: 0}, 0.5, {type: ONESHOT, ease: smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
 										if (tutorialGraphicC != null)
@@ -7720,13 +7718,13 @@ class PlayState extends MusicBeatState
 						case 176:
 							avoidBulletTipGraphic.x -= 110;
 							avoidBulletTipGraphic.y -= 30;
-							FlxTween.tween(avoidBulletTipGraphic, {x: avoidBulletTipGraphic.x + 150, y: avoidBulletTipGraphic.y + 45, alpha: 1}, 0.5, {type: ONESHOT, ease: FlxEase.elasticInOut});
+							FlxTween.tween(avoidBulletTipGraphic, {x: avoidBulletTipGraphic.x + 150, y: avoidBulletTipGraphic.y + 45, alpha: 1}, 0.5, {type: ONESHOT, ease: elasticInOut});
 						case 180:
 							avoidBulletTipGraphic.acceleration.y = 1200;
 							avoidBulletTipGraphic.acceleration.x = 800;
 							avoidBulletTipGraphic.velocity.y -= FlxG.random.int(150, 175);
 							avoidBulletTipGraphic.velocity.x += FlxG.random.int(300, 400);
-							FlxTween.tween(avoidBulletTipGraphic, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 0.3,
+							FlxTween.tween(avoidBulletTipGraphic, {alpha: 0}, 0.5, {type: ONESHOT, ease: sineInOut, startDelay: 0.3,
 								onComplete: function(twn:FlxTween)
 								{
 									avoidBulletTipGraphic.kill();
@@ -8525,28 +8523,28 @@ class PlayState extends MusicBeatState
 		switch (twnType)
 		{
 			case 'expo':
-				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: FlxEase.expoOut,
+				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: expoOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camGameZoomTwn = null;
 					}
 				});
 		
-				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: FlxEase.expoOut,
+				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: expoOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camHUDZoomTwn = null;
 					}
 				});
 			case 'elastic':
-				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: FlxEase.elasticOut,
+				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: elasticOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camGameZoomTwn = null;
 					}
 				});
 		
-				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: FlxEase.elasticOut,
+				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: elasticOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camHUDZoomTwn = null;
@@ -8554,14 +8552,14 @@ class PlayState extends MusicBeatState
 				});
 
 			default:
-				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: FlxEase.smoothStepOut,
+				camGameZoomTwn = FlxTween.tween(camGame, {zoom: defaultCamZoom}, time, {ease: smoothStepOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camGameZoomTwn = null;
 					}
 				});
 		
-				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: FlxEase.smoothStepOut,
+				camHUDZoomTwn = FlxTween.tween(camHUD, {zoom: 1}, time, {ease: smoothStepOut,
 					onComplete: function(twn:FlxTween) 
 					{
 						camHUDZoomTwn = null;
@@ -8601,7 +8599,7 @@ class PlayState extends MusicBeatState
 				{
 					songPosGroup.forEach(function(blep:FlxSprite)
 					{
-						FlxTween.tween(blep, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smootherStepIn, onComplete: function(twn:FlxTween)
+						FlxTween.tween(blep, {alpha: 0}, 0.5, {type: ONESHOT, ease: smootherStepIn, onComplete: function(twn:FlxTween)
 						{
 							blep.visible = false;
 						}});
@@ -8888,7 +8886,7 @@ class PlayState extends MusicBeatState
 										dadFollowOffset[0] = -60;
 										dadFollowOffset[1] = -60;
 										dad.playAnim('badFingerStart', true);
-										FlxTween.tween(camGame, {zoom: 1}, 0.1, {type: ONESHOT, ease: FlxEase.expoIn});
+										FlxTween.tween(camGame, {zoom: 1}, 0.1, {type: ONESHOT, ease: expoIn});
 										allowHeartBeatSounds = false;
 									case 255:
 										//doCamFollowing = false;
@@ -8912,17 +8910,17 @@ class PlayState extends MusicBeatState
 										allowHeartBeatSounds = true;
 										gf.playAnim('danceRight', true);
 										boyfriend.playAnim('scaredHOLD', false);
-										FlxTween.tween(camHUD, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
+										FlxTween.tween(camHUD, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: quadIn});
 									case 258:
 										defaultCamZoom += 0.15;
 										camZooming = true;
 										boyfriend.playAnim('awkward', true);
 										//trace("AWKWARD LMAO");
 									case 260:
-										FlxTween.tween(grpStrumLine, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
+										FlxTween.tween(grpStrumLine, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: quadIn});
 										playerStrums.forEach(function(strum:FlxSprite)
 										{
-											FlxTween.tween(strum, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
+											FlxTween.tween(strum, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: quadIn});
 										});
 										midsongCutscene = false;
 										defaultCamZoom = 0.9;
@@ -8962,7 +8960,7 @@ class PlayState extends MusicBeatState
 										if (isStoryMode)
 										{
 											fadeOutGameplayHUD(4.5);
-											FlxTween.tween(camGame, {zoom: 1.05}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.expoInOut});
+											FlxTween.tween(camGame, {zoom: 1.05}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: expoInOut});
 											//trace('HUD now Faded Out');
 										}
 									case 530:
@@ -8995,7 +8993,7 @@ class PlayState extends MusicBeatState
 										camGame.zoom = 1;
 										FlxTween.tween(camGame, {zoom: defaultCamZoom}, 1.0, 
 											{type: ONESHOT, 
-												ease: FlxEase.quadInOut,
+												ease: quadInOut,
 											});
 									case 191:
 										swapDadForNewChar(dadSwaperoo, 100, 315);
@@ -9020,7 +9018,7 @@ class PlayState extends MusicBeatState
 											camGame.zoom = 1.15;
 											FlxTween.tween(camGame, {zoom: 0.95}, Conductor.crochet * 4.5 / 1000, 
 												{type: ONESHOT,
-													ease: FlxEase.quadOut,
+													ease: quadOut,
 												});	
 										}
 										dad.playAnim('angryLoop', true);
@@ -9169,8 +9167,8 @@ class PlayState extends MusicBeatState
 										objectWiggleShader.waveAmplitude = 0.00125;
 										objectTrailShader.blend = ADD;
 										objectTrailShader.color = 0xff8080;
-										FlxTween.tween(bgBopper, {alpha: 0.65, y: 590 - (bgBopper.height - 80)}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
-										FlxTween.tween(theBorderBG, {alpha: 0.3}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
+										FlxTween.tween(bgBopper, {alpha: 0.65, y: 590 - (bgBopper.height - 80)}, 0.5, {type: ONESHOT, ease: quadOut});
+										FlxTween.tween(theBorderBG, {alpha: 0.3}, 0.5, {type: ONESHOT, ease: quadOut});
 										dadFollowOffset[1] = 15;
 										bfFollowOffset[1] += 20;
 										inSongClimax = true;
@@ -9178,11 +9176,11 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.flashing)
 										{
 											colourWash.alpha = 0;
-											FlxTween.tween(colourWash, {alpha: 0.1}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.smootherStepOut});
+											FlxTween.tween(colourWash, {alpha: 0.1}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: smootherStepOut});
 										}
 									case 223:
-										FlxTween.tween(bgBopper, {alpha: 0, y: 590}, 1, {type: ONESHOT, ease: FlxEase.quadIn});
-										FlxTween.tween(theBorderBG, {alpha: 0.5}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
+										FlxTween.tween(bgBopper, {alpha: 0, y: 590}, 1, {type: ONESHOT, ease: quadIn});
+										FlxTween.tween(theBorderBG, {alpha: 0.5}, 0.5, {type: ONESHOT, ease: quadOut});
 										objectWiggleShader.waveSpeed = 16;
 										objectWiggleShader.waveAmplitude = 0.0009;
 										objectTrailShader.alpha = 0.65;
@@ -9191,7 +9189,7 @@ class PlayState extends MusicBeatState
 										inSongClimax = false;
 										singFollowMultiplier = 1;
 										if (FlxG.save.data.flashing)
-											FlxTween.tween(colourWash, {alpha: stageAmbAlpha}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.smootherStepOut});
+											FlxTween.tween(colourWash, {alpha: stageAmbAlpha}, Conductor.crochet / 1000, {type: ONESHOT, ease: smootherStepOut});
 									case 224:
 										//glitchyGlitchEffect.active = false;
 										defaultCamZoom = 0.95;
@@ -9245,14 +9243,14 @@ class PlayState extends MusicBeatState
 										objectTrailShader.alpha = 1;
 										defaultCamZoom = 0.815;
 										camGame.zoom += 0.02;
-										FlxTween.tween(bgBopper, {alpha: 0.8, y: 590 - (bgBopper.height - 80)}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
-										FlxTween.tween(theBorderBG, {alpha: 0.3}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
+										FlxTween.tween(bgBopper, {alpha: 0.8, y: 590 - (bgBopper.height - 80)}, 0.5, {type: ONESHOT, ease: quadOut});
+										FlxTween.tween(theBorderBG, {alpha: 0.3}, 0.5, {type: ONESHOT, ease: quadOut});
 										inSongClimax = true;
 										singFollowMultiplier = 2.25;
 										if (FlxG.save.data.flashing)
 										{
 											colourWash.blend = ADD;
-											FlxTween.color(colourWash, Conductor.crochet * 4 / 1000, FlxColor.WHITE, stageAmbColour, {type: ONESHOT, ease: FlxEase.smootherStepOut});
+											FlxTween.color(colourWash, Conductor.crochet * 4 / 1000, FlxColor.WHITE, stageAmbColour, {type: ONESHOT, ease: smootherStepOut});
 										}
 									case 416:
 										objectTrailShader.alpha = 0.5;
@@ -9269,9 +9267,9 @@ class PlayState extends MusicBeatState
 										bfFollowOffset[1] -= 10;
 										allowNoteHitSounds = false;
 										camFollowSpeed = 0.01;
-										FlxTween.tween(bgBopper, {alpha: -10, y: 690}, 4.1142, {type: ONESHOT, ease: FlxEase.quadIn});
-										FlxTween.tween(camHUD, {alpha: 0.75}, 4.1142, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 0.1});
-										FlxTween.tween(theBorderBG, {alpha: 0.8}, 4.1142, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 0.1});
+										FlxTween.tween(bgBopper, {alpha: -10, y: 690}, 4.1142, {type: ONESHOT, ease: quadIn});
+										FlxTween.tween(camHUD, {alpha: 0.75}, 4.1142, {type: ONESHOT, ease: sineInOut, startDelay: 0.1});
+										FlxTween.tween(theBorderBG, {alpha: 0.8}, 4.1142, {type: ONESHOT, ease: sineInOut, startDelay: 0.1});
 										theBorderBG.alpha += 0.0035;
 										dadFollowOffset[1] = -25;
 										inSongClimax = false;
@@ -9280,7 +9278,7 @@ class PlayState extends MusicBeatState
 										{
 											colourWash.blend = SCREEN;
 											colourWash.alpha = 0;
-											FlxTween.tween(colourWash, {alpha: stageAmbAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.smootherStepOut});
+											FlxTween.tween(colourWash, {alpha: stageAmbAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: smootherStepOut});
 										}
 									case 507:
 										dadFollowOffset[1] = 5;
@@ -9294,7 +9292,7 @@ class PlayState extends MusicBeatState
 										midsongCutscene = true;
 										dad.playAnim('endsongAnim1', true);
 										camShake(true, true, 'camGame', 0.03, idleCamShakeTimer - 0.05);
-										FlxTween.tween(camGame, {zoom: 1.65}, 2, {type: ONESHOT, ease: FlxEase.quadIn});
+										FlxTween.tween(camGame, {zoom: 1.65}, 2, {type: ONESHOT, ease: quadIn});
 									case 509:
 										//glitchyGlitchEffect.active = false;
 										boyfriend.playAnim('concerned', true);
@@ -9383,25 +9381,25 @@ class PlayState extends MusicBeatState
 									case 159:
 										camZooming = false;
 									case 160:
-										FlxTween.tween(camGame, {zoom: 0.82}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.quadInOut});
+										FlxTween.tween(camGame, {zoom: 0.82}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: quadInOut});
 										strumLineNotes.forEach(function(babyArrow:FlxSprite)
 										{
-											FlxTween.tween(babyArrow, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
+											FlxTween.tween(babyArrow, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: quadIn});
 										});
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
 											grpStrumLine.forEach(function(leStrussy:FlxSprite)
 											{
-												FlxTween.tween(leStrussy, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
+												FlxTween.tween(leStrussy, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: quadIn});
 											});
 										}
 										camFollowSpeed = 0.0175;
 									case 174:
 										dad.playAnim('gunLOAD', true);
-										FlxTween.tween(camGame, {zoom: 0.85}, 0.4, {type: ONESHOT, ease: FlxEase.sineInOut});
+										FlxTween.tween(camGame, {zoom: 0.85}, 0.4, {type: ONESHOT, ease: sineInOut});
 									case 175:
-										FlxTween.tween(camGame, {zoom: 0.95}, 0.15, {type: ONESHOT, ease: FlxEase.quadInOut});
+										FlxTween.tween(camGame, {zoom: 0.95}, 0.15, {type: ONESHOT, ease: quadInOut});
 										midsongCutscene = true;
 										dad.playAnim('gunWARNING', true);
 										boyfriend.playAnim('scared', true);
@@ -9416,12 +9414,12 @@ class PlayState extends MusicBeatState
 									case 179:
 										strumLineNotes.forEach(function(babyArrow:FlxSprite)
 										{
-											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: FlxEase.quadIn});
+											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: quadIn});
 										});
 										if (FlxG.save.data.strumline)
 											grpStrumLine.forEach(function(leStrussy:FlxSprite)
 											{
-												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete: 
+												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: quadOut, onComplete: 
 													function(twn:FlxTween)
 													{
 														doStrumLineBGTweening = true;
@@ -9449,10 +9447,10 @@ class PlayState extends MusicBeatState
 										camFollow.x = gf.getGraphicMidpoint().x + 50;
 										camFollow.y = gf.getGraphicMidpoint().y - 50;
 										camZooming = false;
-										FlxTween.tween(camGame, {zoom: 1}, 0.5, {type: ONESHOT, ease: FlxEase.elasticInOut});
+										FlxTween.tween(camGame, {zoom: 1}, 0.5, {type: ONESHOT, ease: elasticInOut});
 									case 304:
 										//Hides the HUD and zooms the camera out once priest speaks
-										camTween = FlxTween.tween(camGame, {zoom: 1.2}, (Conductor.crochet / 1000), {type: ONESHOT, ease: FlxEase.elasticInOut, onComplete:
+										camTween = FlxTween.tween(camGame, {zoom: 1.2}, (Conductor.crochet / 1000), {type: ONESHOT, ease: elasticInOut, onComplete:
 											function (twn:FlxTween)
 											{
 												camTween = null;
@@ -9460,14 +9458,14 @@ class PlayState extends MusicBeatState
 										});
 										strumLineNotes.forEach(function(babyArrow:FlxSprite)
 										{
-											FlxTween.tween(babyArrow, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadOut});
+											FlxTween.tween(babyArrow, {alpha: 0}, 0.2, {type: ONESHOT, ease: quadOut});
 										});
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
 											grpStrumLine.forEach(function(leStrussy:FlxSprite)
 											{
-												FlxTween.tween(leStrussy, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadIn});
+												FlxTween.tween(leStrussy, {alpha: 0}, 0.2, {type: ONESHOT, ease: quadIn});
 											});
 										}
 										dad.playAnim('gunSHOCKED', true);
@@ -9502,12 +9500,12 @@ class PlayState extends MusicBeatState
 										midsongCutscene = false;
 										strumLineNotes.forEach(function(babyArrow:FlxSprite)
 										{
-											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: FlxEase.quadIn});
+											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: quadIn});
 										});
 										if (FlxG.save.data.strumline)
 											grpStrumLine.forEach(function(leStrussy:FlxSprite)
 											{
-												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete:
+												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: quadOut, onComplete:
 												function(twn:FlxTween)
 												{
 													doStrumLineBGTweening = true;
@@ -9555,7 +9553,7 @@ class PlayState extends MusicBeatState
 										singFollowMultiplier = 2;
 									case 223:
 										dad.blend = SUBTRACT;
-										FlxTween.tween(dummyBlackScreen, {alpha: 1}, Conductor.crochet / 900, {type: ONESHOT, ease: FlxEase.sineInOut});
+										FlxTween.tween(dummyBlackScreen, {alpha: 1}, Conductor.crochet / 900, {type: ONESHOT, ease: sineInOut});
 									case 224:
 										stageParticles.visible = false;
 										inSongClimax = false;
@@ -9579,14 +9577,14 @@ class PlayState extends MusicBeatState
 									case 353:
 										camZooming = true;
 									case 416:
-										FlxTween.tween(camGame, {zoom: 1}, Conductor.crochet * 30 / 1000, {type: ONESHOT, ease: FlxEase.sineInOut});
+										FlxTween.tween(camGame, {zoom: 1}, Conductor.crochet * 30 / 1000, {type: ONESHOT, ease: sineInOut});
 										allowHeartBeatSounds = false;
 										camZooming = false;
 										inSongClimax = false;
 										singFollowMultiplier = 1;
 										camHUD.zoom = 1;
 									case 447:
-										FlxTween.tween(camGame, {zoom: 0.85}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
+										FlxTween.tween(camGame, {zoom: 0.85}, Conductor.crochet / 1000, {type: ONESHOT, ease: expoIn});
 									case 448:
 										defaultCamZoom = 0.85;
 										boyfriend.active = false;
@@ -9654,7 +9652,7 @@ class PlayState extends MusicBeatState
 										camGame.shake(0.05, 0.3, true, true);
 									case 896:
 										camFollowSpeed = 0.01;
-										FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.quadOut});
+										FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: quadOut});
 									case 932:
 										miscs.volume = vocalsVolume;
 										remove(boyfriend);
