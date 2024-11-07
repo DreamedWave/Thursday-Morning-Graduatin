@@ -1359,8 +1359,8 @@ class FlxCamera extends FlxBasic
 	//This is such a fucking mess BAHAHAHAHA
 	var scrollShakeX:Float = 0;
 	var scrollShakeY:Float = 0;
-	var prevScrollShakeX:Float = 0;
-	var prevScrollShakeY:Float = 0;
+	var nextScrollShakeX:Float = 0;
+	var nextScrollShakeY:Float = 0;
 	var shakeBaseDuration:Float = 0;
 	var frameRateCap:Int = 0;
 	//didnt wanna do this but DGBDJOHJMSNHFNJ
@@ -1379,10 +1379,10 @@ class FlxCamera extends FlxBasic
 					if (scrollShakeTween != null)
 						scrollShakeTween.cancel();
 
-					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.2 * _fxShakeHoldFor, {type: ONESHOT, ease: FlxEase.circOut, 
+					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {type: ONESHOT, ease: FlxEase.circOut, 
 						onComplete: function (twn:FlxTween){scrollShakeTween = null;}});
-					prevScrollShakeX = 0;
-					prevScrollShakeY = 0;
+					nextScrollShakeX = 0;
+					nextScrollShakeY = 0;
 				}
 				else
 				{
@@ -1413,8 +1413,8 @@ class FlxCamera extends FlxBasic
 						frameRateCap--;
 						//Different Lerp for camShake
 						//im going through it ok dont judge me
-						scrollShakeX = FlxMath.lerp(0, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
-						scrollShakeY = FlxMath.lerp(0, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+						scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+						scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
 					}
 					else
 					{
@@ -1422,36 +1422,36 @@ class FlxCamera extends FlxBasic
 						frameRateCap = Math.round((FlxG.save.data.fpsCap / 60) * _fxShakeHoldFor);
 						if (_fxShakeAxes != FlxAxes.Y)
 						{
-							if (prevScrollShakeX < 0)
-								scrollShakeX = FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1);
+							if (nextScrollShakeX < 0)
+								nextScrollShakeX = FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1);
 							else
-								scrollShakeX = FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							scrollShakeX /= 2;
-							scrollShakeX /= zoom;
-							scrollShakeX *= FlxG.width / 1280;
-							prevScrollShakeX = scrollShakeX;
+								nextScrollShakeX = FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1);
+							nextScrollShakeX /= 2;
+							nextScrollShakeX /= zoom;
+							nextScrollShakeX *= FlxG.width / 1280;
+							scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
 						}
 
 						if (_fxShakeAxes != FlxAxes.X)
 						{
-							if (prevScrollShakeY < 0)
-								scrollShakeY = FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1);
+							if (nextScrollShakeY < 0)
+								nextScrollShakeY = FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1);
 							else
-								scrollShakeY = FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							scrollShakeY /= 2;
-							scrollShakeY /= zoom;
-							scrollShakeY *= FlxG.height / 720;
-							prevScrollShakeY = scrollShakeY;
+								nextScrollShakeY = FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1);
+							nextScrollShakeY /= 2;
+							nextScrollShakeY /= zoom;
+							nextScrollShakeY *= FlxG.height / 720;
+							scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
 						}
 					}
 				}
 				else
 				{
 					if (_fxShakeAxes != FlxAxes.Y)
-						flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * width, _fxShakeIntensity * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
+						flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * 0.5 * width, _fxShakeIntensity * 0.5 * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
 
 					if (_fxShakeAxes != FlxAxes.X)
-						flashSprite.y += (FlxG.random.float(-_fxShakeIntensity * height, _fxShakeIntensity * height) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.height / 720);
+						flashSprite.y += (FlxG.random.float(-_fxShakeIntensity * 0.5 * height, _fxShakeIntensity * 0.5 * height) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.height / 720);
 				}
 			}
 		}
@@ -1740,8 +1740,8 @@ class FlxCamera extends FlxBasic
 			case 'shake':
 				scrollShakeX = 0;
 				scrollShakeY = 0;
-				prevScrollShakeX = 0;
-				prevScrollShakeY = 0;
+				nextScrollShakeX = 0;
+				nextScrollShakeY = 0;
 				_fxShakeDuration = 0;
 				_fxShakeHoldFor = 1;
 				shakeBaseDuration = 0;
@@ -1756,8 +1756,8 @@ class FlxCamera extends FlxBasic
 				_fxFadeAlpha = 0.0;
 				scrollShakeX = 0;
 				scrollShakeY = 0;
-				prevScrollShakeX = 0;
-				prevScrollShakeY = 0;
+				nextScrollShakeX = 0;
+				nextScrollShakeY = 0;
 				_fxFadeDuration = 0.0;
 				_fxShakeHoldFor = 1;
 				_fxShakeDuration = 0;
