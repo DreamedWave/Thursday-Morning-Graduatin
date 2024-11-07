@@ -54,14 +54,9 @@ import openfl.ui.Keyboard;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
-//#if shaders_supported
 import openfl.filters.BitmapFilter;
 import openfl.filters.BlurFilter;
-//import openfl.filters.GlowFilter;
-//Indie Cross ShaderShit
 import IndieCrossShaders;
-//#end
-//import openfl.display.StageQuality; //whut is this used for????
 import openfl.events.KeyboardEvent;
 import shaders.WiggleEffect;
 import flixel.util.FlxAxes;
@@ -72,15 +67,12 @@ import Sys;
 import sys.FileSystem;
 #end
 
-//PROFILER - REMOVE ONCE IN RELEASE!!!
-//import pgr.dconsole.DC;
-
 using StringTools;
 
 class PlayState extends MusicBeatState
 {
 	public static var instance:PlayState;
-	public var crashPrevBool:Bool = false; //crash prevention
+	public var allowDeaths:Bool = false; //crash prevention
 
 	public static var curStage:String = '';
 	public static var stageSuffix:String = '';
@@ -129,10 +121,27 @@ class PlayState extends MusicBeatState
 	var detailsText:String = "";
 	#end
 
+	//VolumeShit
+	//Transfered from HitSoundFunction
+	var musicVolume:Float = 0;
+	var vocalsVolume:Float = 0;
+	var soundsVolume:Float = 0;
+	var noteHitVolume:Float = 0;
+	
+	private var lowHPHeartBeat:FlxSound;
+	private var lowHPOverlay:FlxSprite;
+	var allowHeartBeatSounds:Bool = true;
+
 	public var musicGroup:FlxSoundGroup;
-	var hitSFXGroup:FlxSoundGroup;
-	var susHitSFXGroup:FlxSoundGroup;
-	var specilNoteSFXGroup:FlxSoundGroup;
+	var missSoundGroup:FlxSoundGroup;
+
+	//Note Hit SFX Shits
+	public static var hitsoundType:String = "default"; //this gets set by loadingState everytime so uhh dw abt it lol
+	var allowNoteHitSounds:Bool = true;
+	var noteHitSFXGroup:FlxSoundGroup;
+	var susNoteHitSFXGroup:FlxSoundGroup;
+	var specilNoteHitSFXGroup:FlxSoundGroup;
+
 	//for the adaptive Music
 	public var instLowHP:FlxSound;
 	//For the FNF voices
@@ -140,6 +149,7 @@ class PlayState extends MusicBeatState
 	//For things such as Playing With Fire Guns and other shits that I am yet to do
 	public var miscs:FlxSound;
 	//ADAPTIVE MUSIC AAAAA FUKC
+	//good god this has gYATT to be turned into a soundgroup LMFAO
 	private var drums:FlxSound;
 	private var taiko:FlxSound;
 	private var choir:FlxSound;
@@ -193,14 +203,15 @@ class PlayState extends MusicBeatState
 	var grpRatingsMG = new FlxSpriteGroup();
 	var grpRatingsFG = new FlxSpriteGroup();
 
-	var grpStrumLine:FlxSpriteGroup = null;
-	var strumLineBGTween:FlxTween;
-	var doStrumLineBGTweening:Bool = false;
 	public static var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
 	public static var playerStrums:FlxTypedGroup<FlxSprite> = null;
 	public var cpuStrums:FlxTypedGroup<FlxSprite> = null;
-	var preventBFIdleAnim:Bool = false;
+	var grpStrumLine:FlxSpriteGroup = null;
+	var strumLineBGTween:FlxTween;
+	var doStrumLineBGTweening:Bool = false;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
+
+	var preventBFIdleAnim:Bool = false;
 
 	private var camZooming:Bool = false;
 	private var camZoomUsesTween:Bool = false;
@@ -315,20 +326,6 @@ class PlayState extends MusicBeatState
 
 	//For stage-only fade outs
 	var dummyBlackScreen:FlxSprite;
-
-	public static var hitsoundType:String = "default"; //this gets set by loadingState everytime so uhh dw abt it lol
-	var allowNoteHitSounds:Bool = true;
-	private var missSound:FlxSound;
-	private var lowHPHeartBeat:FlxSound;
-	private var lowHPOverlay:FlxSprite;
-	//Make this changable
-	//Done!... hopefully nothing breaks haha  ha
-	//Transfered from HitSoundFunction
-	var noteHitVolume:Float = 0;
-	var musicVolume:Float = 0;
-	var vocalsVolume:Float = 0;
-	var sfxVolume:Float = 0;
-	var allowHeartBeatSounds:Bool = true;
 
 	public var songScore:Int = 0;
 	var dummySongScore:Float = 0;
@@ -461,10 +458,10 @@ class PlayState extends MusicBeatState
 		//Update Saves
 		SaveData.initSave();
 
+		//SetVolumes
 		musicVolume = FlxG.save.data.musicVol * 0.01;
 		vocalsVolume = FlxG.save.data.vocalsVol * 0.01;
-		sfxVolume = FlxG.save.data.gamesfxVol * 0.01;
-
+		soundsVolume = FlxG.save.data.gamesfxVol * 0.01;
 		noteHitVolume = FlxG.save.data.notesfxVol * 0.01;
 
 		if (FlxG.save.data.fpsCap > 290)
@@ -473,15 +470,9 @@ class PlayState extends MusicBeatState
 			FlxG.save.data.fpsCap = 290;
 		}
 
-		//LMAO WE NEED THIS LIKE ACTUALLY-
-		//if (FlxG.sound.music != null)
-			//FlxG.sound.music.stop();
-
 		//Startup Shit
 		songStarted = false;
-
 		PauseSubState.resyncToLastPos = false;
-
 		highestCombo = 0;
 
 		PlayStateChangeables.useDownscroll = FlxG.save.data.downscroll;
@@ -519,7 +510,6 @@ class PlayState extends MusicBeatState
 		bgColor = 0xFF000000;
 
 		pauseBlurLol = new BlurFilter(0, 0, 2);
-		//testGLOWFILTER = new GlowFilter(FlxColor.RED, 1, 20, 20, 10, 2, true, false);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -553,23 +543,17 @@ class PlayState extends MusicBeatState
 		FlxCamera.defaultCameras = [camGame];
 
 		camGame.filters = camGameFilters;
-		//camHUD.filters = camHUDFilters;
 		camGameFilters.push(pauseBlurLol);
-		//camGameFilters.push(gotShotBlurLol);
-		//camGameFilters.push(testGLOWFILTER); //TESTING PURPOSES
-		//setAll()
-		//camHUDFilters.push(pauseBlurLol);
 		camGame.filtersEnabled = false;
 
 		lowHPHeartBeat = new FlxSound().loadEmbedded(Paths.sound('lowHP'));
 		styleSound = new FlxSound().loadEmbedded(Paths.sound('styleOnEm'));
-		missSound = new FlxSound();
-		musicGroup = new FlxSoundGroup(FlxG.save.data.musicVol * 0.01);
-		specilNoteSFXGroup = new FlxSoundGroup(1);
+		musicGroup = new FlxSoundGroup(musicVolume);
+		specilNoteHitSFXGroup = new FlxSoundGroup(soundsVolume);
 		if (FlxG.save.data.notesfx)
 		{
-			hitSFXGroup = new FlxSoundGroup(1);
-			susHitSFXGroup = new FlxSoundGroup(1);
+			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
+			susNoteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
 		}
 
 		persistentUpdate = true;
@@ -2159,7 +2143,7 @@ class PlayState extends MusicBeatState
 		trace("StartCountdown");
 		#end
 
-		crashPrevBool = true;
+		allowDeaths = true;
 
 		#if windows
 		// Updating Discord Rich Presence
@@ -2412,10 +2396,8 @@ class PlayState extends MusicBeatState
 					if(FlxG.save.data.missSounds)
 					{
 						//vocals.volume = 0;
-						if (missSound.playing)
-							missSound.stop();
-						missSound = FlxG.sound.play(Paths.soundRandom('missnote', 1, 3));
-						missSound.volume = sfxVolume * FlxG.random.float(0.2, 0.25);
+						missSoundGroup.stop();
+						FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.2, 0.25), false, missSoundGroup);
 					}
 		
 					// Whole switch statement replaced with a single line :)
@@ -2617,7 +2599,6 @@ class PlayState extends MusicBeatState
 
 		instLowHP.time = FlxG.sound.music.time;
 		instLowHP.play();
-		musicGroup.add(instLowHP);
 		vocals.play();
 		miscs.play();
 		/*IDEA FOR THE FINALE 7:25 FEB-02-2022
@@ -2792,7 +2773,7 @@ class PlayState extends MusicBeatState
 		switch (SONG.song)
 		{
 			case "Retaliation":
-				miscs.volume = 0.3 * sfxVolume;
+				miscs.volume = 0.3 * soundsVolume;
 			case "Finale":
 				vocals.looped = true;
 		}
@@ -2811,7 +2792,6 @@ class PlayState extends MusicBeatState
 		// Per song offset check
 		#if windows
 		// pre lowercasing the song name (generateSong)
-
 		var songPath = 'assets/data/' + songLowercase + '/';
 
 		for (file in sys.FileSystem.readDirectory(songPath))
@@ -2932,7 +2912,6 @@ class PlayState extends MusicBeatState
 		clearNotesBefore(Conductor.songPosition);
 		setSongTime(0);
 		vocals.play();
-		//musicGroup.play();
 		
 		var songData = SONG;
 		curSong = songData.song;
@@ -3086,7 +3065,7 @@ class PlayState extends MusicBeatState
 
 			cpuStrums.forEach(function(spr:FlxSprite)
 			{
-				spr.centerOffsets(); // CPU arrows start out slightly off-center
+				spr.centerOffsets(); //CPU arrows start out slightly off-center
 			});
 
 			if(player)
@@ -3202,19 +3181,18 @@ class PlayState extends MusicBeatState
 			if (paused && !died)
 			{
 				if (FlxG.sound.music != null)
-				{
 					FlxG.sound.music.pause();
-					musicGroup.pause();
-					vocals.pause();
-					miscs.pause();
 
-					switch (curSong)
-					{
-						case "Desperation" | "Disagreement" | "Retaliation":
-							if (!startedCountdown && songStarted)
-								if (stageSound != null && stageSound.playing)
-									stageSound.pause();
-					}
+				musicGroup.pause();
+				vocals.pause();
+				miscs.pause();
+
+				switch (curSong)
+				{
+					case "Desperation" | "Disagreement" | "Retaliation":
+						if (!startedCountdown && songStarted)
+							if (stageSound != null && stageSound.playing)
+								stageSound.pause();
 				}
 
 				#if windows
@@ -3523,10 +3501,10 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+		super.update(elapsed);
+
 		if (FlxG.mouse.visible && !paused)
 			FlxG.mouse.visible = false;
-
-		super.update(elapsed);
 
 		if (!showedResults && !endedSong && FlxG.sound.music.playing)
 		{				
@@ -3631,14 +3609,14 @@ class PlayState extends MusicBeatState
 		else if (!endedSong && canPause)
 			safeVignette.visible = true;
 
-		if (controls.PAUSE && !skippingIntro && !video.isPlaying && crashPrevBool && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
+		if (controls.PAUSE && !skippingIntro && !video.isPlaying && allowDeaths && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
 			pauseGame();
 
 		//CHANGED FROM MULTIPLE IF STATEMENTS (see if this causes problems)
 		//Changed it back to multiple if statements to allow for more functionality
 		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 3) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
 		{
-			if (!showedResults && !video.isPlaying && crashPrevBool && !PlayStateChangeables.botPlay)
+			if (!showedResults && !video.isPlaying && allowDeaths && !PlayStateChangeables.botPlay)
 			{
 				if (!cannotDie)
 				{
@@ -4013,7 +3991,7 @@ class PlayState extends MusicBeatState
 									switch (daNote.noteType)
 									{
 										case 'mine':
-											dodgeFuckingShot(daNote.noteData);
+											dodgeFuckingShot(false, daNote.noteData);
 											//la health none for mine
 											//if (FlxG.save.data.accuracyMod == 0)
 											totalNotesHit += 1;
@@ -4079,10 +4057,8 @@ class PlayState extends MusicBeatState
 												popUpScore('', daNote);
 												if(FlxG.save.data.missSounds)
 												{
-													if (missSound.playing)
-														missSound.stop();
-													missSound = FlxG.sound.play(Paths.soundRandom('missnote', 1, 3));
-													missSound.volume = sfxVolume * FlxG.random.float(0.3, 0.4);
+													missSoundGroup.stop();
+													FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.3, 0.4), false, missSoundGroup);
 												}
 												vocals.volume = 0;
 											}
@@ -4123,7 +4099,7 @@ class PlayState extends MusicBeatState
 									switch (daNote.noteType)
 									{
 										case 'mine':
-											dodgeFuckingShot(daNote.noteData);
+											dodgeFuckingShot(false, daNote.noteData);
 										case 'trigger':
 											getFuckingShot(true);
 									}
@@ -4294,7 +4270,7 @@ class PlayState extends MusicBeatState
 
 			//Low-Health Suspense
 			lowHealthEffectVolume = 1 - health;
-			lowHPHeartBeat.volume = FlxMath.lerp(lowHealthEffectVolume * sfxVolume, lowHPHeartBeat.volume, calculateLerpTime(elapsed, 15));
+			lowHPHeartBeat.volume = FlxMath.lerp(lowHealthEffectVolume * soundsVolume, lowHPHeartBeat.volume, calculateLerpTime(elapsed, 15));
 			
 			if (lowHPOverlay.alpha > 0)
 			{
@@ -4639,8 +4615,8 @@ class PlayState extends MusicBeatState
 			if (stageOverlay1 != null && stageOverlay1.animation.curAnim.name.toLowerCase() == 'warning')
 				stageOverlay1.animation.play('static');
 		}
-		specilNoteSFXGroup.stop();
-		FlxG.sound.play(Paths.sound('Note_Mine'), 1, false, specilNoteSFXGroup);
+		specilNoteHitSFXGroup.stop();
+		FlxG.sound.play(Paths.sound('Note_Mine'), 1, false, specilNoteHitSFXGroup);
 		camShake(true, false, 'camGame', 0.2, Conductor.crochet / 1000);
 		camShake(true, true, 'camHUD', 0.075, Conductor.crochet / 500, X);
 		
@@ -4714,7 +4690,7 @@ class PlayState extends MusicBeatState
 					//IDEA! MAKE IT DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
 					//LIKE Paths.sound('damageAlert_' + timesClutched)!! !!!
 					//d0ne HEHEHEHEHEHEH!!
-					FlxG.sound.play(Paths.sound('damageAlert_' + (timesClutched < 5 ? timesClutched : 5)), 0.65 + 0.05 * timesClutched, false, specilNoteSFXGroup);
+					FlxG.sound.play(Paths.sound('damageAlert_' + (timesClutched < 5 ? timesClutched : 5)), 0.65 + 0.05 * timesClutched, false, specilNoteHitSFXGroup);
 					//Before you say "woAH, theres LORE hidden in the code!!!!11!!1!", only the city has the weird glitchy overlay thanng, no it aint lore i just dont wanna add that var on any other stage calm yoself lol
 					if (stageOverlay2 != null && stageOverlay2.exists)
 					{
@@ -4737,7 +4713,7 @@ class PlayState extends MusicBeatState
 				else if (!cannotDie)
 				{
 					causeOfDeath = 'ate-many-bullets';
-					FlxG.sound.play(Paths.sound('damageAlert_fail'), 0.7, false, specilNoteSFXGroup);
+					FlxG.sound.play(Paths.sound('damageAlert_fail'), 0.7, false, specilNoteHitSFXGroup);
 					targetHealth = -100;
 					health = -100;
 				}
@@ -4765,7 +4741,7 @@ class PlayState extends MusicBeatState
 			camShake(true, false, 2, 0.075, Conductor.crochet / 1000);
 			camShake(true, true, 'camHUD', 2, 0.01, Conductor.crochet / 500);
 			if (playDodgeSound)
-				FlxG.sound.play(Paths.sound('Note_Trigger'), 1, false, hitSFXGroup);
+				FlxG.sound.play(Paths.sound('Note_Trigger'), 1, false, specilNoteHitSFXGroup);
 	}
 
 	var loadingNextSong:Bool = false;
@@ -5985,10 +5961,8 @@ class PlayState extends MusicBeatState
 			if(FlxG.save.data.missSounds && daNote.noteType != 'trigger')
 			{
 				vocals.volume = 0;
-				if (missSound.playing)
-					missSound.stop();
-				missSound = FlxG.sound.play(Paths.soundRandom('missnote', 1, 3));
-				missSound.volume = sfxVolume * FlxG.random.float(0.4, 0.5);
+				missSoundGroup.stop();
+				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.3, 0.4), false, missSoundGroup);
 			}
 
 			// Whole switch statement replaced with a single line :)
@@ -6017,10 +5991,8 @@ class PlayState extends MusicBeatState
 				dad.playAnim('sing' + noteDirection + "miss", true);
 			if(FlxG.save.data.missSounds)
 			{
-				if (missSound.playing)
-					missSound.stop();
-				missSound = FlxG.sound.play(Paths.soundRandom('enemyMiss', 1, 3));
-				missSound.volume = sfxVolume * FlxG.random.float(0.15, 0.2);
+				//Unsure if I should put this in a sound group or not lol :3
+				FlxG.sound.play(Paths.soundRandom('enemyMiss', 1, 3), FlxG.random.float(0.15, 0.2), missSoundGroup);
 			}
 			
 			if (healthBar.percent < 85)
@@ -6200,34 +6172,34 @@ class PlayState extends MusicBeatState
 			//	SFX for hitting notes (such as SICK, GOOD, BAD, SHIT, and SPECIAL NOTEs);
 			if (!PlayStateChangeables.botPlay && !note.withinCompensation)
 			{
-				hitSFXGroup.stop();
+				noteHitSFXGroup.stop();
 				//Converted from nested if-else statements and 2 switch statements to a one switch! You're welcome!
 				switch (rating)
 				{
 					case 'sick':
 						//For Sick Rating
-						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Sick"), noteHitVolume, false, hitSFXGroup);
+						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume;
 
 					case 'good':
 						//For Good Rating
-						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Good"), noteHitVolume, false, hitSFXGroup);
+						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.85;
 
 					case 'bad':
 						//For Bad Rating
-						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), noteHitVolume, false, hitSFXGroup);
+						FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.55;
 
 					case 'shit':
 						//For Shit Rating
 						if (allowHealthModifiers && !note.withinCompensation)
-							FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Crap"), noteHitVolume, false, hitSFXGroup);
+							FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Crap"), false, noteHitSFXGroup);
 						else
-							FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), noteHitVolume, false, hitSFXGroup);
+							FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
 						//Vocal Shit
 						//if (FlxG.save.data.shitBreaksCombo)
 						vocals.volume = vocalsVolume * 0.1;
@@ -6242,15 +6214,15 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				hitSFXGroup.stop();
-				FlxG.sound.play(Paths.sound("Note_botplay"), noteHitVolume, false, hitSFXGroup);
+				noteHitSFXGroup.stop();
+				FlxG.sound.play(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
 				vocals.volume = vocalsVolume;
 			}
 		}
 		else if (!PlayStateChangeables.botPlay)
 		{
-			susHitSFXGroup.stop();
-			FlxG.sound.play(Paths.sound('Note_' + hitsoundType + '_Sustain'), noteHitVolume, false, susHitSFXGroup);
+			susNoteHitSFXGroup.stop();
+			FlxG.sound.play(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, susNoteHitSFXGroup);
 		}	
 	}
 
@@ -6650,19 +6622,18 @@ class PlayState extends MusicBeatState
 		paused = true;
 
 		if (FlxG.sound.music != null)
-		{
 			FlxG.sound.music.pause();
-			musicGroup.pause();
-			vocals.pause();
-			miscs.pause();
 
-			switch (curSong)
-			{
-				case "Desperation" | "Disagreement" | "Retaliation":
-					if (!startedCountdown && songStarted)
-						if (stageSound != null && stageSound.playing)
-							stageSound.pause();
-			}
+		musicGroup.pause();
+		vocals.pause();
+		miscs.pause();
+
+		switch (curSong)
+		{
+			case "Desperation" | "Disagreement" | "Retaliation":
+				if (!startedCountdown && songStarted)
+					if (stageSound != null && stageSound.playing)
+						stageSound.pause();
 		}
 
 		// 5 / 1000 chance for Gitaroo Man easter egg
@@ -6697,7 +6668,7 @@ class PlayState extends MusicBeatState
 		camGame.stopFX();
 		camHUD.stopFX();
 
-		specilNoteSFXGroup.volume = 0.65;
+		specilNoteHitSFXGroup.volume = 0.65;
 
 		if (!PlayStateChangeables.Optimize)
 			boyfriend.stunned = true;

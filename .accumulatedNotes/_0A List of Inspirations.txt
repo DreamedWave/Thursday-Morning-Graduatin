@@ -1,9 +1,13 @@
 Music:
+- Laura Shigihara
 - C418 (Daniel Rosenfeld)
 - Toby Fox
 - Kawai Sprite
 - Femtanyl
 - Torr
+- Lena Raine
+- Tanger
+- Mike Klubnika
 
 Gameplay/Gamedev:
 - Toby Fox
@@ -12,7 +16,8 @@ Gameplay/Gamedev:
 - Pizza Tower (Tour De Pizza)
 - Doors (LSPLASH, Redibles)
 - Pressure (YourFriendZeal, zerum, SearingCircuits, NoLongerNull)
-- Celeste
+- Celeste (MaddieMakesGames & Her Team)
+- Original PVZ Developers
 
 Art:
 - Temmie Chang
