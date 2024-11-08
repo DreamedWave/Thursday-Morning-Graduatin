@@ -75,10 +75,12 @@ class FlxSoundGroup
 			if (sounds.length > clearThresh)
 			{
 				for (sound in sounds)
-					sound.stop();
+					if (sound != null)
+						sound.stop();
 			}
 			else if (sounds.length == 1)
-				sounds[0].stop();
+				if (sounds[0] != null)
+					sounds[0].stop();
 		}
 	
 	/**

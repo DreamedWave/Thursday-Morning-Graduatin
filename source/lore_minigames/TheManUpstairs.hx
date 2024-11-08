@@ -15,7 +15,8 @@ enum FinalChaserType
 
 class TheManUpstairs extends FlxSprite
 {
-	static inline var CHASE_SPEED:Float = 180;
+	//static inline 
+	var CHASE_SPEED:Float = 180;
 
 	var type:FinalChaserType;
 
@@ -77,6 +78,11 @@ class TheManUpstairs extends FlxSprite
 		alpha = 1;
 		aiStatus = 'chase';
 		FlxVelocity.moveTowardsPoint(this, playerPosition, CHASE_SPEED);
+	}
+
+	public function setChaseSpeed(givenChaseSpeed:Float = 180):Void
+	{
+		CHASE_SPEED = givenChaseSpeed;
 	}
 
 	public function quellTheDemon(idleTime:Int, resetCurrentTimer:Bool = true, stopCurrentVelocity:Bool = true)

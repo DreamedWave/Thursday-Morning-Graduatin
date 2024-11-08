@@ -452,6 +452,10 @@ class TitleState extends MusicBeatMenu
 
 		if (!skippedIntro && !changedMenu)
 		{
+			//skips this if the music is not started yet
+			if (curBeat < 0)
+				return;
+
 			switch (curBeat)
 			{
 				case 0:

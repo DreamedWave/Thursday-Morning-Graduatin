@@ -225,7 +225,6 @@ class SaveData
 		FlxG.save.data.inputShow = null;
 		FlxG.save.data.optimize = null;
 		FlxG.save.data.cacheMusic = null;
-		FlxG.save.data.cacheImages = null;
 		FlxG.save.data.pauseOnUnfocus = null;
 		FlxG.save.data.showPresence = null;
 		FlxG.save.data.nightmode = null;
@@ -276,7 +275,6 @@ class SaveData
 		FlxG.save.data.inputShow = null;
 		FlxG.save.data.optimize = null;
 		FlxG.save.data.cacheMusic = null;
-		FlxG.save.data.cacheImages = null;
 		FlxG.save.data.pauseOnUnfocus = null;
 		FlxG.save.data.showPresence = null;
 		FlxG.save.data.nightmode = null;

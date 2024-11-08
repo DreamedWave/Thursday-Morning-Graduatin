@@ -1674,6 +1674,7 @@ class FlxCamera extends FlxBasic
 	/**
 	 * A simple screen-shake effect.
 	 *
+	 * @param	HoldFor		 How much frames the shake will hold for in a 60fps setting - meaning it will look the same across framerates.
 	 * @param   Intensity    Percentage of screen size representing the maximum distance
 	 *                       that the screen can move while shaking.
 	 * @param   Duration     The length in seconds that the shaking effect should last.

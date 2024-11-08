@@ -101,7 +101,6 @@ class StoryMenuState extends MusicBeatMenu
 
 	override function create()
 	{
-		FlxG.camera.followLerp = 50;
 		//FlxG.camera.fade(FlxColor.BLACK, 0.5, true);
 		confirmSound = new FlxSound();
 

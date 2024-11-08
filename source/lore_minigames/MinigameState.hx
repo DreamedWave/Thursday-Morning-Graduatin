@@ -316,6 +316,21 @@ class MinigameState extends MusicBeatState
 	{		
 		super.update(elapsed);
 
+		if (FlxG.keys.justPressed.ONE)
+		{
+			if (theManUpstairs != null)
+			{
+				theManUpstairs.setChaseSpeed(8000);
+			}
+			else
+			{
+				preEscMusGroup.stop();
+				defaultEscapeTime = 5;
+				escTimeBar.setRange(0, defaultEscapeTime);
+				triggerEscapeSeq();
+			}
+		}
+
 		if (FlxG.sound.music.playing)
 			Conductor.songPosition += FlxG.elapsed * 1000;
 
@@ -436,7 +451,7 @@ class MinigameState extends MusicBeatState
 	//Ripped from playstate???\
 	//stfu im very prouc of this function it is cool
 	//chuu~
-	public static function camShake(force:Bool = true, decay:Bool = false, intensity:Float = 0.03, duration:Float = 0.25, axis:FlxAxes = XY):Void
+	public static function camShake(camToShake:String = 'camGame', force:Bool = true, decay:Bool = false, ?holdFor:Int = 1, intensity:Float = 0.03, duration:Float = 0.25, axis:FlxAxes = XY):Void
 	{
 		if (decay)
 		{
@@ -444,7 +459,13 @@ class MinigameState extends MusicBeatState
 			duration *= 2;
 		}
 
-		camGame.shake(intensity, duration, force, decay, axis);
+		switch(camToShake)
+		{
+			case 'camHUD':
+				camHUD.shake(holdFor, intensity, duration, force, decay, axis);
+			default:
+				camGame.shake(holdFor, intensity, duration, force, decay, axis);
+		}
 	}
 
 	var timerMult:Float = 0;
@@ -887,6 +908,8 @@ class MinigameState extends MusicBeatState
 	{
 		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
 		{
+			camGame.shakeFlashSprite = false;
+			camHUD.shakeFlashSprite = false;
 			him.aiStatus = 'inactive';
 			him.kill();
 			him.destroy();
@@ -910,43 +933,97 @@ class MinigameState extends MusicBeatState
 			jumpscareSprite.visible = false;
 			add(jumpscareSprite);
 
-			var randJumpTimeLol:Float = FlxG.random.float(2.45, 6.65);
+			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
 
 			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
 			{
-				FlxG.sound.playMusic(Paths.sound('boh'), 1, false);
-				FlxG.sound.music.onComplete = endGameoverJumpscare;
+				FlxG.sound.play(Paths.sound('boh'), 1, false);
 				jumpscareSprite.visible = true;
 				jumpscaredPlayer = true;
 				//camHUD.focusOn(jumpscareSprite.getPosition());
-				camHUD.shake(0.025, FlxG.sound.music.length, true);
+				camHUD.shake(0.075, 2, true);
+				new FlxTimer().start(0.35, function(tmr:FlxTimer)
+				{
+					endGameoverJumpscare();
+				});
 			});
 		}
 	}
 	
+	var textAlpha:Float = 0;
 	private function endGameoverJumpscare()
 	{
-		jumpscareSprite.visible = false;
 		//PLACE OF HOLDER SDKBSFKB
-		camHUD.stopFX();
-		camHUD.flash(0xFF22003B, 0.5);
+		//jumpscareSprite.visible = false;
+		//camHUD.stopFX();
+
+		var dummyBlackScreen:FlxSprite = new FlxSprite(-FlxG.width * defaultCamZoom,
+			-FlxG.height * defaultCamZoom).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFF160025);
+		dummyBlackScreen.scrollFactor.set();
+		dummyBlackScreen.alpha = 0;
+		dummyBlackScreen.screenCenter();
+		dummyBlackScreen.cameras = [camHUD];
+		add(dummyBlackScreen);
+
+		var textLol:FlxText = new FlxText(0, 0, 0, "GAME OVER!", 80);
+		textLol.setFormat(Paths.font("Times New Roman"), 100, FlxColor.WHITE, CENTER);
+		textLol.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1.5);
+		textLol.scale.set(15, 15);
+		textLol.screenCenter();
+		//textLol.scrollFactor(1, 1);
+		textLol.alpha = 0;
+		textLol.antialiasing = true;
+		textLol.cameras = [camHUD];
+		add(textLol);
+
 		FlxG.sound.play('assets/minigame/sounds/SND_GameOver.ogg', 1, false);
-		new FlxTimer().start(0.75, function(tmr:FlxTimer)
+
+		//a Whopping 3 TWEENS!!!
+		FlxTween.tween(dummyBlackScreen, {alpha: 0.5}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut, startDelay: 0.25});
+		FlxTween.tween(this, {textAlpha: 1}, 0.35,
 		{
-			camShake(true, true, 0.05, 1);
-			var textLol:FlxText = new FlxText(0, 0, 0, "GAME OVER!", 80);
-			textLol.setFormat(Paths.font("Times New Roman"), 100, FlxColor.WHITE, CENTER);
-			textLol.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1.5);
-			textLol.screenCenter();
-			textLol.cameras = [camHUD];
-			add(textLol);
-			camHUD.flash(FlxColor.RED, 2);
-			new FlxTimer().start(3, function(tmr:FlxTimer)
+			type: ONESHOT, 
+			ease: FlxEase.smoothStepInOut, 
+			startDelay: 0.5,
+			onUpdate: function(twn:FlxTween)
 			{
-				Conductor.songPosition = 0;
-				isResetting = true;
-				FlxG.resetState();
-			});
+				textLol.alpha = textAlpha;
+			},
+		});
+		FlxTween.tween(textLol.scale, {x: 0.8,  y: 0.8}, 0.25, 
+		{
+			type: ONESHOT,
+			ease: FlxEase.quartIn,
+			startDelay: 0.5,
+
+			onUpdate: function(twn:FlxTween)
+			{
+				textLol.screenCenter();
+			},
+
+			onComplete: function(twn:FlxTween)
+			{
+				jumpscareSprite.visible = false;
+				dummyBlackScreen.alpha = 0.25;
+				FlxTween.tween(textLol.scale, {x: 1, y: 1}, 0.35,
+				{
+					type: ONESHOT,
+					ease: FlxEase.elasticOut,
+					onUpdate: function(twn:FlxTween)
+					{
+						textLol.screenCenter();
+					},
+				});
+				camHUD.stopFX();
+				camShake('camHUD', true, true, 5, 0.5, 0.35);
+				camHUD.flash(FlxColor.RED, 1);
+				new FlxTimer().start(3, function(tmr:FlxTimer)
+				{
+					Conductor.songPosition = 0;
+					isResetting = true;
+					FlxG.resetState();
+				});
+			}
 		});
 	}
 

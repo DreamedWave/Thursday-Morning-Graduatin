@@ -7,9 +7,6 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 
-//PROFILER - REMOVE ONCE IN RELEASE!!!
-import pgr.dconsole.DC;
-
 class Boyfriend extends Character
 {
 	public var stunned:Bool = false;
@@ -21,7 +18,6 @@ class Boyfriend extends Character
 
 	override function update(elapsed:Float)
 	{
-		DC.beginProfile("bfShit");
 		if (!debugMode)
 		{
 			if (animation.curAnim.name.startsWith('sing'))
@@ -41,7 +37,6 @@ class Boyfriend extends Character
 				playAnim('deathLoop');
 			}
 		}
-		DC.endProfile("bfShit");
 
 		super.update(elapsed);
 	}

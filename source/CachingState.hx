@@ -30,6 +30,7 @@ using StringTools;
 
 class CachingState extends MusicBeatMenu
 {
+	//Depracatad - will probs get rid of this soon
 	var loaded = false;
 
 	var goForTheMilk:Bool = false;
@@ -52,6 +53,10 @@ class CachingState extends MusicBeatMenu
 		if (FlxG.save.data.showPresence)
 			DiscordClient.changePresence("Loading...", null, true, "apppresence-loading");
 		#end
+
+		//ForTesting
+		FlxG.save.data.cacheImages = false;
+		FlxG.save.data.cacheMusic = false;
 
 		screen = new CachingScreen();
 		add(screen);
@@ -185,11 +190,11 @@ class CachingState extends MusicBeatMenu
 		//...all samuels are dead now- Everyone, welcome Amiee to the dev team :33
 		cacheMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-loading'), true, false);
 		cacheMusic.volume = 0;
-		FlxG.sound.list.add(cacheMusic);
+		//FlxG.sound.list.add(cacheMusic);
 		disclaimerMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-disclaimer'), true, false);
 		disclaimerMusic.persist = true;
 		disclaimerMusic.volume = 0;
-		FlxG.sound.list.add(disclaimerMusic);
+		//FlxG.sound.list.add(disclaimerMusic);
 
 		super.create();
 

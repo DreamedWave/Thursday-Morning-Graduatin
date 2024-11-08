@@ -53,20 +53,20 @@ class LoadingState extends MusicBeatMenu
 		switch(Type.getClass(target))
 		{
 			case PlayState:
-				var songLowercase = StringTools.replace(PlayState.SONG.song, " ", "-").toLowerCase();
+				//var songLowercase = StringTools.replace(PlayState.SONG.song, " ", "-").toLowerCase();
 				definePlayStateShit();
 				var preloadList:Map<String, String> = new Map<String, String>();
 				
-				if (!FlxG.save.data.cacheMusic)
-				{
-					preloadList.set(songLowercase, 'inst');
-					if (PlayState.SONG.needsVoices)
-						preloadList.set(songLowercase, 'voices');
-					if (PlayState.SONG.needsMiscs)
-						preloadList.set(songLowercase, 'miscs');
-					if (PlayState.SONG.needsAdaptiveMus)
-						preloadList.set(songLowercase, 'adaptiveMus');
-				}
+				//if (!FlxG.save.data.cacheMusic)
+				//{
+				preloadList.set(PlayState.SONG.song, 'inst');
+				if (PlayState.SONG.needsVoices)
+					preloadList.set(PlayState.SONG.song, 'voices');
+				if (PlayState.SONG.needsMiscs)
+					preloadList.set(PlayState.SONG.song, 'miscs');
+				if (PlayState.SONG.needsAdaptiveMus)
+					preloadList.set(PlayState.SONG.song, 'adaptiveMus');
+				//}
 
 				switch (songLowercase)
 				{
@@ -275,7 +275,7 @@ class LoadingState extends MusicBeatMenu
 				{
 					for (key => type in preloadList)
 					{
-						//trace("Preloading " + key + " (" + type + ")");
+						trace("Preloading " + key + " (" + type + ")");
 						switch(type)
 						{
 							case 'video':
@@ -302,10 +302,13 @@ class LoadingState extends MusicBeatMenu
 								Paths.videoMusic(key);
 							case 'inst':
 								Paths.inst(key);
+								trace('!!!! CaCHED INST ' + key);
 							case 'voices':
 								Paths.voices(key);
+								trace('!!!! CaCHED VOICES ' + key);
 							case 'miscs':
 								Paths.miscs(key);
+								trace('!!!! CaCHED MISCS ' + key);
 							case 'adaptiveMus':
 								Paths.adaptiveMus(key);
 						}

@@ -65,8 +65,6 @@ class MainMenuState extends MusicBeatMenu
 			DiscordClient.changePresence("In the Main Menu", null);
 		#end
 
-		FlxG.camera.followLerp = 50;
-
 		confirmSound = new FlxSound();
 
 		if (FlxG.sound.music != null)

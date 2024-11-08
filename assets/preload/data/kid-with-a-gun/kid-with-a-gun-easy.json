@@ -3,6 +3,7 @@
         "song": "Kid With a Gun",
         "bpm": 135.0,
         "needsVoices": true,
+        "needsMiscs": true,
         "player1": "guy-default",
         "player2": "pico-default",
         "speed": 2,

@@ -126,6 +126,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelInfo.setFormat(Paths.font("playtime.ttf"), 32);
 		levelInfo.updateHitbox();
 		levelInfo.alpha = 0;
+		levelInfo.antialiasing = true;
 		add(levelInfo);
 
 		levelDifficulty = new FlxText(20, 15 + 32, 0, "");
@@ -134,6 +135,7 @@ class PauseSubState extends MusicBeatSubstate
 		levelDifficulty.setFormat(Paths.font("playtime.ttf"), 32);
 		levelDifficulty.updateHitbox();
 		levelDifficulty.alpha = 0;
+		levelDifficulty.antialiasing = true;
 		add(levelDifficulty);
 
 		failCount = new FlxText(20, 15 + 64, 0, "");
@@ -142,6 +144,7 @@ class PauseSubState extends MusicBeatSubstate
 		failCount.setFormat(Paths.font("playtime.ttf"), 32);
 		failCount.updateHitbox();
 		failCount.alpha = 0;
+		failCount.antialiasing = true;
 		add(failCount);
 
 		practiceModeText = new FlxText(20, 15 + 96, 0, "");
@@ -150,6 +153,7 @@ class PauseSubState extends MusicBeatSubstate
 		practiceModeText.setFormat(Paths.font("playtime.ttf"), 32, RIGHT);
 		practiceModeText.updateHitbox();
 		practiceModeText.alpha = 0;
+		practiceModeText.antialiasing = true;
 		add(practiceModeText);
 
 		runValidityText = new FlxText(20, 15 + 128, 0, "");
@@ -158,6 +162,7 @@ class PauseSubState extends MusicBeatSubstate
 		runValidityText.setFormat(Paths.font("playtime.ttf"), 32);
 		runValidityText.updateHitbox();
 		runValidityText.alpha = 0;
+		runValidityText.antialiasing = true;
 		add(runValidityText);
 
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
@@ -213,6 +218,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		FlxG.mouse.visible = true;
 		pauseSound = new FlxSound().loadEmbedded(Paths.sound('pauseMenu'));
+		FlxG.sound.list.add(pauseSound);
 		pauseSound.volume = 0.7;
 		pauseSound.play();
 
