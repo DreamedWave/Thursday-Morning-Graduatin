@@ -2771,8 +2771,6 @@ class PlayState extends MusicBeatState
 
 		switch (SONG.song)
 		{
-			case "Retaliation":
-				miscs.volume = 0.3 * soundsVolume;
 			case "Finale":
 				vocals.looped = true;
 		}
@@ -5209,7 +5207,11 @@ class PlayState extends MusicBeatState
 						{
 							prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
 							if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
+							{
 								prevNum.color = 0xFFd7d1e6;
+								if (prevNum.alpha == 1)
+									prevNum.alpha = 0.75;
+							}
 							else
 								prevNum.color = 0xFFEA417C;
 						});
@@ -5368,8 +5370,12 @@ class PlayState extends MusicBeatState
 						grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
 						{
 							prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
-							if (prevRating.color != 0xFFFFC7C7)
+							if (prevRating.color != 0xFFD09A9C)
+							{
 								prevRating.color = 0xFFB1A9C3;
+								if (prevRating.alpha == 1)
+									prevRating.alpha = 0.75;
+							}
 							else
 								prevRating.color = 0xFFD09A9C;
 						});
@@ -5377,7 +5383,11 @@ class PlayState extends MusicBeatState
 						{
 							prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
 							if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
+							{
 								prevNum.color = 0xFFd7d1e6;
+								if (prevNum.alpha == 1)
+									prevNum.alpha = 0.75;
+							}
 							else
 								prevNum.color = 0xFFEA417C;
 						});
@@ -5608,17 +5618,19 @@ class PlayState extends MusicBeatState
 		}
 
 		showNumShit = false;
-		
-		if (comboBreakSound != null && comboBreakSound.playing)
-			comboBreakSound.stop();
 
 		if (combo >= 100 || nonSustainCombo >= 50)
 		{
+			if (comboBreakSound != null && comboBreakSound.playing)
+				comboBreakSound.stop();
+
 			comboBreakSound = FlxG.sound.play(Paths.soundRandom('comboBreakBig', 1, 3), 1);
 			comboBreakSound.set_pitch(FlxG.random.float(0.8, 1.2));
 		}
 		else if (combo >= 50 || nonSustainCombo >= 10)
 		{
+			if (comboBreakSound != null && comboBreakSound.playing)
+				comboBreakSound.stop();
 			comboBreakSound = FlxG.sound.play(Paths.soundRandom('comboBreak', 1, 3), 1);
 			(FlxG.random.float(0.75, 1.25));
 		}

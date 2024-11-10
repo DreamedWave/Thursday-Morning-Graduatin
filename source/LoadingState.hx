@@ -53,7 +53,7 @@ class LoadingState extends MusicBeatMenu
 		switch(Type.getClass(target))
 		{
 			case PlayState:
-				//var songLowercase = StringTools.replace(PlayState.SONG.song, " ", "-").toLowerCase();
+				var songLowercase = StringTools.replace(PlayState.SONG.song, " ", "-").toLowerCase();
 				definePlayStateShit();
 				var preloadList:Map<String, String> = new Map<String, String>();
 				

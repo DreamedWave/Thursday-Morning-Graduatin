@@ -5,6 +5,8 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVelocity;
 import flixel.system.FlxSound;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 
 enum FinalChaserType
 {
@@ -43,6 +45,7 @@ class TheManUpstairs extends FlxSprite
 		playerPosition = FlxPoint.get();
 		
 		//Suspense Music
+		//Might remove this and merge it with the below
 		dadSuspenseMusFar = FlxG.sound.load('assets/minigame/music/dadSuspense_Far.ogg', 0);
 		dadSuspenseMusFar.looped = true;
 		dadSuspenseMusFar.proximity(x, y, lore_minigames.MinigameState.player, 2500);
@@ -59,7 +62,18 @@ class TheManUpstairs extends FlxSprite
 		dadSNDFar.proximity(x, y, lore_minigames.MinigameState.player, 800, true);
 		dadSNDNear = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Near.ogg', 0);
 		dadSNDNear.looped = true;
-		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 250, true);
+		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 300, true);
+
+		dadSuspenseMusFar.setPosition(x + (width / 2), y + (height / 2));
+		dadSuspenseMusNear.setPosition(x + (width / 2), y + (height / 2));
+		dadSNDFar.setPosition(x + (width / 2), y + (height / 2));
+		dadSNDNear.setPosition(x + (width / 2), y + (height / 2));
+
+		//a whopping 4 FLXTWEENS
+		FlxTween.tween(dadSuspenseMusFar, {volume: 0.5}, 1, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+		FlxTween.tween(dadSuspenseMusNear, {volume: 0.5}, 1, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+		FlxTween.tween(dadSNDFar, {volume: 1}, 1, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+		FlxTween.tween(dadSNDNear, {volume: 1}, 1, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
 
 		dadSNDFar.play();
 		dadSNDNear.play();

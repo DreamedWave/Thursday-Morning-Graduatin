@@ -604,7 +604,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.log.add('Splat Sound');		
 			case 'imposterfromamoger' | 'amongusjokes' | 'anentiregeneration' | 'theyweretoosus':
 				FlxG.sound.play(Paths.sound('intro_sus'), 0.55);
-			case 'haha' | 'shitsaggressively' | 'bwap' | 'aggressiveshitting' | 'goneinaninstant':
+			case 'shitsaggressively' | 'aggressiveshitting' | 'goneinaninstant':
 				doCamZooming = false;
 				camUI.zoom -= 0.03;
 				FlxG.sound.play(Paths.sound('intro_shid'), 0.55);

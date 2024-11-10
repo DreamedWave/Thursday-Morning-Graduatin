@@ -105,7 +105,7 @@ class MinigameState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
-		camGame.shakeFlashSprite = true;
+		//camGame.shakeFlashSprite = true;
 
 		FlxCamera.defaultCameras = [camGame];
 
@@ -349,7 +349,15 @@ class MinigameState extends MusicBeatState
 
 		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq)
 		{
-			FlxG.overlap(player, theManUpstairs, gameoverFunction);
+			//this updates every frame - is that alright??
+			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
+			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
+			{
+				camShake(false, false, 3, 0.05 * theManUpstairs.dadSNDNear.getActualVolume(), 0.05);
+				trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
+			}
+
+			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
 			if (fatherElapsedCheck < 1)
 			{
 				theManUpstairs.playerPosition = player.getMidpoint();
@@ -376,6 +384,10 @@ class MinigameState extends MusicBeatState
 
 		if (inEscSeq && escapeTimer != null)
 		{
+			//Only lower the shake when the time reaches 30 seconds
+			if (escapeTimer.timeLeft <= 30)
+				timerMult = (escapeTimer.timeLeft / 30);
+			
 			if (timeLeftChecker > escapeTimer.timeLeft)
 			{
 				timeLeftChecker = escapeTimer.timeLeft;
@@ -475,8 +487,6 @@ class MinigameState extends MusicBeatState
 		
 		if (inEscSeq)
 		{
-			if (escapeTimer.timeLeft <= defaultEscapeTime)
-				timerMult = (escapeTimer.timeLeft / defaultEscapeTime) - 1;
 			//trace (timerMult);
 			camHoldShakeAdditive[0] = FlxG.random.int(8, -8) * timerMult;
 			camHoldShakeAdditive[1] = FlxG.random.int(-4, 4) * timerMult;
@@ -566,7 +576,7 @@ class MinigameState extends MusicBeatState
 				}
 				fakeBeat++;
 			case 2 | 3:
-				camShake(false, false, 0.005 + (0.005 * timerMult), Conductor.crochet / 1200);
+				//camShake(false, false, 0.01 * timerMult, Conductor.crochet / 1200);
 				if (curBeat % 4 == 0)
 				{
 					if (FlxG.sound.music != null)
@@ -581,6 +591,7 @@ class MinigameState extends MusicBeatState
 
 	var timesUp:Bool = false;
 	var timerGroupTargetY:Float;
+	var timerMultTween:FlxTween;
 
 	var finalCollectLocation:Array<Float> = [];
 
@@ -597,6 +608,16 @@ class MinigameState extends MusicBeatState
 			FlxG.sound.music.onComplete = checkAndSwapMusic;
 			trace('seqCheck ' + seqCheck);
 
+			timerMultTween = FlxTween.tween(this, {timerMult: 0.5}, Conductor.crochet * 16 / 1000, 
+			{	
+				type: ONESHOT, 
+				ease: FlxEase.smoothStepInOut,
+				onComplete: function(twn:FlxTween)
+				{
+					timerMultTween = null;
+				}
+			});
+
 			curBeat = 0;
 			fakeBeat = 0;
 			Conductor.songPosition = 0;
@@ -608,7 +629,7 @@ class MinigameState extends MusicBeatState
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("The Clock is Ticking...", "(I think you gotta run-)", true, defaultEscapeTime * 1000, "apppresence-strange");
+				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going...)", true, defaultEscapeTime * 1000, "apppresence-strange");
 			#end
 
 			escapeTimer = new FlxTimer().start(defaultEscapeTime, function(tmr:FlxTimer)
@@ -688,6 +709,9 @@ class MinigameState extends MusicBeatState
 					triggerEscapeSeq();
 				case 1:
 					trace('SKIBIDI !!!!!');
+					if (timerMultTween != null)
+						timerMultTween.cancel();
+					timerMult = 1;
 					seqCheck = 2;
 					FlxG.sound.music.stop();
 					Conductor.changeBPM(180);
@@ -709,6 +733,20 @@ class MinigameState extends MusicBeatState
 		switch (cid)
 		{
 			case 1:
+				if (timerMultTween != null)
+				{
+					timerMultTween.cancel();
+					timerMultTween = FlxTween.tween(this, {timerMult: 0}, Conductor.crochet * 7 / 1000, 
+					{	
+						type: ONESHOT, 
+						ease: FlxEase.smoothStepOut,
+						onComplete: function(twn:FlxTween)
+						{
+							timerMultTween = null;
+						}
+					});
+				}
+
 				if (FlxG.sound.music.playing)
 				{
 					musicTween = FlxTween.tween(preSuspenseMusGroup, {volume: 0}, Conductor.crochet * 16 / 1000, 
@@ -729,6 +767,11 @@ class MinigameState extends MusicBeatState
 				suspenseEscMusicIntro.onComplete = getTheFuckOutMusic;
 			case 2:
 				trace ('HAUR?????');
+				if (timerMultTween != null)
+				{
+					timerMultTween.cancel();
+					timerMult = 1;
+				}
 				if (musicTween != null)
 					musicTween.cancel();
 				seqCheck = 3;
@@ -904,12 +947,12 @@ class MinigameState extends MusicBeatState
 	var stopActiveTweening:Bool = false;
 	var jumpscareSprite:FlxSprite;
 	var jumpscaredPlayer:Bool = false;
-	function gameoverFunction(player:Player, him:TheManUpstairs)
+	function jumpscareGameOver(player:Player, him:TheManUpstairs)
 	{
 		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
 		{
-			camGame.shakeFlashSprite = false;
-			camHUD.shakeFlashSprite = false;
+			//camGame.shakeFlashSprite = false;
+			//camHUD.shakeFlashSprite = false;
 			him.aiStatus = 'inactive';
 			him.kill();
 			him.destroy();
@@ -944,14 +987,14 @@ class MinigameState extends MusicBeatState
 				camHUD.shake(0.075, 2, true);
 				new FlxTimer().start(0.35, function(tmr:FlxTimer)
 				{
-					endGameoverJumpscare();
+					showGameoverScreen();
 				});
 			});
 		}
 	}
 	
 	var textAlpha:Float = 0;
-	private function endGameoverJumpscare()
+	private function showGameoverScreen()
 	{
 		//PLACE OF HOLDER SDKBSFKB
 		//jumpscareSprite.visible = false;
