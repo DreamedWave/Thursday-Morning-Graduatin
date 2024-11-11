@@ -45,7 +45,7 @@
  - **Quality of Life additions**
       - Note Hit Sounds! (for both normal and hold notes - akin to that of osu's)
       - A visual and auditory cue for when you break a combo! (to avoid beating a level thinking you Full Combo'd it, only to see that you missed 1 note somewhere... yeowch)
-      - Night Mode and Photosensitive mode!
+      - Night Mode and Photosensitive Mode!
  - **And many more!**
       - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
       - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
@@ -81,7 +81,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 <br></br>
 
 ### FNF: Indie Cross (For code references)
- *(Specifically: LoadingState.hx, VideoState.hx, and some Shader Stuff!)*
+ *(Specifically: LoadingState.hx, VideoState.hx, CrashHandler code, and some Shader Stuff!)*
  **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games Cuphead, Undertale, and Bendy and the Ink Machine.
 
  Links: **[source code on GitHub](https://github.com/brightfyregit/Indie-Cross-Public)**
