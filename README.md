@@ -1,7 +1,7 @@
 ![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was initially created by [DreamedWave](https://github.com/DreamedWave) as a joke making fun of her scuffed graduationte, but eventually evolved into a bigger project featuring some new mechanics, an overarching original story, and a mostly new cast of characters that are very much *NOT* connected to the story of Friday Night Funkin' in any way. Based on the 1.6 version of Kade Engine, which was *HEAVILY* modified to improve/add some things and remove some bloat.
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** connected to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat..
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost!!
 
@@ -42,7 +42,13 @@
       - Your song clear percentage then determines a Letter Ranking (such as F, D, C A, etc.) - inspired by Pizza Tower!
       - This makes it so that 100%ing a song is now ACTUALLY plausible, without requiring you to be a robot with complete accuracy!
       - Full Comboing a song isn't in vein though, as *something cool will happen when you sucessfully do so! Guess you'll have to wait and see~ >:3*
+ - **Quality of Life additions**
+      - Note Hit Sounds! (for both normal and hold notes - akin to that of osu's)
+      - A visual and auditory cue for when you break a combo! (to avoid beating a level thinking you Full Combo'd it, only to see that you missed 1 note somewhere... yeowch)
+      - Night Mode and Photosensitive mode!
  - **And many more!**
+      - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
+      - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
       - Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB
 <br></br>
 
