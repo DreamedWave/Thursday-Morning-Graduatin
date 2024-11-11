@@ -1,18 +1,9 @@
 ![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
 
-# Thursday Morning Graduatin': Kade Engine
-## A mod of Friday Night Funkin'
-**Friday Night Funkin'** is a rhythm game originally made for Ludum Dare 47 "Stuck In a Loop".
+# Thursday Morning Graduatin'
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was originally created as a joke making fun of a scuffed graduation, but later turned into it's own thing featuring an original story, and cast of characters that are very much *NOT* connected to Friday Night Funkin'. Based on a lot of Friday Night Funkin mods, but mainly the 1.6 version of Kade Engine, which was *HEAVILY* modified to improve some things and remove some bloat.
 
-# THIS IS UGLY AND SHIT RN - GURLIE'S WORKIN ON IT, OK????
-
-Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](https://www.newgrounds.com/portal/view/770371) ⋅ [source code on GitHub](https://github.com/ninjamuffin99/Funkin)**
-> Uh oh! Your tryin to kiss ur hot girlfriend, but her MEAN and EVIL dad is trying to KILL you! He's an ex-rockstar, the only way to get to his heart? The power of music... 
-
-## Kade Engine
-**Kade Engine** is a mod for Friday Night Funkin', including a full engine rework, replays, and more.
-
-**REMEMBER**: This is a **mod**. This is not the vanilla game and should be treated as a **modification**. This is not and probably will never be official, so don't get confused.
+**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by 1 person!
 
 # Previews ([skip](#features))
 ![Title Screen](art/readme/KadeEngineTitleScreen.png)
@@ -51,20 +42,28 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 	 either already included in Kade Engine or is being worked on!
 
 # Credits
-### Friday Night Funkin'
+### Friday Night Funkin' (For being DA O.G. GOAT!!!)
+ **Friday Night Funkin'** is a rhythm game originally made for Ludum Dare 47 "Stuck In a Loop".
+ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](https://www.newgrounds.com/portal/view/770371) ⋅ [source code on GitHub](https://github.com/ninjamuffin99/Funkin)**
  - [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programming
  - [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
  - [Kawai Sprite](https://twitter.com/kawaisprite) - Music
+ This game was made with love to Newgrounds and its community. Extra love to Tom Fulp.
 
-This game was made with love to Newgrounds and its community. Extra love to Tom Fulp.
-### Kade Engine
-- [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
-- [The contributors](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
+### Kade Engine (For the starting foundations of this mod)
+ **Kade Engine** is a modification for Friday Night Funkin' created by KadeDev.
+ Links: **[source code on GitHub](https://github.com/kadedev/Kade-Engine)**
+ - [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
+ - [The contributors](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
 
+### Psych Engine (For the code references)
+ (Specifically: Asset Loading/Paths.hx, MusicBeatState.hx, Framerate-bound FlxMath.lerp, Sustain Note fixes, Particle Emmiters, and Input System!)
+ **Psych Engine** is a modification of Friday Night Funkin' lead by ShadowMario. originally used for the Mind Games mod.
+ Links: **[source code on GitHub](https://github.com/ShadowMario/FNF-PsychEngine)
+ 
 
 ### Shoutouts
-- [GWebDev](https://github.com/GrowtopiaFli) - Video Code
-- [Rozebud](https://github.com/ThatRozebudDude) - Ideas (that I stole)
-- [Puyo](https://github.com/puyoxyz) - Setting up appveyor and a lot of other help
-- [Smokey](https://github.com/Smokey555) - telling me that I should do the tricky asset loading
-- [Poco](https://github.com/poco0317) - math degree (aka most of the fucking math in this project)
+ **Modding Help**
+   - TheZoroForce240 for the [Note Type Guide!](https://drive.google.com/file/d/1YcG1TphzhbHgadgezhZQeUW65pPNtirG/view)
+   - BrightFyre for the early Kade Engine 1.6 Modding tutorials
+   - bbpanzu for more modding tutorials
