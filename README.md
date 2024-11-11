@@ -53,7 +53,9 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  - [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programming
  - [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Art
  - [Kawai Sprite](https://twitter.com/kawaisprite) - Music
+ 
  This game was made with love to Newgrounds and its community. Extra love to Tom Fulp. -Cameron
+
 
 ### FNF: Kade Engine (For the starting foundations of this mod)
  **Kade Engine** was a modification for an older build of Friday Night Funkin' created by KadeDev. Originally used for the VS Whitty mod.
@@ -61,6 +63,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  Links: **[source code on GitHub](https://github.com/kadedev/Kade-Engine)**
  - [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
  - [(All contributors to this project)](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
+
 
 ### FNF: Psych Engine (For code references)
  *(Specifically: Asset Loading/Paths.hx, MusicBeatState.hx, Framerate-bound FlxMath.lerp, Sustain Note fixes, Particle Emitters, and Input System!)*
@@ -70,6 +73,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  - [ShadowMario](https://twitter.com/shadow_mario_)
  - [Riveren](https://twitter.com/riverennn)
 
+
 ### FNF: Indie Cross (For code references)
  *(Specifically: LoadingState.hx, VideoState.hx, and some Shader Stuff!)*
  **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games Cuphead, Undertale, and Bendy and the Ink Machine.
@@ -77,6 +81,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  Links: **[source code on GitHub](https://github.com/brightfyregit/Indie-Cross-Public)**
  - [BrightFyre](https://linktr.ee/BrightFyre)
  - [(All contributors to this project)](https://github.com/brightfyregit/Indie-Cross-Public/blob/master/source/CreditsMenu.hx)
+
 
 ### Special Thanks:
  **Huge Modding Help**
