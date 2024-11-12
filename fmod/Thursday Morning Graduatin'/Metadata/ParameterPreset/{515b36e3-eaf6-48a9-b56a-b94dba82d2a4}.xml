@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="ParameterPreset" id="{515b36e3-eaf6-48a9-b56a-b94dba82d2a4}">
+		<property name="name">
+			<value>TakoIntensity</value>
+		</property>
+		<relationship name="folder">
+			<destination>{43ec3e75-6c62-42b1-bf60-0189933c9174}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{07c13627-ecf2-41d6-893b-fae64c83c504}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{07c13627-ecf2-41d6-893b-fae64c83c504}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>3</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Taiko-Calm</value>
+			<value>Taiko-Buildup</value>
+			<value>Taiko-Suspense</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>

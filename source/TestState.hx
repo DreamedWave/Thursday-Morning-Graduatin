@@ -187,6 +187,8 @@ class TestState extends MusicBeatState
 	var shitPlaceholder:Bool = false;
 	override public function update(elapsed:Float)
 	{
+		FmodManager.Update();
+
 		if (Conductor.songPosition < FlxG.sound.music.length)
 			Conductor.songPosition += FlxG.elapsed * 1000;
 
@@ -298,6 +300,11 @@ class TestState extends MusicBeatState
 			{
 				camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000, Y);
 				loseControl = true;
+			}
+
+			if (FlxG.keys.justPressed.NINE)
+			{
+				FmodManager.PlaySoundOneShot(FmodSFX.TestEvent);
 			}
 
 			if (FlxG.keys.justPressed.SPACE)

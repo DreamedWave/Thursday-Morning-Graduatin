@@ -21,6 +21,8 @@ import flixel.graphics.FlxGraphic;
 import sys.FileSystem;
 
 //Trans Shit
+//...
+//YO I'VE JUST THOUGHT OF A REALLY FUNNY JOKE
 import flixel.FlxCamera;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircleInverted;
@@ -54,7 +56,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 	{
 		//FlxG.save.bind('graduatin', 'dreamedwave');
 		//Format:       .SOL filename        .SOL location
-		FlxG.save.bind('graduatin', "dreamedwave/Thursday Morning Graduatin'");
+		//FlxG.save.bind('graduatin', "dreamedwave/Thursday Morning Graduatin'");
 
 		//DC.init();//PROFILER!! REMOVE ON RELEASE!!
 

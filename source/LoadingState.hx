@@ -198,7 +198,7 @@ class LoadingState extends MusicBeatMenu
 
 				preloadList.set(PlayState.pauseMusicName, 'music');
 
-				if (PlayState.dadSwaperoo != "" && !FlxG.save.data.cacheImages)
+				if (PlayState.dadSwaperoo != "")// && !FlxG.save.data.cacheImages)
 				{
 					trace('preloaded Dad Swaperoo!!!');
 					preloadList.set("characters/" + PlayState.dadSwaperoo, 'image');

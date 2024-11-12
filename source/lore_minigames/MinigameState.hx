@@ -12,7 +12,6 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.tile.FlxTilemap;
-import flixel.FlxG;
 import flixel.ui.FlxBar;
 import flixel.util.FlxTimer;
 import flixel.util.FlxAxes;

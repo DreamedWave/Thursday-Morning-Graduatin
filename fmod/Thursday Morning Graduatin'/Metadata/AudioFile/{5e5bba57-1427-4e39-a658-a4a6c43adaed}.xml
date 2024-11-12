@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{5e5bba57-1427-4e39-a658-a4a6c43adaed}">
+		<property name="assetPath">
+			<value>TMG-GP_FinaleAdaptiveMus/bells_0.ogg</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>11.294104308390022</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0ad7311-ef8c-4c44-99ae-0d37f49dafe8}</destination>
+		</relationship>
+	</object>
+</objects>

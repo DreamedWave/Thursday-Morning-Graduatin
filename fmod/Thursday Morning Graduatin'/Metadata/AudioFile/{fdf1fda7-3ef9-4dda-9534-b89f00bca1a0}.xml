@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="AudioFile" id="{fdf1fda7-3ef9-4dda-9534-b89f00bca1a0}">
+		<property name="assetPath">
+			<value>TMG-GP_FinaleAdaptiveMus/taiko_4.ogg</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>5.6470521541950109</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0ad7311-ef8c-4c44-99ae-0d37f49dafe8}</destination>
+		</relationship>
+	</object>
+</objects>

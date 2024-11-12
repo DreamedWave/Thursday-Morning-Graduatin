@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="Workspace" id="{4e8c9cbd-daee-477d-9dc0-009f6691b99b}">
+		<property name="builtBanksOutputDirectory">
+			<value>../../../../../Documents/GitHub/Thursday-Morning-Graduatin/assets/fmod</value>
+		</property>
+		<relationship name="masterEventFolder">
+			<destination>{669ebd93-4871-4c8d-8551-4e35e467623d}</destination>
+		</relationship>
+		<relationship name="masterTagFolder">
+			<destination>{428a3a7d-fda1-4104-9e41-aea43b20f3e4}</destination>
+		</relationship>
+		<relationship name="masterEffectPresetFolder">
+			<destination>{0a40e862-e92b-4fe7-b984-56ae0c70ce5a}</destination>
+		</relationship>
+		<relationship name="masterParameterPresetFolder">
+			<destination>{43ec3e75-6c62-42b1-bf60-0189933c9174}</destination>
+		</relationship>
+		<relationship name="masterBankFolder">
+			<destination>{574ddd2c-6329-489b-86d5-5e25a530f5c8}</destination>
+		</relationship>
+		<relationship name="masterAssetFolder">
+			<destination>{b0ad7311-ef8c-4c44-99ae-0d37f49dafe8}</destination>
+		</relationship>
+		<relationship name="mixer">
+			<destination>{a352e43b-6f2d-497f-a9d4-386aa184dd5b}</destination>
+		</relationship>
+		<relationship name="platforms">
+			<destination>{2a7e2c77-15b5-4f89-9270-fcbe0ed6fd03}</destination>
+		</relationship>
+	</object>
+</objects>

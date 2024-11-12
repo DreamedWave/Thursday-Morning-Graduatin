@@ -8,7 +8,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 using StringTools;
 
 //PROFILER - REMOVE ONCE IN RELEASE!!!
-import pgr.dconsole.DC;
+//import pgr.dconsole.DC;
 
 class Character extends FlxSprite
 {
@@ -361,7 +361,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		DC.beginProfile("charShit");
+		//DC.beginProfile("charShit");
 		if (dodgetime > 0)
 			dodgetime--;
 		else if (dodgetime < 0)
@@ -390,7 +390,7 @@ class Character extends FlxSprite
 				holdTimer = 0;
 			}
 		}
-		DC.endProfile("charShit");
+		//DC.endProfile("charShit");
 		
 		super.update(elapsed);
 	}

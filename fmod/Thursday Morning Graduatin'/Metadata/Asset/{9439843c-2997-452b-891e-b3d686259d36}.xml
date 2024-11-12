@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="EncodableAsset" id="{9439843c-2997-452b-891e-b3d686259d36}">
+		<property name="assetPath">
+			<value>TMG-GP_FinaleAdaptiveMus/</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{b0ad7311-ef8c-4c44-99ae-0d37f49dafe8}</destination>
+		</relationship>
+	</object>
+</objects>

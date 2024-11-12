@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.00.00">
+	<object class="ParameterPreset" id="{a9c9ff46-07ec-4733-a6a6-a6be076bbfdf}">
+		<property name="name">
+			<value>Choir Intensity</value>
+		</property>
+		<relationship name="folder">
+			<destination>{43ec3e75-6c62-42b1-bf60-0189933c9174}</destination>
+		</relationship>
+		<relationship name="parameter">
+			<destination>{1b05973b-dc32-4f74-9866-8d4ff87e768b}</destination>
+		</relationship>
+	</object>
+	<object class="GameParameter" id="{1b05973b-dc32-4f74-9866-8d4ff87e768b}">
+		<property name="parameterType">
+			<value>2</value>
+		</property>
+		<property name="maximum">
+			<value>2</value>
+		</property>
+		<property name="enumerationLabels">
+			<value>Choir-normal</value>
+			<value>Choir-Intense</value>
+		</property>
+		<property name="initialValue">
+			<value>0</value>
+		</property>
+	</object>
+</objects>
