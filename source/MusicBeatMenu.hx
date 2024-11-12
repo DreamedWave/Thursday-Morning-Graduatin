@@ -6,7 +6,7 @@ import Discord.DiscordClient;
 import openfl.Lib;
 import openfl.Assets;
 import Conductor.BPMChangeEvent;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;

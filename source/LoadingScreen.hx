@@ -1,7 +1,7 @@
 package;
 
 import flash.Lib;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxRect;

@@ -11,7 +11,7 @@ import flash.Lib;
 import flash.text.TextField;
 import flash.text.TextFormat;
 import flash.text.TextFormatAlign;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -21,6 +21,8 @@ import flixel.graphics.FlxGraphic;
 import sys.FileSystem;
 
 //Trans Shit
+//...
+//YO I'VE JUST THOUGHT OF A REALLY FUNNY JOKE
 import flixel.FlxCamera;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircleInverted;
@@ -53,13 +55,8 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 	override public function create():Void
 	{
 		//FlxG.save.bind('graduatin', 'dreamedwave');
-		//Format:       .SOL filename        .SOL location
-		FlxG.save.bind('graduatin', "dreamedwave/Thursday Morning Graduatin'");
 
 		//DC.init();//PROFILER!! REMOVE ON RELEASE!!
-
-		PlayerSettings.init();
-		SaveData.initSave();
 		
 		FlxG.autoPause = false;
 

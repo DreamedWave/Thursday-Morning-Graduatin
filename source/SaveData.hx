@@ -1,6 +1,6 @@
 import flixel.input.gamepad.FlxGamepad;
 import openfl.Lib;
-import flixel.FlxG;
+//import flixel.FlxG;
 
 class SaveData
 {
@@ -224,7 +224,7 @@ class SaveData
 		FlxG.save.data.scoreScreen = null;
 		FlxG.save.data.inputShow = null;
 		FlxG.save.data.optimize = null;
-		FlxG.save.data.cacheMusic = null;
+		//FlxG.save.data.cacheMusic = null;
 		FlxG.save.data.pauseOnUnfocus = null;
 		FlxG.save.data.showPresence = null;
 		FlxG.save.data.nightmode = null;
@@ -274,7 +274,7 @@ class SaveData
 		FlxG.save.data.scoreScreen = null;
 		FlxG.save.data.inputShow = null;
 		FlxG.save.data.optimize = null;
-		FlxG.save.data.cacheMusic = null;
+		//FlxG.save.data.cacheMusic = null;
 		FlxG.save.data.pauseOnUnfocus = null;
 		FlxG.save.data.showPresence = null;
 		FlxG.save.data.nightmode = null;

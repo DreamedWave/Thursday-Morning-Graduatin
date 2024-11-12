@@ -4,7 +4,7 @@ import lime.app.Application;
 import lime.media.openal.AL;
 import openfl.Lib;
 
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSubState;
 import flixel.math.FlxPoint;

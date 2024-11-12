@@ -8,7 +8,7 @@ import discord_rpc.DiscordRpc;
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import flixel.util.FlxColor;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
@@ -123,8 +123,17 @@ class Main extends Sprite
 		#end
 		addChild(game);
 
+		//Format:       .SOL filename        .SOL location
+		FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
+		PlayerSettings.init();
+		SaveData.initSave();
+
+		FlxG.sound.defaultMusicGroup.volume = FlxG.save.data.musicVol * 0.01;
+		FlxG.sound.defaultSoundGroup.volume = FlxG.save.data.gamesfxVol * 0.01;
+
 		#if windows
-		DiscordClient.initialize();
+		if (FlxG.save.data.showPresence)
+			DiscordClient.initialize();
 		#end
 
 		Application.current.onExit.add (function (exitCode)

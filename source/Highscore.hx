@@ -1,6 +1,6 @@
 package;
 
-import flixel.FlxG;
+//import flixel.FlxG;
 
 using StringTools;
 class Highscore

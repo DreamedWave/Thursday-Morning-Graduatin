@@ -10,7 +10,7 @@ import sys.io.File;
 import Song.SwagSong;
 import flixel.input.gamepad.FlxGamepad;
 import flash.text.TextField;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.tweens.FlxEase;

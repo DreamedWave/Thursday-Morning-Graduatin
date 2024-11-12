@@ -1,7 +1,7 @@
 package;
 
 import flash.Lib;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.math.FlxMath;
@@ -46,16 +46,16 @@ class CachingScreen extends FlxSpriteGroup
 		add(kadeLogo);
 		add(text);
 
-		#if cpp
+		/*#if cpp
 		if (!FlxG.save.data.cacheImages && !FlxG.save.data.cacheMusic)
 		{
 			text.text = "<<Press  ENTER>>";
 			text.screenCenter(X);
 		}
-		#else
+		#else*/
 		text.text = "<<Press  ENTER>>";
 		text.screenCenter(X);
-		#end
+		//#end
     }
 
     override function update(elapsed:Float)

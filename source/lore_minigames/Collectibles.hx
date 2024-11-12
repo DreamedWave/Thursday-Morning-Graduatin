@@ -1,7 +1,7 @@
 package lore_minigames;
 
 import flixel.FlxSprite;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import flixel.tweens.FlxEase;

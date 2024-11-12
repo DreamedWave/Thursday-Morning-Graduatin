@@ -1,6 +1,5 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
@@ -184,13 +183,6 @@ class TitleState extends MusicBeatMenu
 			#if sys
 			if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/temp"))
 				sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/temp");
-			#end
-			
-			#if !cpp
-			FlxG.save.bind('graduatin', 'dreamedwave');
-
-			PlayerSettings.init();
-			KadeEngineData.initSave();
 			#end
 
 			camUI.zoom = 1;

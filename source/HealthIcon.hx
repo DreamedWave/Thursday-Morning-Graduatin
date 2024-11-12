@@ -1,7 +1,7 @@
 package;
 
 import flixel.FlxSprite;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.addons.effects.FlxTrail;
 import flixel.addons.effects.FlxTrailArea;
 import openfl.utils.Assets as OpenFlAssets;

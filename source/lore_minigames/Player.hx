@@ -1,7 +1,7 @@
 package lore_minigames;
 
 import flixel.FlxSprite;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxTimer;
 import flixel.util.FlxDirectionFlags;
@@ -9,6 +9,7 @@ import flixel.util.FlxDirectionFlags;
 using StringTools;
 
 //I DISCOVERED HOW ENUMS WORK IM GONNA OVERUSE THEM NOW !!!!! MUAHAHAHAHHAA >:3>
+//Gurl just use an FSM smh
 enum AnimType
 {
 	NORMAL;

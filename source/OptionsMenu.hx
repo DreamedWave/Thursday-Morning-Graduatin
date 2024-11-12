@@ -7,7 +7,7 @@ import openfl.Lib;
 import Options;
 import Controls.Control;
 import flash.text.TextField;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -22,6 +22,8 @@ import discord_rpc.DiscordRpc;
 import Discord.DiscordClient;
 #end
 import flixel.addons.transition.FlxTransitionableState;
+
+using StringTools;
 
 class OptionsMenu extends MusicBeatMenu
 {
@@ -356,11 +358,10 @@ class OptionsMenu extends MusicBeatMenu
 						for (leOptionne in currentSelectedCat.getOptions())
 						{
 							//Idk man there's no getName() and im too lazy to make one myself,,, (- ^ -)
-							switch (leOptionne.getDescription())
+							if (leOptionne.getDisplay().contains('Reset'))
 							{
-								case 'Reset your scores on all songs and weeks.\n(This is irreversible!)' | 'Reset your story mode progress.\n(This is irreversible!)' | 'Reset ALL your settings.\n(This is irreversible!)':
-									leOptionne.resetConfirmBool();
-									trace ('reset state of ' + leOptionne.getDisplay());
+								leOptionne.resetConfirmBool();
+								trace ('reset state of ' + leOptionne.getDisplay());
 							}
 						}
 					}
@@ -481,18 +482,17 @@ class OptionsMenu extends MusicBeatMenu
 			
 			if (isCat)
 			{
-				if (currentSelectedCat.getOptions()[curSelected].getAccept())
+				if (currentSelectedCat.getOptions()[curSelected].checkIfSlider())
 				{	
-					if (FlxG.keys.pressed.SHIFT)
+					if (currentSelectedCat.getOptions()[curSelected].canSpeedUp && FlxG.keys.pressed.SHIFT)
 					{
 						if (FlxG.keys.pressed.RIGHT)
-						{
-							currentSelectedCat.getOptions()[curSelected].right();
-							//update the alphabet text itself
-							grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-							
+						{			
 							if (antiSpam > 3)
 							{
+								//update the option and alphabet text itself
+								currentSelectedCat.getOptions()[curSelected].right();
+								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
 								FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 							}
@@ -500,13 +500,12 @@ class OptionsMenu extends MusicBeatMenu
 								antiSpam++;
 						}
 						else if (FlxG.keys.pressed.LEFT)
-						{
-							currentSelectedCat.getOptions()[curSelected].left();
-							//update the alphabet text itself
-							grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-							
+						{	
 							if (antiSpam > 3)
 							{
+								//update the option and alphabet text itself
+								currentSelectedCat.getOptions()[curSelected].left();
+								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
 								FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 							}
@@ -528,6 +527,7 @@ class OptionsMenu extends MusicBeatMenu
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 					}
+
 					offsetNumberShit.text = currentSelectedCat.getOptions()[curSelected].getValue();
 					descriptionShit.text = currentDescription;
 				}
@@ -548,10 +548,9 @@ class OptionsMenu extends MusicBeatMenu
 					}
 					else if (FlxG.keys.pressed.RIGHT)
 					{
-						FlxG.save.data.offset += 0.1;
-						
 						if (antiSpam > 3)
 						{
+							FlxG.save.data.offset += 0.1;
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 						}
@@ -559,11 +558,10 @@ class OptionsMenu extends MusicBeatMenu
 							antiSpam++;
 					}
 					else if (FlxG.keys.pressed.LEFT)
-					{
-						FlxG.save.data.offset -= 0.1;
-						
+					{	
 						if (antiSpam > 3)
 						{
+							FlxG.save.data.offset -= 0.1;
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 						}
@@ -591,11 +589,10 @@ class OptionsMenu extends MusicBeatMenu
 					}
 				}
 				else if (FlxG.keys.pressed.RIGHT)
-				{
-					FlxG.save.data.offset += 0.1;
-					
+				{					
 					if (antiSpam > 3)
 					{
+						FlxG.save.data.offset += 0.1;
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 					}
@@ -603,11 +600,10 @@ class OptionsMenu extends MusicBeatMenu
 						antiSpam++;
 				}
 				else if (FlxG.keys.pressed.LEFT)
-				{
-					FlxG.save.data.offset -= 0.1;
-					
+				{		
 					if (antiSpam > 3)
 					{
+						FlxG.save.data.offset -= 0.1;
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 					}
@@ -630,6 +626,12 @@ class OptionsMenu extends MusicBeatMenu
 					{
 						FlxG.save.flush();
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
+						//Cool Flashing Red Effect
+						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
+						{
+							//Placeholder - flash this and do sum cool shit with it!
+							grpControls.members[curSelected].color = 0xFFC77070;
+						}
 					}
 				}
 				else
@@ -679,11 +681,10 @@ class OptionsMenu extends MusicBeatMenu
 						controlLabel.y += 70 * i;
 						controlLabel.targetY = i;
 						controlLabel.ID = i;
-						switch (currentSelectedCat.getOptions()[i].getDescription())
+						if (currentSelectedCat.getOptions()[i].getDisplay().contains('Reset'))
 						{
-							case 'Reset your scores on all songs and weeks.\n(This is irreversible!)' | 'Reset your story mode progress.\n(This is irreversible!)' | 'Reset ALL your settings.\n(This is irreversible!)':
-								if (DisclaimerState.wentOptions)
-									controlLabel.color = 0xFFC77070;
+							if (DisclaimerState.wentOptions)
+								controlLabel.color = 0xFFC77070;
 						}
 						grpControls.add(controlLabel);
 					}
@@ -703,7 +704,23 @@ class OptionsMenu extends MusicBeatMenu
 		#if !switch
 		// NGio.logEvent("Fresh");
 		#end
-		
+
+		if (isCat)
+		{
+			//trace('pls work;;;');
+			if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('|['))
+			{
+				//trace('omg???');
+				currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
+				grpControls.members[curSelected].color = 0xFFFFFFFF;
+			}
+		}
+		/*if (currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
+		{
+			grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
+			grpControls.members[curSelected].color = 0xFFFFFFFF;
+		}*/
+
 		if (change != 0)
 			FlxG.sound.play(Paths.sound("scrollMenu"));
 
@@ -717,7 +734,7 @@ class OptionsMenu extends MusicBeatMenu
 		if (isCat)
 		{
 			currentDescription = currentSelectedCat.getOptions()[curSelected].getDescription();
-			if (currentSelectedCat.getOptions()[curSelected].getAccept())
+			if (currentSelectedCat.getOptions()[curSelected].checkIfSlider())
 			{
 				offsetNumberShit.text = currentSelectedCat.getOptions()[curSelected].getValue();
 				descriptionShit.text = currentDescription;

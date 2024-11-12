@@ -1,7 +1,7 @@
 package;
 
 import flixel.input.gamepad.FlxGamepad;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.input.FlxInput;
 import flixel.input.actions.FlxAction;
 import flixel.input.actions.FlxActionInput;

@@ -6,7 +6,7 @@ import Discord.DiscordClient;
 import flixel.util.FlxColor;
 import openfl.Lib;
 import Conductor.BPMChangeEvent;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.addons.ui.FlxUIState;
 import flixel.math.FlxMath;
 

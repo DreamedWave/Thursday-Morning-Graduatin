@@ -1,7 +1,7 @@
 package;
 
 import flixel.input.gamepad.FlxGamepad;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
 import flixel.tweens.FlxEase;

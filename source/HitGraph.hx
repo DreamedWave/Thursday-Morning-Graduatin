@@ -1,4 +1,4 @@
-import flixel.FlxG;
+//import flixel.FlxG;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.text.TextFieldAutoSize;

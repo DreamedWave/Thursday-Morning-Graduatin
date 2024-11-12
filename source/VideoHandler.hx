@@ -1,7 +1,7 @@
 package;
 
 import flixel.input.gamepad.FlxGamepad;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.util.FlxColor;
@@ -11,6 +11,7 @@ import vlc.VlcBitmap;
 
 // THIS IS FOR TESTING
 // DONT STEAL MY CODE >:(
+//Im sorry i promise I wil replace u;;;;
 class VideoHandler
 {
 	public var finishCallback:Void->Void;

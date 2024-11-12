@@ -1,6 +1,6 @@
 package;
-import flixel.*;
-import flixel.FlxG;
+//import flixel.*;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.addons.text.FlxTextField;

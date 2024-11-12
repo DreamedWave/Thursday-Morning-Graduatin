@@ -15,7 +15,7 @@ import sys.thread.Thread;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import openfl.ui.Keyboard;
 import flixel.FlxSprite;
-import flixel.FlxG;
+//import flixel.FlxG;
 
 class GameplayCustomizeState extends MusicBeatMenu
 {

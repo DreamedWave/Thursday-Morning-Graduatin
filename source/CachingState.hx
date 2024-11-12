@@ -15,7 +15,7 @@ import sys.FileSystem;
 import sys.io.File;
 import sys.thread.Thread;
 #end
-import flixel.FlxG;
+
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -55,13 +55,13 @@ class CachingState extends MusicBeatMenu
 		#end
 
 		//ForTesting
-		FlxG.save.data.cacheImages = false;
-		FlxG.save.data.cacheMusic = false;
+		//FlxG.save.data.cacheImages = false;
+		//FlxG.save.data.cacheMusic = false;
 
 		screen = new CachingScreen();
 		add(screen);
 
-		if (FlxG.save.data.cacheImages || FlxG.save.data.cacheMusic)
+		/*if (FlxG.save.data.cacheImages || FlxG.save.data.cacheMusic)
 		{
 			tipText = new FlxText(screen.vals[0], screen.vals[1] + screen.vals[2] * 1.3, screen.vals[3] - 240, "Loading times too long? Turn off pre-caching in the 'Performance' tab within the options menu!");
 			tipText.setFormat(Paths.font("playtime.ttf"), 35);
@@ -71,9 +71,9 @@ class CachingState extends MusicBeatMenu
 			tipText.alpha = 0;
 			tipText.screenCenter(X);
 			add(tipText);
-		}
+		}*/
 
-		#if cpp
+		/*#if cpp
 		if (!FlxG.save.data.cacheImages && !FlxG.save.data.cacheMusic)
 			FlxG.camera.fade(FlxColor.BLACK, 1, true);
 		else
@@ -81,7 +81,7 @@ class CachingState extends MusicBeatMenu
 			FlxG.camera.fade(FlxColor.BLACK, 5, true);
 
 			//Preload Menu Themes
-			/*var sillyMenuDeterminator:String = 'peaceful';
+			var sillyMenuDeterminator:String = 'peaceful';
 			switch(FlxG.save.data.weekUnlocked)
 			{
 				case 1:
@@ -92,7 +92,7 @@ class CachingState extends MusicBeatMenu
 					sillyMenuDeterminator = 'city';
 				case 4:
 					sillyMenuDeterminator = 'village';
-			}*/
+			}
 
 			if (FlxG.save.data.cacheImages)
 			{
@@ -133,7 +133,7 @@ class CachingState extends MusicBeatMenu
 			Thread.create(() -> 
 			{
 				//Preload Menu Mus and Snd
-				/*for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/music")))
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/music")))
 				{
 					if (i.startsWith(sillyMenuDeterminator) && i.endsWith(".ogg"))
 					{
@@ -154,7 +154,7 @@ class CachingState extends MusicBeatMenu
 						screen.toBeDone++;
 						screen.done++;
 					}
-				}*/
+				}
 
 
 				for (i in images)
@@ -178,9 +178,9 @@ class CachingState extends MusicBeatMenu
 				finishCaching();
 			});
 		}
-		#else
+		#else*/
 		FlxG.camera.fade(FlxColor.BLACK, 1, true);
-		#end
+		//#end
 
 		//Tips for future Samuel: If sound volume is '0', it doesn't play the sound until volume is < 0
 		//Maybe we can fix that by adding a "disclaimerMusic.time" thing on update or sum shit idk
@@ -190,20 +190,20 @@ class CachingState extends MusicBeatMenu
 		//...all samuels are dead now- Everyone, welcome Amiee to the dev team :33
 		cacheMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-loading'), true, false);
 		cacheMusic.volume = 0;
-		//FlxG.sound.list.add(cacheMusic);
+		FlxG.sound.list.add(cacheMusic);
 		disclaimerMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-disclaimer'), true, false);
 		disclaimerMusic.persist = true;
 		disclaimerMusic.volume = 0;
-		//FlxG.sound.list.add(disclaimerMusic);
+		FlxG.sound.list.add(disclaimerMusic);
 
 		super.create();
 
-		cacheMusic.play();
+		//cacheMusic.play();
 		disclaimerMusic.play();
-		if (!FlxG.save.data.cacheImages && !FlxG.save.data.cacheMusic)
-			cacheMusic.fadeIn(3, 0, 0.5);
-		else
-			cacheMusic.fadeIn(5, 0, 0.5);
+		//if (!FlxG.save.data.cacheImages && !FlxG.save.data.cacheMusic)
+		//cacheMusic.fadeIn(3, 0, 0.5);
+		//else
+		cacheMusic.fadeIn(5, 0, 0.5);
 	}
 
 	var targetAlpha:Float = 0;
@@ -213,22 +213,22 @@ class CachingState extends MusicBeatMenu
 	{
 		super.update(elapsed);
 
-		if (!FlxG.save.data.cacheMusic && !FlxG.save.data.cacheImages)
+		//if (!FlxG.save.data.cacheMusic && !FlxG.save.data.cacheImages)
+		//{
+		if ((controls.ACCEPT || FlxG.mouse.justPressed) && !goForTheMilk)
 		{
-			if ((controls.ACCEPT || FlxG.mouse.justPressed) && !goForTheMilk)
-			{
-				goForTheMilk = true;
-				finishCaching();
-			}
+			goForTheMilk = true;
+			finishCaching();
 		}
-		else
+		//}
+		/*else
 		{
 			if (!tweenedAlready && Main.isFocused && (FlxG.keys.justPressed.ANY || FlxG.mouse.justPressed || FlxG.mouse.justPressedMiddle || FlxG.mouse.justPressedRight))
 			{
 				FlxTween.tween(tipText, {alpha: 1}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
 				tweenedAlready = true;
 			}
-		}
+		}*/
 	}
 
 	function finishCaching():Void

@@ -13,7 +13,7 @@ import flixel.FlxSubState;
 import Options.Option;
 import flixel.input.FlxInput;
 import flixel.input.keyboard.FlxKey;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;

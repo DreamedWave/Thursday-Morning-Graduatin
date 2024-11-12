@@ -1,7 +1,7 @@
 package;
 
 import flixel.FlxSprite;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 class CharacterSetting

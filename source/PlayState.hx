@@ -11,7 +11,7 @@ import Section.SwagSection;
 import Song.SwagSong;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -560,16 +560,17 @@ class PlayState extends MusicBeatState
 
 		//SoundGroupShit
 		//Move this to an initializing state and when you update options bcuz yea :33
-		FlxG.sound.defaultMusicGroup.volume = musicVolume;
-		FlxG.sound.defaultSoundGroup.volume = soundsVolume;
+		//done!
+		//FlxG.sound.defaultMusicGroup.volume = musicVolume;
+		//FlxG.sound.defaultSoundGroup.volume = soundsVolume;
 		musicGroup = new FlxSoundGroup(musicVolume);
 		specilNoteHitSFXGroup = new FlxSoundGroup(soundsVolume);
 		if(FlxG.save.data.missSounds)
 			missSoundGroup = new FlxSoundGroup(musicVolume);
 		if (FlxG.save.data.notesfx)
 		{
-			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
-			susNoteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
+			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume * soundsVolume);
+			susNoteHitSFXGroup = new FlxSoundGroup(noteHitVolume * soundsVolume);
 		}
 
 		persistentUpdate = true;
@@ -6674,7 +6675,7 @@ class PlayState extends MusicBeatState
 		camGame.stopFX();
 		camHUD.stopFX();
 
-		specilNoteHitSFXGroup.volume = 0.65;
+		specilNoteHitSFXGroup.volume *= 0.65;
 
 		if (!PlayStateChangeables.Optimize)
 			boyfriend.stunned = true;

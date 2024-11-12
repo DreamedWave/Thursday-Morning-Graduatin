@@ -3,7 +3,7 @@ package;
 import flixel.input.gamepad.FlxGamepad;
 import openfl.Lib;
 import Controls.Control;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxSubState;

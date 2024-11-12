@@ -1,6 +1,6 @@
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import flixel.math.FlxMath;

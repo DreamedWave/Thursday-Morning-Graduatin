@@ -1,7 +1,7 @@
 package;
 
 import Song.SwagSong;
-import flixel.FlxG;
+//import flixel.FlxG;
 //guh
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;

@@ -1,7 +1,7 @@
 package;
 
 import Conductor.BPMChangeEvent;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.util.FlxColor;
 import openfl.Lib;

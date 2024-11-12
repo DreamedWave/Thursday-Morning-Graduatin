@@ -3,7 +3,7 @@ package;
 #if windows
 import Sys.sleep;
 import discord_rpc.DiscordRpc;
-import flixel.FlxG;
+//import flixel.FlxG;
 
 using StringTools;
 

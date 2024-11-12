@@ -1,7 +1,7 @@
 package;
 
 import flixel.*;
-import flixel.FlxG;
+//import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;

@@ -1,4 +1,4 @@
-import flixel.FlxG;
+//import flixel.FlxG;
 
 class Ratings
 {

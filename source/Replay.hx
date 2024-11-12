@@ -2,7 +2,7 @@
 import sys.io.File;
 #end
 import Controls.Control;
-import flixel.FlxG;
+//import flixel.FlxG;
 import openfl.events.IOErrorEvent;
 import openfl.events.Event;
 import openfl.net.FileReference;
