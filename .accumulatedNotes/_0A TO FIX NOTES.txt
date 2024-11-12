@@ -15,7 +15,7 @@ X Add tiltshift blur to when pico shoots you
 - Alt + ENTER fullscreen still a problem - check flash btmap or FlxCamera or FlxCameraFrontEnd or something good heavens-
 / Something is wrong with playState - it lags when palying songs for some reason (maybe stop updating notes when they're not on screen idk)
 ^ The issue seems to be Low Power mode in my laptop - gotta test this on my old laptop lol
-- Caching Optimizations (remove in some parts, fix in some others)
++ Caching Optimizations (remove in some parts, fix in some others)
 ^ FIX cuz it still shows up after the numbers show when your combo breaks
 - Autopause not working in playstate again
 - Offset Tapper

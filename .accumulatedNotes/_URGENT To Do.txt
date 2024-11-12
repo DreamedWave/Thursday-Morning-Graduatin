@@ -1,13 +1,14 @@
 To Do:
 
 !!!URGENT!!!
+- Rename Orange Mode to Persistence Mode
 - Alpha of arrows not following parent alpha
 - Increase Gun Volume in pico parts
-- Restore old camshake it looks cooler lol
+X Restore old camshake it looks cooler lol (nvm MADE A NEW BETTER SYSTEM YIPEEEEE)
 - Fix Lag compensation not turning off (turtle not fading out)
-- Game doing that weird doubletime speed thingy again
-- Try out removing soundgroups (or check soundgroup assigning and stop(); code lol)
-- Make it so that Miscs reset to 1 when selfsert dies in sprouting
++ Game doing that weird doubletime speed thingy again
+X Try out removing soundgroups (or check soundgroup assigning and stop(); code lol)
++ Make it so that Miscs reset to 1 when selfsert dies in sprouting
 
 + Reexport everything you mixed (weeks 1-3) to unleveled
 + Mix everything in mastered

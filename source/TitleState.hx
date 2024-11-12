@@ -516,9 +516,10 @@ class TitleState extends MusicBeatMenu
 
 	function doSpecialWacky():Void
 	{
-		//AHM GETTIN' UPSET, JEREMY!!
+		//"AHM GETTIN' UPSET, JEREMY!!""
 		//you do not have any idea how much pain this has caused me
 		//literally almost a scrapped feature bruih
+		//This removes all the wAcKy cHaRaCtErS aNd sPaCEs wOaAHhHH!!11!!!
 		var wackySwitch:String = StringTools.trim(chosenWacky).toLowerCase();
 		wackySwitch = StringTools.replace(wackySwitch, " ", "").toString();
 		var hideChars:Array<String> = ['.', ',', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
@@ -528,10 +529,10 @@ class TitleState extends MusicBeatMenu
 
 		switch (wackySwitch)
 		{
-			case 'suckmydick' | 'fuckittohell':
+			/*case 'suckmydick' | 'fuckittohell':
 				wackyXtraText.text = '(not in a sex way)';
 				wackyXtraText.visible = true;
-				FlxG.log.add('WackyText');
+				FlxG.log.add('WackyText');*/
 			case 'idunno':
 				wackyXtraText.text = '(oh actually today is a ' + Main.curDayString + "!!)";
 				wackyXtraText.visible = true;
@@ -547,7 +548,7 @@ class TitleState extends MusicBeatMenu
 				if(Main.curHourString == "1 AM")
 					wackyXtraText.text = '(you should go to sleep-)';
 				else
-					wackyXtraText.text = '(bro it is literally ' + Main.curHourString + '-)';
+					wackyXtraText.text = "(errrm actually, it's " + Main.curHourString + '-)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 			case 'lets gooooooo' | 'thatwasayearago' | 'aaaaaaaaaa' | 'orelseillscream':
@@ -563,23 +564,27 @@ class TitleState extends MusicBeatMenu
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 			case 'willbeeasy' | 'nahimjustkidding':
-				wackyXtraText.text = 'probably...';
+				wackyXtraText.text = '()...probably)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 			case 'men':
 				wackyXtraText.text = 'I MEAN MEN- I- I MEAN- MEN- I MEAN-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
-			case 'fightmemihoyo' | 'theschool' | '2dosesoflean':
+			case 'women':
+				wackyXtraText.text = 'I MEAN, MOMMY- I MEAN- MOMMY- I MEAN-';
+				wackyXtraText.visible = true;
+				FlxG.log.add('WackyText');
+			case 'enbies':
+				wackyXtraText.text = 'I MEAN HOTTIES- I MEAN- HOTTIES- I MEAN-';
+				wackyXtraText.visible = true;
+				FlxG.log.add('WackyText');
+			case 'fightmemihoyo':
 				wackyXtraText.text = '(For legal reasons, this is a joke!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 			case 'unfunny':
 				wackyXtraText.text = '(PICO FUNNY!!!)';
-				wackyXtraText.visible = true;
-				FlxG.log.add('WackyText');
-			case 'gethead':
-				wackyXtraText.text = '...phones';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 			case 'slmclclveiwerr':
@@ -588,11 +593,11 @@ class TitleState extends MusicBeatMenu
 				FlxG.log.add('WackyText');
 				FlxG.sound.play(Paths.sound('intro_schplat'), 0.45);
 				FlxG.log.add('Splat Sound');
-			case 'ki kinda nic e yea':
-				wackyXtraText.text = '(for no particular reason mhm yep)';
+			case 'kikindaniceyea':
+				wackyXtraText.text = '(cuz pink is based!!!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
-			case 'hopeyouhavefuh':
+			case 'hopeyouhavefun':
 				wackyXtraText.text = '!!!';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
@@ -609,12 +614,38 @@ class TitleState extends MusicBeatMenu
 				camUI.zoom -= 0.03;
 				FlxG.sound.play(Paths.sound('intro_shid'), 0.55);
 				FlxG.log.add('BRAAPPP');
-			case 'urmomhahagottem' | 'theymademeanegg' | 'afamily' | 'x':
+			case 'urmom' | 'theymademeanegg' | 'afamily' | 'x':
 				camUI.zoom += 0.015;
 				FlxG.sound.play(Paths.sound('intro_vine'), 0.65);
 				FlxG.log.add('Vine Thud');
-			case 'notsafe' | 'mydadleftme' | 'somebodyhelp' | 'help':
+			case 'notsafe' | 'somebodyhelp' | 'help' | 'ok':
 				FlxG.sound.music.volume = 0;
+			case 'inchat':
+				var meowCounter:Int = 0;
+				wackyXtraText.visible = true;
+				new FlxTimer().start(Conductor.stepCrochet / 4 / 1000, function(tmr:FlxTimer)
+				{
+					meowCounter++;
+					switch(meowCounter)
+					{
+						case 5:
+							wackyXtraText.text += '\n';
+						case 10:
+							wackyXtraText.text += '\n';
+							wackyXtraText.text += ':3 :3 :3 :3 :3 :3 :3 ';
+						case 14:
+							wackyXtraText.text += '\n';
+							wackyXtraText.text += ':3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 ';
+						case 15:
+							wackyXtraText.text += '\n';
+							wackyXtraText.text += ':3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 ';
+						case 16:
+							wackyXtraText.text += '\n';
+							wackyXtraText.text += ':3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 :3 ';
+					}
+					wackyXtraText.text += ':3 ';
+				}, 16);
+				FlxG.log.add(':3');	
 			case 'ewrjoqjmovkvjwbtjmwmgkgkmxcmrm':
 				var screamCounter:Int = 0;
 				new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
@@ -631,11 +662,11 @@ class TitleState extends MusicBeatMenu
 						case 5:
 							addMoreText('makitlikeitnevehappenenawewuno');
 						case 6:
-							addMoreText('mmdsmisimpforfaiththeycoolakdf');
+							addMoreText('mmdsmwhatamievenlikeLMFAOLakdf');
 						case 7:
-							addMoreText('idkijustlikethemtheyrecuteands');
+							addMoreText('likeidfkwhatIamAllIknowIsThatI');
 						case 8:
-							addMoreText('hitskdgksgkkssssskskkksdksaaaa');
+							addMoreText('ImAGurlButThatsItLMFAOIDFKANYT');
 					}
 				}, 8);
 				FlxG.log.add('Fnaf Lore');
@@ -649,17 +680,17 @@ class TitleState extends MusicBeatMenu
 						case 1:
 							addMoreText('NO.');
 						case 3:
-							addMoreText('NO.');
+							addMoreText('NO. NO.');
 						case 4:
-							addMoreText('NO.');
+							addMoreText('NO. NO. NO.');
 						case 5:
-							addMoreText('NO.');
+							addMoreText('NO. NO. NO. NO. NO.');
 						case 6:
-							addMoreText('NO.');
+							addMoreText('NO. NO. NO. NO. NO.');
 						case 7:
-							addMoreText('NO.');
+							addMoreText('NO. NO. NO. NO. NO.');
 						case 8:
-							addMoreText('NO.');
+							addMoreText('NO. NO. NO. NO. NO.');
 					}
 				}, 8);
 			case 'adrawingtablet':
