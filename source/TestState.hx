@@ -304,6 +304,7 @@ class TestState extends MusicBeatState
 
 			if (FlxG.keys.justPressed.NINE)
 			{
+				trace('bro???');
 				FmodManager.PlaySoundOneShot(FmodSFX.TestEvent);
 			}
 
