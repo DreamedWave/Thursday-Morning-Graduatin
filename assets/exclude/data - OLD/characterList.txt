@@ -1,0 +1,10 @@
+guy-default
+guy-theborder
+demon-dad
+priest-theborderpray
+priest-theborderannoyed
+priest-theborderangry
+pico-default
+selfsert-default
+table-default
+table-theborder

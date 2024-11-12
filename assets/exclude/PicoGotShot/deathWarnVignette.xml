@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="deathWarnVignette.png">
+<SubTexture name="dmgVigStage0_0000" x="0" y="0" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0001" x="1282" y="0" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0002" x="0" y="722" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0003" x="1282" y="722" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0004" x="0" y="1444" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0005" x="1282" y="1444" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0006" x="2564" y="0" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage0_0007" x="2564" y="722" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0000" x="2564" y="1444" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0001" x="0" y="2166" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0002" x="1282" y="2166" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0003" x="2564" y="2166" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0004" x="0" y="2888" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0005" x="1282" y="2888" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0006" x="2564" y="2888" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage1_0007" x="3846" y="0" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0000" x="3846" y="722" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0001" x="3846" y="1444" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0002" x="3846" y="2166" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0003" x="3846" y="2888" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0004" x="0" y="3610" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0005" x="1282" y="3610" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0006" x="2564" y="3610" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+<SubTexture name="dmgVigStage2_0007" x="3846" y="3610" width="1282" height="722" frameX="0" frameY="0" frameWidth="1280" frameHeight="720" />
+</TextureAtlas>

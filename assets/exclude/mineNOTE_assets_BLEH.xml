@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="mineNOTE_assets.png">
+	<!-- Created with Adobe Animate version 21.0.0.35450 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+
+	<SubTexture name="blue alone0000" x="0" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0001" x="0" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0002" x="0" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0003" x="0" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0004" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0005" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0006" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0007" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0008" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0009" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0010" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0011" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0012" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0013" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0014" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0015" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0016" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0017" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0018" x="0" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue alone0019" x="0" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="blue hold0000" x="980" y="306" width="50" height="44"/>
+	<SubTexture name="blue tail0000"  x="980" y="10" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="green alone0000" x="720" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0001" x="720" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0002" x="720" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0003" x="720" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0004" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0005" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0006" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0007" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0008" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0009" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0010" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0011" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0012" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0013" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0014" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0015" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0016" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0017" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0018" x="720" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green alone0019" x="720" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="green hold0000" x="980" y="360" width="50" height="44"/>
+	<SubTexture name="green tail0000" x="980" y="84" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="purple alone0000" x="240" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0001" x="240" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0002" x="240" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0003" x="240" y="480" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0004" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0005" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0006" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0007" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0008" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0009" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0010" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0011" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0012" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0013" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0014" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0015" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0016" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0017" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0018" x="240" y="0" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple alone0019" x="240" y="240" width="240" height="240" frameX="41" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="purple hold0000" x="980" y="414" width="50" height="44"/>
+	<SubTexture name="purple tail0000" x="980" y="158" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+	<SubTexture name="red alone0000" x="480" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0001" x="480" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0002" x="480" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0003" x="480" y="480" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0004" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0005" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0006" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0007" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0008" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0009" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0010" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0011" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0012" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0013" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0014" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0015" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0016" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0017" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0018" x="480" y="0" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red alone0019" x="480" y="240" width="240" height="240" frameX="43" frameY="36" frameWidth="240" frameHeight="240"/>
+	<SubTexture name="red hold0000" x="980" y="468" width="50" height="44"/>
+	<SubTexture name="red tail0000" x="980" y="232" width="50" height="74" frameX="0" frameY="-10" frameWidth="50" frameHeight="74"/>
+</TextureAtlas>

@@ -1,0 +1,630 @@
+C:/Users/Samuel/Documents/FFMPEG/bin/ffmpeg.exe -hide_banner -y -v debug -r 24 -start_number 0 -start_number_range 1 -i D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png -vf palettegen=stats_mode=full:reserve_transparent=1 -y D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png 
+=====================================================
+Splitting the commandline.
+Reading option '-hide_banner' ... matched as option 'hide_banner' (do not show program banner) with argument '1'.
+Reading option '-y' ... matched as option 'y' (overwrite output files) with argument '1'.
+Reading option '-v' ... matched as option 'v' (set logging level) with argument 'debug'.
+Reading option '-r' ... matched as option 'r' (set frame rate (Hz value, fraction or abbreviation)) with argument '24'.
+Reading option '-start_number' ... matched as AVOption 'start_number' with argument '0'.
+Reading option '-start_number_range' ... matched as AVOption 'start_number_range' with argument '1'.
+Reading option '-i' ... matched as input url with argument 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png'.
+Reading option '-vf' ... matched as option 'vf' (set video filters) with argument 'palettegen=stats_mode=full:reserve_transparent=1'.
+Reading option '-y' ... matched as option 'y' (overwrite output files) with argument '1'.
+Reading option 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png' ... matched as output url.
+Finished splitting the commandline.
+Parsing a group of options: global .
+Applying option hide_banner (do not show program banner) with argument 1.
+Applying option y (overwrite output files) with argument 1.
+Applying option v (set logging level) with argument debug.
+Applying option y (overwrite output files) with argument 1.
+Successfully parsed a group of options.
+Parsing a group of options: input url D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png.
+Applying option r (set frame rate (Hz value, fraction or abbreviation)) with argument 24.
+Successfully parsed a group of options.
+Opening an input file: D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png.
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0000.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a54ec0c0] Statistics: 9327 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0001.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a54ee7c0] Statistics: 11305 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0002.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a54ee7c0] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0003.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a553ad80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0004.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a553dd80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0005.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5540d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0006.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5543d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0007.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0008.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0009.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0010.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0011.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0012.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0013.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0014.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0015.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11786 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0016.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9784 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0017.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11349 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0018.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0019.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0020.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0021.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0022.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0023.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0024.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0025.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0026.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0027.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0028.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0029.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0030.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0031.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12029 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0032.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9726 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0033.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11256 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0034.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0035.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0036.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0037.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0038.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0039.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0040.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0041.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0042.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0043.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0044.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0045.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0046.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11966 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0047.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9376 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0048.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 11362 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0049.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0050.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0051.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0052.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0053.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0054.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0055.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0056.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0057.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0058.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0059.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 12040 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0060.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9128 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0061.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9128 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0062.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9128 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0063.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9128 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0064.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9128 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0065.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 50064 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0066.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 63861 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0067.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 67051 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0068.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 65727 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0069.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 58358 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0070.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 54541 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0071.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0072.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0073.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0074.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0075.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0076.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0077.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0078.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0079.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39264 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0080.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10808 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0081.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10808 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0082.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10808 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0083.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10808 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0084.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10808 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0085.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 53570 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0086.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 67905 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0087.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 70905 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0088.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 70736 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0089.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 60088 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0090.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 54514 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0091.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0092.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0093.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0094.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0095.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0096.png' for reading
+[file @ 00000192a54e0900] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0097.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0098.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0099.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 39542 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0100.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10605 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0101.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10605 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0102.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10605 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0103.png' for reading
+[file @ 00000192a54e0000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10605 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0104.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 10605 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0105.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 52955 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0106.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 66766 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0107.png' for reading
+[file @ 00000192a54e0340] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 70736 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0108.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 70806 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0109.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 60460 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0110.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 54198 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0111.png' for reading
+[file @ 00000192a54dfdc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0112.png' for reading
+[file @ 00000192a54e0240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0113.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0114.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0115.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0116.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0117.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0118.png' for reading
+[file @ 00000192a54e0a00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0119.png' for reading
+[file @ 00000192a54dfec0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 40053 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0120.png' for reading
+[file @ 00000192a54dfc80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9944 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0121.png' for reading
+[file @ 00000192a54e07c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9944 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0122.png' for reading
+[file @ 00000192a54e0100] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9944 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0123.png' for reading
+[file @ 00000192a54e06c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9944 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0124.png' for reading
+[file @ 00000192a54e0580] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 9944 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0125.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5546d80] Statistics: 53006 bytes read, 0 seeks
+[image2 @ 00000192a54dae00] max_analyze_duration 5000000 reached at 5000000 microseconds st:0
+Input #0, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png':
+  Duration: 00:00:05.60, start: 0.000000, bitrate: N/A
+  Stream #0:0, 125, 1/25: Video: png, 1 reference frame, rgba(pc), 240x240 [SAR 2834:2834 DAR 1:1], 0/1, 25 fps, 25 tbr, 25 tbn
+Successfully opened the file.
+Parsing a group of options: output url D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png.
+Applying option vf (set video filters) with argument palettegen=stats_mode=full:reserve_transparent=1.
+Successfully parsed a group of options.
+Opening an output file: D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png.
+Successfully opened the file.
+detected 16 logical cores
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> png (native))
+Press [q] to stop, [?] for help
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 15 times
+[AVFilterGraph @ 00000192a5c8a980] Setting 'stats_mode' to value 'full'
+[AVFilterGraph @ 00000192a5c8a980] Setting 'reserve_transparent' to value '1'
+[graph 0 input from stream 0:0 @ 00000192a551a180] Setting 'video_size' to value '240x240'
+[graph 0 input from stream 0:0 @ 00000192a551a180] Setting 'pix_fmt' to value '26'
+[graph 0 input from stream 0:0 @ 00000192a551a180] Setting 'time_base' to value '1/24'
+[graph 0 input from stream 0:0 @ 00000192a551a180] Setting 'pixel_aspect' to value '2834/2834'
+[graph 0 input from stream 0:0 @ 00000192a551a180] Setting 'frame_rate' to value '24/1'
+[graph 0 input from stream 0:0 @ 00000192a551a180] w:240 h:240 pixfmt:rgba tb:1/24 fr:24/1 sar:2834/2834
+[format @ 00000192a54e89c0] Setting 'pix_fmts' to value 'rgb24|rgba|rgb48be|rgba64be|pal8|gray|ya8|gray16be|ya16be|monob'
+[auto_scale_0 @ 00000192a54e8ac0] w:iw h:ih flags:'' interl:0
+[Parsed_palettegen_0 @ 00000192a551a080] auto-inserting filter 'auto_scale_0' between the filter 'graph 0 input from stream 0:0' and the filter 'Parsed_palettegen_0'
+[auto_scale_1 @ 00000192a5502a80] w:iw h:ih flags:'' interl:0
+[format @ 00000192a54e89c0] auto-inserting filter 'auto_scale_1' between the filter 'Parsed_palettegen_0' and the filter 'format'
+[AVFilterGraph @ 00000192a5c8a980] query_formats: 4 queried, 3 merged, 2 already done, 0 delayed
+[auto_scale_1 @ 00000192a5502a80] picking rgba out of 10 ref:bgra alpha:1
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d81ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d94f00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5da7f40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dbaf40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dcdf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5de0fc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5df4000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e07000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e1a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e2d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e400c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e530c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e66100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e79140] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e8c180] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e9f180] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 00000192a54e8ac0] w:240 h:240 fmt:rgba sar:2834/2834 -> w:240 h:240 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5ec71c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5eda200] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5eed240] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f00280] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f13280] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f262c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f39300] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f4c340] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f5f340] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f72380] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f853c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5f98400] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5fab400] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5fbe440] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5fd3480] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5eb21c0] [swscaler @ 00000192a5fe64c0] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_1 @ 00000192a5502a80] w:16 h:16 fmt:bgra sar:1/1 -> w:16 h:16 fmt:rgba sar:1/1 flags:0x00000004
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e8c040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e9f080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d81ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d94f00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5da7f40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dbaf40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dcdf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5de0fc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5df4000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e07000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e1a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e2d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e400c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e530c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e66100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e79140] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 00000192a54e8ac0] w:240 h:240 fmt:rgba sar:2834/2834 -> w:240 h:240 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d81ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d8eec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5da1ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5db4f00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dc7f40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5ddaf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dedf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e00fc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e14000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e27040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e3a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e4d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e600c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e73100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e86100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e99140] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 00000192a54e8ac0] w:240 h:240 fmt:rgba sar:2834/2834 -> w:240 h:240 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e86040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e93000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d81ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5d8eec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5da1ec0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5db4f00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dc7f40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5ddaf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5dedf80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e00fc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e14000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e27040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e3a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e4d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e600c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 00000192a5d74f00] [swscaler @ 00000192a5e73100] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 00000192a54e8ac0] w:240 h:240 fmt:rgba sar:2834/2834 -> w:240 h:240 fmt:bgra sar:1/1 flags:0x00000004
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 108 times
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0126.png' for reading
+[file @ 00000192a54e0480] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a5532b40] Statistics: 69259 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0127.png' for reading
+[file @ 00000192a555a6c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ed00] Statistics: 74066 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0128.png' for reading
+[file @ 00000192a555a800] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555efc0] Statistics: 72240 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0129.png' for reading
+[file @ 00000192a555a6c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f6c0] Statistics: 61522 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0130.png' for reading
+[file @ 00000192a555a000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f980] Statistics: 54133 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0131.png' for reading
+[file @ 00000192a5559b80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f6c0] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0132.png' for reading
+[file @ 00000192a555a6c0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ebc0] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0133.png' for reading
+[file @ 00000192a555a240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ee80] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0134.png' for reading
+[file @ 00000192a5559b80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ebc0] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0135.png' for reading
+[file @ 00000192a555a380] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ed00] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0136.png' for reading
+[file @ 00000192a5559b80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f800] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0137.png' for reading
+[file @ 00000192a5559dc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f6c0] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0138.png' for reading
+[file @ 00000192a555a380] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555f400] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+[image2 @ 00000192a54dae00] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame0139.png' for reading
+[file @ 00000192a555a000] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555ebc0] Statistics: 39854 bytes read, 0 seeks
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+EOF in input file 0
+Terminating demuxer thread 0
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 16 times
+[Parsed_palettegen_0 @ 00000192a551a080] 255(+1) colors generated out of 269367 colors; ratio=0.000947
+[Parsed_palettegen_0 @ 00000192a551a080] Duped color: FF000000
+    Last message repeated 2 times
+[Parsed_palettegen_0 @ 00000192a551a080] Duped color: FF0E4E4E
+[Parsed_palettegen_0 @ 00000192a551a080] Duped color: FF262644
+    Last message repeated 2 times
+[vost#0:0/png @ 00000192a58ac680] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+Output #0, image2, to 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0, 0, 1/24: Video: png, 1 reference frame, rgba(pc, gbr/unknown/unknown, progressive), 16x16 (0x0) [SAR 1:1 DAR 1:1], 0/1, q=2-31, 200 kb/s, 24 fps, 24 tbn
+    Metadata:
+      encoder         : Lavc60.3.100 png
+[vost#0:0/png @ 00000192a58ac680] Clipping frame in rate conversion by 0.000008
+frame=    0 fps=0.0 q=0.0 size=       0kB time=-577014:32:22.77 bitrate=  -0.0kbits/s speed=N/A    [out_0_0 @ 00000192a54ebdc0] EOF on sink link out_0_0:default.
+No more output streams to write to, finishing.
+[image2 @ 00000192a5561780] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_000001.png' for writing
+[file @ 00000192a5fd2a40] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 00000192a555efc0] Statistics: 1003 bytes written, 0 seeks, 1 writeouts
+[out#0/image2 @ 00000192a54ddb80] All streams finished
+[out#0/image2 @ 00000192a54ddb80] Terminating muxer thread
+frame=    1 fps=0.0 q=-0.0 Lsize=N/A time=00:00:00.00 bitrate=N/A speed=   0x    
+video:1kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+Input file #0 (D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png):
+  Input stream #0:0 (video): 140 packets read (3833202 bytes); 140 frames decoded; 
+  Total: 140 packets (3833202 bytes) demuxed
+Output file #0 (D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png):
+  Output stream #0:0 (video): 1 frames encoded; 1 packets muxed (1003 bytes); 
+  Total: 1 packets (1003 bytes) muxed
+140 frames successfully decoded, 0 decoding errors
+Input #0, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/frame%04d.png':
+  Duration: 00:00:05.60, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc), 240x240 [SAR 2834:2834 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Input #1, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/KritaTempPalettegen_%06d.png':
+  Duration: 00:00:00.04, start: 0.000000, bitrate: N/A
+  Stream #1:0: Video: png, rgba(pc), 16x16 [SAR 1:1 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 (png) -> paletteuse
+  Stream #1:0 (png) -> paletteuse
+  paletteuse:default -> Stream #0:0 (gif)
+Press [q] to stop, [?] for help
+[image2 @ 000001b709e6be80] Thread message queue blocking; consider raising the thread_queue_size option (current value: 8)
+Output #0, gif, to 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/OLD NOTES/TMG Notes Redone Animations.gif':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0: Video: gif, pal8(pc, gbr/unknown/unknown, progressive), 240x240 [SAR 1:1 DAR 1:1], q=2-31, 200 kb/s, 24 fps, 100 tbn
+    Metadata:
+      encoder         : Lavc60.3.100 gif
+frame=    0 fps=0.0 q=-0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=  140 fps=0.0 q=-0.0 Lsize=     564kB time=00:00:05.79 bitrate= 798.6kbits/s speed=  17x    
+video:564kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.003460%

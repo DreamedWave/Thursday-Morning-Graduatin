@@ -1,0 +1,12 @@
+Mic Test:table-default:0
+Tech. Difficulties:demon-dad:1
+Awkward Pauses:demon-dad:1
+Up and Beyond:demon-dad:1
+Sudden Confrontation:bf-old:1
+Desperation:priest-theborderpray:2
+Disagreement:priest-theborderannoyed:2
+Retaliation:priest-theborderangry:2
+Finale:bf-old:2
+Kid With a Gun:pico-default:3
+Playing With Fire:pico-default:3
+Variegated Skylines:pico-default:3

@@ -1,0 +1,155 @@
+package lore_minigames;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.math.FlxPoint;
+import flixel.math.FlxVelocity;
+import flixel.system.FlxSound;
+
+enum FinalChaserType
+{
+	NORMAL;
+	BUFFED;
+	NERFED;
+}
+
+class TheManUpstairs extends FlxSprite
+{
+	static inline var CHASE_SPEED:Float = 180;
+
+	var type:FinalChaserType;
+
+	var brain:EnemyAI;
+	var idleTimer:Float;
+	var moveDirection:Float;
+	var seesPlayer:Bool;
+	public var playerPosition:FlxPoint;
+	public var aiStatus:String = 'idle';
+
+	public var dadSuspenseMusFar:FlxSound;
+	public var dadSuspenseMusNear:FlxSound;
+
+	public var dadSNDFar:FlxSound;
+	public var dadSNDNear:FlxSound;
+
+	public function new(x:Float, y:Float, type:FinalChaserType)
+	{
+		super(x, y);
+		makeGraphic(48, 48, 0xFF640000);
+		alpha = 0.75;
+		brain = new EnemyAI(idle);
+		idleTimer = 3;
+		playerPosition = FlxPoint.get();
+		
+		//Suspense Music
+		dadSuspenseMusFar = FlxG.sound.load('assets/minigame/music/dadSuspense_Far.ogg', 0.4);
+		dadSuspenseMusFar.looped = true;
+		dadSuspenseMusFar.proximity(x, y, lore_minigames.MinigameState.player, 2500);
+		dadSuspenseMusNear = FlxG.sound.load('assets/minigame/music/dadSuspense_Near.ogg', 0.65);
+		dadSuspenseMusNear.looped = true;
+		dadSuspenseMusNear.proximity(x, y, lore_minigames.MinigameState.player, 1000);
+
+		dadSuspenseMusFar.play();
+		dadSuspenseMusNear.play();
+
+		//SND like rush or ambush
+		dadSNDFar = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Far.ogg', 1);
+		dadSNDFar.looped = true;
+		dadSNDFar.proximity(x, y, lore_minigames.MinigameState.player, 800, true);
+		dadSNDNear = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Near.ogg', 1);
+		dadSNDNear.looped = true;
+		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 250, true);
+
+		dadSNDFar.play();
+		dadSNDNear.play();
+	}
+
+	function idle(elapsed:Float)
+	{
+		if (idleTimer > 0)
+			idleTimer -= elapsed;
+		else
+			brain.activeState = chase;
+	}
+	
+	function chase(elapsed:Float)
+	{
+		alpha = 1;
+		aiStatus = 'chase';
+		FlxVelocity.moveTowardsPoint(this, playerPosition, CHASE_SPEED);
+	}
+
+	public function quellTheDemon(idleTime:Int, resetCurrentTimer:Bool = true, stopCurrentVelocity:Bool = true)
+	{
+		alpha = 0.75;
+		//no <3
+		if (idleTime < 0)
+			idleTime = 0;
+		
+		if (stopCurrentVelocity)
+		{
+			velocity.set(0, 0);
+			acceleration.set(0, 0);
+		}
+
+		aiStatus = 'idle';
+		brain.activeState = idle;
+		if (resetCurrentTimer)
+			idleTimer = idleTime;
+		else
+			idleTimer += idleTime;
+	}
+
+	override function destroy()
+	{
+		//Failsafe
+		dadSuspenseMusFar.stop();
+		dadSuspenseMusNear.stop();
+		dadSNDFar.stop();
+		dadSNDNear.stop();
+
+		super.destroy();
+	}
+
+	override public function update(elapsed:Float)
+	{
+		if (velocity.x != 0 || velocity.y != 0)
+		{
+			if (Math.abs(velocity.x) > Math.abs(velocity.y))
+			{
+				if (velocity.x < 0)
+					facing = LEFT;
+				else
+					facing = RIGHT;
+			}
+			else
+			{
+				if (velocity.y < 0)
+					facing = UP;
+				else
+					facing = DOWN;
+			}
+		}
+
+		/*switch (facing)
+		{
+			case LEFT, RIGHT:
+				animation.play("lr_" + action);
+
+			case UP:
+				animation.play("u_" + action);
+
+			case DOWN:
+				animation.play("d_" + action);
+
+			case _:
+		}*/
+		brain.update(elapsed);
+		super.update(elapsed);
+
+		dadSuspenseMusFar.setPosition(x + (width / 2), y + (height / 2));
+		dadSuspenseMusNear.setPosition(x + (width / 2), y + (height / 2));
+		dadSNDFar.setPosition(x + (width / 2), y + (height / 2));
+		dadSNDNear.setPosition(x + (width / 2), y + (height / 2));
+	}
+}

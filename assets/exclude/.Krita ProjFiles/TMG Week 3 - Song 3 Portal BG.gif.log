@@ -1,0 +1,22 @@
+C:/Users/Samuel/Documents/FFMPEG/bin/ffmpeg.exe -hide_banner -y -y -r 14 -start_number 0 -start_number_range 1 -i D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/Dodge2%04d.png -i D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/KritaTempPalettegen_%06d.png -lavfi [0:v][1:v]paletteuse=dither=sierra2_4a:diff_mode=none -f gif -loop 0 -gifflags +transdiff D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/TMG Week 3 - Song 3 Portal BG.gif
+=====================================================
+Input #0, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/Dodge2%04d.png':
+  Duration: 00:00:00.36, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc), 1729x955 [SAR 2834:2834 DAR 1729:955], 25 fps, 25 tbr, 25 tbn
+Input #1, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/KritaTempPalettegen_%06d.png':
+  Duration: 00:00:00.04, start: 0.000000, bitrate: N/A
+  Stream #1:0: Video: png, rgba(pc), 16x16 [SAR 1:1 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 (png) -> paletteuse
+  Stream #1:0 (png) -> paletteuse
+  paletteuse:default -> Stream #0:0 (gif)
+Press [q] to stop, [?] for help
+[image2 @ 000001bce37be940] Thread message queue blocking; consider raising the thread_queue_size option (current value: 8)
+Output #0, gif, to 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/.Krita ProjFiles/TMG Week 3 - Song 3 Portal BG.gif':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0: Video: gif, pal8(pc, gbr/unknown/unknown, progressive), 1729x955 [SAR 1:1 DAR 1729:955], q=2-31, 200 kb/s, 14 fps, 100 tbn
+    Metadata:
+      encoder         : Lavc60.3.100 gif
+frame=    0 fps=0.0 q=-0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=    4 fps=0.0 q=-0.0 size=     768kB time=00:00:00.29 bitrate=21694.7kbits/s speed=0.478x    frame=    8 fps=7.0 q=-0.0 size=    2560kB time=00:00:00.57 bitrate=36792.1kbits/s speed=0.502x    frame=    9 fps=7.9 q=-0.0 Lsize=    3867kB time=00:00:00.57 bitrate=55571.2kbits/s speed=0.499x    
+video:3867kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.000505%

@@ -1,0 +1,259 @@
+C:/Users/Samuel/Documents/FFMPEG/bin/ffmpeg.exe -hide_banner -y -v debug -r 15 -start_number 0 -start_number_range 1 -i D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png -vf palettegen=stats_mode=full:reserve_transparent=1 -y D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png 
+=====================================================
+Splitting the commandline.
+Reading option '-hide_banner' ... matched as option 'hide_banner' (do not show program banner) with argument '1'.
+Reading option '-y' ... matched as option 'y' (overwrite output files) with argument '1'.
+Reading option '-v' ... matched as option 'v' (set logging level) with argument 'debug'.
+Reading option '-r' ... matched as option 'r' (set frame rate (Hz value, fraction or abbreviation)) with argument '15'.
+Reading option '-start_number' ... matched as AVOption 'start_number' with argument '0'.
+Reading option '-start_number_range' ... matched as AVOption 'start_number_range' with argument '1'.
+Reading option '-i' ... matched as input url with argument 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png'.
+Reading option '-vf' ... matched as option 'vf' (set video filters) with argument 'palettegen=stats_mode=full:reserve_transparent=1'.
+Reading option '-y' ... matched as option 'y' (overwrite output files) with argument '1'.
+Reading option 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png' ... matched as output url.
+Finished splitting the commandline.
+Parsing a group of options: global .
+Applying option hide_banner (do not show program banner) with argument 1.
+Applying option y (overwrite output files) with argument 1.
+Applying option v (set logging level) with argument debug.
+Applying option y (overwrite output files) with argument 1.
+Successfully parsed a group of options.
+Parsing a group of options: input url D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png.
+Applying option r (set frame rate (Hz value, fraction or abbreviation)) with argument 15.
+Successfully parsed a group of options.
+Opening an input file: D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png.
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0000.png' for reading
+[file @ 000001e449311800] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e44931a240] Statistics: 7640 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0001.png' for reading
+[file @ 000001e44931a240] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e44931c300] Statistics: 8007 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0002.png' for reading
+[file @ 000001e44931c280] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11661 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0003.png' for reading
+[file @ 000001e44933a980] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0004.png' for reading
+[file @ 000001e449349b00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0005.png' for reading
+[file @ 000001e44934cb40] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0006.png' for reading
+[file @ 000001e44934fb80] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0007.png' for reading
+[file @ 000001e449352bc0] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0008.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 11772 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0009.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 14980 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0010.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 15474 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0011.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 9512 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0012.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0013.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0014.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0015.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0016.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0017.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+[image2 @ 000001e44930ae80] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace0018.png' for reading
+[file @ 000001e449355c00] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449346a40] Statistics: 13025 bytes read, 0 seeks
+Input #0, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png':
+  Duration: 00:00:00.76, start: 0.000000, bitrate: N/A
+  Stream #0:0, 19, 1/25: Video: png, 1 reference frame, rgba(pc), 150x150 [SAR 2835:2835 DAR 1:1], 0/1, 25 fps, 25 tbr, 25 tbn
+Successfully opened the file.
+Parsing a group of options: output url D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png.
+Applying option vf (set video filters) with argument palettegen=stats_mode=full:reserve_transparent=1.
+Successfully parsed a group of options.
+Opening an output file: D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png.
+Successfully opened the file.
+detected 16 logical cores
+Stream mapping:
+  Stream #0:0 -> #0:0 (png (native) -> png (native))
+Press [q] to stop, [?] for help
+[vost#0:0/png @ 000001e44937b2c0] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 15 times
+[AVFilterGraph @ 000001e4493d7b40] Setting 'stats_mode' to value 'full'
+[AVFilterGraph @ 000001e4493d7b40] Setting 'reserve_transparent' to value '1'
+[graph 0 input from stream 0:0 @ 000001e449392540] Setting 'video_size' to value '150x150'
+[graph 0 input from stream 0:0 @ 000001e449392540] Setting 'pix_fmt' to value '26'
+[graph 0 input from stream 0:0 @ 000001e449392540] Setting 'time_base' to value '1/15'
+[graph 0 input from stream 0:0 @ 000001e449392540] Setting 'pixel_aspect' to value '2835/2835'
+[graph 0 input from stream 0:0 @ 000001e449392540] Setting 'frame_rate' to value '15/1'
+[graph 0 input from stream 0:0 @ 000001e449392540] w:150 h:150 pixfmt:rgba tb:1/15 fr:15/1 sar:2835/2835
+[format @ 000001e449733bc0] Setting 'pix_fmts' to value 'rgb24|rgba|rgb48be|rgba64be|pal8|gray|ya8|gray16be|ya16be|monob'
+[auto_scale_0 @ 000001e449734400] w:iw h:ih flags:'' interl:0
+[Parsed_palettegen_0 @ 000001e449346100] auto-inserting filter 'auto_scale_0' between the filter 'graph 0 input from stream 0:0' and the filter 'Parsed_palettegen_0'
+[auto_scale_1 @ 000001e449734040] w:iw h:ih flags:'' interl:0
+[format @ 000001e449733bc0] auto-inserting filter 'auto_scale_1' between the filter 'Parsed_palettegen_0' and the filter 'format'
+[AVFilterGraph @ 000001e4493d7b40] query_formats: 4 queried, 3 merged, 2 already done, 0 delayed
+[auto_scale_1 @ 000001e449734040] picking rgba out of 10 ref:bgra alpha:1
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449734e80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449741e40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449754e80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449768200] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44977b580] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44978e900] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497a1c80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497b5000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497c8040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497db040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497ee080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4498010c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449814100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449827100] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44983a140] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44984d180] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 000001e449734400] w:150 h:150 fmt:rgba sar:2835/2835 -> w:150 h:150 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498731c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498861c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e44989a200] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498ad240] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498c0280] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498d32c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498e62c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4498f9300] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e44990c340] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e44991f380] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e449932380] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e4499453c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e449958400] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e44996b440] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e44997e440] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4498601c0] [swscaler @ 000001e449993480] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_1 @ 000001e449734040] w:16 h:16 fmt:bgra sar:1/1 -> w:16 h:16 fmt:rgba sar:1/1 flags:0x00000004
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44983a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449847000] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449734bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449741b80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449754bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449767c00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44977ac40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e44978dc40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497a0c80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497b3cc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497cad00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497ddd40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4497f0d40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449803d80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e449816dc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4496966c0] [swscaler @ 000001e4499a64c0] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 000001e449734400] w:150 h:150 fmt:rgba sar:2835/2835 -> w:150 h:150 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4496966c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44983a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44984d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497cad00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497ddd40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497f0d40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449803d80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449816dc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449734bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449741b80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449754bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449767c00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44977ac40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44978dc40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497a0c80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497b3cc0] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 000001e449734400] w:150 h:150 fmt:rgba sar:2835/2835 -> w:150 h:150 fmt:bgra sar:1/1 flags:0x00000004
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4496966c0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44983a040] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44984d080] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497cad00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497ddd40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497f0d40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449803d80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449816dc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449734bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449741b80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449754bc0] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e449767c00] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44977ac40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e44978dc40] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497a0c80] Forcing full internal H chroma due to input having non subsampled chroma
+[swscaler @ 000001e4499a64c0] [swscaler @ 000001e4497b3cc0] Forcing full internal H chroma due to input having non subsampled chroma
+[auto_scale_0 @ 000001e449734400] w:150 h:150 fmt:rgba sar:2835/2835 -> w:150 h:150 fmt:bgra sar:1/1 flags:0x00000004
+[vost#0:0/png @ 000001e44937b2c0] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 1 times
+EOF in input file 0
+Terminating demuxer thread 0
+[vost#0:0/png @ 000001e44937b2c0] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+    Last message repeated 16 times
+[Parsed_palettegen_0 @ 000001e449346100] 255(+1) colors generated out of 3693 colors; ratio=0.069050
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF000000
+    Last message repeated 3 times
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF010101
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF222710
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF303816
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF829A3D
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FF93AE44
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FFADCC50
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FFAFCE51
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FFB1BE50
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FFB7D855
+[Parsed_palettegen_0 @ 000001e449346100] Duped color: FFC2C2C2
+[vost#0:0/png @ 000001e44937b2c0] cur_dts is invalid [init:0 i_done:0 finish:0] (this is harmless if it occurs once at the start per stream)
+Output #0, image2, to 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0, 0, 1/15: Video: png, 1 reference frame, rgba(pc, gbr/unknown/unknown, progressive), 16x16 (0x0) [SAR 1:1 DAR 1:1], 0/1, q=2-31, 200 kb/s, 15 fps, 15 tbn
+    Metadata:
+      encoder         : Lavc60.3.100 png
+[vost#0:0/png @ 000001e44937b2c0] Clipping frame in rate conversion by 0.000008
+frame=    0 fps=0.0 q=0.0 size=       0kB time=-577014:32:22.77 bitrate=  -0.0kbits/s speed=N/A    [out_0_0 @ 000001e449392640] EOF on sink link out_0_0:default.
+No more output streams to write to, finishing.
+[image2 @ 000001e44933c640] Opening 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_000001.png' for writing
+[file @ 000001e449991880] Setting default whitelist 'file,crypto,data'
+[AVIOContext @ 000001e449aaedc0] Statistics: 931 bytes written, 0 seeks, 1 writeouts
+[out#0/image2 @ 000001e44930dcc0] All streams finished
+[out#0/image2 @ 000001e44930dcc0] Terminating muxer thread
+frame=    1 fps=0.0 q=-0.0 Lsize=N/A time=00:00:00.00 bitrate=N/A speed=   0x    
+video:1kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: unknown
+Input file #0 (D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png):
+  Input stream #0:0 (video): 19 packets read (229081 bytes); 19 frames decoded; 
+  Total: 19 packets (229081 bytes) demuxed
+Output file #0 (D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png):
+  Output stream #0:0 (video): 1 frames encoded; 1 packets muxed (931 bytes); 
+  Total: 1 packets (931 bytes) muxed
+19 frames successfully decoded, 0 decoding errors
+Input #0, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/DreamedwaveSplashPlace%04d.png':
+  Duration: 00:00:00.76, start: 0.000000, bitrate: N/A
+  Stream #0:0: Video: png, rgba(pc), 150x150 [SAR 2835:2835 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Input #1, image2, from 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/KritaTempPalettegen_%06d.png':
+  Duration: 00:00:00.04, start: 0.000000, bitrate: N/A
+  Stream #1:0: Video: png, rgba(pc), 16x16 [SAR 1:1 DAR 1:1], 25 fps, 25 tbr, 25 tbn
+Stream mapping:
+  Stream #0:0 (png) -> paletteuse
+  Stream #1:0 (png) -> paletteuse
+  paletteuse:default -> Stream #0:0 (gif)
+Press [q] to stop, [?] for help
+[image2 @ 0000017acb18e9c0] Thread message queue blocking; consider raising the thread_queue_size option (current value: 8)
+Output #0, gif, to 'D:/Apps/Friday Night Funkin/MODDING/Kade-Engine-1.6/Kade-Engine-1.6/assets/exclude/NewIcons/Anim/TMG Animated Health Icons - 6 Pico.gif':
+  Metadata:
+    encoder         : Lavf60.3.100
+  Stream #0:0: Video: gif, pal8(pc, gbr/unknown/unknown, progressive), 150x150 [SAR 1:1 DAR 1:1], q=2-31, 200 kb/s, 15 fps, 100 tbn
+    Metadata:
+      encoder         : Lavc60.3.100 gif
+frame=    0 fps=0.0 q=-0.0 size=       0kB time=00:00:00.00 bitrate=N/A speed=   0x    frame=   19 fps=0.0 q=-0.0 Lsize=      70kB time=00:00:01.20 bitrate= 477.3kbits/s speed=14.6x    
+video:70kB audio:0kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 0.027945%
