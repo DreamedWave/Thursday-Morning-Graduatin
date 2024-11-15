@@ -95,6 +95,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - BrightFyre for the early Kade Engine 1.6 Modding tutorials
    - bbpanzu for more modding tutorials
    - PolybiusProxy for the initial videosprite code used for testing
+  <br></br>
 
 **Musical Inspirations**
    - [C418 (Daniel Rosenfeld)](https://c418.bandcamp.com/)
@@ -105,6 +106,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - [Lena Raine](https://www.notion.so/RADICAL-DREAMLAND-62b6665ca4ce4c658b7f036e930551a3?pvs=4#83c26288234247d8bc360080d9d47bc8)
    - [Tanger (Vi)](https://www.youtube.com/@Tangermusic)
    - [Laura Shigihara](https://www.youtube.com/@supershigi)
+<br></br>
 
  **Game Design Inspirations**
    - [Decked Out 2](https://www.youtube.com/watch?v=aoVVCwx6k1w) (by [TangoTek](https://www.youtube.com/@TangoTekLP))
@@ -113,10 +115,12 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - [Pressure](https://www.roblox.com/games/12411473842/Pressure) (by [YourFriendZeal](https://twitter.com/YourFriendZeal), [zerum](https://twitter.com/zerkichi), [SearingCircuits](https://twitter.com/SearingCircuits), and [NoLongerNull](https://twitter.com/NoLongerNull))
    - [Doors](https://www.roblox.com/games/6516141723/DOORS) (by [LSPLASH](https://x.com/LightningSplash) and [Redibles](https://x.com/RediblesQW))
    - [Celeste](https://store.steampowered.com/app/504230/Celeste/) (by [Maddy Thorson](https://www.mattmakesgames.com/) & [Her Team](https://www.exok.com/))
+<br></br>
 
  **Artstyle Inspirations**
    - [Temmie Chang](https://www.youtube.com/Temmiechang)
    - [PhantomArcade](https://phantomarcade.newgrounds.com/)
+<br></br>
 
  **And Lastly (but not the least)**
    - To a few of my friends that initially gave me the idea to make this into a full-blown thing
