@@ -1,72 +1,25 @@
 package flixel.addons.transition;
 
+import flixel.addons.transition.FlxTransitionSprite.TransitionStatus;
 import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.addons.transition.FlxTransitionSprite;
 import flixel.graphics.FlxGraphic;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flixel.util.FlxTimer;
 import openfl.display.BitmapData;
 
-#if html5
-@:keep @:bitmap("assets/images/transitions/circle.png")
-private class RawGraphicTransTileCircle extends BitmapData {}
-class GraphicTransTileCircle extends RawGraphicTransTileCircle
-{
-	static inline var WIDTH = 544;
-	static inline var HEIGHT = 32;
-
-	public function new(?onLoad)
-	{
-		super(WIDTH, HEIGHT, true, 0xFFffffff, onLoad);
-		// Set properties because `@:bitmap` constructors ignore width/height
-		this.width = WIDTH;
-		this.height = HEIGHT;
-	}
-}
-
-@:keep @:bitmap("assets/images/transitions/diamond.png")
-private class RawGraphicTransTileDiamond extends BitmapData {}
-class GraphicTransTileDiamond extends RawGraphicTransTileDiamond
-{
-	static inline var WIDTH = 544;
-	static inline var HEIGHT = 32;
-
-	public function new(?onLoad)
-	{
-		super(WIDTH, HEIGHT, true, 0xFFffffff, onLoad);
-		// Set properties because `@:bitmap` constructors ignore width/height
-		this.width = WIDTH;
-		this.height = HEIGHT;
-	}
-}
-
-@:keep @:bitmap("assets/images/transitions/square.png")
-class RawGraphicTransTileSquare extends BitmapData {}
-class GraphicTransTileSquare extends RawGraphicTransTileSquare
-{
-	static inline var WIDTH = 544;
-	static inline var HEIGHT = 32;
-
-	public function new(?onLoad)
-	{
-		super(WIDTH, HEIGHT, true, 0xFFffffff, onLoad);
-		// Set properties because `@:bitmap` constructors ignore width/height
-		this.width = WIDTH;
-		this.height = HEIGHT;
-	}
-}
-#else
 @:keep @:bitmap("assets/images/transitions/circle.png")
 class GraphicTransTileCircle extends BitmapData {}
+
+@:keep @:bitmap("assets/images/transitions/inverted_circle.png")
+class GraphicTransTileCircleInverted extends BitmapData {}
 
 @:keep @:bitmap("assets/images/transitions/diamond.png")
 class GraphicTransTileDiamond extends BitmapData {}
 
 @:keep @:bitmap("assets/images/transitions/square.png")
 class GraphicTransTileSquare extends BitmapData {}
-#end
 
 /**
  *
@@ -95,9 +48,6 @@ class FlxTransitionSprite extends FlxSprite
 		}
 		_delay = Delay;
 		loadGraphic(Graphic, true, GraphicWidth, GraphicHeight);
-		
-		if (graphic == null)
-			return;
 
 		graphic.persist = true;
 		graphic.destroyOnNoUse = false;
@@ -143,12 +93,7 @@ class FlxTransitionSprite extends FlxSprite
 		}
 
 		animation.play(anim);
-		#if (flixel < version("5.9.0"))
 		animation.finishCallback = onFinishAnim;
-		#else
-		if (!animation.onFinish.has(onFinishAnim))
-			animation.onFinish.add(onFinishAnim);
-		#end
 		status = Status;
 	}
 
@@ -190,7 +135,8 @@ class FlxTransitionSprite extends FlxSprite
 	}
 }
 
-enum abstract TransitionStatus(Int)
+@:enum
+abstract TransitionStatus(Int)
 {
 	var IN = 0;
 	var OUT = 1;
