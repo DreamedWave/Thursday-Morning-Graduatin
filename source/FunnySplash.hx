@@ -54,10 +54,6 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 	override public function create():Void
 	{
-		//FlxG.save.bind('graduatin', 'dreamedwave');
-
-		//DC.init();//PROFILER!! REMOVE ON RELEASE!!
-		
 		FlxG.autoPause = false;
 
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
@@ -71,7 +67,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 		bitmapData = new Map<String,FlxGraphic>();
 
-		//Date and shit
+		//Date and Time shit
 		Main.nightMode = FlxG.save.data.nightmode;
 		Main.curMonthString = Main.monthList[Date.now().getMonth()];
 		Main.curMonthInt = Date.now().getMonth();
@@ -91,21 +87,20 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 		//add get utc date in main
 		if (Date.now().getUTCDate() <= 3 && Main.curMonthString == "April")
-			Main.aprilFools;
+			Main.aprilFools = true;
 
 		if (FlxG.save.data.weekUnlocked > 1)
-			doRickRoll = FlxG.random.bool(0.1);
-
-		if (Main.aprilFools)
-			doRickRoll = true;
-		
-		if (Main.curDayString == 'Sunday' && (FlxG.random.bool(50) || Main.curHourInt <= 5))
 		{
-			Main.todayIsSunday = true;
-			trace('Today is a Sunday!!');
+			var rickRollChance:Float = 0.1;///10% chance to rickroll LMFAO
+			if (Main.aprilFools)
+				rickRollChance = 0.45;
+			doRickRoll = FlxG.random.bool(rickRollChance);
 		}
+		
+		if (Main.curDayString == 'Sunday' && FlxG.random.bool(30))
+			Main.todayIsSunday = true;
 
-
+		//Preloading of Menu Sounds - unsure if this should be here
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/sounds")))
 		{
 			if (i.endsWith(".ogg"))
@@ -128,7 +123,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 		var transitionSprite:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileCircleInverted);
 		transitionSprite.persist = true;
 		transitionSprite.destroyOnNoUse = false;
-		//If you're gonna change this, don't forget to change the thing in paths too!
+		//If you're gonna change this, don't forget to change the thing in Paths.hx too!
 
 		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(-0.5, -1), {width: 32, height: 32, asset: transitionSprite}, 
 			new FlxRect(0, 0, FlxG.width, FlxG.height), FlxCamera.defaultCameras[FlxCamera.defaultCameras.length]);
@@ -141,6 +136,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 		FlxTransitionableState.skipNextTransIn = true;
 		FlxTransitionableState.skipNextTransOut = true;
 
+		//Temporary! Will make my own animated version!!!
 		times = [0.041, 0.184, 0.334, 0.495, 0.636];
 		colors = [0x00b922, 0xffc132, 0xf5274e, 0x3641ff, 0x04cdfb];
 		functions = [drawGreen, drawYellow, drawRed, drawBlue, drawLightBlue];
@@ -164,6 +160,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 		text.defaultTextFormat = dtf;
 		FlxG.stage.addChild(text);
 
+		//Opening Animation Danec
 		lilOpeningAnim = new FlxSprite(0, 0);
 		if (!doRickRoll)
 			lilOpeningAnim.frames = Paths.getSparrowAtlas('preloadAnim');
@@ -201,9 +198,9 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 			text.text = "HaxeFlixel";
 		else
 			if (!Main.aprilFools)
-				text.text = "GOTTEM LMAOO";
+				text.text = "HaxeFlixel\nWill Never Give You Up!";
 			else
-				text.text = "APRIL FOOLS!!";
+				text.text = "Haxeflixel\n(ALSO HAPPY APRIL FOOLS!!!)";
 		removedOpeningAnim = true;
 		remove(lilOpeningAnim);
 	}

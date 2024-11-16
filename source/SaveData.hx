@@ -181,54 +181,8 @@ class SaveData
 
 	public static function resetAllData():Void
 	{
-		FlxG.save.data.autosave == null;
-		FlxG.save.data.weekUnlocked = null;
-		FlxG.save.data.songScores = null;
-		FlxG.save.data.songCombos = null;
-		FlxG.save.data.downscroll = null;
-		FlxG.save.data.antialiasing = null;
-		FlxG.save.data.missSounds = null;
-		//FlxG.save.data.shitBreaksCombo = null;
-		FlxG.save.data.notesplash = null;
-		FlxG.save.data.hqnotesploosh = null;
-		FlxG.save.data.lagCompensation = null;
-		FlxG.save.data.notesfx = null;
-		FlxG.save.data.musicVol = null;
-		FlxG.save.data.vocalsVol = null;
-		FlxG.save.data.gamesfxVol = null;
-		FlxG.save.data.notesfxVol = null;
-		FlxG.save.data.notesfxType = null;
-		FlxG.save.data.subtitles = null;
-		FlxG.save.data.centersubtitles = null;
-		FlxG.save.data.accuracyDisplay = null;
-		FlxG.save.data.offset = null;
-		FlxG.save.data.songPosition = null;
-		FlxG.save.data.fps = null;
-		FlxG.save.data.changedHit = null;
-		FlxG.save.data.fpsRain = null;
-		FlxG.save.data.fullscreen = null;
-		FlxG.save.data.fpsCap = null;
-		FlxG.save.data.setFpsCap = null;
-		FlxG.save.data.scrollSpeed = null;
-		FlxG.save.data.npsDisplay = null;
-		FlxG.save.data.frames = null;
-		FlxG.save.data.accuracyMod = null;
-		FlxG.save.data.watermark = null;
-		FlxG.save.data.ghost = null;
-		FlxG.save.data.flashing = null;
-		FlxG.save.data.resetButton = null;
-		FlxG.save.data.botplay = null;
-		FlxG.save.data.cpuStrums = null;
-		FlxG.save.data.strumline = null;
-		FlxG.save.data.camzoom = null;
-		FlxG.save.data.scoreScreen = null;
-		FlxG.save.data.inputShow = null;
-		FlxG.save.data.optimize = null;
-		//FlxG.save.data.cacheMusic = null;
-		FlxG.save.data.pauseOnUnfocus = null;
-		FlxG.save.data.showPresence = null;
-		FlxG.save.data.nightmode = null;
-		FlxG.save.data.autoNightmode = null;
+		trace('erasing all saveData');
+		FlxG.save.erase();
 		initSave();
 	}
 

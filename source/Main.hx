@@ -123,8 +123,7 @@ class Main extends Sprite
 		#end
 		addChild(game);
 
-		//Format:       .SOL filename        .SOL location
-		FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
+		//Moved Save.Bind to Modified FlxG
 		PlayerSettings.init();
 		SaveData.initSave();
 
