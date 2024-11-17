@@ -140,6 +140,7 @@ class PlayState extends MusicBeatState
 
 	//Sound filters
 	var musicFilter:FlxSoundFilter;
+	var musicFilterLowpassTween:FlxTween;
 
 	//Note Hit SFX Shits
 	public static var hitsoundType:String = "default"; //this gets set by loadingState everytime so uhh dw abt it lol
@@ -3615,19 +3616,6 @@ class PlayState extends MusicBeatState
 			//Sound/Music Filter Shit! :33
 			if (musicFilter != null)
 			{
-				switch(musicFilter.filterType)
-				{
-					case HIGHPASS:
-						trace('HIPASS');
-					case BANDPASS:
-						trace('BANDPASS');
-					case NONE:
-						trace('NONE');
-					default:
-						if (health > 0.25)
-							musicFilter.gainHF = FlxMath.lerp(1, musicFilter.gainHF, calculateLerpTime(elapsed, (Conductor.bpm * 0.01)));
-				}
-				
 				musicFilter.applyFilter(FlxG.sound.music);
 				musicFilter.applyFilter(miscs);
 			}
@@ -4685,8 +4673,19 @@ class PlayState extends MusicBeatState
 
 			causeOfDeath = 'ate-bullet';
 
-			if (musicFilter != null)
-				musicFilter.gainHF = 0;
+			//Cool Lowpass Shit
+			musicFilter.gainHF = 0;
+			if (musicFilterLowpassTween != null)
+				musicFilterLowpassTween.cancel();
+			musicFilterLowpassTween = FlxTween.tween(musicFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
+				{
+					ease: FlxEase.smootherStepInOut,
+					startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
+					onComplete: function(twn:FlxTween) 
+					{
+						musicFilterLowpassTween = null;
+					}
+				});
 			
 			//la health drain for failed specil	
 			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + pityDeaths - 2)
