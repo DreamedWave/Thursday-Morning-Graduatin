@@ -23,7 +23,6 @@ import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
-import flixel.system.FlxSound;
 import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;

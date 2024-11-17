@@ -6,7 +6,6 @@ import sys.io.File;
 #end
 import openfl.geom.Matrix;
 import openfl.display.BitmapData;
-import flixel.system.FlxSound;
 import flixel.util.FlxAxes;
 import flixel.util.FlxTimer;
 import flixel.FlxSubState;

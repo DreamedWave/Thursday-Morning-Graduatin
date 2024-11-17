@@ -293,10 +293,10 @@ class Paths
 	//sounds to be excluded from being cleared
 	public static var dumpExclusions:Array<String> = 
 	[
-		'assets/images/trans_circleSharp.png',
-		'flixel/sounds/volumeUnmute',
-		'flixel/sounds/volumeUp',
-		'flixel/sounds/volumeDown'
+		'assets/images/custom_bitmaps/trans_circle-inverted.png',
+		'assets/sounds/soundtray/volumeUnmute',
+		'assets/sounds/soundtray/volumeUp',
+		'assets/sounds/soundtray/volumeDown'
 	];
 
 	// define the locally tracked assets

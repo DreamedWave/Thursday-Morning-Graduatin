@@ -1,7 +1,6 @@
 package;
 import openfl.utils.Future;
 import openfl.media.Sound;
-import flixel.system.FlxSound;
 #if sys
 //import smTools.SMFile;
 import sys.FileSystem;

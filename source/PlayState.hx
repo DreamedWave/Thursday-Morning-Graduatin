@@ -34,7 +34,6 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.system.FlxSound;
 import flixel.system.FlxSoundGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
@@ -132,15 +131,19 @@ class PlayState extends MusicBeatState
 	private var lowHPOverlay:FlxSprite;
 	var allowHeartBeatSounds:Bool = true;
 
+	//Sound groups and shit
 	public var musicGroup:FlxSoundGroup;
 	var missSoundGroup:FlxSoundGroup;
+	var noteHitSFXGroup:FlxSoundGroup;
+	var susNoteHitSFXGroup:FlxSoundGroup;
+	var specilNoteHitSFXGroup:FlxSoundGroup;
+
+	//Sound filters
+	var musicFilter:FlxSoundFilter;
 
 	//Note Hit SFX Shits
 	public static var hitsoundType:String = "default"; //this gets set by loadingState everytime so uhh dw abt it lol
 	var allowNoteHitSounds:Bool = true;
-	var noteHitSFXGroup:FlxSoundGroup;
-	var susNoteHitSFXGroup:FlxSoundGroup;
-	var specilNoteHitSFXGroup:FlxSoundGroup;
 
 	//for the adaptive Music
 	public var instLowHP:FlxSound;
@@ -703,7 +706,7 @@ class PlayState extends MusicBeatState
 
 			boyfriend = new Boyfriend(770, 450, SONG.player1);
 
-			// BF REPOSITIONING PER CHAR
+			// BF REPOSITIONING PER CHAR OF OFFSETS AND CAMFOLLOW OFFSETS
 			switch (SONG.player1)
 			{
 				case 'guy-theborder':
@@ -1163,7 +1166,7 @@ class PlayState extends MusicBeatState
 					}
 			}
 
-			//Character dependent shit
+			//Opponent Character dependent shit
 			switch (SONG.player2)
 			{
 				case "priest-theborderangry":
@@ -1243,6 +1246,10 @@ class PlayState extends MusicBeatState
 			
 			grabbedScreen.dispose();
 		}
+
+		musicFilter = new FlxSoundFilter();
+		musicFilter.filterType = FlxSoundFilterType.LOWPASS;
+		musicFilter.gainHF = 1;
 
 		//UI Vignettes
 		//The detail thing that appears when you get shot
@@ -1813,7 +1820,7 @@ class PlayState extends MusicBeatState
 				startCountdown();
 			case 'variegated-skylines':
 				doPityDeaths = true;
-				if (!PlayStateChangeables.Optimize)
+				if (!PlayStateChangeables.Optimize && curStage == 'cityskylineVariegated')
 					stageParticles.visible = true;
 				hasSubtitles = true;
 				startCountdown();
@@ -3505,101 +3512,124 @@ class PlayState extends MusicBeatState
 		if (FlxG.mouse.visible && !paused)
 			FlxG.mouse.visible = false;
 
-		if (!showedResults && !endedSong && FlxG.sound.music.playing)
-		{				
-			if (SONG.eventObjects != null && SONG.eventObjects.length != 0)
-			{
-				for(i in SONG.eventObjects)
+		if (FlxG.sound.music.playing)
+		{
+			if (!showedResults && !endedSong)
+			{				
+				if (SONG.eventObjects != null && SONG.eventObjects.length != 0)
 				{
-					if (!i.triggerCheck)
+					for(i in SONG.eventObjects)
 					{
-						//gonna use timed values rather than beats cuz it's more precise and less prone to fucking up - gurlie's not an expert coder-
-						if (i.type == "BPM Tween" && i.value[0] <= Conductor.songPosition)
+						if (!i.triggerCheck)
 						{
-							i.triggerCheck = true;
-							// `i.value` contains these vars in order: position of event in ms, tempo to tween to, length of tween
-							// couldn't find a better way to do this without doing 7 different unreliable things that break the game so manual it is-
-							//im not gonna code different tween types sorry ill just work with linear cuz good lord my heard hurts-
-							tweenBPM(i.value);
-						}
-						else if (i.position <= curDecimalBeat)
-						{
-							i.triggerCheck = true;
-							switch(i.type)
+							//gonna use timed values rather than beats cuz it's more precise and less prone to fucking up - gurlie's not an expert coder-
+							if (i.type == "BPM Tween" && i.value[0] <= Conductor.songPosition)
 							{
-								case "Scroll Speed Change":
-									prevScrollCheck = false;
-									prevScroll = newScroll;
-									newScroll = (i.value * diffSpeedMult) * FlxG.save.data.scrollSpeed;
-									tweenScroll();
-								case "BPM Change":
-									Conductor.changeBPM(i.value, false);
-									fakeCrochet = (60 / i.value) * 1000;
-									idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-									compensationTime = Conductor.crochet * 2 / 1000;
-									
-									//Kade- gurl- why is this so convoluted-
-									//var timingSeg = TimingStruct.getTimingAtTimestamp(Conductor.songPosition);
-									/*if (timingSeg != null)
-									{
-										var timingSegBpm = timingSeg.bpm;
-						
-										if (timingSegBpm != Conductor.bpm)
-										{
-											trace("BPM CHANGE to " + timingSegBpm);
-											Conductor.changeBPM(timingSegBpm, false);
-											fakeCrochet = (60 / timingSegBpm) * 1000;
-											idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-											compensationTime = Conductor.crochet * 2 / 1000;			
-										}
-
-										TimingStruct.clearTimings();
-
-										var currentIndex = 0;
-										var beat:Float = i.position;
-										var endBeat:Float = Math.POSITIVE_INFINITY;
-				
-										TimingStruct.addTiming(beat,i.value,endBeat, 0); // offset in this case = start time since we don't have a offset
+								i.triggerCheck = true;
+								// `i.value` contains these vars in order: position of event in ms, tempo to tween to, length of tween
+								// couldn't find a better way to do this without doing 7 different unreliable things that break the game so manual it is-
+								//im not gonna code different tween types sorry ill just work with linear cuz good lord my heard hurts-
+								tweenBPM(i.value);
+							}
+							else if (i.position <= curDecimalBeat)
+							{
+								i.triggerCheck = true;
+								switch(i.type)
+								{
+									case "Scroll Speed Change":
+										prevScrollCheck = false;
+										prevScroll = newScroll;
+										newScroll = (i.value * diffSpeedMult) * FlxG.save.data.scrollSpeed;
+										tweenScroll();
+									case "BPM Change":
+										Conductor.changeBPM(i.value, false);
+										fakeCrochet = (60 / i.value) * 1000;
+										idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
+										compensationTime = Conductor.crochet * 2 / 1000;
 										
-										if (currentIndex != 0)
+										//Kade- gurl- why is this so convoluted-
+										//var timingSeg = TimingStruct.getTimingAtTimestamp(Conductor.songPosition);
+										/*if (timingSeg != null)
 										{
-											var data = TimingStruct.AllTimings[currentIndex - 1];
-											data.endBeat = beat;
-											data.length = (data.endBeat - data.startBeat) / (data.bpm / 60);
-											TimingStruct.AllTimings[currentIndex].startTime = data.startTime + data.length;
-										}
-				
-										currentIndex++;
-									}*/
+											var timingSegBpm = timingSeg.bpm;
+							
+											if (timingSegBpm != Conductor.bpm)
+											{
+												trace("BPM CHANGE to " + timingSegBpm);
+												Conductor.changeBPM(timingSegBpm, false);
+												fakeCrochet = (60 / timingSegBpm) * 1000;
+												idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
+												compensationTime = Conductor.crochet * 2 / 1000;			
+											}
+
+											TimingStruct.clearTimings();
+
+											var currentIndex = 0;
+											var beat:Float = i.position;
+											var endBeat:Float = Math.POSITIVE_INFINITY;
+					
+											TimingStruct.addTiming(beat,i.value,endBeat, 0); // offset in this case = start time since we don't have a offset
+											
+											if (currentIndex != 0)
+											{
+												var data = TimingStruct.AllTimings[currentIndex - 1];
+												data.endBeat = beat;
+												data.length = (data.endBeat - data.startBeat) / (data.bpm / 60);
+												TimingStruct.AllTimings[currentIndex].startTime = data.startTime + data.length;
+											}
+					
+											currentIndex++;
+										}*/
+								}
 							}
 						}
 					}
 				}
+
+				notes.sort(FlxSort.byY, (PlayStateChangeables.useDownscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
+
+				if (!PlayStateChangeables.Optimize && songStarted && generatedMusic && !paused)
+					camFollowShit();
+
+				// reverse iterate to remove oldest notes first and not invalidate the iteration
+				// stop iteration as soon as a note is not removed
+				// all notes should be kept in the correct order and this is optimal, safe to do every frame/update
+				if (FlxG.save.data.npsDisplay)
+				{
+					var balls = notesHitArray.length - 1;
+					while (balls >= 0)
+					{
+						var cock:Date = notesHitArray[balls];
+						if (cock != null && cock.getTime() + 1000 < Date.now().getTime())
+							notesHitArray.remove(cock);
+						else
+							balls = 0;
+						balls--;
+					}
+					nps = notesHitArray.length;
+					if (nps > maxNPS)
+						maxNPS = nps;
+				}
 			}
 
-			notes.sort(FlxSort.byY, (PlayStateChangeables.useDownscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
-
-			if (!PlayStateChangeables.Optimize && songStarted && generatedMusic && !paused)
-				camFollowShit();
-
-			// reverse iterate to remove oldest notes first and not invalidate the iteration
-			// stop iteration as soon as a note is not removed
-			// all notes should be kept in the correct order and this is optimal, safe to do every frame/update
-			if (FlxG.save.data.npsDisplay)
+			//Sound/Music Filter Shit! :33
+			if (musicFilter != null)
 			{
-				var balls = notesHitArray.length - 1;
-				while (balls >= 0)
+				switch(musicFilter.filterType)
 				{
-					var cock:Date = notesHitArray[balls];
-					if (cock != null && cock.getTime() + 1000 < Date.now().getTime())
-						notesHitArray.remove(cock);
-					else
-						balls = 0;
-					balls--;
+					case HIGHPASS:
+						trace('HIPASS');
+					case BANDPASS:
+						trace('BANDPASS');
+					case NONE:
+						trace('NONE');
+					default:
+						if (health > 0.25)
+							musicFilter.gainHF = FlxMath.lerp(1, musicFilter.gainHF, calculateLerpTime(elapsed, (Conductor.bpm * 0.01)));
 				}
-				nps = notesHitArray.length;
-				if (nps > maxNPS)
-					maxNPS = nps;
+				
+				musicFilter.applyFilter(FlxG.sound.music);
+				musicFilter.applyFilter(miscs);
 			}
 		}
 
@@ -4400,9 +4430,9 @@ class PlayState extends MusicBeatState
 
 			if (songLowercase == 'mic-test')
 			{
-				camGame.zoom = 1.5;
 				if (camTween != null)
 					camTween.cancel();
+				camGame.zoom = 1.5;
 				if (tutorialGraphicA != null)
 					tutorialGraphicA.destroy();
 				if (tutorialGraphicB != null)
@@ -4417,33 +4447,21 @@ class PlayState extends MusicBeatState
 						for (i in 0...tutorialText.length)
 						{
 							if (tutorialText.members[i] != null)
-							{
-								tutorialText.members[i].kill();
 								tutorialText.members[i].destroy();
-							}
 						}
 					}
-
-					if (bindTxtLeft != null)
-						tutorialText.remove(bindTxtLeft);
-					if (bindTxtDown != null)
-						tutorialText.remove(bindTxtDown);
-					if (bindTxtUp != null)
-						tutorialText.remove(bindTxtUp);
-					if (bindTxtRight != null)
-						tutorialText.remove(bindTxtRight);
-
-					tutorialText.kill();
 					tutorialText.destroy();
 				}
 			}
-			
+
 			if (skipButton != null)
-				skipButton.destroy();
+				FlxTween.shake(skipButton, 0.05, 0.3, X, {ease: FlxEase.sineIn});
 
 			new FlxTimer().start(0.32, function(tmr:FlxTimer)
 			{
 				skippingIntro = false;
+				if (skipButton != null)
+					skipButton.destroy();
 				if (!PlayStateChangeables.Optimize)
 				{
 					dummyBlackScreen.alpha = 0;
@@ -4666,6 +4684,9 @@ class PlayState extends MusicBeatState
 			//trace("ate " + timesShot + ' bullet/s');
 
 			causeOfDeath = 'ate-bullet';
+
+			if (musicFilter != null)
+				musicFilter.gainHF = 0;
 			
 			//la health drain for failed specil	
 			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + pityDeaths - 2)
@@ -8562,8 +8583,6 @@ class PlayState extends MusicBeatState
 							{
 								if (health >= 0.7 && curBeat % 4 == 0 || health > 0.5 && curBeat % 2 == 0 || health < 0.5)
 								{
-									if (lowHPHeartBeat.playing)
-										lowHPHeartBeat.stop();
 									lowHPHeartBeat.play(true);
 									lowHPHeartBeat.set_pitch(FlxG.random.float(0.85, 1.15));
 									/*#if cpp
@@ -8581,8 +8600,6 @@ class PlayState extends MusicBeatState
 							{
 								if (health >= 0.7 && curBeat % 4 == 0 || curBeat % 2 == 0)
 								{
-									if (lowHPHeartBeat.playing)
-										lowHPHeartBeat.stop();
 									lowHPHeartBeat.play(true);
 									lowHPHeartBeat.set_pitch(FlxG.random.float(0.85, 1.15));
 									/*#if cpp

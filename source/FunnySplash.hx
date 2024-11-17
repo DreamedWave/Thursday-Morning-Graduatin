@@ -19,14 +19,14 @@ import flixel.util.FlxTimer;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
 import sys.FileSystem;
+import flixel.FlxCamera;
 
 //Trans Shit
 //...
 //YO I'VE JUST THOUGHT OF A REALLY FUNNY JOKE
-import flixel.FlxCamera;
 import flixel.addons.transition.FlxTransitionableState;
-import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircleInverted;
 import flixel.addons.transition.TransitionData;
+import flixel.addons.transition.CustomTransitionSprites.TransTileInvertedCircle;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 
@@ -67,27 +67,24 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 		bitmapData = new Map<String,FlxGraphic>();
 
-		//Date and Time shit
-		Main.nightMode = FlxG.save.data.nightmode;
-		Main.curMonthString = Main.monthList[Date.now().getMonth()];
-		Main.curMonthInt = Date.now().getMonth();
-		Main.curDayString = Main.dayList[Date.now().getDay()];
-		Main.curDayInt = Date.now().getDay();
-		Main.curHourString = Main.hoursList[Date.now().getHours()];
-		Main.curHourInt = Date.now().getHours();
-
-		trace(Main.curMonthString + ', ' + Main.curDayString + ', ' + Main.curHourString);
-		trace(Main.curMonthInt + ', ' + Main.curDayInt + ', ' + Main.curHourInt);
-
-		if ((Main.curHourInt < 6 || Main.curHourInt > 23) && FlxG.save.data.autoNightmode)
-			Main.nightMode = true;
-
 		FlxG.cameras.bgColor = FlxColor.BLACK;
 		FlxG.fixedTimestep = false;
 
-		//add get utc date in main
-		if (Date.now().getUTCDate() <= 3 && Main.curMonthString == "April")
-			Main.aprilFools = true;
+		
+		//Moved from TitleState -> DisclaimerScreen -> Caching -> FunnySplash
+		var transitionSprite:FlxGraphic = FlxGraphic.fromClass(TransTileInvertedCircle);
+		transitionSprite.persist = true;
+		transitionSprite.destroyOnNoUse = false;
+		//If you're gonna change this, don't forget to change the thing in Paths.hx too!
+
+		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(-0.5, -1), {width: 32, height: 32, asset: transitionSprite}, 
+			new FlxRect(0, 0, FlxG.width, FlxG.height), FlxCamera.defaultCameras[FlxCamera.defaultCameras.length]);
+		FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(-0.5, -1),
+			{asset: transitionSprite, width: 32, height: 32}, new FlxRect(0, 0, FlxG.width, FlxG.height), FlxCamera.defaultCameras[FlxCamera.defaultCameras.length]);
+
+		
+		transIn = FlxTransitionableState.defaultTransIn;
+		transOut = FlxTransitionableState.defaultTransOut;
 
 		if (FlxG.save.data.weekUnlocked > 1)
 		{
@@ -96,11 +93,8 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 				rickRollChance = 0.45;
 			doRickRoll = FlxG.random.bool(rickRollChance);
 		}
-		
-		if (Main.curDayString == 'Sunday' && FlxG.random.bool(30))
-			Main.todayIsSunday = true;
 
-		//Preloading of Menu Sounds - unsure if this should be here
+		//Preloading of Menu Sounds - unsure if this should still be here
 		for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/sounds")))
 		{
 			if (i.endsWith(".ogg"))
@@ -119,19 +113,6 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 			}
 		}
 
-		//Moved from TitleState -> DisclaimerScreen -> Caching -> FunnySplash
-		var transitionSprite:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileCircleInverted);
-		transitionSprite.persist = true;
-		transitionSprite.destroyOnNoUse = false;
-		//If you're gonna change this, don't forget to change the thing in Paths.hx too!
-
-		FlxTransitionableState.defaultTransIn = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(-0.5, -1), {width: 32, height: 32, asset: transitionSprite}, 
-			new FlxRect(0, 0, FlxG.width, FlxG.height), FlxCamera.defaultCameras[FlxCamera.defaultCameras.length]);
-		FlxTransitionableState.defaultTransOut = new TransitionData(TILES, FlxColor.BLACK, 0.5, new FlxPoint(-0.5, -1),
-			{asset: transitionSprite, width: 32, height: 32}, new FlxRect(0, 0, FlxG.width, FlxG.height), FlxCamera.defaultCameras[FlxCamera.defaultCameras.length]);
-
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
 
 		FlxTransitionableState.skipNextTransIn = true;
 		FlxTransitionableState.skipNextTransOut = true;

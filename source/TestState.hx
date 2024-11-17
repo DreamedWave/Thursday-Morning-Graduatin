@@ -185,6 +185,9 @@ class TestState extends MusicBeatState
 
 	var loseControl:Bool = false;
 	var shitPlaceholder:Bool = false;
+	var PLACEHOLDERTESTFILTERBOOLEAN:Bool = false;
+	var funnyFilter:FlxSoundFilter;
+
 	override public function update(elapsed:Float)
 	{
 		if (Conductor.songPosition < FlxG.sound.music.length)
@@ -305,32 +308,31 @@ class TestState extends MusicBeatState
 				camGame.zoom += 0.2;
 			}
 
-			/*if (FlxG.keys.justPressed.L)
+			if (FlxG.keys.justPressed.L)
 			{
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				shitPlaceholder = !shitPlaceholder;
-				if (shitPlaceholder)
+				FlxG.sound.music.volume = 0.15;
+
+				if (!PLACEHOLDERTESTFILTERBOOLEAN)
 				{
-					#if cpp
-					@:privateAccess
-					{
-						lime.media.openal.AL.
-						lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.LOWPASS_GAINHF, 0.3);
-						lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.LOWPASS_GAIN, 1);
-					}
-					#end
+					PLACEHOLDERTESTFILTERBOOLEAN = true;
+					funnyFilter = new FlxSoundFilter();
+					funnyFilter.filterType = FlxSoundFilterType.LOWPASS;
+					funnyFilter.gainHF = 0.1;
+					funnyFilter.destroyWithSound = false;
+
+					var reverb = new FlxSoundReverbEffect();
+					reverb.decayTime = 3.5;
+					funnyFilter.addEffect(reverb);
 				}
-				else
-				{
-					#if cpp
-					@:privateAccess
-					{
-						lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.LOWPASS_GAINHF, 1);
-						lime.media.openal.AL.sourcef(FlxG.sound.music._channel.__source.__backend.handle, lime.media.openal.AL.LOWPASS_GAIN, 0);
-					}
-					#end
-				}
-			}*/
+
+				var sound = new FlxFilteredSound();
+				sound.loadEmbedded(Paths.sound('boh'));
+				FlxG.sound.list.add(sound);
+				FlxG.sound.defaultSoundGroup.add(sound);
+				sound.volume = 0.5;
+				sound.play();
+				sound.filter = funnyFilter;
+			}
 
 			if (FlxG.keys.justPressed.ENTER)
 			{
@@ -343,6 +345,12 @@ class TestState extends MusicBeatState
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				FlxG.switchState(new MainMenuState());
+				//Find a way to remove filters from the sound cuz a crash will def happen if I delete this while it's in use LMAO
+				if (PLACEHOLDERTESTFILTERBOOLEAN)
+				{
+					funnyFilter.destroyWithSound = true;
+					funnyFilter.destroy();
+				}
 			}
 
 			if (FlxG.keys.justPressed.C)

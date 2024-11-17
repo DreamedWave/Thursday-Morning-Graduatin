@@ -6,7 +6,6 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;

@@ -16,6 +16,10 @@ import flash.text.AntiAliasType;
 import flash.text.GridFitType;
 #end
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxTimer;
+
 /**
  * The flixel sound tray, the little volume meter that pops down sometimes.
  * Accessed via `FlxG.game.soundTray` or `FlxG.sound.soundTray`.
@@ -30,7 +34,7 @@ class FlxSoundTray extends Sprite
 	/**
 	 * Helps us auto-hide the sound tray after a volume change.
 	 */
-	var _timer:Float;
+	var trayTween:FlxTween;
 
 	/**
 	 * Helps display the volume bars on the sound tray.
@@ -63,6 +67,7 @@ class FlxSoundTray extends Sprite
 	{
 		super();
 
+		alpha = 0;
 		visible = false;
 		scaleX = _defaultScale;
 		scaleY = _defaultScale;
@@ -110,38 +115,13 @@ class FlxSoundTray extends Sprite
 
 	/**
 	 * This function just updates the soundtray object.
+	 * Stupid and doesnt need to be here but uhhh yknow apparently FlxGame needs it so uhhhh yeah LMAO
 	 */
-	public function update(MS:Float):Void
-	{
-		// Animate stupid sound tray thing
-		if (FlxG.sound.volume > 0 && globalVolume != 0 && !FlxG.sound.muted)
-		{
-			if (_timer > 0)
-			{
-				_timer -= MS / 1000;
-			}
-			else if (y > -height)
-			{
-				y -= (MS / 1000) * FlxG.height;
-
-				if (y <= -height)
-				{
-					visible = false;
-					active = false;
-
-					// Save sound preferences
-					if (FlxG.save.isBound)
-					{
-						FlxG.save.data.mute = FlxG.sound.muted;
-						FlxG.save.data.volume = FlxG.sound.volume;
-						FlxG.save.flush();
-					}
-				}
-			}
-		}
-	}
+	 public function update(elapsedMS:Float):Void
+	{}
 
 	var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
+	var isRetreating:Bool = true;
 
 	/**
 	 * Makes the little volume tray slide out.
@@ -162,10 +142,31 @@ class FlxSoundTray extends Sprite
 				FlxG.sound.load(sound).play();
 		}
 
-		_timer = 1;
-		y = 0;
-		visible = true;
-		active = true;
+		//Cancel any tween that might be happening right meow
+		if (trayTween != null)
+			trayTween.cancel();
+
+		//Only tween if shit is about to hide, otherwise, nothing happens
+		if (isRetreating)
+		{
+			isRetreating = false;
+			visible = true;
+			active = true;
+
+			trayTween = FlxTween.tween(this, {y: 0, alpha: 1}, 0.75, 
+				{
+					ease: FlxEase.elasticOut, 
+					onComplete: function(twn:FlxTween)
+					{
+						trayTween = null;
+						hide(2.25);
+					}
+				});
+		}
+		//otherwise, do the hiding function only
+		else
+			hide();
+
 		globalVolume = Math.round(FlxG.sound.volume * 10);
 
 		if (FlxG.sound.muted)
@@ -189,6 +190,37 @@ class FlxSoundTray extends Sprite
 			{
 				_bars[i].alpha = 0.5;
 			}
+		}
+	}
+
+	/**
+	 * Makes the little sound tray slide back in.
+	 * @param delayTime the length of the tweenDelay in seconds
+	 */
+	public function hide(?delayTime:Float = 3):Void
+	{
+		if (FlxG.sound.volume > 0 && globalVolume != 0 && !FlxG.sound.muted)
+		{
+			isRetreating = true;
+			trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
+				{
+					ease: FlxEase.cubeIn, 
+					startDelay: delayTime,
+					onComplete: function(twn:FlxTween)
+					{
+						trayTween = null;
+						visible = false;
+						active = false;
+				
+						// Save sound preferences
+						if (FlxG.save.isBound)
+						{
+							FlxG.save.data.mute = FlxG.sound.muted;
+							FlxG.save.data.volume = FlxG.sound.volume;
+							FlxG.save.flush();
+						}
+					}
+				});
 		}
 	}
 

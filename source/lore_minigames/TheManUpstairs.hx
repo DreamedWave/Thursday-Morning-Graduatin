@@ -4,7 +4,6 @@ package lore_minigames;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.math.FlxVelocity;
-import flixel.system.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 

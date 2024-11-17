@@ -21,7 +21,6 @@ import flixel.tweens.FlxTween;
 import flixel.math.FlxMath;
 import flixel.group.FlxSpriteGroup;
 import flixel.system.FlxSoundGroup;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
 

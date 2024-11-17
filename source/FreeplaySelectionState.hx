@@ -5,7 +5,6 @@ import Controls.KeyboardScheme;
 //import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
-import flixel.system.FlxSound;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;

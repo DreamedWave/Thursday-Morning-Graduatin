@@ -15,7 +15,6 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.addons.ui.FlxUIState;
-import flixel.system.FlxSound;
 
 class MusicBeatMenu extends FlxUIState
 {
