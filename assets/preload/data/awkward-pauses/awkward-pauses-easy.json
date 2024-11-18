@@ -2,6 +2,7 @@
  "song": {
   "player1": "guy-default",
   "needsAdaptiveMus": true,
+  "needsMiscs": true,
   "player2": "demon-dad",
   "notes": [
    {

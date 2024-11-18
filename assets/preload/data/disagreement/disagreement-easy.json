@@ -3,6 +3,7 @@
         "song": "Disagreement",
         "bpm": 155.0,
         "needsVoices": true,
+        "needsMiscs": true,
         "player1": "guy-theborder",
         "player2": "priest-theborderannoyed",
         "speed": 2,

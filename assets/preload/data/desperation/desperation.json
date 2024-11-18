@@ -1,6 +1,7 @@
 {
  "song": {
   "needsAdaptiveMus": true,
+  "needsMiscs": true,
   "player1": "guy-theborder",
   "notes": [
    {
