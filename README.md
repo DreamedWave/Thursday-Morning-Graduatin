@@ -1,9 +1,9 @@
 ![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** connected to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
 
-**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also, like, I'm NOT a coder, so I'm warning you in advance, some of the shit in the source code may make any professional coders reading it scream and cry-
+**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning you in advance, the source code may make any professional coders reading it weep and cry-
 
 	# Previews ([skip](#features))
 	![Title Screen](art/readme/KadeEngineTitleScreen.png)
@@ -82,7 +82,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 
 ### FNF: Indie Cross (For code references)
  *(Specifically: LoadingState.hx, VideoState.hx, CrashHandler code, and some Shader Stuff!)*
- **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games Cuphead, Undertale, and Bendy and the Ink Machine.
+ **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games such as Cuphead, Undertale, and Bendy and the Ink Machine.
 
  Links: **[source code on GitHub](https://github.com/brightfyregit/Indie-Cross-Public)**
  - [BrightFyre](https://linktr.ee/BrightFyre)
@@ -123,9 +123,9 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 <br></br>
 
  **And Lastly (but not the least)**
-   - To the 'Eldritch' friend group that initially gave me this idea and pushed me to make an FNF Mod
-   - To the 'BEPIS' friend group for supporting me throughout these years of development and just being overall really cool people
-   - To the 'Joki Joki' friend group, classmates, and acquaintances that were interested in the project - atleast even just for a brief moment
+   - To my 'Eldritch' friends that initially gave me this idea and pushed me to make an FNF Mod
+   - To my 'BEPIS' friends for supporting me throughout these years of development and just being overall really cool people
+   - To my 'Joki Joki' friends, and any classmates/acquaintances that were interested in the project - atleast even just for a brief moment
    - And to you who is reading this right now!
 
 **Big thanks to you all! This project would not have been possible if it weren't for all of you!**
