@@ -1,9 +1,9 @@
 ![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** connected to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat..
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** connected to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
 
-**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost!!
+**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also, like, I'm NOT a coder, so I'm warning you in advance, some of the shit in the source code may make any professional coders reading it scream and cry-
 
 	# Previews ([skip](#features))
 	![Title Screen](art/readme/KadeEngineTitleScreen.png)
@@ -24,14 +24,14 @@
 	
 	![Replay Loader](art/readme/KadeEngineReplayLoader.png)
 
-# What You Can Expect:
+# This Mod Contains:
  - **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
       - All containing 3 or more songs, each fully charted in all difficulties (Easy, Normal, and Hard)!
  - **Custom game mechanics**
       - Some 'Weeks' change up the formula a little bit, and adds a few new mechanics that builds upon Friday Night Funkin's gameplay without jeopardizing it!
  - *[to be added]* **An *actual* Tutorial Level**
       - That teaches any new players how to play without 100 or so lines of text!
- - **More unlockable Freeplay Songs**
+ - **Unlockable Freeplay Songs**
       - Aside from all the songs within every 'Week', there will be more songs available for you to find and unlock within Freeplay!
  - **Adaptive Music**
       - Most to playable story mode songs change and react to how well you're doing!
@@ -68,7 +68,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  
  Links: **[source code on GitHub](https://github.com/kadedev/Kade-Engine)**
  - [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
- - [(All contributors to this project)](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
+ - [(All Kade Engine contributors)](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
 <br></br>
 
 ### FNF: Psych Engine (For code references)
@@ -86,15 +86,15 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 
  Links: **[source code on GitHub](https://github.com/brightfyregit/Indie-Cross-Public)**
  - [BrightFyre](https://linktr.ee/BrightFyre)
- - [(All contributors to this project)](https://github.com/brightfyregit/Indie-Cross-Public/blob/master/source/CreditsMenu.hx)
+ - [(All Indie Cross contributors)](https://github.com/brightfyregit/Indie-Cross-Public/blob/master/source/CreditsMenu.hx)
 <br></br>
 
 ### Special Thanks:
  **Huge Modding Help**
-   - TheZoroForce240 for the [Note Type Guide!](https://drive.google.com/file/d/1YcG1TphzhbHgadgezhZQeUW65pPNtirG/view)
-   - BrightFyre for the early Kade Engine 1.6 Modding tutorials
-   - bbpanzu for more modding tutorials
-   - PolybiusProxy for the initial videosprite code used for testing
+   - [TheZoroForce240](https://github.com/TheZoroForce240) for the [Note Type Guide](https://drive.google.com/file/d/1YcG1TphzhbHgadgezhZQeUW65pPNtirG/view) and the [OpenAL FlxSound implementation!](https://github.com/TheZoroForce240/FlxSoundFilters)
+   - [BrightFyre](https://www.youtube.com/channel/UCvbZKyPNpKGri4uKGsZSw6w) for the early Kade Engine 1.6 Modding tutorials
+   - [bbpanzu](https://www.youtube.com/channel/UCkdhotVDNwu7ZCoe-99AJRQ) for more modding tutorials
+   - [PolybiusProxy](https://github.com/polybiusproxy) for the initial videoplayer code used for testing
   <br></br>
 
 **Musical Inspirations**
@@ -123,9 +123,9 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 <br></br>
 
  **And Lastly (but not the least)**
-   - To a few of my friends that initially gave me the idea to make this into a full-blown thing
-   - To all the friends who stuck around with me and this project throughout the years
-   - To my classmates and acquaintances that were interested in the project - atleast even just for a brief moment
+   - To the 'Eldritch' friend group that initially gave me this idea and pushed me to make an FNF Mod
+   - To the 'BEPIS' friend group for supporting me throughout these years of development and just being overall really cool people
+   - To the 'Joki Joki' friend group, classmates, and acquaintances that were interested in the project - atleast even just for a brief moment
    - And to you who is reading this right now!
 
 **Big thanks to you all! This project would not have been possible if it weren't for all of you!**
