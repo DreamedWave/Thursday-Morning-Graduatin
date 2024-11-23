@@ -1,28 +1,9 @@
 ![Kade Engine logo](art/NewRevampedLogo/titleNewest.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave (aka me)](https://github.com/DreamedWave) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
 
-**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning you in advance, the source code may make any professional coders reading it weep and cry-
-
-	# Previews ([skip](#features))
-	![Title Screen](art/readme/KadeEngineTitleScreen.png)
-	
-	![Week Select](art/readme/KadeEngineWeekSelect.png)
-	
-	![Freeplay](art/readme/KadeEngineFreeplay.png)
-	
-	![Options](art/readme/KadeEngineOptions.png)
-	
-	![Senpai Gameplay (Hard, Upscroll)](art/readme/KadeEnginePixelGameplay.png)
-	
-	![Roses Dialogue](art/readme/KadeEngineDialogue.png)
-	
-	![Pause Screen](art/readme/KadeEnginePauseScreen.png)
-	
-	![Results Screen](art/readme/KadeEngineResultsScreen.png)
-	
-	![Replay Loader](art/readme/KadeEngineReplayLoader.png)
+**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
 # This Mod Contains:
  - **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
