@@ -1,4 +1,4 @@
-![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
+![Kade Engine logo](assets/art/NewRevampedLogo/titleNewest.png)
 
 # Thursday Morning Graduatin'
 **Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
@@ -46,10 +46,11 @@
       - Note Hit Sounds! (for both normal and hold notes - akin to that of osu's)
       - A visual and auditory cue for when you break a combo! (to avoid beating a level thinking you Full Combo'd it, only to see that you missed 1 note somewhere... yeowch)
       - Night Mode and Photosensitive Mode!
- - **And many more!**
+ - **A few Backend Fixins/Rewrites**
       - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
       - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
       - Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB
+ - **And many more!**
 <br></br>
 
 # Credits:
@@ -117,7 +118,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - [Celeste](https://store.steampowered.com/app/504230/Celeste/) (by [Maddy Thorson](https://www.mattmakesgames.com/) & [Her Team](https://www.exok.com/))
 <br></br>
 
- **Artstyle Inspirations**
+ **Art Inspirations**
    - [Temmie Chang](https://www.youtube.com/Temmiechang)
    - [PhantomArcade](https://phantomarcade.newgrounds.com/)
 <br></br>
@@ -128,4 +129,4 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - To my 'Joki Joki' friends, and any classmates/acquaintances that were interested in the project - atleast even just for a brief moment
    - And to you who is reading this right now!
 
-**Big thanks to you all! This project would not have been possible if it weren't for all of you!**
+**A BIG thanks to you all! This project would not have been possible if it weren't for all of you!**

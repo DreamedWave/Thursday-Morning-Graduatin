@@ -5226,7 +5226,7 @@ class PlayState extends MusicBeatState
 							{
 								prevNum.color = 0xFFd7d1e6;
 								if (prevNum.alpha == 1)
-									prevNum.alpha = 0.75;
+									prevNum.alpha = 0.5;
 							}
 							else
 								prevNum.color = 0xFFEA417C;
@@ -5389,8 +5389,8 @@ class PlayState extends MusicBeatState
 							if (prevRating.color != 0xFFD09A9C)
 							{
 								prevRating.color = 0xFFB1A9C3;
-								if (prevRating.alpha == 1)
-									prevRating.alpha = 0.75;
+								if (prevNum.alpha == 1)
+									prevNum.alpha = 0.5;
 							}
 							else
 								prevRating.color = 0xFFD09A9C;
