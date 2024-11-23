@@ -155,7 +155,7 @@
 	<haxelib name="linc_luajit" if="windows"/>
 	<haxelib name="hxvm-luajit" if="windows"/>
 
-	<haxelib name="flxsoundfilters" />
+	<haxelib name="flxsoundfilters"/>
 
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 

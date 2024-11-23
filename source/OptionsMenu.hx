@@ -17,10 +17,6 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.utils.Assets;
-#if windows
-import discord_rpc.DiscordRpc;
-import Discord.DiscordClient;
-#end
 import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
@@ -95,7 +91,7 @@ class OptionsMenu extends MusicBeatMenu
 		new OptionCategory("Saves and Data", [
 			new WatermarkOption("Toggle if you want to hide the faces of people (such as Guy or Priest.)\nThis DOES NOT work yet though! LMAO!"),
 			#if desktop
-			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Spamming this might break things.)"),
+			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Selected changes will apply when you press [ESC].)"),
 			//new ReplayOption("View saved song replays."),
 			#end
 			new ResetScoreOption("Reset your scores on all songs and weeks.\n(This is irreversible!)"),
@@ -257,11 +253,6 @@ class OptionsMenu extends MusicBeatMenu
 		if (DisclaimerState.wentOptions)
 			(cast (Lib.current.getChildAt(0), Main)).toggleFPS(FlxG.save.data.fps);
 
-		#if windows
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Options Menu", null);
-		#end
-
 		mouseTimer = new FlxTimer().start(0.5, function(swagTimer:FlxTimer)
 		{
 			mouseActive = true;
@@ -339,7 +330,7 @@ class OptionsMenu extends MusicBeatMenu
 					#if windows
 					if (!FlxG.save.data.showPresence && discordClientStarted)
 					{
-						DiscordRpc.shutdown();
+						DiscordClient.shutdown();
 						discordClientStarted = false;
 					}
 					else if (FlxG.save.data.showPresence && !discordClientStarted)

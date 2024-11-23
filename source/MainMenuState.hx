@@ -19,10 +19,6 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxMath;
 import flash.system.System;
 
-#if windows
-import Discord.DiscordClient;
-#end
-
 using StringTools;
 
 class MainMenuState extends MusicBeatMenu
@@ -61,7 +57,7 @@ class MainMenuState extends MusicBeatMenu
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("In the Main Menu", null);
+			DiscordClient.changePresence("Perusing the Menus", null);
 		#end
 
 		confirmSound = new FlxSound();

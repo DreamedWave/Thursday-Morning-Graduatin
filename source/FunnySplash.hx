@@ -1,8 +1,5 @@
 package;
 
-#if windows
-import Discord.DiscordClient;
-#end
 import lime.app.Application;
 import openfl.display.BitmapData;
 import flash.display.Graphics;
@@ -54,12 +51,10 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 	override public function create():Void
 	{
+		FlxG.game.soundTray.tempDisable = true;
 		FlxG.autoPause = false;
 
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
-		
-		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("", null, "apppresence-loading");
 
 		FlxG.mouse.visible = false;
 
@@ -157,6 +152,11 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 		
 		super.create();
 
+		#if windows
+		if (FlxG.save.data.showPresence)
+			DiscordClient.changePresence("[Hello, World!]", null, false, 'apppresence-dark');
+		#end
+
 		Conductor.changeBPM(98);
 		var leTime:Float = Conductor.stepCrochet / 1000;
 		times = [0, leTime, leTime * 2, leTime * 3, leTime * 4];
@@ -231,6 +231,9 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 		times = null;
 		colors = null;
 		functions = null;
+
+		FlxG.game.soundTray.tempDisable = false;
+		
 		super.destroy();
 	}
 

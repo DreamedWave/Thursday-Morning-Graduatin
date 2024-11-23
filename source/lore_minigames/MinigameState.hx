@@ -1,10 +1,6 @@
 //IN PAIN - TOO LAZY TO FIX UP PATHS.JSON TO WORK WITH THIS SHIT AUGHHHH
 package lore_minigames;
 
-#if windows
-import Discord.DiscordClient;
-#end
-
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.FlxCamera;
@@ -87,7 +83,7 @@ class MinigameState extends MusicBeatState
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
+			DiscordClient.changePresence("Somewhere Familiar...", null, false, "apppresence-strange");
 		#end
 		
 		if (FlxG.sound.music != null)
@@ -628,7 +624,7 @@ class MinigameState extends MusicBeatState
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going...)", true, defaultEscapeTime * 1000, "apppresence-strange");
+				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going.)", true, defaultEscapeTime * 1000, "apppresence-strange");
 			#end
 
 			escapeTimer = new FlxTimer().start(defaultEscapeTime, function(tmr:FlxTimer)
@@ -950,6 +946,12 @@ class MinigameState extends MusicBeatState
 	{
 		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
 		{
+			#if windows
+			// Updating Discord Rich Presence
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("...", "(it wasn't your fault.)", false, "apppresence-dark");
+			#end
+
 			//camGame.shakeFlashSprite = false;
 			//camHUD.shakeFlashSprite = false;
 			him.aiStatus = 'inactive';

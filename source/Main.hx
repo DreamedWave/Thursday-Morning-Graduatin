@@ -1,10 +1,6 @@
 package;
 
 import lime.app.Application;
-#if windows
-import Discord.DiscordClient;
-import discord_rpc.DiscordRpc;
-#end
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import flixel.util.FlxColor;
@@ -151,7 +147,7 @@ class Main extends Sprite
 		if (curDayString == 'Sunday' && FlxG.random.bool(30))
 			todayIsSunday = true;
 
-
+		
 		#if windows
 		if (FlxG.save.data.showPresence)
 			DiscordClient.initialize();
@@ -159,9 +155,10 @@ class Main extends Sprite
 
 		Application.current.onExit.add (function (exitCode)
 		{
+			#if windows
 			DiscordClient.shutdown();
-			DiscordRpc.shutdown();
 			OptionsMenu.discordClientStarted = false;
+			#end
 			ResultsScreen.CleanUpAfterYoself('assets/temp');
 			ChartingState.CleanUpAfterMeself(true);
 
@@ -330,8 +327,10 @@ class Main extends Sprite
 	{
 		FlxG.fullscreen = false;
 
+		#if windows
 		if (FlxG.save.data.showPresence)
 			DiscordClient.changePresence("Game Crashed!", "...whoops", false, "apppresence-crashed", "_tinyico-crash", ":skull_emoji:");
+		#end
 		
 		var errMsg:String = "";
 		var path:String;
@@ -413,10 +412,6 @@ class Main extends Sprite
 
 		errMsg += "\n(a [.txt] version of this can be found in the '_logs' folder.)";
 		Application.current.window.alert(errMsg, "Whoopsie-");
-
-		DiscordClient.shutdown();
-		DiscordRpc.shutdown();
-		OptionsMenu.discordClientStarted = false;
 
 		trace('The game crashed!!! Reminding you that if you rename a sound, you also need to change it in LoadingState if its within Playstate!!!');
 

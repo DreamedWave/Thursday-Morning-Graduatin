@@ -45,9 +45,6 @@ import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
 import sys.FileSystem;
-#if windows
-import Discord.DiscordClient;
-#end
 
 using StringTools;
 

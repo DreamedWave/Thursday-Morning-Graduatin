@@ -40,6 +40,11 @@ class LoadingState extends MusicBeatMenu
 	override function create()
 	{	
 		super.create();
+		
+		#if windows
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("Loading...", null);
+		#end
 
 		//Dumping of unused cache
 		Paths.clearUnusedMemory();

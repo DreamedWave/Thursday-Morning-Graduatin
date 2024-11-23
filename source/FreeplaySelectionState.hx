@@ -15,9 +15,6 @@ import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 
-#if windows
-import Discord.DiscordClient;
-#end
 import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
@@ -186,11 +183,6 @@ class FreeplaySelectionState extends MusicBeatMenu
 		changeItem();
 
 		super.create();
-		
-		#if windows
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Freeplay Menu", null);
-		#end
 	}
 
 	var selectedSomethin:Bool = false;

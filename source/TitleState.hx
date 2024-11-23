@@ -18,11 +18,6 @@ import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
 
-#if windows
-import Discord.DiscordClient;
-import discord_rpc.DiscordRpc;
-#end
-
 #if cpp
 import sys.thread.Thread;
 #end
@@ -165,12 +160,6 @@ class TitleState extends MusicBeatMenu
 			//Paths.clearStoredMemory();
 			Paths.clearUnusedMemory();
 
-			#if windows
-			// Updating Discord Rich Presence
-			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("In the Title Screen", null);
-			#end
-
 			credGroup = new FlxGroup();
 			add(credGroup);
 			textGroup = new FlxGroup();
@@ -189,6 +178,12 @@ class TitleState extends MusicBeatMenu
 			Highscore.load();
 
 			curWacky = FlxG.random.getObject(splitTextIntoArray(Paths.txt('data/introText')));
+			
+			#if windows
+			// Updating Discord Rich Presence
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("Perusing the Menus", "('" + curWacky[0] + ' ' + curWacky[1] + "')", false, 'apppresence-default');
+			#end
 
 			trace('Hello There!');
 		}
@@ -570,7 +565,7 @@ class TitleState extends MusicBeatMenu
 				wackyXtraText.text = 'I MEAN HOTTIES- I MEAN- HOTTIES- I MEAN-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
-			case 'fightmemihoyo':
+			case 'fightmemihoyo' | 'thetmgine':
 				wackyXtraText.text = '(For legal reasons, this is a joke!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
@@ -807,6 +802,11 @@ class TitleState extends MusicBeatMenu
 				}
 
 			case 2:	
+				#if windows
+				// Updating Discord Rich Presence
+				DiscordClient.changePresence("[Goodbye, World.]", null, false, 'apppresence-dark');
+				#end
+
 				didThePress = true;	
 				failSafeAugh = true;
 				transitioning = true;

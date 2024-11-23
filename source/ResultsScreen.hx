@@ -29,10 +29,6 @@ import flixel.text.FlxText;
 import flixel.input.FlxKeyManager;
 import flixel.addons.transition.FlxTransitionableState;
 
-#if windows
-import Discord.DiscordClient;
-#end
-
 using StringTools;
 
 class ResultsScreen extends MusicBeatSubstate
@@ -263,7 +259,10 @@ class ResultsScreen extends MusicBeatSubstate
 
         #if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("In the Results Screen", null);
+        {
+            var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + (PlayState.isStoryMode ? Ratings.GenerateLetterRank(PlayState.campaignAccuracy, PlayState.instance.keeledOver) : Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver)) + ' (' + (PlayState.isStoryMode ? HelperFunctions.truncateFloat(PlayState.campaignAccuracy, 2) : HelperFunctions.truncateFloat(PlayState.instance.accuracy,2)) + '%)]';
+			DiscordClient.changePresence("The Results!", funnyTextLol, false);
+        }
 		#end
 
         startBeatShit = true;
