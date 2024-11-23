@@ -8,8 +8,7 @@ import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.math.FlxMath;
 import flixel.FlxCamera;
-import flixel.system.FlxSound;
-import flixel.system.ui.FlxSoundTray;
+//import flixel.system.ui.FlxSoundTray;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -18,11 +17,6 @@ import flixel.util.FlxTimer;
 import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
-
-#if windows
-import Discord.DiscordClient;
-import discord_rpc.DiscordRpc;
-#end
 
 #if cpp
 import sys.thread.Thread;
@@ -166,12 +160,6 @@ class TitleState extends MusicBeatMenu
 			//Paths.clearStoredMemory();
 			Paths.clearUnusedMemory();
 
-			#if windows
-			// Updating Discord Rich Presence
-			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("In the Title Screen", null);
-			#end
-
 			credGroup = new FlxGroup();
 			add(credGroup);
 			textGroup = new FlxGroup();
@@ -190,6 +178,12 @@ class TitleState extends MusicBeatMenu
 			Highscore.load();
 
 			curWacky = FlxG.random.getObject(splitTextIntoArray(Paths.txt('data/introText')));
+			
+			#if windows
+			// Updating Discord Rich Presence
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("Perusing the Menus", "('" + curWacky[0] + ' ' + curWacky[1] + "')", false, 'apppresence-default');
+			#end
 
 			trace('Hello There!');
 		}
@@ -521,10 +515,14 @@ class TitleState extends MusicBeatMenu
 
 		switch (wackySwitch)
 		{
-			/*case 'suckmydick' | 'fuckittohell':
-				wackyXtraText.text = '(not in a sex way)';
+			case 'mypenis':
+				wackyXtraText.text = "(God, I wish - I mean WHAT WHO SAID THAT?!)";
 				wackyXtraText.visible = true;
-				FlxG.log.add('WackyText');*/
+				FlxG.log.add('WackyText');
+				camUI.zoom += 0.015;
+				FlxG.sound.play(Paths.sound('intro_vine'), 0.65);
+				FlxG.log.add('Vine Thud');
+
 			case 'idunno':
 				wackyXtraText.text = '(oh actually today is a ' + Main.curDayString + "!!)";
 				wackyXtraText.visible = true;
@@ -536,6 +534,7 @@ class TitleState extends MusicBeatMenu
 					wackyXtraText.text = "(bro wdym, it's a " + Main.curDayString + "-)";
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'wasnow1am':
 				if(Main.curHourString == "1 AM")
 					wackyXtraText.text = '(you should go to sleep-)';
@@ -543,75 +542,94 @@ class TitleState extends MusicBeatMenu
 					wackyXtraText.text = "(errrm actually, it's " + Main.curHourString + '-)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'lets gooooooo' | 'thatwasayearago' | 'aaaaaaaaaa' | 'orelseillscream':
 				wackyXtraText.text = '(AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'buyassetsforkidney':
 				wackyXtraText.text = 'EA moment';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'ayearago':
 				wackyXtraText.text = 'holy shit wow--';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'willbeeasy' | 'nahimjustkidding':
 				wackyXtraText.text = '()...probably)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'men':
 				wackyXtraText.text = 'I MEAN MEN- I- I MEAN- MEN- I MEAN-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'women':
 				wackyXtraText.text = 'I MEAN, MOMMY- I MEAN- MOMMY- I MEAN-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'enbies':
 				wackyXtraText.text = 'I MEAN HOTTIES- I MEAN- HOTTIES- I MEAN-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
-			case 'fightmemihoyo':
+
+			case 'fightmemihoyo' | 'thetmgine':
 				wackyXtraText.text = '(For legal reasons, this is a joke!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'unfunny':
 				wackyXtraText.text = '(PICO FUNNY!!!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+				
 			case 'slmclclveiwerr':
 				wackyXtraText.text = '? ?!?!? !';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 				FlxG.sound.play(Paths.sound('intro_schplat'), 0.45);
 				FlxG.log.add('Splat Sound');
+
 			case 'kikindaniceyea':
-				wackyXtraText.text = '(cuz pink is based!!!)';
+				wackyXtraText.text = '(Bcuz Pink is based!!!)';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'hopeyouhavefun':
 				wackyXtraText.text = '!!!';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			case 'pleasebecomefunny' | 'lmaoodeadchanneldead' | 'thedreamedwavechannel' | 'bruh' | 'bruuuhhh':
 				FlxG.sound.play(Paths.sound('intro_bruh'), 0.55);
 				FlxG.log.add('Bruh Sound');
+
 			case 'theyarrive' | 'thecomezone' | 'youregonnacum' | 'broimcreaming':
 				FlxG.sound.play(Paths.sound('intro_schplat'), 0.45);
 				FlxG.log.add('Splat Sound');		
+
 			case 'imposterfromamoger' | 'amongusjokes' | 'anentiregeneration' | 'theyweretoosus':
 				FlxG.sound.play(Paths.sound('intro_sus'), 0.55);
+
 			case 'shitsaggressively' | 'aggressiveshitting' | 'goneinaninstant':
 				doCamZooming = false;
 				camUI.zoom -= 0.03;
 				FlxG.sound.play(Paths.sound('intro_shid'), 0.55);
 				FlxG.log.add('BRAAPPP');
+
 			case 'urmom' | 'theymademeanegg' | 'afamily' | 'x':
 				camUI.zoom += 0.015;
 				FlxG.sound.play(Paths.sound('intro_vine'), 0.65);
 				FlxG.log.add('Vine Thud');
+
 			case 'notsafe' | 'somebodyhelp' | 'help' | 'ok':
 				FlxG.sound.music.volume = 0;
+
 			case 'inchat':
 				var meowCounter:Int = 0;
 				wackyXtraText.visible = true;
@@ -638,6 +656,7 @@ class TitleState extends MusicBeatMenu
 					wackyXtraText.text += ':3 ';
 				}, 16);
 				FlxG.log.add(':3');	
+
 			case 'ewrjoqjmovkvjwbtjmwmgkgkmxcmrm':
 				var screamCounter:Int = 0;
 				new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
@@ -662,6 +681,7 @@ class TitleState extends MusicBeatMenu
 					}
 				}, 8);
 				FlxG.log.add('Fnaf Lore');
+
 			case 'piecklreck':
 				var screamCounter:Int = 0;
 				new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
@@ -685,13 +705,16 @@ class TitleState extends MusicBeatMenu
 							addMoreText('NO. NO. NO. NO. NO.');
 					}
 				}, 8);
+
 			case 'adrawingtablet':
 				wackyXtraText.text = 'WISH GRANTED!!! WOOOO!!!!';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
+
 			default:
 				FlxG.log.add('did the default do');
 				trace("no wack");
+				
 		}
 		trace("wackyFunction");
 	}
@@ -808,6 +831,11 @@ class TitleState extends MusicBeatMenu
 				}
 
 			case 2:	
+				#if windows
+				// Updating Discord Rich Presence
+				DiscordClient.changePresence("[Goodbye, World.]", null, false, 'apppresence-dark');
+				#end
+
 				didThePress = true;	
 				failSafeAugh = true;
 				transitioning = true;

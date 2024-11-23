@@ -1,8 +1,5 @@
 package;
 
-#if windows
-import Discord.DiscordClient;
-#end
 import openfl.Lib;
 import openfl.Assets;
 import Conductor.BPMChangeEvent;
@@ -15,7 +12,12 @@ import flixel.util.FlxColor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.addons.ui.FlxUIState;
-import flixel.system.FlxSound;
+
+/*enum MouseSupportType
+{
+	HOVER;
+	SCROLL;
+}*/
 
 class MusicBeatMenu extends FlxUIState
 {
@@ -26,6 +28,8 @@ class MusicBeatMenu extends FlxUIState
 	public var camUI:FlxCamera;
 	public var camLoad:FlxCamera;
 	public var confirmSound:FlxSound;//to make it persist heehee
+	//public var mouseHoverGrp:FlxTypedGroup<FlxObject>; //More robust Mouse Support'
+	//public var hasMouseSupport:Bool = false;
 	
 	private var curStep:Int = -4;
 	private var curBeat:Int = -1;
@@ -168,6 +172,20 @@ class MusicBeatMenu extends FlxUIState
 
 		return allTextsArray;
 	}
+
+	//More robust mouse support [WIP]
+	/*public function addMouseSupport(?type:MouseSupportType = HOVER)
+	{
+		hasMouseSupport = true;
+
+		switch (type)
+		{
+			case SCROLL:
+				//do nada
+			default: 
+				//var topScroller:FlxSprite //add flx sprite that is the width of the screen and the height of the idk make it settable or something idk also the enum is prob unecessary ok i gotta gho now my laptop boutta die bye
+		}
+	}*/
 
 	public function getTips(menuTipID:String = ''):String
 	{

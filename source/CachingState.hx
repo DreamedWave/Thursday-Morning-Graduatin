@@ -2,9 +2,6 @@
 package;
 
 import lime.app.Application;
-#if windows
-import Discord.DiscordClient;
-#end
 import openfl.display.BitmapData;
 import openfl.utils.Assets;
 import haxe.Exception;
@@ -23,7 +20,6 @@ import flixel.math.FlxMath;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import flixel.text.FlxText;
-import flixel.system.FlxSound;
 import flixel.addons.transition.FlxTransitionableState;
 
 using StringTools;
@@ -49,10 +45,7 @@ class CachingState extends MusicBeatMenu
 
 	override function create()
 	{
-		#if windows
-		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Loading...", null, true, "apppresence-loading");
-		#end
+		FlxG.autoPause = true;
 
 		//ForTesting
 		//FlxG.save.data.cacheImages = false;
@@ -204,6 +197,11 @@ class CachingState extends MusicBeatMenu
 		//cacheMusic.fadeIn(3, 0, 0.5);
 		//else
 		cacheMusic.fadeIn(5, 0, 0.5);
+
+		#if windows
+		if (FlxG.save.data.showPresence)
+			DiscordClient.changePresence("[Loading...]", null, true, "apppresence-loading");
+		#end
 	}
 
 	var targetAlpha:Float = 0;

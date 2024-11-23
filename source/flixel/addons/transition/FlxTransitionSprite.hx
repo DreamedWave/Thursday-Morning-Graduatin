@@ -12,9 +12,6 @@ import openfl.display.BitmapData;
 @:keep @:bitmap("assets/images/transitions/circle.png")
 class GraphicTransTileCircle extends BitmapData {}
 
-@:keep @:bitmap("assets/images/transitions/inverted_circle.png")
-class GraphicTransTileCircleInverted extends BitmapData {}
-
 @:keep @:bitmap("assets/images/transitions/diamond.png")
 class GraphicTransTileDiamond extends BitmapData {}
 

@@ -8,7 +8,6 @@ import flixel.math.FlxPoint;
 import flixel.FlxObject;
 import flixel.addons.transition.FlxTransitionableState;
 #if windows
-import Discord.DiscordClient;
 import sys.thread.Thread;
 #end
 
@@ -39,11 +38,6 @@ class GameplayCustomizeState extends MusicBeatMenu
     
     public override function create() 
     {
-        #if windows
-		// Updating Discord Rich Presence
-		DiscordClient.changePresence("Customizing Gameplay Modules", null);
-		#end
-
 		//Conductor.changeBPM(102);
 		persistentUpdate = true;
 

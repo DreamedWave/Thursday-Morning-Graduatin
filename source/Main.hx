@@ -1,10 +1,6 @@
 package;
 
 import lime.app.Application;
-#if windows
-import Discord.DiscordClient;
-import discord_rpc.DiscordRpc;
-#end
 import openfl.display.BlendMode;
 import openfl.text.TextFormat;
 import flixel.util.FlxColor;
@@ -12,7 +8,6 @@ import flixel.util.FlxColor;
 import flixel.FlxGame;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
-import flixel.system.FlxSound;
 import openfl.Assets;
 import openfl.Lib;
 import openfl.display.FPS;
@@ -115,6 +110,7 @@ class Main extends Sprite
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
 
+
 		initialState = FunnySplash;
 		#if cpp
 		game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, false);
@@ -123,13 +119,35 @@ class Main extends Sprite
 		#end
 		addChild(game);
 
+
 		//Moved Save.Bind to Modified FlxG
 		PlayerSettings.init();
 		SaveData.initSave();
 
-		FlxG.sound.defaultMusicGroup.volume = FlxG.save.data.musicVol * 0.01;
-		FlxG.sound.defaultSoundGroup.volume = FlxG.save.data.gamesfxVol * 0.01;
 
+		//Date and Time shit
+		nightMode = FlxG.save.data.nightmode;
+		curMonthString = monthList[Date.now().getMonth()];
+		curMonthInt = Date.now().getMonth();
+		curDayString = dayList[Date.now().getDay()];
+		curDayInt = Date.now().getDay();
+		curHourString = hoursList[Date.now().getHours()];
+		curHourInt = Date.now().getHours();
+
+		trace(curMonthString + ', ' + curDayString + ', ' + curHourString);
+		trace(curMonthInt + ', ' + curDayInt + ', ' + curHourInt);
+
+		if ((curHourInt < 6 || curHourInt > 23) && FlxG.save.data.autoNightmode)
+			nightMode = true;
+
+		//add get utc date in main
+		if (Date.now().getUTCDate() <= 3 && curMonthString == "April")
+			aprilFools = true;
+
+		if (curDayString == 'Sunday' && FlxG.random.bool(30))
+			todayIsSunday = true;
+
+		
 		#if windows
 		if (FlxG.save.data.showPresence)
 			DiscordClient.initialize();
@@ -137,6 +155,13 @@ class Main extends Sprite
 
 		Application.current.onExit.add (function (exitCode)
 		{
+			#if windows
+			DiscordClient.shutdown();
+			OptionsMenu.discordClientStarted = false;
+			#end
+			ResultsScreen.CleanUpAfterYoself('assets/temp');
+			ChartingState.CleanUpAfterMeself(true);
+
 			switch (exitCode)
 			{
 				case 1:
@@ -144,12 +169,6 @@ class Main extends Sprite
 				default:
 					trace('exited game');
 			}
-
-			DiscordClient.shutdown();
-			DiscordRpc.shutdown();
-			OptionsMenu.discordClientStarted = false;
-			ResultsScreen.CleanUpAfterYoself('assets/temp');
-			ChartingState.CleanUpAfterMeself(true);
 		});
 
 		#if !mobile
@@ -166,7 +185,7 @@ class Main extends Sprite
 		Application.current.window.onFocusOut.add(onWindowFocusOut);
 		Application.current.window.onFocusIn.add(onWindowFocusIn);
 
-		FlxG.mouse.load('assets/images/TMG_CustomCursor.png', 1, 3, 3);
+		FlxG.mouse.load('assets/images/custom_bitmaps/TMG_CustomCursor.png', 1, 3, 3);
 	}
 
 	public function toggleFPS(fpsEnabled:Bool):Void
@@ -308,8 +327,10 @@ class Main extends Sprite
 	{
 		FlxG.fullscreen = false;
 
+		#if windows
 		if (FlxG.save.data.showPresence)
 			DiscordClient.changePresence("Game Crashed!", "...whoops", false, "apppresence-crashed", "_tinyico-crash", ":skull_emoji:");
+		#end
 		
 		var errMsg:String = "";
 		var path:String;
@@ -329,8 +350,9 @@ class Main extends Sprite
 			"Technically bug free - I don't see any spiders!",
 			"It's not a bug, it's a feature!",
 			"This isn't a beach, this is a BATHTUB!",
-			"Ugh, whatever, I'm going back to my roblox obby.",
+			"Ugh whatever, I'm going back to roblox fnf obby.",
 			"Damn, Friday Night Bloxin' won't ever do me like this,,,",
+			"GOD. DAMN IT.",
 			"Guys what one is your favourite?",
 			"That was uhhhh- yeah that was my bad-",
 			"My mistake, the gate is NOT open.",
@@ -338,6 +360,7 @@ class Main extends Sprite
 			"This is basically just a fancy way of saying something broke!",
 			"f e c k .",
 			"MY LEG!!!",
+			"AAAAAAAA SORRY MY BAD",
 			"'Nile is a river in Egypt' -Freddie, 2023",
 			"'when i close my eyes i cant see -Brittany Broski, 2021'",
 			"Addeh Facts #05: 'RED is not GREEN'!",
@@ -351,10 +374,12 @@ class Main extends Sprite
 			"This crash screen is NOT CANON.",
 			"Not part of the script!",
 			"You killed Niko.",
+			"Congrats, you won!",
 			"Two quills and a   b o n g .",
 			"DreamedWave4364 was obliterated by a sonically-charged shriek",
 			"Gone fishin'",
-			"If you were wondering what '_oops.ogg' was for, well you just heard it now!"
+			"If you were wondering what '_oops.ogg' was for, well you just heard it now!",
+			"HUMAN, I SHAT MESELF"
 		];
 
 		dateNow = StringTools.replace(dateNow, " ", "_");
@@ -387,10 +412,6 @@ class Main extends Sprite
 
 		errMsg += "\n(a [.txt] version of this can be found in the '_logs' folder.)";
 		Application.current.window.alert(errMsg, "Whoopsie-");
-
-		DiscordClient.shutdown();
-		DiscordRpc.shutdown();
-		OptionsMenu.discordClientStarted = false;
 
 		trace('The game crashed!!! Reminding you that if you rename a sound, you also need to change it in LoadingState if its within Playstate!!!');
 

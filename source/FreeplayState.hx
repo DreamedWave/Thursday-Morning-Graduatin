@@ -1,7 +1,6 @@
 package;
 import openfl.utils.Future;
 import openfl.media.Sound;
-import flixel.system.FlxSound;
 #if sys
 //import smTools.SMFile;
 import sys.FileSystem;
@@ -24,10 +23,6 @@ import flixel.util.FlxTimer;
 import lime.utils.Assets;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.effects.FlxFlicker;
-
-#if windows
-import Discord.DiscordClient;
-#end
 
 using StringTools;
 
@@ -296,7 +291,7 @@ class FreeplayState extends MusicBeatMenu
 
 		#if windows
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Freeplay Menu", null);
+		DiscordClient.changePresence("Perusing the Menus", null);
 		#end
 	}
 

@@ -6,17 +6,12 @@ import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Application;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.FlxGraphic;
 import openfl.Lib;
-
-#if windows
-import Discord.DiscordClient;
-#end
 
 class DisclaimerState extends MusicBeatMenu
 {
@@ -105,7 +100,7 @@ class DisclaimerState extends MusicBeatMenu
 		FlxTransitionableState.skipNextTransOut = true;
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("[Awaiting Input]", null, false, "apppresence-loading");
+			DiscordClient.changePresence("[Awaiting Input.]", null, false, "apppresence-loading");
 		#end
 	}
 
@@ -114,6 +109,11 @@ class DisclaimerState extends MusicBeatMenu
 	
 	function exitDisclaimerState():Void
 	{
+		#if windows
+		if (FlxG.save.data.showPresence)
+			DiscordClient.changePresence("[Have fun~!]", null, false, "apppresence-loading");
+		#end
+
 		if (!wentOptions)
 		{
 			FlxTransitionableState.skipNextTransIn = true;
@@ -160,7 +160,13 @@ class DisclaimerState extends MusicBeatMenu
 					new FlxTimer().start(0.1, function(tmr:FlxTimer)
 					{
 						if (!spedran)
+						{
+							#if windows
+							if (FlxG.save.data.showPresence)
+								DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+							#end
 							FlxG.switchState(new TitleState());
+						}
 					});
 				}, true);
 			});
@@ -182,7 +188,13 @@ class DisclaimerState extends MusicBeatMenu
 					{
 						(cast (Lib.current.getChildAt(0), Main)).toggleFPS(FlxG.save.data.fps);
 						if (!spedran)
+						{
 							FlxG.switchState(new OptionsMenu());
+							#if windows
+							if (FlxG.save.data.showPresence)
+								DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+							#end
+						}
 					});
 				}, true);
 			});
@@ -209,6 +221,10 @@ class DisclaimerState extends MusicBeatMenu
 		//Role Exit Prevention
 		new FlxTimer().start(0.1, function(tmr:FlxTimer)
 		{
+			#if windows
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+			#end
 			if (!wentOptions)
 				FlxG.switchState(new TitleState());
 			else

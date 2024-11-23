@@ -1,28 +1,9 @@
-![Kade Engine logo](assets/preload/images/KadeEngineLogo.png)
+![Kade Engine logo](art/NewRevampedLogo/titleNewest.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave](https://github.com/DreamedWave) initially as a joke making fun of her scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** connected to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [DreamedWave (aka me)](https://github.com/DreamedWave) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
 
-**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also, like, I'm NOT a coder, so I'm warning you in advance, some of the shit in the source code may make any professional coders reading it scream and cry-
-
-	# Previews ([skip](#features))
-	![Title Screen](art/readme/KadeEngineTitleScreen.png)
-	
-	![Week Select](art/readme/KadeEngineWeekSelect.png)
-	
-	![Freeplay](art/readme/KadeEngineFreeplay.png)
-	
-	![Options](art/readme/KadeEngineOptions.png)
-	
-	![Senpai Gameplay (Hard, Upscroll)](art/readme/KadeEnginePixelGameplay.png)
-	
-	![Roses Dialogue](art/readme/KadeEngineDialogue.png)
-	
-	![Pause Screen](art/readme/KadeEnginePauseScreen.png)
-	
-	![Results Screen](art/readme/KadeEngineResultsScreen.png)
-	
-	![Replay Loader](art/readme/KadeEngineReplayLoader.png)
+**REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
 # This Mod Contains:
  - **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
@@ -46,10 +27,11 @@
       - Note Hit Sounds! (for both normal and hold notes - akin to that of osu's)
       - A visual and auditory cue for when you break a combo! (to avoid beating a level thinking you Full Combo'd it, only to see that you missed 1 note somewhere... yeowch)
       - Night Mode and Photosensitive Mode!
- - **And many more!**
+ - **A few Backend Fixins/Rewrites**
       - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
       - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
       - Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB
+ - **And many more!**
 <br></br>
 
 # Credits:
@@ -68,7 +50,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  
  Links: **[source code on GitHub](https://github.com/kadedev/Kade-Engine)**
  - [KadeDeveloper](https://twitter.com/KadeDeveloper) - Maintainer and lead programmer
- - [(All contributors to this project)](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
+ - [(All Kade Engine contributors)](https://github.com/KadeDev/Kade-Engine/graphs/contributors)
 <br></br>
 
 ### FNF: Psych Engine (For code references)
@@ -82,11 +64,11 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
 
 ### FNF: Indie Cross (For code references)
  *(Specifically: LoadingState.hx, VideoState.hx, CrashHandler code, and some Shader Stuff!)*
- **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games Cuphead, Undertale, and Bendy and the Ink Machine.
+ **Indie Cross** is a massive community collaboration lead by BrightFyre, featuring 3 weeks and many more songs dedicated to indie games such as Cuphead, Undertale, and Bendy and the Ink Machine.
 
  Links: **[source code on GitHub](https://github.com/brightfyregit/Indie-Cross-Public)**
  - [BrightFyre](https://linktr.ee/BrightFyre)
- - [(All contributors to this project)](https://github.com/brightfyregit/Indie-Cross-Public/blob/master/source/CreditsMenu.hx)
+ - [(All Indie Cross contributors)](https://github.com/brightfyregit/Indie-Cross-Public/blob/master/source/CreditsMenu.hx)
 <br></br>
 
 ### Special Thanks:
@@ -117,15 +99,15 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
    - [Celeste](https://store.steampowered.com/app/504230/Celeste/) (by [Maddy Thorson](https://www.mattmakesgames.com/) & [Her Team](https://www.exok.com/))
 <br></br>
 
- **Artstyle Inspirations**
+ **Art Inspirations**
    - [Temmie Chang](https://www.youtube.com/Temmiechang)
    - [PhantomArcade](https://phantomarcade.newgrounds.com/)
 <br></br>
 
  **And Lastly (but not the least)**
-   - To the 'Eldritch' friend group that initially gave me this idea and pushed me to make an FNF Mod
-   - To the 'BEPIS' friend group for supporting me throughout these years of development and just being overall really cool people
-   - To the 'Joki Joki' friend group, classmates, and acquaintances that were interested in the project - atleast even just for a brief moment
+   - To my 'Eldritch' friends that initially gave me this idea and pushed me to make an FNF Mod
+   - To my 'BEPIS' friends for supporting me throughout these years of development and just being overall really cool people
+   - To my 'Joki Joki' friends, and any classmates/acquaintances that were interested in the project - atleast even just for a brief moment
    - And to you who is reading this right now!
 
-**Big thanks to you all! This project would not have been possible if it weren't for all of you!**
+**A BIG thanks to you all! This project would not have been possible if it weren't for all of you!**

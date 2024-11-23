@@ -6,7 +6,6 @@ import Controls.KeyboardScheme;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxObject;
-import flixel.system.FlxSound;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -19,10 +18,6 @@ import lime.app.Application;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.math.FlxMath;
 import flash.system.System;
-
-#if windows
-import Discord.DiscordClient;
-#end
 
 using StringTools;
 
@@ -62,7 +57,7 @@ class MainMenuState extends MusicBeatMenu
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("In the Main Menu", null);
+			DiscordClient.changePresence("Perusing the Menus", null);
 		#end
 
 		confirmSound = new FlxSound();

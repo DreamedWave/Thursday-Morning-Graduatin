@@ -10,16 +10,11 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
-import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.net.curl.CURLCode;
-
-#if windows
-import Discord.DiscordClient;
-#end
 
 using StringTools;
 
@@ -312,7 +307,7 @@ class StoryMenuState extends MusicBeatMenu
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("In the Story Mode Menu", null);
+			DiscordClient.changePresence("Perusing the Menus", null, false, 'apppresence-default');
 		#end
 
 		weekLockedSound = FlxG.sound.load(Paths.sound('confirmMenuLocked'), 0.5);

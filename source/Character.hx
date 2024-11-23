@@ -103,6 +103,22 @@ class Character extends FlxSprite
 				playAnim('idle');
 
 
+			case 'joki-lmao':
+				tex = Paths.getSparrowAtlas('jokiFNF','shared', true);
+				frames = tex;
+				animation.addByPrefix('idle', 'jokiFNF idle', 12, false);
+
+				animation.addByPrefix('singUP', 'jokiFNF singUP', 14);
+				animation.addByPrefix('singRIGHT', 'jokiFNF singRIGHT', 14);
+				animation.addByPrefix('singDOWN', 'jokiFNF singDOWN', 14);
+				animation.addByPrefix('singLEFT', 'jokiFNF singLEFT', 14);
+
+				animation.addByPrefix('cheer', 'jokiFNF hey', 15, false);
+
+				loadOffsetFile(curCharacter);
+				playAnim('idle');
+
+
 			case 'priest-theborderpray':
 				tex = Paths.getSparrowAtlas('priest_theBorder','shared',true);
 				frames = tex;
@@ -380,7 +396,7 @@ class Character extends FlxSprite
 			{
 				case "demon-dad":
 					dadVar = 6;
-				case "selfsert-default":
+				case "selfsert-default" | "joki-lmao":
 					dadVar = 7.1;
 			}
 			if (holdTimer > Conductor.stepCrochet * dadVar * 0.001)

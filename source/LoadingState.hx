@@ -40,6 +40,11 @@ class LoadingState extends MusicBeatMenu
 	override function create()
 	{	
 		super.create();
+		
+		#if windows
+		// Updating Discord Rich Presence
+		DiscordClient.changePresence("Loading...", null);
+		#end
 
 		//Dumping of unused cache
 		Paths.clearUnusedMemory();
@@ -296,6 +301,7 @@ class LoadingState extends MusicBeatMenu
 								Paths.sound(key, pathLibrary);
 							case 'music':
 								Paths.music(key, 'shared');
+								trace('WOAGH! PATH.MUSIC!');
 							case 'music-in-week-library':
 								Paths.music(key, pathLibrary);
 							case 'video-music':
@@ -312,9 +318,9 @@ class LoadingState extends MusicBeatMenu
 							case 'adaptiveMus':
 								Paths.adaptiveMus(key);
 						}
-						#if debug
+						//#if debug
 						trace("Preloaded " + key + " (" + type + ")");
-						#end
+						//#end
 						screen.done++;
 					}
 					
