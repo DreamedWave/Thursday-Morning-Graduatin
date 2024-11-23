@@ -949,7 +949,7 @@ class MinigameState extends MusicBeatState
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("...", "(it wasn't your fault.)", false, "apppresence-dark");
+				DiscordClient.changePresence("(it wasn't your fault.)", null, false, "apppresence-dark");
 			#end
 
 			//camGame.shakeFlashSprite = false;
