@@ -5,6 +5,8 @@
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
+**P.S.:** Yes, I know there isn't any proper documentation as to what you need and how to compile this! It's because this is a currently WIP mod being worked on by a College Student studying Animation, I AM VERY BUSY BUT THERE WILL [maybe probably] BE COMPILE DOCUMENTATION IN THE FUTURE!!!
+
 # This Mod Contains/Will Contain:
  - **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
       - All containing 3 or more songs, each fully charted in all difficulties (Easy, Normal, and Hard)!
