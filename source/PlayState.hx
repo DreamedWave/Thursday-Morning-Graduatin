@@ -3760,6 +3760,13 @@ class PlayState extends MusicBeatState
 		//DC.beginProfile("NoteShits");
 		if (generatedMusic && startedCountdown)
 		{
+			//Updating of alphas
+			if (lagCompIcon.alpha > 0)
+			{
+				if (allowHealthModifiers)
+					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 10));
+			}
+
 			if (!paused && !endedSong)
 			{
 				holdArray = [controls.LEFT, controls.DOWN, controls.UP, controls.RIGHT];
@@ -4209,13 +4216,6 @@ class PlayState extends MusicBeatState
 					}
 				}
 			}*/
-
-			//Updating of alphas
-			if (lagCompIcon.alpha > 0)
-			{
-				if (allowHealthModifiers)
-					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 10));
-			}
 
 			//Particles and stage updates
 			switch (curStage)
