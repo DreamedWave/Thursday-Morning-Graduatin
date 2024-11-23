@@ -8,13 +8,13 @@
 **P.S.:** Yes, I know there isn't any proper documentation as to what you need and how to compile this! It's because this is a currently WIP mod being worked on by a College Student studying Animation, I AM VERY BUSY BUT THERE WILL [maybe probably] BE COMPILE DOCUMENTATION IN THE FUTURE!!!
 
 # This Mod Contains/Will Contain:
- - **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
+ - *[to be added]* **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
       - All containing 3 or more songs, each fully charted in all difficulties (Easy, Normal, and Hard)!
- - **Custom game mechanics**
+ - *[to be added]* **Custom game mechanics**
       - Some 'Weeks' change up the formula a little bit, and adds a few new mechanics that builds upon Friday Night Funkin's gameplay without jeopardizing it!
  - *[to be added]* **An *actual* Tutorial Level**
       - That teaches any new players how to play without 100 or so lines of text!
- - **Unlockable Freeplay Songs**
+ - *[to be added]* **Unlockable Freeplay Songs**
       - Aside from all the songs within every 'Week', there will be more songs available for you to find and unlock within Freeplay!
  - **Adaptive Music**
       - Most to playable story mode songs change and react to how well you're doing!
