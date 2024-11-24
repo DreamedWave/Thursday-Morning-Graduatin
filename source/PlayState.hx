@@ -664,8 +664,10 @@ class PlayState extends MusicBeatState
 			switch (SONG.player2)
 			{
 				case 'joki-lmao':
-					dadFollowOffset[0] -= 200;
+					dadFollowOffset[0] -= 280;
+					dadFollowOffset[0] += 100;
 					dad.y += 80;
+
 				case 'demon-dad':
 					dadFollowOffset[1] = -40;
 					camPos.x += 400;
@@ -8602,6 +8604,7 @@ class PlayState extends MusicBeatState
 										camHUD.fade(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000, false);
 									case 100:
 										camGame.visible = false;
+										camHUD.stopFX();
 										camHUD.flash(DisclaimerState.flashColor, Conductor.crochet / 1000);
 								}
 
