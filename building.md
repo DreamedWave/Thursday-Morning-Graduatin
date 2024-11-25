@@ -34,6 +34,7 @@
 	 - `haxelib git extension-webm https://github.com/KadeDev/extension-webm`
 	 - `lime rebuild extension-webm <ie. windows, macos, linux>`
 	 - `haxelib git flxsoundfilters https://github.com/TheZoroForce240/FlxSoundFilters`
+	 - `ADD THE FUCKING GIT VER OF YOUR MODIFIED DISCORD RPC THINGY`
 
 ### Required Dependencies
 You also need to install **Visual Studio 2019**. While installing it, *don't click on any of the options to install workloads*. Instead, go to the **individual components** tab and choose the following:
