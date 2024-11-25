@@ -154,7 +154,7 @@ class FunnySplash extends MusicBeatState //is musicbeatstate rather than musicbe
 
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("[Hello, World!]", null, false, 'apppresence-dark');
+			DiscordClient.changePresence("[Hello, World!]", null, 'apppresence-dark');
 		#end
 
 		Conductor.changeBPM(98);

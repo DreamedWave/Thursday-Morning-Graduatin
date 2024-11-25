@@ -200,7 +200,7 @@ class CachingState extends MusicBeatMenu
 
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("[Loading...]", null, true, "apppresence-loading");
+			DiscordClient.changePresence("[Loading...]", null, "apppresence-loading");
 		#end
 	}
 

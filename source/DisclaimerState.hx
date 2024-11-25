@@ -100,7 +100,7 @@ class DisclaimerState extends MusicBeatMenu
 		FlxTransitionableState.skipNextTransOut = true;
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("[Awaiting Input.]", null, false, "apppresence-loading");
+			DiscordClient.changePresence("[Awaiting Input]", null, "apppresence-loading");
 		#end
 	}
 
@@ -111,7 +111,7 @@ class DisclaimerState extends MusicBeatMenu
 	{
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("[Have fun~!]", null, false, "apppresence-loading");
+			DiscordClient.changePresence("[Have fun!]", null, "apppresence-loading");
 		#end
 
 		if (!wentOptions)
@@ -163,7 +163,7 @@ class DisclaimerState extends MusicBeatMenu
 						{
 							#if windows
 							if (FlxG.save.data.showPresence)
-								DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+								DiscordClient.changePresence("", null, 'apppresence-dark');
 							#end
 							FlxG.switchState(new TitleState());
 						}
@@ -192,7 +192,7 @@ class DisclaimerState extends MusicBeatMenu
 							FlxG.switchState(new OptionsMenu());
 							#if windows
 							if (FlxG.save.data.showPresence)
-								DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+								DiscordClient.changePresence("", null, 'apppresence-dark');
 							#end
 						}
 					});
@@ -223,7 +223,7 @@ class DisclaimerState extends MusicBeatMenu
 		{
 			#if windows
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("[!!!]", '(:3c)', false, 'apppresence-dark');
+				DiscordClient.changePresence("", null, 'apppresence-dark');
 			#end
 			if (!wentOptions)
 				FlxG.switchState(new TitleState());

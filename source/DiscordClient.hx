@@ -9,10 +9,13 @@ using StringTools;
 
 class DiscordClient
 {
+	static var startingTime:Int = 0;//Unchangable Variable
+
 	public function new()
 	{
 		if (FlxG.save.data.showPresence)
 		{
+			startingTime = Std.int(Date.now().getTime() / 1000);
 			trace("Discord Client starting...");
 			DiscordRpc.start({
 				clientID: "877073843028635670", //Discord app id
@@ -27,7 +30,8 @@ class DiscordClient
 				details: "",
 				state: null,
 				largeImageKey: 'apppresence-dark',
-				largeImageText: "Thursday Morning Graduatin'"
+				largeImageText: "Thursday Morning Graduatin'",
+				startTimestamp: startingTime
 			});
 
 			while (true)
@@ -36,11 +40,11 @@ class DiscordClient
 				sleep(2);
 				//trace("Discord Client Update");
 			}
-		}
 
-		DiscordRpc.shutdown();
-		trace("shut down..?");
-		//trace AH THIS IS SMART CAUSE IT LIKE STOPS AND SHUTS DOWN WHEN IT LIKE TURNS FALSE DAMN
+			DiscordRpc.shutdown();
+			trace("shut down..?");
+			//trace AH THIS IS SMART CAUSE IT LIKE STOPS AND SHUTS DOWN WHEN IT LIKE TURNS FALSE DAMN
+		}
 	}
 
 	public static function shutdown()
@@ -84,15 +88,9 @@ class DiscordClient
 		}
 	}
 
-	public static function changePresence(details:String, state:Null<String>, ?hasTimeShit:Bool, ?endTimestamp:Float, ?givenLargeImageKey:String = "apppresence-default", ?givenSmallImageKey:String, ?givenSmallImageText:String)
+	public static function changePresence(details:String, state:Null<String>, ?givenLargeImageKey:String = "apppresence-default", ?givenSmallImageKey:String, ?givenSmallImageText:String)
 	{
-		/*var startTimestamp:Float = 0;
-		if (hasTimeShit)
-			startTimestamp = Date.now().getTime();
-
-		if (hasTimeShit && endTimestamp > 0)
-			endTimestamp = startTimestamp + endTimestamp;*/
-
+		//no timestamp bull shit
 		DiscordRpc.presence(
 		{
 			details: details,
@@ -101,12 +99,8 @@ class DiscordClient
 			largeImageText: "Thursday Morning Graduatin'",
 			smallImageKey: givenSmallImageKey,
 			smallImageText: givenSmallImageText,
-			// Obtained times are in milliseconds so they are divided so Discord can use it
-			//startTimestamp : Std.int(startTimestamp / 1000),
-       	    //endTimestamp : Std.int(endTimestamp / 1000)
+			startTimestamp: startingTime
 		});
-
-		//trace('Discord RPC Updated. Arguments: $details, $state, $smallImageKey, $hasTimeShit, $endTimestamp');
 	}
 }
 #end

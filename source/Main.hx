@@ -329,7 +329,7 @@ class Main extends Sprite
 
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Game Crashed!", "...whoops", false, "apppresence-crashed", "_tinyico-crash", ":skull_emoji:");
+			DiscordClient.changePresence("Game Crashed!", "...whoops", "apppresence-crashed", "_tinyico-crash", ":skull_emoji:");
 		#end
 		
 		var errMsg:String = "";

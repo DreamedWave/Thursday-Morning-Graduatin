@@ -307,7 +307,7 @@ class StoryMenuState extends MusicBeatMenu
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Perusing the Menus", null, false, 'apppresence-default');
+			DiscordClient.changePresence("Perusing the Menus", null, 'apppresence-default');
 		#end
 
 		weekLockedSound = FlxG.sound.load(Paths.sound('confirmMenuLocked'), 0.5);

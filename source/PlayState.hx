@@ -664,8 +664,8 @@ class PlayState extends MusicBeatState
 			switch (SONG.player2)
 			{
 				case 'joki-lmao':
-					dadFollowOffset[0] -= 280;
-					dadFollowOffset[0] += 100;
+					dadFollowOffset[0] += 120;
+					dadFollowOffset[1] += 200;
 					dad.y += 80;
 
 				case 'demon-dad':
@@ -3269,9 +3269,7 @@ class PlayState extends MusicBeatState
 							"Score: " + songScore
 							+ " | RIPs: " + (misses + slips)
 							+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-							+ "%)",
-							true, 
-							songLength - Conductor.songPosition - FlxG.save.data.offset + songOffset);
+							+ "%)");
 					}
 				}
 				#end
@@ -5927,9 +5925,7 @@ class PlayState extends MusicBeatState
 							"Score: " + songScore
 							+ " | RIPs: " + (misses + slips)
 							+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-							+ "%)", 
-							true,
-							songLength - Conductor.songPosition - FlxG.save.data.offset + songOffset);
+							+ "%)");
 					}
 					#end
 			}
@@ -6954,9 +6950,7 @@ class PlayState extends MusicBeatState
 					"Score: " + songScore
 					+ " | RIPs: " + (misses + slips)
 					+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-					+ "%)", 
-					true,
-					songLength - Conductor.songPosition - FlxG.save.data.offset + songOffset);
+					+ "%)");
 			}
 			#end
 		}
@@ -8601,11 +8595,12 @@ class PlayState extends MusicBeatState
 									case 98:
 										clearSubtitles();
 										boyfriend.playAnim('awkward', false);
-										camHUD.fade(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000, false);
+										camEXT.fade(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000, false);
 									case 100:
 										camGame.visible = false;
-										camHUD.stopFX();
-										camHUD.flash(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000);
+										camHUD.visible = false;
+										camEXT.stopFX();
+										camEXT.flash(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000);
 								}
 
 							case 'Mic Test':

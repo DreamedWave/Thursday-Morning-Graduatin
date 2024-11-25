@@ -83,7 +83,7 @@ class MinigameState extends MusicBeatState
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Somewhere Familiar...", null, false, "apppresence-strange");
+			DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
 		#end
 		
 		if (FlxG.sound.music != null)
@@ -624,7 +624,7 @@ class MinigameState extends MusicBeatState
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going.)", true, defaultEscapeTime * 1000, "apppresence-strange");
+				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going.)", "apppresence-strange");
 			#end
 
 			escapeTimer = new FlxTimer().start(defaultEscapeTime, function(tmr:FlxTimer)
@@ -949,7 +949,7 @@ class MinigameState extends MusicBeatState
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("(it wasn't your fault.)", null, false, "apppresence-dark");
+				DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
 			#end
 
 			//camGame.shakeFlashSprite = false;

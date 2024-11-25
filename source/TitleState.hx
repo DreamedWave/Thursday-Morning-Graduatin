@@ -182,7 +182,7 @@ class TitleState extends MusicBeatMenu
 			#if windows
 			// Updating Discord Rich Presence
 			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("Perusing the Menus", "('" + curWacky[0] + ' ' + curWacky[1] + "')", false, 'apppresence-default');
+				DiscordClient.changePresence("Perusing the Menus", "('" + curWacky[0] + ' ' + curWacky[1] + "')", 'apppresence-default');
 			#end
 
 			trace('Hello There!');
@@ -833,7 +833,7 @@ class TitleState extends MusicBeatMenu
 			case 2:	
 				#if windows
 				// Updating Discord Rich Presence
-				DiscordClient.changePresence("[Goodbye, World.]", null, false, 'apppresence-dark');
+				DiscordClient.changePresence("[Goodbye, World]", null, 'apppresence-dark');
 				#end
 
 				didThePress = true;	

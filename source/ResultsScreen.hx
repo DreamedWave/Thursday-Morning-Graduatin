@@ -261,7 +261,7 @@ class ResultsScreen extends MusicBeatSubstate
 		if (FlxG.save.data.showPresence)
         {
             var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + (PlayState.isStoryMode ? Ratings.GenerateLetterRank(PlayState.campaignAccuracy, PlayState.instance.keeledOver) : Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver)) + ' (' + (PlayState.isStoryMode ? HelperFunctions.truncateFloat(PlayState.campaignAccuracy, 2) : HelperFunctions.truncateFloat(PlayState.instance.accuracy,2)) + '%)]';
-			DiscordClient.changePresence("The Results!", funnyTextLol, false);
+			DiscordClient.changePresence("The Results!", funnyTextLol);
         }
 		#end
 

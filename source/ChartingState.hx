@@ -343,7 +343,7 @@ class ChartingState extends MusicBeatState
 		
 		#if windows
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Charting a Song...", null, true);
+			DiscordClient.changePresence("Charting a Song...", null);
 		#end
 
 		new FlxTimer().start(300, function(tmr:FlxTimer)
