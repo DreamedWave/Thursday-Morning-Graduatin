@@ -1,5 +1,7 @@
 ﻿# Building Thursday Morning Graduatin'
 
+(This is literally just a modified version of Kade Engine 1.6's Building Guide but we ball!!!)
+
 **Please note** that these instructions are for compiling/building Thursday Morning Graduatin'. If you just want to play the mod, just download it from [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)!
 
 **Also note**: you should be familiar with the commandline. If not, read this [quick guide by ninjamuffin](https://ninjamuffin99.newgrounds.com/news/post/1090480).
