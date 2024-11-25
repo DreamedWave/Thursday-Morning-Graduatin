@@ -5391,8 +5391,8 @@ class PlayState extends MusicBeatState
 							if (prevRating.color != 0xFFD09A9C)
 							{
 								prevRating.color = 0xFFB1A9C3;
-								if (prevNum.alpha == 1)
-									prevNum.alpha = 0.5;
+								if (prevRating.alpha == 1)
+									prevRating.alpha = 0.5;
 							}
 							else
 								prevRating.color = 0xFFD09A9C;
@@ -8605,7 +8605,7 @@ class PlayState extends MusicBeatState
 									case 100:
 										camGame.visible = false;
 										camHUD.stopFX();
-										camHUD.flash(DisclaimerState.flashColor, Conductor.crochet / 1000);
+										camHUD.flash(DisclaimerState.flashColor, Conductor.crochet * 2 / 1000);
 								}
 
 							case 'Mic Test':
