@@ -5,7 +5,7 @@
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
-**P.S.:** Yes, I know there isn't any proper documentation as to what you need and how to compile this! It's because this is a currently WIP mod being worked on by a College Student studying Animation, I AM VERY BUSY BUT THERE WILL [maybe probably] BE COMPILE DOCUMENTATION IN THE FUTURE!!!
+To find out how to be able to build this mod, click [this](#How to Build) to skip to the building guide!
 
 # This Mod Contains/Will Contain:
  - *[to be added]* **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
