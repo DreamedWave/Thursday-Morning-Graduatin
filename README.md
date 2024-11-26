@@ -15,10 +15,10 @@ To find out how to be able to build this mod, click [this](https://github.com/Dr
  - *[to be added]* **An *actual* Tutorial Level**
       - That teaches any new players how to play without 100 or so lines of text!
  - *[to be added]* **Unlockable Freeplay Songs**
-      - Aside from all the songs within every 'Week', there will be more songs available for you to find and unlock within Freeplay!
+      - Aside from all the songs within every Story Part, there will be more songs available for you to find and unlock within Freeplay!
  - **Adaptive Music**
       - Most to playable story mode songs change and react to how well you're doing!
-      - For example: some tracks' instrumentals become more suspenseful when your health reaches critical levels.
+      - For example: some tracks' instrumentals become more suspenseful the more your health lowers.
  - *[to be added]* **Custom scoring and ranking system**
       - To keep the fun and casual aspect, this mod implements it's own take on a scoring and ranking system, mainly inspired by the system implemented in current day FNF!
       - Accuracy is now only an internal value, with it being only used to calculate gameplay-related events. Instead, your song clear percentage is determined by your note ratings!
@@ -32,7 +32,7 @@ To find out how to be able to build this mod, click [this](https://github.com/Dr
  - **A few Backend Fixins/Rewrites**
       - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
       - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
-      - Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB
+      - `(Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB)`
  - **And many more!**
 <br></br>
 
@@ -104,7 +104,7 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  **Art Inspirations**
    - [Temmie Chang](https://www.youtube.com/Temmiechang)
    - [PhantomArcade](https://phantomarcade.newgrounds.com/)
-   - [Issbrokie & Shteppi](https://www.instagram.com/shteppi/)
+   - [Issbrokie/Shteppi](https://www.instagram.com/shteppi/)
    - Femtanyl
    - Tour De Pizza
    - SearingCircuits
