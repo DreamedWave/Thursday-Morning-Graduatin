@@ -9,7 +9,7 @@
 **Also ALSO note**: This is unfortunately only for **Windows** only, as I unfortunately don't really have the time nor resources to mod for multiple platforms as I am just one person who is currently studying in college... Sorry!
 
 ## Dependencies
- 1. [Install Haxe 4.1.5](https://haxe.org/download/version/4.1.5/). You should use 4.1.5 instead of the latest version because the foundations of [this mod](https://github.com/DreamedWave/Thursday-Morning-Graduatin) (Kade Engine 1.6) was built using this verwsion of Haxe, and updating it would be too much of a timesink for this mod (which already is 3 years or so in development btw!).
+ 1. [Install Haxe 4.1.5](https://haxe.org/download/version/4.1.5/). You should use 4.1.5 instead of the latest version because Kade Engine, the foundations of this mod, was built using this version of Haxe, and updating it would be too much of a timesink for this mod (which already is 3 years or so in development!).
  2. After installing Haxe, [Install HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/).
  3. Install `git`.
 	 - Windows: install from the [git-scm](https://git-scm.com/downloads) website.
