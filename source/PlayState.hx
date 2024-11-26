@@ -138,8 +138,8 @@ class PlayState extends MusicBeatState
 	var specilNoteHitSFXGroup:FlxSoundGroup;
 
 	//Sound filters
-	var musicFilter:FlxSoundFilter;
-	var musicFilterLowpassTween:FlxTween;
+	var lowpassFilter:FlxSoundFilter;
+	var lowpassFilterTween:FlxTween;
 
 	//Note Hit SFX Shits
 	public static var hitsoundType:String = "default"; //this gets set by loadingState everytime so uhh dw abt it lol
@@ -549,7 +549,7 @@ class PlayState extends MusicBeatState
 		//if (PlayState.SONG.needsVoices)
 			//Paths.voices(key);
 		
-		lowHPHeartBeat = new FlxSound().loadEmbedded(Paths.sound('lowHP'));
+		lowHPHeartBeat = new FlxSound();
 		styleSound = new FlxSound().loadEmbedded(Paths.sound('styleOnEm'));
 		FlxG.sound.list.add(lowHPHeartBeat);
 		FlxG.sound.list.add(styleSound);
@@ -1247,9 +1247,9 @@ class PlayState extends MusicBeatState
 			grabbedScreen.dispose();
 		}
 
-		musicFilter = new FlxSoundFilter();
-		musicFilter.filterType = FlxSoundFilterType.LOWPASS;
-		musicFilter.gainHF = 1;
+		lowpassFilter = new FlxSoundFilter();
+		lowpassFilter.filterType = FlxSoundFilterType.LOWPASS;
+		lowpassFilter.gainHF = 1;
 
 		//UI Vignettes
 		//The detail thing that appears when you get shot
@@ -3607,11 +3607,12 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			//Sound/Music Filter Shit! :33
-			if (musicFilter != null)
+			//Sound/Music Filter List Shit! :33
+			if (lowpassFilter != null)
 			{
-				musicFilter.applyFilter(FlxG.sound.music);
-				musicFilter.applyFilter(miscs);
+				lowpassFilter.applyFilter(FlxG.sound.music);
+				lowpassFilter.applyFilter(miscs);
+				lowpassFilter.applyFilter(lowHPHeartBeat);
 			}
 		}
 
@@ -4281,8 +4282,8 @@ class PlayState extends MusicBeatState
 			}
 
 			//Low-Health Suspense
-			lowHealthEffectVolume = 1 - health;
-			lowHPHeartBeat.volume = FlxMath.lerp(lowHealthEffectVolume, lowHPHeartBeat.volume, calculateLerpTime(elapsed, 15));
+			lowHPEffectVol = 1 - health;
+			lowHPHeartBeat.volume = FlxMath.lerp(lowHPEffectVol, lowHPHeartBeat.volume, calculateLerpTime(elapsed, 15));
 			
 			if (lowHPOverlay.alpha > 0)
 			{
@@ -4290,7 +4291,7 @@ class PlayState extends MusicBeatState
 				if (FlxG.save.data.flashing)
 					lowHPOverlay.alpha = FlxMath.lerp(0, lowHPOverlay.alpha, calculateLerpTime(elapsed, 4.5 * (Conductor.bpm * 0.01)));
 				else
-					lowHPOverlay.alpha = FlxMath.lerp(lowHealthEffectVolume, lowHPOverlay.alpha, calculateLerpTime(elapsed, 6 * (Conductor.bpm * 0.01)));
+					lowHPOverlay.alpha = FlxMath.lerp(lowHPEffectVol, lowHPOverlay.alpha, calculateLerpTime(elapsed, 6 * (Conductor.bpm * 0.01)));
 			}
 
 			if (SONG.needsAdaptiveMus && !skippingIntro)
@@ -4304,7 +4305,7 @@ class PlayState extends MusicBeatState
 						if (health < 1)
 						{
 							FlxG.sound.music.volume = FlxMath.lerp((health - 0.3), FlxG.sound.music.volume, calculateLerpTime(elapsed, 15));
-							instLowHP.volume = FlxMath.lerp((lowHealthEffectVolume + 0.3), instLowHP.volume, calculateLerpTime(elapsed, 15));
+							instLowHP.volume = FlxMath.lerp((lowHPEffectVol + 0.3), instLowHP.volume, calculateLerpTime(elapsed, 15));
 						}
 						else if (health >= 1 && FlxG.sound.music.volume < 1)
 						{
@@ -4669,16 +4670,16 @@ class PlayState extends MusicBeatState
 			causeOfDeath = 'ate-bullet';
 
 			//Cool Lowpass Shit
-			musicFilter.gainHF = 0;
-			if (musicFilterLowpassTween != null)
-				musicFilterLowpassTween.cancel();
-			musicFilterLowpassTween = FlxTween.tween(musicFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
+			lowpassFilter.gainHF = 0;
+			if (lowpassFilterTween != null)
+				lowpassFilterTween.cancel();
+			lowpassFilterTween = FlxTween.tween(lowpassFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
 				{
 					ease: FlxEase.smootherStepInOut,
 					startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
 					onComplete: function(twn:FlxTween) 
 					{
-						musicFilterLowpassTween = null;
+						lowpassFilterTween = null;
 					}
 				});
 			
@@ -6674,6 +6675,13 @@ class PlayState extends MusicBeatState
 
 	function literallyFuckingDie():Void
 	{
+		if (songStarted)
+		{
+			vocals.stop();
+			miscs.stop();
+			musicGroup.stop();
+		}
+		
 		if (resetTextTwn != null)
 			resetTextTwn.cancel();
 
@@ -6700,13 +6708,6 @@ class PlayState extends MusicBeatState
 		campaignDeaths++;
 		songDeaths++;
 		hasReset = true;
-
-		if (songStarted)
-		{
-			vocals.stop();
-			miscs.stop();
-			musicGroup.stop();
-		}
 
 		if (!PlayStateChangeables.Optimize)
 			openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
@@ -6979,7 +6980,7 @@ class PlayState extends MusicBeatState
 
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
-	var lowHealthEffectVolume:Float = 0;
+	var lowHPEffectVol:Float = 0;
 
 	function doSubtitleShit():Void
 	{
@@ -9698,13 +9699,15 @@ class PlayState extends MusicBeatState
 					case "Mic Test" | "Sudden Confrontation" | "Sprouting Irritation" | "Striking Tribulation":
 						//do NATHIN
 					default:
-						if (health < 1 && !midsongCutscene && allowHeartBeatSounds && !showedResults && !inCutscene && !cannotDie && allowHealthModifiers)
+						if (health < 1 && lowHPEffectVol > 0 && !midsongCutscene && allowHeartBeatSounds && !showedResults && !inCutscene && !cannotDie && allowHealthModifiers)
 						{
 							if (Conductor.bpm <= 250)
 							{
 								if (health >= 0.7 && curBeat % 4 == 0 || health > 0.5 && curBeat % 2 == 0 || health < 0.5)
 								{
-									lowHPHeartBeat.play(true);
+									if (lowHPHeartBeat.playing)
+										lowHPHeartBeat.stop();
+									lowHPHeartBeat = FlxG.sound.play(Paths.sound('lowHP'), lowHPEffectVol);
 									lowHPHeartBeat.set_pitch(FlxG.random.float(0.85, 1.15));
 									/*#if cpp
 									@:privateAccess
@@ -9713,7 +9716,7 @@ class PlayState extends MusicBeatState
 									}
 									#end*/
 									if (FlxG.save.data.flashing)
-										lowHPOverlay.alpha = lowHealthEffectVolume;
+										lowHPOverlay.alpha = lowHPEffectVol;
 									//trace ("Played Low HP Noise");
 								}
 							}
@@ -9721,7 +9724,9 @@ class PlayState extends MusicBeatState
 							{
 								if (health >= 0.7 && curBeat % 4 == 0 || curBeat % 2 == 0)
 								{
-									lowHPHeartBeat.play(true);
+									if (lowHPHeartBeat.playing)
+										lowHPHeartBeat.stop();
+									lowHPHeartBeat = FlxG.sound.play(Paths.sound('lowHP'), lowHPEffectVol);
 									lowHPHeartBeat.set_pitch(FlxG.random.float(0.85, 1.15));
 									/*#if cpp
 									@:privateAccess
@@ -9730,11 +9735,11 @@ class PlayState extends MusicBeatState
 									}
 									#end
 									if (FlxG.save.data.flashing)
-										lowHPOverlay.alpha = lowHealthEffectVolume;*/
+										lowHPOverlay.alpha = lowHPEffectVol;*/
 									//trace ("Played Low HP Noise || BPM > 300");
 								}
 							}
-							trace ('lowHPVOL ' + lowHealthEffectVolume);
+							trace ('lowHPVOL ' + lowHPHeartBeat.volume);
 						}
 				}
 

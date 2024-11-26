@@ -133,30 +133,54 @@ class FlxSoundTray extends Sprite
 			{
 				_timer -= elapsedMS / 1000;
 			}
-			else if (!isRetreating)
+			else 
 			{
-				if (trayTween != null)
-					trayTween.cancel();
+				if (!isRetreating)
+				{
+					if (trayTween != null)
+						trayTween.cancel();
 
-				isRetreating = true;
-				trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
-					{
-						ease: FlxEase.cubeIn,
-						onComplete: function(twn:FlxTween)
+					isRetreating = true;
+					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
 						{
-							trayTween = null;
-							visible = false;
-							active = false;
-					
-							// Save sound preferences
-							if (FlxG.save.isBound)
+							ease: FlxEase.cubeIn,
+							onComplete: function(twn:FlxTween)
 							{
-								FlxG.save.data.mute = FlxG.sound.muted;
-								FlxG.save.data.volume = FlxG.sound.volume;
-								FlxG.save.flush();
+								trayTween = null;
+								visible = false;
+								active = false;
+						
+								// Save sound preferences
+								if (FlxG.save.isBound)
+								{
+									FlxG.save.data.mute = FlxG.sound.muted;
+									FlxG.save.data.volume = FlxG.sound.volume;
+									FlxG.save.flush();
+								}
 							}
-						}
-					});
+						});
+				}
+				else if (visible && !trayTween.active)
+				{
+					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
+						{
+							ease: FlxEase.smootherStepIn,
+							onComplete: function(twn:FlxTween)
+							{
+								trayTween = null;
+								visible = false;
+								active = false;
+						
+								// Save sound preferences
+								if (FlxG.save.isBound)
+								{
+									FlxG.save.data.mute = FlxG.sound.muted;
+									FlxG.save.data.volume = FlxG.sound.volume;
+									FlxG.save.flush();
+								}
+							}
+						});
+				}
 			}
 		}
 	}
@@ -187,13 +211,13 @@ class FlxSoundTray extends Sprite
 
 			_timer = 1.5; //in seconds
 
-			//Cancel any tween that might be happening right meow
-			if (trayTween != null)
-				trayTween.cancel();
-
 			//Only tween if shit is about to hide, otherwise, nothing happens
 			if (isRetreating)
 			{
+				//Cancel any tween that might be happening right meow
+				if (trayTween != null)
+					trayTween.cancel();
+
 				isRetreating = false;
 				visible = true;
 				active = true;

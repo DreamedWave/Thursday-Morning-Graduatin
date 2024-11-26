@@ -171,7 +171,7 @@ class LoadingState extends MusicBeatMenu
 						preloadList.set(i, 'video');
 				}
 				
-				var gameplaySFX:Array<String> = ["skipSongIntro", "intro3", "intro2", "intro1", "introGo", "missnote1", "missnote2", "missnote3", "enemyMiss1", "enemyMiss2", "enemyMiss3", "GitarooFail", "GitarooPress", "GitarooHover", "deathsound-practice", "styleOnEm", "pauseMenu", "comboBreak1", "comboBreak2", "comboBreak3", "comboBreakBig1", "comboBreakBig2", "comboBreakBig3"]; //THANK YOU STILL BSOD#2524 FROM HAXE DISCORD SERVER!!!!
+				var gameplaySFX:Array<String> = ["skipSongIntro", "intro3", "intro2", "intro1", "introGo", "missnote1", "missnote2", "missnote3", "enemyMiss1", "enemyMiss2", "enemyMiss3", "GitarooFail", "GitarooPress", "GitarooHover", "deathsound-practice", "styleOnEm", "pauseMenu", "comboBreak1", "comboBreak2", "comboBreak3", "comboBreakBig1", "comboBreakBig2", "comboBreakBig3", "lowHP"]; //THANK YOU STILL BSOD#2524 FROM HAXE DISCORD SERVER!!!!
 				for (i in gameplaySFX) 
 					preloadList.set(i, 'sound');
 
