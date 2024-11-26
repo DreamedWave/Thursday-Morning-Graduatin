@@ -1,6 +1,6 @@
 ﻿# Building Thursday Morning Graduatin'
 
-(This is literally just a modified version of Kade Engine 1.6's Building Guide but we ball!!!)
+(This is literally just a modified version of Kade Engine 1.6's Building Guide, but it still applies so here goes!)
 
 **Please note** that these instructions are for compiling/building Thursday Morning Graduatin'. If you just want to play the mod, just download it from [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ)!
 
@@ -34,7 +34,6 @@
 	 - `haxelib git extension-webm https://github.com/KadeDev/extension-webm`
 	 - `lime rebuild extension-webm <ie. windows, macos, linux>`
 	 - `haxelib git flxsoundfilters https://github.com/TheZoroForce240/FlxSoundFilters`
-	 - `ADD THE FUCKING GIT VER OF YOUR MODIFIED DISCORD RPC THINGY`
 
 ### Required Dependencies
 You also need to install **Visual Studio 2019**. While installing it, *don't click on any of the options to install workloads*. Instead, go to the **individual components** tab and choose the following:
@@ -49,7 +48,7 @@ You also need to install **Visual Studio 2019**. While installing it, *don't cli
 This will install about 7 GB of crap, but is necessary for a build to work at all.
 
 ## Building
-Finally, we are ready to build.
+Finally, we are ready to build!
 
 - Open Windows Powershell in this current folder (e.g. `within 'Thursday-Morning-Graduatin', outside of folders like 'source/'`).
 - Run `lime build windows` (if you'd like to not include trace messages, write `lime build windows -no-traces` instead).
