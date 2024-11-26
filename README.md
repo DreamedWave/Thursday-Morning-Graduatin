@@ -104,6 +104,10 @@ Links: **[itch.io page](https://ninja-muffin24.itch.io/funkin) ⋅ [Newgrounds](
  **Art Inspirations**
    - [Temmie Chang](https://www.youtube.com/Temmiechang)
    - [PhantomArcade](https://phantomarcade.newgrounds.com/)
+   - [Issbrokie & Shteppi](https://www.instagram.com/shteppi/)
+   - Femtanyl
+   - Tour De Pizza
+   - SearingCircuits
 <br></br>
 
  **And Lastly (but not the least)**
