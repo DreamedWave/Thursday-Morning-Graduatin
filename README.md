@@ -5,7 +5,7 @@
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
-To find out how to be able to build this mod, click [this](https://github.com/DreamedWave/Thursday-Morning-Graduatin/blob/main/building.md)!
+To find out how to be able to build this mod, click [this](https://github.com/DreamedWave/Thursday-Morning-Graduatin/blob/main/BUILDING-GUIDE.md)!
 
 # This Mod Contains/Will Contain:
  - *[to be added]* **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
