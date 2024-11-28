@@ -87,7 +87,8 @@ class TestState extends MusicBeatState
 
 		instance = this;
 		
-		FlxG.game.soundTray.silent = true;
+		//Bruh this caused me so much stress - my ass thought openal sound integration was fucking up sht but it was just this LMFAO
+		//FlxG.game.soundTray.silent = true;
 
 		//Update Saves
 		SaveData.initSave();

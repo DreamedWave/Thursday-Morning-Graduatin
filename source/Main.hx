@@ -77,13 +77,9 @@ class Main extends Sprite
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
 
 		if (stage != null)
-		{
 			init();
-		}
 		else
-		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
-		}
 	}
 
 	private function init(?E:Event):Void
@@ -98,6 +94,12 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		//Bind Save before we create the game
+		// Use a customised save path that doesn't follow Project.xml bcuz we cool like that :3
+		//Format:      .SOL filename            .SOL location
+		//It still makes a new folder for some reason???
+		FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
+
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
@@ -109,7 +111,6 @@ class Main extends Sprite
 			gameWidth = Math.ceil(stageWidth / zoom);
 			gameHeight = Math.ceil(stageHeight / zoom);
 		}
-
 
 		initialState = FunnySplash;
 		#if cpp
@@ -388,7 +389,7 @@ class Main extends Sprite
 		path = "./_logs/" + "TMG-CRASH_" + dateNow + ".txt";
 
 		errMsg = "Thursday Morning Graduatin' has crashed!\n(so here's what went wrong):\n\n";
-		errMsg += "TMG Version: " + Lib.application.meta["version"] + "\n";
+		errMsg += "TMG Version: " + gameVer + "\n";
 
 		for (stackItem in callStack)
 		{

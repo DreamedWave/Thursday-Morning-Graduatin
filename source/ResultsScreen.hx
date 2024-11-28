@@ -119,7 +119,7 @@ class ResultsScreen extends MusicBeatSubstate
             else
             {
                 //Make the player feel bad by playing sad music if the accuracy is low as hell LMAO
-                Conductor.changeBPM(115);
+                Conductor.changeBPM(105);
                 music.loadEmbedded(Paths.music('song_end/resultsScreen_failed'), true, true);
                 music.volume = 0.1;
                 music.play(false);
