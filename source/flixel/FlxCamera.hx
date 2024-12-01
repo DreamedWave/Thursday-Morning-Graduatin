@@ -1379,8 +1379,27 @@ class FlxCamera extends FlxBasic
 					if (scrollShakeTween != null)
 						scrollShakeTween.cancel();
 
-					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {type: ONESHOT, ease: FlxEase.circOut, 
-						onComplete: function (twn:FlxTween){scrollShakeTween = null;}});
+					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {
+						type: ONESHOT, 
+						ease: FlxEase.circOut, 
+						onUpdate: function (twn:FlxTween)
+						{
+							if (target == null)
+							{
+								scroll.x = x + scrollShakeX;
+								scroll.y = y + scrollShakeY;
+							}
+						}, 
+						onComplete: function (twn:FlxTween)	
+						{	
+							if (target == null)
+							{
+								scroll.x = x;
+								scroll.y = y;
+								scrollShakeTween = null;
+							}
+						}
+					});
 					nextScrollShakeX = 0;
 					nextScrollShakeY = 0;
 				}
@@ -1403,7 +1422,7 @@ class FlxCamera extends FlxBasic
 			}
 			else 
 			{
-				if (target != null && !shakeFlashSprite)
+				if (!shakeFlashSprite)
 				{
 					if (scrollShakeTween != null && scrollShakeTween.active)
 						scrollShakeTween.cancel();
@@ -1443,6 +1462,13 @@ class FlxCamera extends FlxBasic
 							nextScrollShakeY *= FlxG.height / 720;
 							scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
 						}
+					}
+
+					//Manually Shake the follow here if target is null
+					if (target == null)
+					{
+						scroll.x = y + scrollShakeX;
+						scroll.y = x + scrollShakeY;
 					}
 				}
 				else

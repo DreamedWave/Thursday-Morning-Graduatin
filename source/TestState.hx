@@ -58,6 +58,7 @@ import flixel.util.FlxAxes;
 
 using StringTools;
 
+//Quick and dirty state for me to test shit
 class TestState extends MusicBeatState
 {
 	var tauntRating:FlxText;
@@ -77,6 +78,12 @@ class TestState extends MusicBeatState
 	var frameRateCap:Int = 1;
 
 	public static var instance:TestState;
+
+	var funnyAlphabetTesterBold:Alphabet;
+	var funnyAlphabetTesterSkinny:Alphabet;
+	var blackScreen:FlxSprite;
+
+	var pageNumberLOL:FlxText;
 
 	override public function create():Void
 	{
@@ -147,6 +154,12 @@ class TestState extends MusicBeatState
 		instructionsLOL.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3, 1);
 		instructionsLOL.cameras = [camEXT];
 		add(instructionsLOL);
+
+		blackScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.BLACK);
+		blackScreen.alpha = 0.5;
+		blackScreen.visible = false;
+		blackScreen.cameras = [camEXT];
+		add(blackScreen);
 		
 		tauntRating = new FlxText(0, 0);
 		tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
@@ -156,6 +169,17 @@ class TestState extends MusicBeatState
 		tauntRating.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3, 1);
 		tauntRating.cameras = [camEXT];
 		add(tauntRating);
+
+		pageNumberLOL = new FlxText(0, 0);
+		pageNumberLOL.text = "Pg. " + testPage + '\n(Z / X to change)';
+		pageNumberLOL.antialiasing = FlxG.save.data.antialiasing;
+		pageNumberLOL.setFormat(Paths.font("VCR OSD Mono"), 20, RIGHT);
+		//pageNumberLOL.screenCenter();
+		pageNumberLOL.color = FlxColor.CYAN;
+		pageNumberLOL.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3, 1);
+		pageNumberLOL.x = (FlxG.width - pageNumberLOL.width) - 5;
+		pageNumberLOL.cameras = [camEXT];
+		add(pageNumberLOL);
 
 		//Cameradata
 		camFollow = new FlxObject(0, 0, 1, 1);
@@ -167,12 +191,29 @@ class TestState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON, 1);
 
 		//For CamHUD to fix itself after shake
-		var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
-		camHUDFollow.screenCenter();
-		camHUD.focusOn(camHUDFollow.getPosition());
-		camHUD.follow(camHUDFollow, LOCKON, 1);
+		//var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
+		//camHUDFollow.screenCenter();
+		//camHUD.focusOn(camHUDFollow.getPosition());
+		//camHUD.follow(camHUDFollow, LOCKON, 1);
+
+		funnyAlphabetTesterBold = new Alphabet(0, 0, '', true);
+		funnyAlphabetTesterBold.screenCenter();
+		funnyAlphabetTesterBold.cameras = [camEXT];
+		funnyAlphabetTesterBold.visible = false;
+		add(funnyAlphabetTesterBold);
+		
+		funnyAlphabetTesterSkinny = new Alphabet(0, 0, '', false);
+		funnyAlphabetTesterSkinny.screenCenter();
+		funnyAlphabetTesterSkinny.cameras = [camEXT];
+		funnyAlphabetTesterSkinny.visible = false;
+		add(funnyAlphabetTesterSkinny);
 
 		super.create();
+
+		//whatthefuck
+		var fullFuckingDocument:String = Assets.getText(Paths.txt('data/allTypableCharacters'));
+		fuckAssAllTypableCharactersArray = fullFuckingDocument.split(' ');
+		trace(fuckAssAllTypableCharactersArray);
 
 		Paths.clearUnusedMemory();
 	}
@@ -188,6 +229,11 @@ class TestState extends MusicBeatState
 	var shitPlaceholder:Bool = false;
 	var PLACEHOLDERTESTFILTERBOOLEAN:Bool = false;
 	var funnyFilter:FlxSoundFilter;
+	var testPage:Int = 0; //a page system lol
+	//what the fuck
+	var fuckAssAllTypableCharactersArray:Array<String> = [];
+	var fuckAssAllTypCharCount:Int = 0;
+	var funnyTextLmao:String = '';
 
 	override public function update(elapsed:Float)
 	{
@@ -196,152 +242,6 @@ class TestState extends MusicBeatState
 
 		if (!loseControl)
 		{
-			if (FlxG.keys.justPressed.LBRACKET)
-			{
-				if (!FlxG.keys.pressed.SHIFT)
-					defaultCamZoom += 0.1;
-				else
-					defaultCamZoom += 0.025;
-				loseControl = true;
-			}
-			else if (FlxG.keys.justPressed.RBRACKET)
-			{
-				if (!FlxG.keys.pressed.SHIFT)
-					defaultCamZoom -= 0.1;
-				else
-					defaultCamZoom -= 0.025;
-				loseControl = true;
-			}
-
-			if (FlxG.keys.justPressed.COMMA)
-			{
-				if (frameRateCap > 1)
-				{
-					frameRateCap--;
-					tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
-				}
-			}
-			else if (FlxG.keys.justPressed.PERIOD)
-			{
-				if (frameRateCap < 10)
-				{
-					frameRateCap++;
-					tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
-				}
-			}
-			
-			if (FlxG.keys.justPressed.ONE)
-			{
-				if (stageFloor.scrollFactor.x > 0.1)
-				{
-					stageFloor.scrollFactor.x -= 0.1;
-					stageFloor.scrollFactor.y -= 0.1;
-				}
-				if (stageOverlay.scrollFactor.x > 0)
-				{
-					stageOverlay.scrollFactor.x -= 0.1;
-					stageOverlay.scrollFactor.y -= 0.1;
-				}
-				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
-			}
-			else if (FlxG.keys.justPressed.TWO)
-			{
-				if (stageFloor.scrollFactor.x < 1)
-				{
-					stageFloor.scrollFactor.x += 0.1;
-					stageFloor.scrollFactor.y += 0.1;
-				}
-				if (stageOverlay.scrollFactor.x < 1)
-				{
-					stageOverlay.scrollFactor.x += 0.1;
-					stageOverlay.scrollFactor.y += 0.1;
-				}
-				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
-			}
-
-			if (FlxG.keys.justPressed.THREE)
-			{
-				if (stageBG.scrollFactor.x > 0.1)
-				{
-					stageBG.scrollFactor.x -= 0.1;
-					stageBG.scrollFactor.y -= 0.1;
-				}
-				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
-			}
-			else if (FlxG.keys.justPressed.FOUR)
-			{
-				if (stageBG.scrollFactor.x < 1)
-				{
-					stageBG.scrollFactor.x += 0.1;
-					stageBG.scrollFactor.y += 0.1;
-				}
-				loseControl = true;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap
-				;
-			}
-
-			if (FlxG.keys.justPressed.FIVE)
-			{
-				camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000);
-				loseControl = true;
-			}
-			else if (FlxG.keys.justPressed.SIX)
-			{
-				camShake(true, true, 'camGame', 0.1, Conductor.crochet * 2 / 1000);
-				loseControl = true;
-			}
-			else if (FlxG.keys.justPressed.SEVEN)
-			{
-				camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000, X);
-				loseControl = true;
-			}
-			else if (FlxG.keys.justPressed.EIGHT)
-			{
-				camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000, Y);
-				loseControl = true;
-			}
-
-			if (FlxG.keys.justPressed.SPACE)
-			{
-				camGame.zoom += 0.2;
-			}
-
-			if (FlxG.keys.justPressed.L)
-			{
-				FlxG.sound.music.volume = 0.15;
-
-				if (!PLACEHOLDERTESTFILTERBOOLEAN)
-				{
-					PLACEHOLDERTESTFILTERBOOLEAN = true;
-					funnyFilter = new FlxSoundFilter();
-					funnyFilter.filterType = FlxSoundFilterType.LOWPASS;
-					funnyFilter.gainHF = 0.1;
-					funnyFilter.destroyWithSound = false;
-
-					var reverb = new FlxSoundReverbEffect();
-					reverb.decayTime = 3.5;
-					funnyFilter.addEffect(reverb);
-				}
-
-				var sound = new FlxFilteredSound();
-				sound.loadEmbedded(Paths.sound('boh'));
-				FlxG.sound.list.add(sound);
-				FlxG.sound.defaultSoundGroup.add(sound);
-				sound.volume = 0.5;
-				sound.play();
-				sound.filter = funnyFilter;
-			}
-
-			if (FlxG.keys.justPressed.ENTER)
-			{
-				camGame.shakeFlashSprite = !camGame.shakeFlashSprite;
-				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
-				loseControl = true;
-			}
-
 			if (FlxG.keys.justPressed.ESCAPE)
 			{
 				FlxG.sound.play(Paths.sound('cancelMenu'));
@@ -353,16 +253,201 @@ class TestState extends MusicBeatState
 					funnyFilter.destroy();
 				}
 			}
-
-			if (FlxG.keys.justPressed.C)
+			
+			//Controls forEach page
+			switch(testPage)
 			{
-				var bpmMult:Float = Conductor.songPosition * (Conductor.bpm * 0.01);
-				var beatOffset = Std.int(bpmMult % 600);
-				beatOffset = (beatOffset >= 300) ? beatOffset - 600 : beatOffset;
-				styleOnEm(beatOffset, FlxG.keys.justPressed.C);
-				loseControl = true;
+				case 0:
+					if (FlxG.keys.justPressed.LBRACKET)
+					{
+						if (!FlxG.keys.pressed.SHIFT)
+							defaultCamZoom += 0.1;
+						else
+							defaultCamZoom += 0.025;
+						loseControl = true;
+					}
+					else if (FlxG.keys.justPressed.RBRACKET)
+					{
+						if (!FlxG.keys.pressed.SHIFT)
+							defaultCamZoom -= 0.1;
+						else
+							defaultCamZoom -= 0.025;
+						loseControl = true;
+					}
+
+					if (FlxG.keys.justPressed.COMMA)
+					{
+						if (frameRateCap > 1)
+						{
+							frameRateCap--;
+							tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+						}
+					}
+					else if (FlxG.keys.justPressed.PERIOD)
+					{
+						if (frameRateCap < 10)
+						{
+							frameRateCap++;
+							tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+						}
+					}
+					
+					if (FlxG.keys.justPressed.ONE)
+					{
+						if (stageFloor.scrollFactor.x > 0.1)
+						{
+							stageFloor.scrollFactor.x -= 0.1;
+							stageFloor.scrollFactor.y -= 0.1;
+						}
+						if (stageOverlay.scrollFactor.x > 0)
+						{
+							stageOverlay.scrollFactor.x -= 0.1;
+							stageOverlay.scrollFactor.y -= 0.1;
+						}
+						loseControl = true;
+						tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+					}
+					else if (FlxG.keys.justPressed.TWO)
+					{
+						if (stageFloor.scrollFactor.x < 1)
+						{
+							stageFloor.scrollFactor.x += 0.1;
+							stageFloor.scrollFactor.y += 0.1;
+						}
+						if (stageOverlay.scrollFactor.x < 1)
+						{
+							stageOverlay.scrollFactor.x += 0.1;
+							stageOverlay.scrollFactor.y += 0.1;
+						}
+						loseControl = true;
+						tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+					}
+
+					if (FlxG.keys.justPressed.THREE)
+					{
+						if (stageBG.scrollFactor.x > 0.1)
+						{
+							stageBG.scrollFactor.x -= 0.1;
+							stageBG.scrollFactor.y -= 0.1;
+						}
+						loseControl = true;
+						tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+					}
+					else if (FlxG.keys.justPressed.FOUR)
+					{
+						if (stageBG.scrollFactor.x < 1)
+						{
+							stageBG.scrollFactor.x += 0.1;
+							stageBG.scrollFactor.y += 0.1;
+						}
+						loseControl = true;
+						tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap
+						;
+					}
+
+					if (FlxG.keys.justPressed.FIVE)
+					{
+						camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000);
+						loseControl = true;
+					}
+					else if (FlxG.keys.justPressed.SIX)
+					{
+						camShake(true, true, 'camGame', 0.1, Conductor.crochet * 2 / 1000);
+						loseControl = true;
+					}
+					else if (FlxG.keys.justPressed.SEVEN)
+					{
+						camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000, X);
+						loseControl = true;
+					}
+					else if (FlxG.keys.justPressed.EIGHT)
+					{
+						camShake(true, false, 'camGame', 0.1, Conductor.crochet * 2 / 1000, Y);
+						loseControl = true;
+					}
+
+					if (FlxG.keys.justPressed.SPACE)
+					{
+						camGame.zoom += 0.2;
+					}
+
+					if (FlxG.keys.justPressed.L)
+					{
+						FlxG.sound.music.volume = 0.15;
+
+						if (!PLACEHOLDERTESTFILTERBOOLEAN)
+						{
+							PLACEHOLDERTESTFILTERBOOLEAN = true;
+							funnyFilter = new FlxSoundFilter();
+							funnyFilter.filterType = FlxSoundFilterType.LOWPASS;
+							funnyFilter.gainHF = 0.1;
+							funnyFilter.destroyWithSound = false;
+
+							var reverb = new FlxSoundReverbEffect();
+							reverb.decayTime = 3.5;
+							funnyFilter.addEffect(reverb);
+						}
+
+						var sound = new FlxFilteredSound();
+						sound.loadEmbedded(Paths.sound('boh'));
+						FlxG.sound.list.add(sound);
+						FlxG.sound.defaultSoundGroup.add(sound);
+						sound.volume = 0.5;
+						sound.play();
+						sound.filter = funnyFilter;
+					}
+
+					if (FlxG.keys.justPressed.ENTER)
+					{
+						camGame.shakeFlashSprite = !camGame.shakeFlashSprite;
+						tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite;
+						loseControl = true;
+					}
+
+					if (FlxG.keys.justPressed.C)
+					{
+						var bpmMult:Float = Conductor.songPosition * (Conductor.bpm * 0.01);
+						var beatOffset = Std.int(bpmMult % 600);
+						beatOffset = (beatOffset >= 300) ? beatOffset - 600 : beatOffset;
+						styleOnEm(beatOffset, FlxG.keys.justPressed.C);
+						loseControl = true;
+					}
+				case 1:
+					//guh primitive text testing
+					//this is sooooo bad [UGLY SOBBING]
+					if (FlxG.keys.justPressed.ENTER)
+					{
+						funnyAlphabetTesterBold.set_text(fuckAssAllTypableCharactersArray[fuckAssAllTypCharCount]);
+						funnyAlphabetTesterBold.screenCenter();
+						loseControl = true;
+						FlxG.sound.play(Paths.sound("keybindsCancel"));
+						fuckAssAllTypCharCount++;
+
+						if (fuckAssAllTypCharCount >= fuckAssAllTypableCharactersArray.length)
+							fuckAssAllTypCharCount = 0;
+						trace('isworki? (Bold)');
+					}
+				case 2:
+					if (FlxG.keys.justPressed.ENTER)
+					{
+						funnyAlphabetTesterSkinny.set_text(fuckAssAllTypableCharactersArray[fuckAssAllTypCharCount]);
+						funnyAlphabetTesterSkinny.screenCenter();
+						loseControl = true;
+						FlxG.sound.play(Paths.sound("keybindsCancel"));
+						fuckAssAllTypCharCount++;
+
+						if (fuckAssAllTypCharCount >= fuckAssAllTypableCharactersArray.length)
+							fuckAssAllTypCharCount = 0;
+						trace('isworki? (Skinny)');
+					}
 			}
 		}
+
+		//fuck
+		if (FlxG.keys.justPressed.Z)
+			changePage(false);
+		else if (FlxG.keys.justPressed.X)
+			changePage(true);
 
 		super.update(elapsed);
 
@@ -392,6 +477,48 @@ class TestState extends MusicBeatState
 				camGame.shake(frameRateCap, intensity, duration, force, decay, axis);
 			case 'camHUD':
 				camHUD.shake(frameRateCap, intensity, duration, force, decay, axis);
+		}
+	}
+
+	//guh this is stupd and this state is stupid but we need somethin quick and dirty to test shiz qwith
+	function changePage(goingForward:Bool = true)
+	{
+		var pageLimit:Int = 2; //Justchange this when you add more pages LMFAO
+		if (goingForward)
+		{
+			if (testPage < pageLimit)
+				testPage++;
+			else
+				testPage = 0;
+		}
+		else
+		{
+			if (testPage > 0)
+				testPage--;
+			else
+				testPage = pageLimit;
+		}
+
+		pageNumberLOL.text = "Pg. " + testPage + '\n(Z / X to change)';
+
+		//per page update
+		switch(testPage)
+		{
+			case 0:
+				blackScreen.visible = false;
+				funnyAlphabetTesterBold.visible = false;
+				funnyAlphabetTesterSkinny.visible = false;
+				tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
+			case 1:
+				blackScreen.visible = true;
+				funnyAlphabetTesterSkinny.visible = false;
+				funnyAlphabetTesterBold.visible = true;
+				tauntRating.text = "Alphabet Testing Mode!\nText: Bold\nPress [ENTER] to Test!"; //i ngl forgor what to put here
+			case 2:
+				blackScreen.visible = true;
+				funnyAlphabetTesterBold.visible = false;
+				funnyAlphabetTesterSkinny.visible = true;
+				tauntRating.text = "Alphabet Testing Mode!\nText: Regular\nPress [ENTER] to Test!";
 		}
 	}
 }

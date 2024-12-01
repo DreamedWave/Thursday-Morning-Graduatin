@@ -1059,7 +1059,7 @@ class MinigameState extends MusicBeatState
 					},
 				});
 				camHUD.stopFX();
-				camShake('camHUD', true, true, 5, 0.5, 0.35);
+				camShake('camHUD', true, true, 2, 0.4, 0.5);
 				camHUD.flash(FlxColor.RED, 1);
 				new FlxTimer().start(3, function(tmr:FlxTimer)
 				{

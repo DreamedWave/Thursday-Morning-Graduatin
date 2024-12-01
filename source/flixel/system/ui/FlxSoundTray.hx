@@ -162,9 +162,9 @@ class FlxSoundTray extends Sprite
 				}
 				else if (visible && !trayTween.active)
 				{
-					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
+					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.35, 
 						{
-							ease: FlxEase.smootherStepIn,
+							ease: FlxEase.linear,
 							onComplete: function(twn:FlxTween)
 							{
 								trayTween = null;

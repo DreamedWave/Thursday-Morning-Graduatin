@@ -70,6 +70,19 @@ class Alphabet extends FlxSpriteGroup
 		this.startPosition.y = y;
 		this.bold = bold;
 		this.text = text;
+
+		//Remove invalid characters if Bold
+		if (this.bold)
+		{
+			for (i in invalidCharacterList)
+			{
+				if (this.text.contains(i))
+				{
+					this.text = text.replace(i, '');
+					trace('WARNING! We removed ' + i + 'from your text because it is not in the sprite sheet!!!');
+				}
+			}
+		}
 		//textColor = color;
 	}
 
@@ -114,8 +127,23 @@ class Alphabet extends FlxSpriteGroup
 		}
 	}
 
+	//The only thing old Kade Engine did better - and im not even sure if this was Kade's idea or wherer it was from old base game LMFAO
+	var invalidCharacterList:Array<String> = ['`', '~', '@', '#', '$', '%', '^', '[', '{', ']', '}', '|', ':', ';', ',', '/', '_'];
+
 	public function set_text(newText:String)
 	{
+		//Remove invalid characters if Bold
+		if (bold)
+		{
+			for (i in invalidCharacterList)
+			{
+				if (newText.contains(i))
+				{
+					newText = newText.replace(i, '');
+					trace('WARNING! We removed ' + i + 'from your text because it is not in the sprite sheet!!!');
+				}
+			}
+		}
 		newText = newText.replace('\\n', '\n');
 		clearLetters();
 		createLetters(newText);

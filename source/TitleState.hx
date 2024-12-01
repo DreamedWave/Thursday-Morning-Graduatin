@@ -18,9 +18,9 @@ import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
 
-#if cpp
-import sys.thread.Thread;
-#end
+//#if cpp
+//import sys.thread.Thread;
+//#end
 
 using StringTools;
 
@@ -186,6 +186,7 @@ class TitleState extends MusicBeatMenu
 			#end
 
 			trace('Hello There!');
+			//trace("Hello! Characters currently not working for Alphabet are: ` ~ @ # $ % ^ [ { ] } | : ; , / _"); //I cant add '\' here for some reason but yes that too
 		}
 
 		FlxG.mouse.visible = true;
@@ -554,7 +555,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.log.add('WackyText');
 
 			case 'ayearago':
-				wackyXtraText.text = 'holy shit wow--';
+				wackyXtraText.text = 'holy shit wow-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 

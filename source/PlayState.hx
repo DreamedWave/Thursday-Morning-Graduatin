@@ -1675,11 +1675,11 @@ class PlayState extends MusicBeatState
 		camGame.followLerp = camFollowSpeed;
 
 		//For CamHUD to fix itself after shake
-		var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
-		camHUDFollow.screenCenter();
-		camHUD.focusOn(camHUDFollow.getPosition());
-		camHUD.follow(camHUDFollow, LOCKON);
-		camHUD.followLerp = 25;
+		//var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
+		//camHUDFollow.screenCenter();
+		//camHUD.focusOn(camHUDFollow.getPosition());
+		//camHUD.follow(camHUDFollow, LOCKON);
+		//camHUD.followLerp = 25;
 
 		//if (!loadRep)
 		rep = new Replay("na");
@@ -3514,7 +3514,7 @@ class PlayState extends MusicBeatState
 			{				
 				if (SONG.eventObjects != null && SONG.eventObjects.length != 0)
 				{
-					for(i in SONG.eventObjects)
+					for (i in SONG.eventObjects)
 					{
 						if (!i.triggerCheck)
 						{

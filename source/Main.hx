@@ -98,7 +98,7 @@ class Main extends Sprite
 		// Use a customised save path that doesn't follow Project.xml bcuz we cool like that :3
 		//Format:      .SOL filename            .SOL location
 		//It still makes a new folder for some reason???
-		FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
+		//FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
 
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
@@ -119,6 +119,11 @@ class Main extends Sprite
 		game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, false);
 		#end
 		addChild(game);
+
+		
+		#if FLX_SOUND_TRAY
+		FlxG.game.soundTray.tempDisable = true;
+		#end
 
 
 		//Moved Save.Bind to Modified FlxG
@@ -241,7 +246,7 @@ class Main extends Sprite
 
 	function onWindowFocusOut()
 	{
-		if (!FlxG.autoPause && doFocusShit)
+		if (!FlxG.autoPause && !FlxG.game.soundTray.tempDisable && doFocusShit)
 		{
 			trace('huh');
 			isFocused = false;
@@ -284,7 +289,7 @@ class Main extends Sprite
 
 	function onWindowFocusIn()
 	{
-		if (!FlxG.autoPause && doFocusShit)
+		if (!FlxG.autoPause && !FlxG.game.soundTray.tempDisable && doFocusShit)
 		{
 			if (Type.getClass(FlxG.state) != PlayState && Type.getClass(FlxG.state) != ChartingState && Type.getClass(FlxG.state) != lore_minigames.MinigameState && (Type.getClass(FlxG.state) != FunnySplash || !FlxG.save.data.fullscreen))
 			{
