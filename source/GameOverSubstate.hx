@@ -180,7 +180,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		tipText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, CENTER);
 		tipText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3, 1);
 		
-		var textLol:String = getTips(PlayState.storyWeek, PlayState.naturalDeaths, PlayState.instance.causeOfDeath) + '^[ESC] or [R. CLICK] - Exit.' + '                                                   ' + '[ENTER] or [L. CLICK] - Retry.^';
+		var textLol:String = getTips(PlayState.storyWeek, PlayState.normalPityDeaths, PlayState.instance.causeOfDeath) + '^[ESC] or [R. CLICK] - Exit.' + '                                                   ' + '[ENTER] or [L. CLICK] - Retry.^';
 		var tip:FlxTextFormat = new FlxTextFormat("VCR OSD Mono", 23, FlxColor.YELLOW, true, false);
 		var lore:FlxTextFormat = new FlxTextFormat("Times New Roman", 20, 0x000000, true, true, 0xFF740D55);
 		var corrupt:FlxTextFormat = new FlxTextFormat("Monsterrat", 25, 0xFFFF0000, true, false);
@@ -300,7 +300,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 				camMain.followLerp = 1.5;
 
-				if ((!doCorruptTips && !doLoreTips || PlayState.naturalDeaths < 3))
+				if ((!doCorruptTips && !doLoreTips || PlayState.normalPityDeaths < 3))
 				{
 					tipTween = FlxTween.tween(tipText,{alpha: 1, y: FlxG.height - tipText.height - 4}, 1.25,{ease: FlxEase.smoothStepOut, onComplete:
 						function (twn:FlxTween)

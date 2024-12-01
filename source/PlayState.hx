@@ -257,8 +257,8 @@ class PlayState extends MusicBeatState
 
 	public static var campaignDeaths:Int = 0;
 	public static var songDeaths:Int = 0;
-	public static var naturalDeaths:Int = 0; //For death pity with health regen
-	static var pityDeaths:Int = 0; //For death pity with mechanics such as pico's gun
+	public static var normalPityDeaths:Int = 0; //For death pity with health regen
+	static var mechanicPityDeaths:Int = 0; //For death pity with mechanics such as pico's gun
 	var doPityDeaths:Bool = false;
 	public static var hasReset:Bool = false;
 
@@ -1704,7 +1704,7 @@ class PlayState extends MusicBeatState
 		add(videoSprite);
 		videoSprite.cameras = [camEXT];
 
-		timesShot = -pityDeaths;
+		timesShot = -mechanicPityDeaths;
 
 		//Song Start Events
 		//trace("Song Startup Shit");
@@ -3670,9 +3670,9 @@ class PlayState extends MusicBeatState
 						{
 							//Natural Deaths
 							literallyFuckingDie();
-							naturalDeaths++;
+							normalPityDeaths++;
 							if (doPityDeaths)
-								pityDeaths++;
+								mechanicPityDeaths++;
 						}
 					}
 				}
@@ -4709,18 +4709,37 @@ class PlayState extends MusicBeatState
 				});
 			
 			//la health drain for failed specil	
-			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + pityDeaths - 2)
+			//Minushealth - not instakill
+			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + mechanicPityDeaths - 2)
 			{
-				if (timesShot == 1 && health > 0.25)
-					targetHealth = 0.25;
-				else if (timesShot == 2 && health > 0.025)
-					targetHealth = 0.025;
+				//I redid this cuz it was effing convoluted as heck LMFAO
+				if (health > 0.15)
+				{
+					if (timesShot <= 1)//Takes care of values lower than 1
+						targetHealth = 0.1;
+					else if (timesShot == 2)
+						targetHealth = 0.025;
+				}
 				else
-					targetHealth -= 0.25;
+				{
+					if (health >= 0.125)
+						targetHealth -= 0.05;
+					else
+						targetHealth -= 0.025;
+				}
+
+				//Old code for comparison
+				//Watch how much it made my head spin LMAOO
+				/*if (timesShot == 1 && health > 0.15) //If health is bigger than 15% and player has only been shot once, do this
+					targetHealth = 0.1;
+				else if (timesShot == 2 && health > 0.15) //If health is bigger than 15% and player has been shot twice, do this
+					targetHealth = 0.025;
+				else if (timesShot > 0) //If health is more than 15% or has been shot than twice, do this
+					targetHealth -= 0.025;*/
 			}
-			else
+			else //instakill if the player fails enough times
 			{
-				if (timesClutched < 5 + pityDeaths - 2 && timesClutched < 10) //Caps clutching to 10 so that it dont go up infinitely LMAO
+				if (timesClutched < 5 + mechanicPityDeaths - 2 && timesClutched < 10) //Caps clutching to 10 so that it dont go up infinitely LMAO
 				{
 					timesShot = 0;
 					timesClutched++;
@@ -4734,7 +4753,7 @@ class PlayState extends MusicBeatState
 					//Before you say "woAH, theres LORE hidden in the code!!!!11!!1!", only the city has the weird glitchy overlay thanng, no it aint lore i just dont wanna add that var on any other stage calm yoself lol
 					if (stageOverlay2 != null && stageOverlay2.exists)
 					{
-						vignetteChecker = (5 + pityDeaths - 2) - timesClutched;
+						vignetteChecker = (5 + mechanicPityDeaths - 2) - timesClutched;
 						//trace (vignetteChecker);
 						//DONT JUDGE ME!!! THE CODE WORKS FINE!!!!
 						switch(vignetteChecker)
@@ -4799,9 +4818,11 @@ class PlayState extends MusicBeatState
 		if (Ratings.GenerateLetterRank(accuracy) == 'RETRY' && !cannotDie && !PauseSubState.skippedSong)
 		{
 			doCamFollowing = false;
-			naturalDeaths++;
 			if(doPityDeaths)
-				pityDeaths++;
+			{
+				normalPityDeaths++;
+				mechanicPityDeaths++;
+			}
 			literallyFuckingDie();
 			return;
 		}
@@ -4813,8 +4834,8 @@ class PlayState extends MusicBeatState
 		}
 
 		songDeaths = 0;
-		pityDeaths = 0;
-		naturalDeaths = 0;
+		mechanicPityDeaths = 0;
+		normalPityDeaths = 0;
 
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);
@@ -5047,8 +5068,8 @@ class PlayState extends MusicBeatState
 				ChartingState.lastSection = 0;
 
 			songDeaths = 0;
-			pityDeaths = 0;
-			naturalDeaths = 0;
+			mechanicPityDeaths = 0;
+			normalPityDeaths = 0;
 			storyPlaylist = [];
 			songsCheatedOn = [];
 			playlistLength = 0;
@@ -6820,8 +6841,8 @@ class PlayState extends MusicBeatState
 		super.stepHit();
 
 		//nudging the player to win to avoid frustration
-		if (healthBar.percent < 50 && naturalDeaths - storyDifficulty > 0 && targetHealth > 0)
-			targetHealth += (naturalDeaths * 0.0005) + 0.0005;
+		if (healthBar.percent < 50 && normalPityDeaths - storyDifficulty > 0 && targetHealth > 0)
+			targetHealth += (normalPityDeaths * 0.00025);
 
 		if (hurtDelay > 0)
 			hurtDelay--;
@@ -6953,9 +6974,9 @@ class PlayState extends MusicBeatState
 					case 'Retaliation':
 						if (healthBar.percent >= 25 && camZooming)
 						{
-							if (!inSongClimax && naturalDeaths < 1)
+							if (!inSongClimax && normalPityDeaths < 1)
 								targetHealth -= 0.001 * (storyDifficulty + 1); 
-							else if (inSongClimax && naturalDeaths < 5)
+							else if (inSongClimax && normalPityDeaths < 5)
 								targetHealth -= 0.005 * (storyDifficulty + 1); 
 						}
 				}
