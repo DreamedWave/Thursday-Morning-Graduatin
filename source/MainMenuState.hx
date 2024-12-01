@@ -45,7 +45,7 @@ class MainMenuState extends MusicBeatMenu
 	var bgGroup:FlxTypedGroup<FlxSprite> = null;
 	var bgGroupTargetY:Float = 0;
 
-	var camFollow:FlxObject;
+	//var camFollow:FlxObject;
 
 	var finishedFunnyMove:Bool = false;
 	var arrowTween:FlxTween;
@@ -114,9 +114,9 @@ class MainMenuState extends MusicBeatMenu
 			bg.alpha = 0.65;
 		bgGroup.add(bg);
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.screenCenter();
-		add(camFollow);
+		//camFollow = new FlxObject(0, 0, 1, 1);
+		//camFollow.screenCenter();
+		//add(camFollow);
 
 		magenta = new FlxSprite(0, 0).loadGraphic(Paths.image('menuBGMagenta'));
 		//magenta.scrollFactor.set();
@@ -609,9 +609,9 @@ class MainMenuState extends MusicBeatMenu
 								FlxG.sound.music.stop();
 								FlxG.sound.playMusic(Paths.sound('boh'), 1, false);
 								FlxG.sound.music.onComplete = endJumpscare;
-								camFollow.screenCenter();
-								FlxG.camera.focusOn(camFollow.getPosition());
-								FlxG.camera.follow(camFollow, LOCKON);
+								//camFollow.screenCenter();
+								//FlxG.camera.focusOn(camFollow.getPosition());
+								//FlxG.camera.follow(camFollow, LOCKON);
 								FlxG.camera.shake(0.05, FlxG.sound.music.length, true);
 								jumpscareSprite.visible = true;
 								startMovingJumpscareSprite = true;

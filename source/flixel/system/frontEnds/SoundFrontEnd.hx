@@ -328,6 +328,7 @@ class SoundFrontEnd
 		sound.destroy();
 	}
 
+	#if FLX_SOUND_TRAY
 	/**
 	 * Toggles muted, also activating the sound tray.
 	 */
@@ -359,13 +360,12 @@ class SoundFrontEnd
 	 */
 	public function showSoundTray(up:Bool = false):Void
 	{
-		#if FLX_SOUND_TRAY
 		if (FlxG.game.soundTray != null && soundTrayEnabled)
 		{
 			FlxG.game.soundTray.show(up);
 		}
-		#end
 	}
+	#end
 
 	function new()
 	{
@@ -387,10 +387,15 @@ class SoundFrontEnd
 		#if FLX_KEYBOARD
 		if (FlxG.keys.anyJustReleased(muteKeys))
 			toggleMuted();
-		else if (FlxG.keys.anyJustReleased(volumeUpKeys))
-			changeVolume(0.1);
-		else if (FlxG.keys.anyJustReleased(volumeDownKeys))
-			changeVolume(-0.1);
+		#if FLX_SOUND_TRAY
+		else if (!FlxG.game.soundTray.tempDisable)
+		{
+			if(FlxG.keys.anyJustReleased(volumeUpKeys))
+				changeVolume(0.1);
+			else if (FlxG.keys.anyJustReleased(volumeDownKeys))
+				changeVolume(-0.1);
+		}
+		#end
 		#end
 	}
 
