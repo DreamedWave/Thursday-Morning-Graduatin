@@ -3670,9 +3670,11 @@ class PlayState extends MusicBeatState
 						{
 							//Natural Deaths
 							literallyFuckingDie();
-							normalPityDeaths++;
 							if (doPityDeaths)
+							{
+								normalPityDeaths++;
 								mechanicPityDeaths++;
+							}
 						}
 					}
 				}
@@ -4634,6 +4636,20 @@ class PlayState extends MusicBeatState
 	function getFuckingShot(purelyVisual:Bool = false):Void
 	{
 		vocals.volume = 0;
+		//Cool Lowpass Shit
+		coolSoundFilter.gainHF = 0;
+		if (coolSoundFilterTween != null)
+			coolSoundFilterTween.cancel();
+		coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
+			{
+				ease: FlxEase.smootherStepInOut,
+				startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
+				onComplete: function(twn:FlxTween) 
+				{
+					coolSoundFilterTween = null;
+				}
+			});
+		
 		if (!PlayStateChangeables.Optimize)
 		{
 			dad.playAnim('gunSHOOT', true);
@@ -4693,32 +4709,20 @@ class PlayState extends MusicBeatState
 			//trace("ate " + timesShot + ' bullet/s');
 
 			causeOfDeath = 'ate-bullet';
-
-			//Cool Lowpass Shit
-			coolSoundFilter.gainHF = 0;
-			if (coolSoundFilterTween != null)
-				coolSoundFilterTween.cancel();
-			coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
-				{
-					ease: FlxEase.smootherStepInOut,
-					startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
-					onComplete: function(twn:FlxTween) 
-					{
-						coolSoundFilterTween = null;
-					}
-				});
 			
 			//la health drain for failed specil	
 			//Minushealth - not instakill
 			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + mechanicPityDeaths - 2)
 			{
-				//I redid this cuz it was effing convoluted as heck LMFAO
+				//I redid this cuz the previous way was effing convoluted as heck LMFAO
 				if (health > 0.15)
 				{
-					if (timesShot <= 1)//Takes care of values lower than 1
+					if (timesShot <= 1) //Takes care of values lower than 1
 						targetHealth = 0.1;
-					else if (timesShot == 2)
+					else if (timesShot == 2) //Can only reach up to 2 anyway here
 						targetHealth = 0.025;
+					else //We handle this then by subbing for values higher than 2
+						targetHealth -= 0.025;
 				}
 				else
 				{
@@ -4727,15 +4731,6 @@ class PlayState extends MusicBeatState
 					else
 						targetHealth -= 0.025;
 				}
-
-				//Old code for comparison
-				//Watch how much it made my head spin LMAOO
-				/*if (timesShot == 1 && health > 0.15) //If health is bigger than 15% and player has only been shot once, do this
-					targetHealth = 0.1;
-				else if (timesShot == 2 && health > 0.15) //If health is bigger than 15% and player has been shot twice, do this
-					targetHealth = 0.025;
-				else if (timesShot > 0) //If health is more than 15% or has been shot than twice, do this
-					targetHealth -= 0.025;*/
 			}
 			else //instakill if the player fails enough times
 			{
@@ -9272,10 +9267,11 @@ class PlayState extends MusicBeatState
 								}
 
 
+								//Variegated Skylines Camshake
 								if (inSongClimax)
 								{
-									camShake(true, false, 'camGame', 2, 0.005, idleCamShakeTimer);
-									camShake(false, false, 'camHUD', 2, 0.002, idleCamShakeTimer);
+									camShake(true, false, 'camGame', 1, 0.005, idleCamShakeTimer);
+									camShake(false, false, 'camHUD', 1, 0.002, idleCamShakeTimer);
 								}
 
 							case 'Kid With a Gun':
