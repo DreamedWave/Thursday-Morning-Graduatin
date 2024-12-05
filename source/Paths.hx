@@ -322,6 +322,7 @@ class Paths
 					FlxG.bitmap._cache.remove(key);
 					obj.destroy();
 					currentTrackedAssets.remove(key);
+					trace ('CLEAR-UNUSED: ' + key);
 				}
 			}
 		}
@@ -348,6 +349,7 @@ class Paths
 				openfl.Assets.cache.removeBitmapData(key);
 				FlxG.bitmap._cache.remove(key);
 				obj.destroy();
+				trace ('CLEAR-STORED: ' + key);
 			}
 		}
 
@@ -360,6 +362,7 @@ class Paths
 				//trace('test: ' + dumpExclusions, key);
 				Assets.cache.clear(key);
 				currentTrackedSounds.remove(key);
+				trace ('CLEAR-STORED: ' + key);
 			}
 		}
 		

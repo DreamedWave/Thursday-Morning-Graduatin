@@ -69,25 +69,25 @@ class MainMenuState extends MusicBeatMenu
 				switch (FlxG.save.data.weekUnlocked)
 				{
 					case 1:
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.5);
 						TitleState.weekAdderThingy = "";
 						bgColor = 0xFF000000;
 					case 2:
-						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.5);
 						TitleState.weekAdderThingy = "-glitchy";
 						bgColor = 0xFF120005;
 					case 3:
-						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.5);
 						TitleState.weekAdderThingy = "-city";
 						bgColor = 0xFF0b0d1d;
 					case 4:
-						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.5);
 						if (FlxG.random.bool(40))
 							FlxG.sound.music.time = 122355;
 						TitleState.weekAdderThingy = "-village";
 						bgColor = 0xff00171c;
 					default:
-						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.5);
 						bgColor = 0xFF051c31;
 				}
 			}

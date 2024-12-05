@@ -344,16 +344,45 @@ class SoundFrontEnd
 		showSoundTray(true);
 	}
 
+	//Stuff from https://github.com/FunkinCrew/flixel/blob/dev-6.0.0-latest/flixel/system/frontEnds/SoundFrontEnd.hx
+	//Very cool stuff y'all!! Epic!!
 	/**
 	 * Changes the volume by a certain amount, also activating the sound tray.
 	 */
 	public function changeVolume(Amount:Float):Void
 	{
 		muted = false;
+		volume = logToLinear(volume);
 		volume += Amount;
+		volume = linearToLog(volume);
 		showSoundTray(Amount > 0);
 	}
 
+	public function linearToLog(x:Float, minValue:Float = 0.001):Float
+	{
+		// If linear volume is 0, return 0
+		if (x <= 0) return 0;
+
+		// Ensure x is between 0 and 1
+		x = Math.min(1, x);
+
+		// Convert linear scale to logarithmic
+		return Math.exp(Math.log(minValue) * (1 - x));
+	}
+
+	public function logToLinear(x:Float, minValue:Float = 0.001):Float
+	{
+		// If logarithmic volume is 0, return 0
+		if (x <= 0) return 0;
+
+		// Ensure x is between minValue and 1
+		x = Math.min(1, x);
+
+		// Convert logarithmic scale to linear
+		return 1 - (Math.log(Math.max(x, minValue)) / Math.log(minValue));
+	}
+
+	
 	/**
 	 * Shows the sound tray if it is enabled.
 	 * @param up Whether or not the volume is increasing.

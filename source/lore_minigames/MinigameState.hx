@@ -33,7 +33,7 @@ class MinigameState extends MusicBeatState
 
 	var walls:FlxTilemap;
 	var interactiblesGroup:FlxTypedGroup<Interactibles>;
-	var doorsLocationMap:Map<String, Array<Float>> = new Map<String, Array<Float>>(); //Format ([PortalID, PortalDestination], [PortalX, PortalY])
+	var doorsLocationMap:Map<String, Array<Float>> = new Map<String, Array<Float>>(); //Format (PortalID_PortalDestination, [PortalX, PortalY])
 	var clatterGroup:FlxTypedGroup<Clatterer>;
 	var collectiblesGroup:FlxTypedGroup<Collectibles>;
 	//var deadliesGroup:FlxTypedGroup<Enemies>;
@@ -90,8 +90,9 @@ class MinigameState extends MusicBeatState
 			FlxG.sound.music.stop();
 		Conductor.changeBPM(115);
 		
-		preEscMusGroup = new FlxSoundGroup(1);
-		preSuspenseMusGroup = new FlxSoundGroup(1);
+		//Volume shits
+		preEscMusGroup = new FlxSoundGroup(FlxG.sound.defaultMusicGroup.volume);
+		preSuspenseMusGroup = new FlxSoundGroup(FlxG.sound.defaultMusicGroup.volume);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -230,11 +231,11 @@ class MinigameState extends MusicBeatState
 			case 'portal_door':
 				//definitely make a class for this
 				var door:Interactibles = new Interactibles(entity.x, entity.y, DOOR);
-				door.destinationID = entity.values.destinationInt;
+				door.destProgInt = entity.values.destinationInt;
 				door.specialAnimType = entity.values.specialAnimType;
-				door.locationID = entity.values.portal_ID + '_' + entity.values.destinationInt;
+				door.doorID = entity.values.portal_ID;
 				door.isLocked = entity.values.isLocked;
-				doorsLocationMap.set(door.locationID, [entity.x, entity.y]);
+				doorsLocationMap.set(door.doorID + "_" + door.destProgInt, [entity.x, entity.y]);
 				interactiblesGroup.add(door);
 			case 'interactibles':
 				var interactibles:Interactibles = new Interactibles(entity.x, entity.y, OTHER);
@@ -269,23 +270,28 @@ class MinigameState extends MusicBeatState
 		{
 			if (bobuxDoors.type == DOOR)
 			{
-				//get Location ID and split
-				var split:Array<String> = bobuxDoors.locationID.split('_');
-				//THEN invert the shit
-				var loadID:String = '';
-				if (Std.parseInt(split[1]) == 0)
-					loadID = split[0] + '_1';
-				else if (Std.parseInt(split[1]) == 1)
-					loadID = split[0] + '_0';
+				//Swap destProgInt values
+				//Wait so why do we need to do this when we have destProgInt
+				//Ok so im gonna try something
+				//SURELY we can just make destination and location separate RIGHT?!
+				//heh,,,, it crashed,,,
+				//Oki trying it again
+				//              stringifyier
+				var loadID:String = "" + bobuxDoors.doorID;
+				if (bobuxDoors.destProgInt == 0)
+					loadID += "_1";
+				else if (bobuxDoors.destProgInt == 1)
+					loadID += "_0";
 
 				//Then retrieve the coords to place the player in!
+				//Gurl I know I wrote the code but this is lowk making my head spin LMFAO
 				var locationArray:Array<Float> = doorsLocationMap.get(loadID);
-				switch (Std.parseInt(split[1]))
+				switch (bobuxDoors.destProgInt)
 				{
 					case 0 | 1:
 						bobuxDoors.destination[0] = Std.int(locationArray[0]);
 						bobuxDoors.destination[1] = Std.int(locationArray[1]);
-						trace ('set door ' + bobuxDoors.locationID + "'s tp coords to [" + locationArray[0] + ', ' + locationArray[1] + '].');
+						trace ('set door ' + bobuxDoors.doorID + "'s tp coords to [" + locationArray[0] + ', ' + locationArray[1] + '].');
 				}
 			}
 		});
@@ -338,6 +344,10 @@ class MinigameState extends MusicBeatState
 		if (player.status != SNEAKING && !player.forceSneak)
 			FlxG.overlap(player, clatterGroup, clatterFunct);
 		FlxG.overlap(player, collectiblesGroup, pickupFunct);
+
+		//EVIL ASS FUNCTION!!! FIX AND REMOVE THIS ASAP!!!!!
+		if (lockTheNextDoorThePlayerOverlapsWith)
+			FlxG.overlap(player, interactiblesGroup, uglyEvilWorkaroundFunction);
 		
 		if (doCamFollowing)
 			followPlayer(elapsed);
@@ -347,10 +357,10 @@ class MinigameState extends MusicBeatState
 			//this updates every frame - is that alright??
 			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
 			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
-			{
+			//{
 				camShake(false, false, 3, 0.05 * theManUpstairs.dadSNDNear.getActualVolume(), 0.05);
-				trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
-			}
+				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
+			//}
 
 			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
 			if (fatherElapsedCheck < 1)
@@ -589,6 +599,7 @@ class MinigameState extends MusicBeatState
 	var timerMultTween:FlxTween;
 
 	var finalCollectLocation:Array<Float> = [];
+	var tempCamAngleEscTwn:FlxTween;
 
 	function triggerEscapeSeq():Void
 	{
@@ -655,13 +666,16 @@ class MinigameState extends MusicBeatState
 					trace('SUMMONED THE BIG BAD :CC');
 				});
 
-			FlxTween.tween(camGame, {angle: -1.25, zoom: camGame.zoom + 0.45}, Conductor.crochet * 16 / 1000, 
+			//incase of secquence breaking shit
+			if (tempCamAngleEscTwn != null)
+				tempCamAngleEscTwn.cancel();
+			tempCamAngleEscTwn = FlxTween.tween(camGame, {angle: -1.25, zoom: camGame.zoom + 0.45}, Conductor.crochet * 16 / 1000, 
 			{
 				type: ONESHOT,
 				ease: FlxEase.smoothStepOut,
 				onComplete: function(twn:FlxTween)
 				{
-					FlxTween.tween(camGame, {angle: 1.25}, Conductor.crochet * 16 / 1000, {type: PINGPONG, ease: FlxEase.smoothStepOut});
+					tempCamAngleEscTwn = FlxTween.tween(camGame, {angle: 1.25}, Conductor.crochet * 16 / 1000, {type: PINGPONG, ease: FlxEase.smoothStepOut});
 				}
 			});
 			FlxTween.tween(darkenScreen, {alpha: 0.15}, Conductor.crochet * 6 / 1000, {type: ONESHOT, ease: FlxEase.smoothStepOut, startDelay: Conductor.crochet * 6 / 1000});
@@ -722,6 +736,7 @@ class MinigameState extends MusicBeatState
 		}
 	}
 
+	//check id - just a counter for this function to allow reusability
 	var cid:Int = 0;
 	private function getTheFuckOutMusic()
 	{
@@ -758,7 +773,7 @@ class MinigameState extends MusicBeatState
 				
 				cid = 2;
 
-				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1);
+				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1, FlxG.sound.defaultMusicGroup);
 				suspenseEscMusicIntro.onComplete = getTheFuckOutMusic;
 			case 2:
 				trace ('HAUR?????');
@@ -775,65 +790,214 @@ class MinigameState extends MusicBeatState
 				curBeat = 0;
 				fakeBeat = 0;
 				Conductor.songPosition = 0;
-				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false);
+				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false, FlxG.sound.defaultMusicGroup);
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = checkAndSwapMusic;
 		}
 	}
 
+	var lockTheNextDoorThePlayerOverlapsWith:Bool = false; //absolutely EVIL and MISCHEVIOUS ASS BOOL!!!
+	//followed by an ABSOLUTELY VILE AND DISGUSTING FUNCTION
+	private function uglyEvilWorkaroundFunction(player:Player, object:Interactibles)
+	{
+		if (object.type == DOOR)
+		{
+			lockTheNextDoorThePlayerOverlapsWith = false;
+			object.isLocked = true;
+			doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
+			doorCloseSound.set_pitch(FlxG.random.float(0.4, 0.6));
+			doorCloseSound.play(true);
+		}
+	}
 	//Interact Functions
 	function interactFunct(player:Player, object:Interactibles)
 	{
 		switch (object.type)
 		{
 			case DOOR:
-				if (player.canMove)
+				if (player.canMove && !object.isLocked)
 				{
-					player.stopAction(true, true);
-					player.setPosition(object.x + 7, object.y + 3);
-					//if (theManUpstairs != null && theManUpstairs.exists)
-						//theManUpstairs.quellTheDemon(15, true, true);
-					player.canMove = false;
-					//DoorSounds
-					if (doorCloseSound != null && doorCloseSound.playing)
-						doorCloseSound.stop();
-					//Open
-					doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
-					doorOpenSound.set_pitch(FlxG.random.float(0.8, 1.2));
-					doorOpenSound.play(true);
-					new FlxTimer().start(Conductor.stepCrochet / 1000, function(tmr:FlxTimer)
+					//Room-dependent Door Shit
+					//Maybe turn this into switch(){case:} one day
+					if (object.doorID == 0 && inEscSeq)
 					{
-						if (pseudoCamFade.alpha < 1)
-							pseudoCamFade.alpha += 0.25;
-						else
+						//A check to allow us to play the correct ending sound - default to true cuz there's only 1 if statement for false - meaning lesser vars to set for me, meaning less writing, meaning more time to do other stuff, meaning- 
+						var musicWasSuspense:Bool = true;
+
+						//FadeOut esc musics - whicheverthefuck is currently playing
+						//Not elseIfs because multiple of them can play atOnce
+						//dontAsk me why imTyping thisWay
+						//guh, so much if statements just to fade out music - it's not gunna tank performance much but it is a lil hard to read :3
+						//eitherway, it works (i think) - and hey we get sick ass adaptive music for it so yea why not :3
+						if (cid == 2 && seqCheck == 3)
 						{
+							//Stops suspense loop
+							FlxTween.tween(FlxG.sound.music, {volume: 0}, 2.5, 
+							{	
+								type: ONESHOT, 
+								ease: FlxEase.smoothStepOut,
+								onComplete: function(twn:FlxTween)
+								{
+									FlxG.sound.music.stop();
+									musicTween = null;
+								}
+							});
+						}
+						else //Stops normal and suspense intro escape music
+						{
+							if (preSuspenseMusGroup.containsPlaying())
+							{
+								if (musicTween != null)
+									musicTween.cancel();
+								musicTween = FlxTween.tween(preSuspenseMusGroup, {volume: 0}, 2.5, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smoothStepOut,
+									onComplete: function(twn:FlxTween)
+									{
+										preSuspenseMusGroup.stop();
+										musicTween = null;
+									}
+								});
+
+								musicWasSuspense = false;
+							}
+
+							if (suspenseEscMusicIntro != null && suspenseEscMusicIntro.playing)
+							{
+								FlxTween.tween(suspenseEscMusicIntro, {volume: 0}, 2.5, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smoothStepOut,
+									onComplete: function(twn:FlxTween)
+									{
+										preSuspenseMusGroup.stop();
+										musicTween = null;
+									}
+								});
+							}
+						}
+
+						if (!timesUp)
+						{
+							//Stop timer and tween timer thingy
+							if (escapeTimer != null)
+								escapeTimer.cancel();
+							FlxTween.tween(escapeTimerGroup, {y: -100}, 1, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smootherStepIn,
+									onComplete: function(twn:FlxTween)
+									{
+										escapeTimerGroup.visible = false;
+									},
+									startDelay: 2
+								});
+						}
+
+						//then wes plays the sound s
+						if (musicWasSuspense)
+							FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseEnd.ogg', 1, FlxG.sound.defaultMusicGroup);
+						else
+							FlxG.sound.play('assets/minigame/music/ExitSequenceThemeEnd.ogg', 1, FlxG.sound.defaultMusicGroup);
+
+						//then we actually do shits LMFAO
+						object.isLocked = true;
+						//we should change the doorID system to something more robust
+						//something like object.otherDoor or sum shit like that so that they're actually linked to eachj other
+						//for now, have this shitty horrible ass fix LMFAOOO
+
+						player.stopAction(true, true);
+						player.canMove = false;
+						player.setPosition(object.x + 7, object.y + 3);
+						if (theManUpstairs != null && theManUpstairs.exists)
+						{
+							//he dont know what hit em
+							theManUpstairs.quellTheDemon(100, true, true);
+							//a whopping 4 FLXTWEENS!!! AGAIN!!!!
+							FlxTween.tween(theManUpstairs.dadSuspenseMusFar, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSuspenseMusNear, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSNDFar, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSNDNear, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						}
+						//DoorSounds
+						if (doorCloseSound != null && doorCloseSound.playing)
+							doorCloseSound.stop();
+						//Open
+						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
+						doorOpenSound.set_pitch(FlxG.random.float(0.35, 0.55));
+						doorOpenSound.play(true);
+						camHUD.fade(FlxColor.WHITE, 2.5, false, function()
+						{
+							camHUD.stopFX();
+							camHUD.flash(FlxColor.WHITE, 1);
+							if (tempCamAngleEscTwn != null)
+								tempCamAngleEscTwn.cancel();
+							camGame.angle = 0;
+							darkenScreen.alpha = 0;
 							camMovementOffset[0] = 0;
 							camMovementOffset[1] = 0;
 							camMovementLerp[0] = 0;
 							camMovementLerp[1] = 0;
 							player.setPosition(object.destination[0] + 7, object.destination[1] + 3);
 							camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
-							/*if (theManUpstairs != null && theManUpstairs.exists)
+							player.canMove = true;
+							lockTheNextDoorThePlayerOverlapsWith = true;
+						}, true);
+				}
+					else
+					{
+						player.stopAction(true, true);
+						player.setPosition(object.x + 7, object.y + 3);
+						//if (theManUpstairs != null && theManUpstairs.exists)
+							//theManUpstairs.quellTheDemon(15, true, true);
+						player.canMove = false;
+						//DoorSounds
+						if (doorCloseSound != null && doorCloseSound.playing)
+							doorCloseSound.stop();
+						//Open
+						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
+						doorOpenSound.set_pitch(FlxG.random.float(0.8, 1.2));
+						doorOpenSound.play(true);
+						new FlxTimer().start(Conductor.stepCrochet / 1000, function(tmr:FlxTimer)
+						{
+							if (pseudoCamFade.alpha < 1)
+								pseudoCamFade.alpha += 0.25;
+							else
 							{
-								theManUpstairs.x = player.x - (theManUpstairs.width - player.width / 2);
-								theManUpstairs.y = player.y - ((theManUpstairs.height - player.height) / 2);
-								theManUpstairs.quellTheDemon(2, true);
-							}*/
-							new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
-							{
-								if (pseudoCamFade.alpha > 0)
-									pseudoCamFade.alpha -= 0.25;
-								else
+								camMovementOffset[0] = 0;
+								camMovementOffset[1] = 0;
+								camMovementLerp[0] = 0;
+								camMovementLerp[1] = 0;
+								player.setPosition(object.destination[0] + 7, object.destination[1] + 3);
+								camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
+								/*if (theManUpstairs != null && theManUpstairs.exists)
 								{
-									player.canMove = true;
-									//Close
-									doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
-									doorCloseSound.set_pitch(FlxG.random.float(0.8, 1.2));
-									doorCloseSound.play(true);
-								}
-							}, 5);
-						}
-					}, 5);
+									theManUpstairs.x = player.x - (theManUpstairs.width - player.width / 2);
+									theManUpstairs.y = player.y - ((theManUpstairs.height - player.height) / 2);
+									theManUpstairs.quellTheDemon(2, true);
+								}*/
+								new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
+								{
+									if (pseudoCamFade.alpha > 0)
+										pseudoCamFade.alpha -= 0.25;
+									else
+									{
+										player.canMove = true;
+										//Close
+										doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
+										doorCloseSound.set_pitch(FlxG.random.float(0.8, 1.2));
+										doorCloseSound.play(true);
+									}
+								}, 5);
+							}
+						}, 5);
+					}
+				}
+				else if (player.canMove)
+				{
+					//Replace with locked door sound!!!!!
+					FlxG.sound.play(Paths.sound('confirmMenuLocked'), 0.5);
 				}
 			case OTHER:
 				var placeholderTXT:FlxText = new FlxText(0, FlxG.height - 80, FlxG.width - 100, '', 25);

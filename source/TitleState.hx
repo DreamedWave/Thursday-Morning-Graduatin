@@ -298,7 +298,7 @@ class TitleState extends MusicBeatMenu
 						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.3);
 			}
 
-			FlxG.sound.music.fadeIn(5, 0.3, 0.65);
+			FlxG.sound.music.fadeIn(5, 0.3, 0.5);
 
 			if (!FreeplayState.freeplayMusicPlaying)
 				Conductor.changeBPM(102);

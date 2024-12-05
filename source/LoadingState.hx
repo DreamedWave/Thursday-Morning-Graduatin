@@ -333,6 +333,7 @@ class LoadingState extends MusicBeatMenu
 				});
 			
 			//IN PAIN - TOO LAZY TO FIX UP PATHS.JSON TO WORK WITH THIS SHIT AUGHHHH
+			//TO DO - MAKE STAGE DEPENDENT LOADING SHIZ BUT FOR NOW SINCE WE TESTIN THIS ONLY LOADS EVERYTHING ALL AT ONCE FOR MAP 1
 			case lore_minigames.MinigameState:	
 				screen = new LoadingScreen(instantShow, inPlayState);
 				add(screen);

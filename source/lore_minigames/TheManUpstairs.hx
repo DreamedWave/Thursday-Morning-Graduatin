@@ -98,6 +98,7 @@ class TheManUpstairs extends FlxSprite
 		CHASE_SPEED = givenChaseSpeed;
 	}
 
+	//idletime is in secondfs, btw
 	public function quellTheDemon(idleTime:Int, resetCurrentTimer:Bool = true, stopCurrentVelocity:Bool = true)
 	{
 		alpha = 0.75;

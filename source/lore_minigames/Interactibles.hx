@@ -19,15 +19,15 @@ class Interactibles extends FlxSprite
 
 	/**
 	*Variables for the doors that serve as transitions to other rooms/levels!
-	* @param locationID - Basically what specifies which door is connected with each other-
-	* @param specialAnimType - The type of animation the door will make, idk- (default = 'none')
+	* @param doorID - Basically what specifies which doors are connected with each other - with the connected doors having the same ID.
+	* @param specialAnimType - The type of animation the door will make, idk- (default = 'none').
 	* @param destination - Where this door will teleport you.
-	* @param destinationID - specifies if this door is a A -> B [0], or a B -> A [1].
+	* @param destProgInt - specifies if this door is a A -> B [0], or a B -> A [1]. This needs a better name and explanation IM FUCKING CRYING.
 	**/
-	public var locationID:String = '';
+	public var doorID:Int = 0;
 	public var specialAnimType:String = 'none';
 	public var destination:Array<Int> = [0, 0];
-	public var destinationID:Int = 0;
+	public var destProgInt:Int = 0;
 	public var isLocked:Bool = false;
 
 	/**

@@ -24,6 +24,7 @@ import flash.text.GridFitType;
 /**
  * The flixel sound tray, the little volume meter that pops down sometimes.
  * Accessed via `FlxG.game.soundTray` or `FlxG.sound.soundTray`.
+ * Customized for TMG by AmieeWuzHere!
  */
 class FlxSoundTray extends Sprite
 {
@@ -185,7 +186,7 @@ class FlxSoundTray extends Sprite
 		}
 	}
 
-	var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
+	var globalVolume:Int = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 	var isRetreating:Bool = true;
 
 	/**
@@ -232,7 +233,7 @@ class FlxSoundTray extends Sprite
 					});
 			}
 
-			globalVolume = Math.round(FlxG.sound.volume * 10);
+			globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 
 			if (FlxG.sound.muted)
 			{

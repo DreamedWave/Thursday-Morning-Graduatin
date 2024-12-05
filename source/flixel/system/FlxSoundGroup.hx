@@ -93,6 +93,20 @@ class FlxSoundGroup
 			sound.resume();
 	}
 
+	/**
+	 * Checks if any sound is playing in this sound group - returns the result as bool! :3
+	 * @since CustomMadeForTMG
+	 */
+	public function containsPlaying():Bool
+	{
+		for (sound in sounds)
+		{
+			if (sound != null && sound.playing)
+				return true;
+		}
+		return false;
+	}
+
 	function set_volume(volume:Float):Float
 	{
 		this.volume = volume;
