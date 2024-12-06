@@ -253,7 +253,7 @@ class TitleState extends MusicBeatMenu
 
 			jkSpr.visible = false;
 			ptSpr.visible = false;
-			createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
+			//createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
 		}
 	}
 
@@ -353,7 +353,8 @@ class TitleState extends MusicBeatMenu
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
-		deleteCoolText();
+		deleteCoolText();//Delete previously created cool text
+		trace('text says: ' + textArray);
 		if(textGroup != null && credGroup != null) 
 		{
 			for (i in 0...textArray.length)

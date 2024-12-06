@@ -2721,7 +2721,6 @@ class PlayState extends MusicBeatState
 		{
 			setSongTime(startTime);
 			clearNotesBefore(startTime);
-
 		}
 		else
 		{
@@ -2930,22 +2929,54 @@ class PlayState extends MusicBeatState
 	public function regenerateSong():Void
 	{
 		//dummyBeats = 0;
-		trace ('idfk why it kills you but it does LMAO');
-		clearNotesBefore(Conductor.songPosition);
+		//trace ('idfk why it kills you but it does LMAO');
+		//Fixed faulty looping code!
 		setSongTime(0);
+		clearNotesBefore(0);
 		vocals.play();
 		
 		var songData = SONG;
 		curSong = songData.song;
 
-		// NEW SHIT.. AGAIN
 		var noteData:Array<SwagSection>;
+
+		// NEW SHIT
 		noteData = songData.notes;
+
+		var playerCounter:Int = 0;
+
+		// Per song offset check
+		#if windows
+		// pre lowercasing the song name (generateSong)
+		var songPath = 'assets/data/' + songLowercase + '/';
+
+		for (file in sys.FileSystem.readDirectory(songPath))
+		{
+			var path = haxe.io.Path.join([songPath, file]);
+			if (!sys.FileSystem.isDirectory(path))
+			{
+				if (path.endsWith('.offset'))
+				{
+					//trace('Found offset file: ' + path);
+					songOffset = Std.parseFloat(file.substring(0, file.indexOf('.off')));
+					break;
+				}
+				else
+				{
+					//trace('Offset file not found. Creating one @: ' + songPath);
+					sys.io.File.saveContent(songPath + songOffset + '.offset', '');
+				}
+			}
+		}
+		#end
+		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
+
 
 		for (section in noteData)
 		{
 			for (songNotes in section.sectionNotes)
 			{
+				//This is were the notes are created!
 				var daStrumTime:Float = songNotes[0] + FlxG.save.data.offset + songOffset;
 				if (daStrumTime < 0)
 					daStrumTime = 0;
@@ -2965,30 +2996,29 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, daNoteStyle);
-
 				if (!gottaHitNote && PlayStateChangeables.Optimize)
 					continue;
 
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, daNoteStyle);
 				swagNote.sustainLength = songNotes[2];
-				//swagNote.scrollFactor.set();
+				swagNote.scrollSpeed = defaultScroll;
 
 				var susLength:Float = swagNote.sustainLength;
 
 				susLength = susLength / Conductor.stepCrochet;
-				unspawnNotes.push(swagNote);
-
-				if (susLength > 0 && !swagNote.isSustainNote)
+				if (susLength > 0)
 					swagNote.isParent = true;
+				unspawnNotes.push(swagNote);
 
 				var type = 0;
 
+				//this is where sustain notes are created!
 				for (susNote in 0...Math.floor(susLength))
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
 					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, daNoteStyle);
-					//sustainNote.scrollFactor.set();
+					sustainNote.scrollSpeed = defaultScroll;
 					unspawnNotes.push(sustainNote);
 
 					sustainNote.mustPress = gottaHitNote;
@@ -3009,6 +3039,8 @@ class PlayState extends MusicBeatState
 						//sustainNote.connectToParent(strumLine.y);
 					}
 					type++;
+					if (type == Math.floor(susLength - 1))
+						sustainNote.isBeforeTail;
 				}
 
 				swagNote.mustPress = gottaHitNote;
@@ -3019,10 +3051,11 @@ class PlayState extends MusicBeatState
 					swagNote.x += FlxG.width / 2; // general offset
 				}
 			}
+			daBeats += 1;
 		}
 
 		unspawnNotes.sort(sortByShit);
-		resyncVocals();
+		//resyncVocals();
 	}
 
 	function sortByShit(Obj1:Note, Obj2:Note):Int
@@ -3519,6 +3552,22 @@ class PlayState extends MusicBeatState
 		if (FlxG.mouse.visible && !paused)
 			FlxG.mouse.visible = false;
 
+		if (SONG.song == "Finale" && FlxG.keys.justPressed.SPACE)
+		{
+			setSongTime(musicTimeCusp);
+			clearNotesBefore(musicTimeCusp);
+			drums.stop();
+			taiko.stop();
+			choir.stop();
+			hats.stop();
+			adders.stop();
+			slayer.stop();
+			retalHats.stop();
+			bells.stop();
+			pads.stop();
+			danger.stop();
+		}
+
 		if (FlxG.sound.music.playing)
 		{
 			if (!showedResults && !endedSong)
@@ -3635,8 +3684,6 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && !skippingIntro && !video.isPlaying && allowDeaths && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
 			pauseGame();
 
-		//CHANGED FROM MULTIPLE IF STATEMENTS (see if this causes problems)
-		//Changed it back to multiple if statements to allow for more functionality
 		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 3) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
 		{
 			if (!showedResults && !video.isPlaying && allowDeaths && !PlayStateChangeables.botPlay)
@@ -4353,11 +4400,12 @@ class PlayState extends MusicBeatState
 			}
 
 			dummySongScore = FlxMath.lerp(dummySongScore, songScore, 0.15);
-			scoreTxt.text = Ratings.CalculateRanking(Math.round(dummySongScore), nps, maxNPS, accuracy, keeledOver);
+			//scoreTxt.text = Ratings.CalculateRanking(Math.round(dummySongScore), nps, maxNPS, accuracy, keeledOver);
 			//And here we see a local devgirl using scoretext as a testing visual aid
 			//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainLF, 3);
 			//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 			//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
+			scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 			scoreTxt.screenCenter(X);
 		}
 		//DC.endProfile("NoteShits");
@@ -8467,6 +8515,8 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.music.pause();
 		//dummyBeats = Std.int(time / Conductor.crochet);
+		if (Conductor.songPosition >= FlxG.sound.music.length)//just resets this if it fopped up and stops updating, otherwise, update handles this pretty well
+			Conductor.songPosition = time; //mightve forghotten this LMFAO WHOOP MB
 		FlxG.sound.music.time = time;
 		FlxG.sound.music.play();
 			

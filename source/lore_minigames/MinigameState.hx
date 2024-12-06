@@ -883,7 +883,7 @@ class MinigameState extends MusicBeatState
 							//Stop timer and tween timer thingy
 							if (escapeTimer != null)
 								escapeTimer.cancel();
-							FlxTween.tween(escapeTimerGroup, {y: -100}, 1, 
+							FlxTween.tween(escapeTimerGroup, {y: -100}, 1.5, 
 								{	
 									type: ONESHOT, 
 									ease: FlxEase.smootherStepIn,
@@ -891,7 +891,7 @@ class MinigameState extends MusicBeatState
 									{
 										escapeTimerGroup.visible = false;
 									},
-									startDelay: 2
+									startDelay: 0.5
 								});
 						}
 
