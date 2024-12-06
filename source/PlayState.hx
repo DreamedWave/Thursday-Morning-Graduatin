@@ -2931,7 +2931,7 @@ class PlayState extends MusicBeatState
 		//dummyBeats = 0;
 		//trace ('idfk why it kills you but it does LMAO');
 		//Fixed faulty looping code!
-		setSongTime(0);
+		setSongTime(0, true);
 		clearNotesBefore(0);
 		vocals.play();
 		
@@ -3554,8 +3554,8 @@ class PlayState extends MusicBeatState
 
 		if (SONG.song == "Finale" && FlxG.keys.justPressed.SPACE)
 		{
-			setSongTime(musicTimeCusp);
-			clearNotesBefore(musicTimeCusp);
+			setSongTime(FlxG.sound.music.length / 2);
+			clearNotesBefore(FlxG.sound.music.length / 2);
 			drums.stop();
 			taiko.stop();
 			choir.stop();
@@ -4400,12 +4400,12 @@ class PlayState extends MusicBeatState
 			}
 
 			dummySongScore = FlxMath.lerp(dummySongScore, songScore, 0.15);
-			//scoreTxt.text = Ratings.CalculateRanking(Math.round(dummySongScore), nps, maxNPS, accuracy, keeledOver);
+			scoreTxt.text = Ratings.CalculateRanking(Math.round(dummySongScore), nps, maxNPS, accuracy, keeledOver);
 			//And here we see a local devgirl using scoretext as a testing visual aid
 			//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainLF, 3);
 			//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 			//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
-			scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+			//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 			scoreTxt.screenCenter(X);
 		}
 		//DC.endProfile("NoteShits");
@@ -8504,7 +8504,7 @@ class PlayState extends MusicBeatState
 	}
 	
 	//Ok now these are all psych's again
-	public function setSongTime(time:Float)
+	public function setSongTime(time:Float, setForConductorToo:Bool = false)
 	{
 		if(time < 0)
 			time = 0;
@@ -8515,7 +8515,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.sound.music.pause();
 		//dummyBeats = Std.int(time / Conductor.crochet);
-		if (Conductor.songPosition >= FlxG.sound.music.length)//just resets this if it fopped up and stops updating, otherwise, update handles this pretty well
+		if (setForConductorToo) //Relying on this function to check if it can set the time or not is unreliable - made it a toggleable bool instead
 			Conductor.songPosition = time; //mightve forghotten this LMFAO WHOOP MB
 		FlxG.sound.music.time = time;
 		FlxG.sound.music.play();
