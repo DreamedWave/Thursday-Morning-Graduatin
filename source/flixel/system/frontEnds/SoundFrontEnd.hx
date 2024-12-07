@@ -9,6 +9,7 @@ import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.system.FlxSound;
 import flixel.system.FlxSoundGroup;
 import flixel.system.ui.FlxSoundTray;
+import flixel.util.FlxSignal;
 import openfl.Assets;
 import openfl.media.Sound;
 #if (openfl >= "8.0.0")
@@ -35,7 +36,13 @@ class SoundFrontEnd
 	 * Set this hook to get a callback whenever the volume changes.
 	 * Function should take the form myVolumeHandler(volume:Float).
 	 */
+	@:deprecated("volumeHandler is deprecated, use onVolumeChange, instead")
 	public var volumeHandler:Float->Void;
+ 
+	/**
+	 * A signal that gets dispatched whenever the volume changes.
+	 */
+	 public var onVolumeChange(default, null):FlxTypedSignal<Float->Void> = new FlxTypedSignal<Float->Void>();
 
 	#if FLX_KEYBOARD
 	/**
@@ -341,6 +348,8 @@ class SoundFrontEnd
 			volumeHandler(muted ? 0 : volume);
 		}
 
+		onVolumeChange.dispatch(muted ? 0 : volume);
+
 		showSoundTray(true);
 	}
 
@@ -348,17 +357,19 @@ class SoundFrontEnd
 	//Very cool stuff y'all!! Epic!!
 	/**
 	 * Changes the volume by a certain amount, also activating the sound tray.
+	 * Imma actually try rounding it out - idk if this will work or not
 	 */
 	public function changeVolume(Amount:Float):Void
 	{
 		muted = false;
-		volume = logToLinear(volume);
+		volume = FlxMath.roundDecimal(logToLinear(volume), 3);
 		volume += Amount;
-		volume = linearToLog(volume);
+		volume = FlxMath.roundDecimal(linearToLog(volume), 3);
 		showSoundTray(Amount > 0);
+		trace('soundVol ACTUAL: ' + volume);
 	}
 
-	public function linearToLog(x:Float, minValue:Float = 0.001):Float
+	public function linearToLog(x:Float, minValue:Float = 0.005):Float
 	{
 		// If linear volume is 0, return 0
 		if (x <= 0) return 0;
@@ -367,10 +378,11 @@ class SoundFrontEnd
 		x = Math.min(1, x);
 
 		// Convert linear scale to logarithmic
+		trace('soundVol Lin->Log: ' + Math.exp(Math.log(minValue) * (1 - x)));
 		return Math.exp(Math.log(minValue) * (1 - x));
 	}
 
-	public function logToLinear(x:Float, minValue:Float = 0.001):Float
+	public function logToLinear(x:Float, minValue:Float = 0.005):Float
 	{
 		// If logarithmic volume is 0, return 0
 		if (x <= 0) return 0;
@@ -378,8 +390,10 @@ class SoundFrontEnd
 		// Ensure x is between minValue and 1
 		x = Math.min(1, x);
 
+		var toReturn:Float = 1 - (Math.log(Math.max(x, minValue)) / Math.log(minValue));
 		// Convert logarithmic scale to linear
-		return 1 - (Math.log(Math.max(x, minValue)) / Math.log(minValue));
+		trace('soundVol Log->Lin: ' + toReturn);
+		return toReturn;
 	}
 
 	
@@ -481,15 +495,18 @@ class SoundFrontEnd
 		}
 	}
 
+	@:haxe.warning("-WDeprecated")
 	function set_volume(Volume:Float):Float
 	{
 		Volume = FlxMath.bound(Volume, 0, 1);
 
 		if (volumeHandler != null)
 		{
-			var param:Float = muted ? 0 : Volume;
-			volumeHandler(param);
+			volumeHandler(muted ? 0 : Volume);
 		}
+
+		onVolumeChange.dispatch(muted ? 0 : Volume);
+
 		return volume = Volume;
 	}
 }

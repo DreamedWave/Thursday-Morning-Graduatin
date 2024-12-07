@@ -235,7 +235,7 @@ class FlxSoundTray extends Sprite
 
 			globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 
-			if (FlxG.sound.muted)
+			if (FlxG.sound.muted || FlxG.sound.volume == 0)
 			{
 				globalVolume = 0;
 				if (text.text != "0  MUTE  0")

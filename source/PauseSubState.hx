@@ -535,7 +535,7 @@ class PauseSubState extends MusicBeatSubstate
 			item.isMenuItem = false;
 			FlxTween.tween(item, {alpha: 0, y: item.y + 500}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
 		}
-		pauseMusic.fadeOut(Conductor.crochet / 1000);
+		pauseMusic.tapeStop(Conductor.crochet / 1000, 0.8);
 
 		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{

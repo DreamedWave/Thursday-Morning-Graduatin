@@ -621,7 +621,7 @@ class OptionsMenu extends MusicBeatMenu
 						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
 						{
 							//Placeholder - flash this and do sum cool shit with it!
-							grpControls.members[curSelected].color = 0xFFC77070;
+							grpControls.members[curSelected].color = 0xFFFF0000;
 						}
 					}
 				}
@@ -696,24 +696,21 @@ class OptionsMenu extends MusicBeatMenu
 		// NGio.logEvent("Fresh");
 		#end
 
-		if (isCat)
+		if (change != 0)
 		{
-			//trace('pls work;;;');
-			if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('|['))
+			FlxG.sound.play(Paths.sound("scrollMenu"));
+
+			if (isCat)
 			{
-				//trace('omg???');
-				currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
-				grpControls.members[curSelected].color = 0xFFFFFFFF;
+				//resets the 'reset story/scores/settings' options to default upon scrolling
+				if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('?'))
+				{
+					currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
+					grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
+					grpControls.members[curSelected].color = 0xFFFFFFFF;
+				}
 			}
 		}
-		/*if (currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
-		{
-			grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-			grpControls.members[curSelected].color = 0xFFFFFFFF;
-		}*/
-
-		if (change != 0)
-			FlxG.sound.play(Paths.sound("scrollMenu"));
 
 		curSelected += change;
 
