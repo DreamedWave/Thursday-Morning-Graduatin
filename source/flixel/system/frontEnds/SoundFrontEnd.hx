@@ -369,7 +369,7 @@ class SoundFrontEnd
 		trace('soundVol ACTUAL: ' + volume);
 	}
 
-	public function linearToLog(x:Float, minValue:Float = 0.005):Float
+	public function linearToLog(x:Float, minValue:Float = 0.001):Float
 	{
 		// If linear volume is 0, return 0
 		if (x <= 0) return 0;
@@ -382,7 +382,7 @@ class SoundFrontEnd
 		return Math.exp(Math.log(minValue) * (1 - x));
 	}
 
-	public function logToLinear(x:Float, minValue:Float = 0.005):Float
+	public function logToLinear(x:Float, minValue:Float = 0.001):Float
 	{
 		// If logarithmic volume is 0, return 0
 		if (x <= 0) return 0;

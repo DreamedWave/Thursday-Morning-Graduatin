@@ -4,6 +4,7 @@ import lime.app.Application;
 import lime.system.DisplayMode;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
 import Controls.KeyboardScheme;
 //import flixel.FlxG;
 import openfl.display.FPS;
@@ -1501,11 +1502,7 @@ class LockWeeksOption extends Option
 		confirm = false;
 		trace('Weeks Locked');
 		display = updateDisplay();
-		new FlxTimer().start(0.14, function(tmr:FlxTimer)
-		{
-			FlxG.sound.music.stop();
-			Conductor.changeBPM(102);
-		});
+		FlxG.sound.music.tapeStop(0.2, 0, function(twn:FlxTween){FlxG.sound.music.stop(); Conductor.changeBPM(102);});
 		FlxG.sound.play(Paths.sound("optionsResetConfirm"));
 		return true;
 	}
