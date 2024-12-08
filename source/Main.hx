@@ -150,7 +150,7 @@ class Main extends Sprite
 		if (Date.now().getUTCDate() <= 3 && curMonthString == "April")
 			aprilFools = true;
 
-		if (curDayString == 'Sunday' && FlxG.random.bool(30))
+		if (curDayString == 'Sunday' && FlxG.random.bool(10))
 			todayIsSunday = true;
 
 		
@@ -393,7 +393,7 @@ class Main extends Sprite
 
 		path = "./_logs/" + "TMG-CRASH_" + dateNow + ".txt";
 
-		errMsg = "Thursday Morning Graduatin' has crashed!\n(so here's what went wrong):\n\n";
+		errMsg = "Thursday Morning Graduatin' has crashed!\n(so here's roughly what went wrong:)\n\n";
 		errMsg += "TMG Version: " + gameVer + "\n";
 
 		for (stackItem in callStack)

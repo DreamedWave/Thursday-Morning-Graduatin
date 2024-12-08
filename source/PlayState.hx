@@ -210,8 +210,8 @@ class PlayState extends MusicBeatState
 	var grpRatingsMG = new FlxSpriteGroup();
 	var grpRatingsFG = new FlxSpriteGroup();
 
-	public static var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
-	public static var playerStrums:FlxTypedGroup<FlxSprite> = null;
+	public var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
+	public var playerStrums:FlxTypedGroup<FlxSprite> = null;
 	public var cpuStrums:FlxTypedGroup<FlxSprite> = null;
 	var grpStrumLine:FlxSpriteGroup = null;
 	var strumLineBGTween:FlxTween;
@@ -524,11 +524,11 @@ class PlayState extends MusicBeatState
 
 		if (isStoryMode)
 		{
-			if (storyProgress == 0 && campaignDeaths == 0 && songDeaths == 0 && !hasReset)
-			//{
+			if (storyProgress == 0 && campaignDeaths == 0 && songDeaths == 0 && !hasReset && storyWeek != 0) //we dont have a hasVideo field, so we gotta manually add weeks here LMAOOO
+			{
 				//trace('me mama');
 				blackScreenAlpha = 1;
-			//}
+			}
 			else
 			{
 				blackScreenAlpha = blackScreenFadeTo;
@@ -1699,22 +1699,22 @@ class PlayState extends MusicBeatState
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
 
-		transIn.camera = camHUD;
-		transOut.camera = camHUD;
-		//trace('set transInCam to camHUD');
-
-		super.create();
-
-		startingSong = true;
-
 		video = new VideoHandler();
 		video.allowSkip = true;
 
 		videoSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		videoSprite.antialiasing = true;
 		videoSprite.visible = false;	
-		add(videoSprite);
 		videoSprite.cameras = [camEXT];
+		add(videoSprite);
+
+		transIn.camera = camEXT;
+		transOut.camera = camEXT;
+		//trace('set transInCam to camHUD');
+
+		super.create();
+
+		startingSong = true;
 
 		timesShot = -mechanicPityDeaths;
 
@@ -2749,7 +2749,7 @@ class PlayState extends MusicBeatState
 			skipButton.y += 5;
 			skipButton.antialiasing = FlxG.save.data.antialiasing;
 			skipButton.updateHitbox();
-			skipButton.cameras = [camEXT];
+			skipButton.cameras = [camHUD];
 			skipButton.alpha = 0;
 			add(skipButton);
 			FlxTween.tween(skipButton, {alpha: 1, y: skipButton.y - 5}, 0.2, {type: ONESHOT, ease: FlxEase.sineInOut});
@@ -3436,7 +3436,7 @@ class PlayState extends MusicBeatState
 		}
 		styleSound.play(true);
 		styleSound.volume = 0.35;
-		styleSound.set_pitch(FlxG.random.float(0.8, 1.2));
+		styleSound.pitch = FlxG.random.float(0.8, 1.2);
 		/*#if cpp
 		@:privateAccess
 		{
@@ -4495,7 +4495,16 @@ class PlayState extends MusicBeatState
 			if (!PlayStateChangeables.Optimize)
 			{
 				dummyBlackScreen.alpha = 1;
-				camHUD.visible = false;
+				grpStrumLine.visible = false;
+				playerStrums.forEach(function(playurShite:FlxSprite)
+				{
+					playurShite.visible = false;
+				});
+				cpuStrums.forEach(function(opponentShite:FlxSprite)
+				{
+					opponentShite.visible = false;
+				});
+				//camHUD.visible = false;
 			}
 
 			if (songLowercase == 'mic-test')
@@ -4535,7 +4544,16 @@ class PlayState extends MusicBeatState
 				if (!PlayStateChangeables.Optimize)
 				{
 					dummyBlackScreen.alpha = 0;
-					camHUD.visible = true;
+					grpStrumLine.visible = true;
+					playerStrums.forEach(function(playurShite:FlxSprite)
+					{
+						playurShite.visible = true;
+					});
+					cpuStrums.forEach(function(opponentShite:FlxSprite)
+					{
+						opponentShite.visible = true;
+					});
+					//camHUD.visible = true;
 				}
 				if (songPosClock != null)
 					FlxTween.shake(songPosClock, 0.05, Conductor.crochet / 1000, XY, {ease: FlxEase.sineOut});
@@ -4947,6 +4965,7 @@ class PlayState extends MusicBeatState
 			campaignRatingArray.push(Ratings.GenerateLetterRank(accuracy));
 		}
 
+		//Ending
 		if (isStoryMode)
 		{
 			campaignScore += songScore;
@@ -5021,7 +5040,7 @@ class PlayState extends MusicBeatState
 				
 				nextStateIsPlayState = true;
 
-				if (!skippedSong)
+				if (!skippedSong && storyProgress > 0)
 				{
 					FlxTransitionableState.skipNextTransOut = true;
 					FlxTransitionableState.skipNextTransIn = true;
@@ -5745,7 +5764,7 @@ class PlayState extends MusicBeatState
 				comboBreakSound.stop();
 
 			comboBreakSound = FlxG.sound.play(Paths.soundRandom('comboBreakBig', 1, 3), 1);
-			comboBreakSound.set_pitch(FlxG.random.float(0.8, 1.2));
+			comboBreakSound.pitch = FlxG.random.float(0.8, 1.2);
 		}
 		else if (combo >= 50 || nonSustainCombo >= 10)
 		{
@@ -9826,7 +9845,7 @@ class PlayState extends MusicBeatState
 								if (lowHPHeartBeat.playing)
 									lowHPHeartBeat.stop();
 								lowHPHeartBeat = FlxG.sound.play(Paths.sound('lowHP'), lowHPEffectVol);
-								lowHPHeartBeat.set_pitch(FlxG.random.float(0.85, 1.15));
+								lowHPHeartBeat.pitch = FlxG.random.float(0.85, 1.15);
 
 								coolSoundFilter.gainLF = ((lowHPEffectVol * 0.75) - 1) * -1; //LMAO I HOPE THIS WORKS
 								

@@ -766,10 +766,12 @@ class FlxSound extends FlxBasic
 	}
 	
 	//Makin this public!!
-	public function set_pitch(v:Float):Float
+	//nevermind!!! LMAO
+	function set_pitch(v:Float):Float
 	{
 		#if FLX_PITCH
 		if (_channel != null)
+		{
 			#if openfl_legacy
 			_channel.pitch = v;
 			#else
@@ -777,6 +779,7 @@ class FlxSound extends FlxBasic
 			if (_channel.__source != null)
 				_channel.__source.pitch = v;
 			#end
+		}
 		#else
 		if (_channel != null)
 		{

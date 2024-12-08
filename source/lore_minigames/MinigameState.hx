@@ -805,7 +805,7 @@ class MinigameState extends MusicBeatState
 			lockTheNextDoorThePlayerOverlapsWith = false;
 			object.isLocked = true;
 			doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
-			doorCloseSound.set_pitch(FlxG.random.float(0.4, 0.6));
+			doorCloseSound.pitch = FlxG.random.float(0.4, 0.6);
 			doorCloseSound.play(true);
 		}
 	}
@@ -925,7 +925,7 @@ class MinigameState extends MusicBeatState
 							doorCloseSound.stop();
 						//Open
 						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
-						doorOpenSound.set_pitch(FlxG.random.float(0.35, 0.55));
+						doorOpenSound.pitch = FlxG.random.float(0.35, 0.55);
 						doorOpenSound.play(true);
 						camHUD.fade(FlxColor.WHITE, 2.5, false, function()
 						{
@@ -957,7 +957,7 @@ class MinigameState extends MusicBeatState
 							doorCloseSound.stop();
 						//Open
 						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
-						doorOpenSound.set_pitch(FlxG.random.float(0.8, 1.2));
+						doorOpenSound.pitch = FlxG.random.float(0.8, 1.2);
 						doorOpenSound.play(true);
 						new FlxTimer().start(Conductor.stepCrochet / 1000, function(tmr:FlxTimer)
 						{
@@ -986,7 +986,7 @@ class MinigameState extends MusicBeatState
 										player.canMove = true;
 										//Close
 										doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
-										doorCloseSound.set_pitch(FlxG.random.float(0.8, 1.2));
+										doorCloseSound.pitch = FlxG.random.float(0.8, 1.2);
 										doorCloseSound.play(true);
 									}
 								}, 5);
@@ -1127,7 +1127,7 @@ class MinigameState extends MusicBeatState
 			camGame.visible = false;
 			var dedSound:FlxSound;
 			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
-			dedSound.set_pitch(0.5);
+			dedSound.pitch = 0.5;
 
 			//Jumpscare Shit
 			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));

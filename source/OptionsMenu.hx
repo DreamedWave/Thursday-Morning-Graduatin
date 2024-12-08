@@ -349,7 +349,7 @@ class OptionsMenu extends MusicBeatMenu
 						for (leOptionne in currentSelectedCat.getOptions())
 						{
 							//Idk man there's no getName() and im too lazy to make one myself,,, (- ^ -)
-							if (leOptionne.getDisplay().contains('Reset'))
+							if (leOptionne.getDisplay().contains('[Reset'))
 							{
 								leOptionne.resetConfirmBool();
 								trace ('reset state of ' + leOptionne.getDisplay());
@@ -618,7 +618,7 @@ class OptionsMenu extends MusicBeatMenu
 						FlxG.save.flush();
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 						//Cool Flashing Red Effect
-						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
+						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('[Reset'))
 						{
 							//Placeholder - flash this and do sum cool shit with it!
 							grpControls.members[curSelected].color = 0xFFFF0000;
@@ -672,7 +672,7 @@ class OptionsMenu extends MusicBeatMenu
 						controlLabel.y += 70 * i;
 						controlLabel.targetY = i;
 						controlLabel.ID = i;
-						if (currentSelectedCat.getOptions()[i].getDisplay().contains('Reset'))
+						if (currentSelectedCat.getOptions()[i].getDisplay().contains('[Reset'))
 						{
 							if (DisclaimerState.wentOptions)
 								controlLabel.color = 0xFFC77070;

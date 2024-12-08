@@ -259,7 +259,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			//Different tweens for pitch and vol cuz it dont sound good when it's a singular one
 			//Now added tapeStop as a function for FlxSound - but like this is still ideal for here so that it don't cut off the effect and also for that cool FlxEase!
 			FlxTween.tween(FlxG.sound.music, {volume: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepOut, startDelay: 0.1});
-			FlxTween.tween(FlxG.sound.music, {pitch: 0.3}, 0.4, {type: ONESHOT, ease: FlxEase.quartOut, onComplete: 
+			FlxTween.tween(FlxG.sound.music, {pitch: 0.5}, 0.4, {type: ONESHOT, ease: FlxEase.quartOut, onComplete: 
 				function(twn:FlxTween)
 				{
 					FlxG.sound.music.stop();

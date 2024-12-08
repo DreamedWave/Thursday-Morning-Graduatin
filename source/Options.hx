@@ -1486,7 +1486,7 @@ class LockWeeksOption extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 
@@ -1533,7 +1533,7 @@ class ResetScoreOption extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 
@@ -1587,7 +1587,7 @@ class ResetSettings extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 

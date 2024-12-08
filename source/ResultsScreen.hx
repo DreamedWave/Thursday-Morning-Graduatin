@@ -291,12 +291,12 @@ class ResultsScreen extends MusicBeatSubstate
         if (PlayerSettings.player1.controls.ACCEPT || FlxG.mouse.justPressed)
         {   
             if (music != null && music.playing)
-                music.fadeOut(0.3);
+                FlxTween.tween(music, {pitch: 1.5}, 0.15, {ease: FlxEase.quartInOut, type: ONESHOT, onComplete: function(twn:FlxTween){music.tapeStop(0.35, 0);}});
 
             trace("Deleting Temp Shit");
             CleanUpAfterYoself('assets/temp');
 
-            FlxG.cameras.fade(FlxColor.BLACK, 0.4, false, function()
+            FlxG.cameras.fade(FlxColor.BLACK, 0.5, false, function()
             {
                 //causes crash LMAO
                 //FlxG.bitmap.clearCache();
@@ -314,7 +314,7 @@ class ResultsScreen extends MusicBeatSubstate
             if (rewardSound != null && rewardSound.playing)
                 rewardSound.stop();
             rewardSound = FlxG.sound.play(Paths.soundRandom('resultScreenPrize/rewardSound_', 0, 15), 0.8);
-            rewardSound.set_pitch(FlxG.random.float(0.9, 1.1));
+            rewardSound.pitch = FlxG.random.float(0.9, 1.1);
             rewardSound.autoDestroy = true;
             switch (FlxG.random.int(0, 2))
             {
