@@ -126,6 +126,9 @@ class Main extends Sprite
 		#end
 
 
+		FlxG.fixedTimestep = false;
+
+
 		//Moved Save.Bind to Modified FlxG
 		PlayerSettings.init();
 		SaveData.initSave();

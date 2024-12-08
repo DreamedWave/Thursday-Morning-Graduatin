@@ -273,6 +273,7 @@ class PlayState extends MusicBeatState
 	public static var campAccDivider:Int = 0;
 	public static var campaignRatingArray:Array<String> = [];
 
+	//should NEVER be updated by itself, for the updateAccuracy function handles this, just specify the amount!!!
 	private var accuracyDefault:Float = 0.00;
 	private var totalNotesHit:Float = 0;
 	private var totalNotesHitMax:Float = 0;
@@ -525,10 +526,10 @@ class PlayState extends MusicBeatState
 		if (isStoryMode)
 		{
 			if (storyProgress == 0 && campaignDeaths == 0 && songDeaths == 0 && !hasReset && storyWeek != 0) //we dont have a hasVideo field, so we gotta manually add weeks here LMAOOO
-			{
+			//{
 				//trace('me mama');
 				blackScreenAlpha = 1;
-			}
+			//}
 			else
 			{
 				blackScreenAlpha = blackScreenFadeTo;
@@ -1116,9 +1117,10 @@ class PlayState extends MusicBeatState
 			}
 
 			dummyBlackScreen = new FlxSprite(-FlxG.width * defaultCamZoom,
-				-FlxG.height * defaultCamZoom).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.BLACK);
+				-FlxG.height * defaultCamZoom).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.WHITE);
 			dummyBlackScreen.scrollFactor.set();
 			dummyBlackScreen.alpha = 0;
+			dummyBlackScreen.blend = SUBTRACT;
 			dummyBlackScreen.screenCenter();
 			add(dummyBlackScreen);
 
@@ -1231,10 +1233,11 @@ class PlayState extends MusicBeatState
 		}
 
 		blackScreen = new FlxSprite(-FlxG.width * 2,
-			-FlxG.height * 2).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.BLACK);
+			-FlxG.height * 2).makeGraphic(FlxG.width * 3, FlxG.height * 3, FlxColor.WHITE);
 		blackScreen.screenCenter();
 		blackScreen.scrollFactor.set();
 		blackScreen.alpha = blackScreenAlpha;
+		blackScreen.blend = SUBTRACT;
 		blackScreen.cameras = [camEXT];
 		add(blackScreen);
 
@@ -1365,7 +1368,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
-		FlxG.fixedTimestep = false;
+		//FlxG.fixedTimestep = false;
 
 		//Adding Offsets Again      V //Ploink
 		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
@@ -2438,8 +2441,7 @@ class PlayState extends MusicBeatState
 						targetHealth += calculateHealth(9);
 						songScore -= 50;
 						//Starts filling your accuracy with duds, causing you to have issues with score and health
-						totalNotesHit += 1 - (0.025 * mashPresses);//Spamming further lowers it
-						updateAccuracy();
+						updateAccuracy(1 - (0.025 * mashPresses));
 						//#if debug
 						trace("BRO STOP SPAMMING - " + mashPresses + ' | ' + mashPressThreshold);
 						//#end
@@ -4074,8 +4076,7 @@ class PlayState extends MusicBeatState
 											dodgeFuckingShot(false, daNote.noteData);
 											//la health none for mine
 											//if (FlxG.save.data.accuracyMod == 0)
-											totalNotesHit += 1;
-											updateAccuracy();
+											updateAccuracy(1);
 											//sicks++;
 
 										case 'trigger':
@@ -4156,6 +4157,7 @@ class PlayState extends MusicBeatState
 											//Health Drain for Sustain Children
 											targetHealth += calculateHealth(3, targetHealth, accuracy);
 										}
+
 										updateAccuracy();
 									}
 								}
@@ -5186,6 +5188,9 @@ class PlayState extends MusicBeatState
 			Paths.clearUnusedMemory();
 
 			Main.doFocusShit = true;
+
+			//We uhhh we uhhh ermm uhhhhhh;;;
+			//FlxG.fixedTimestep = true;
 		}
 
 		super.destroy();
@@ -5313,28 +5318,31 @@ class PlayState extends MusicBeatState
 					return;
 
 				var daRating = daNote.rating;
-				if (daRating == null || !showNumShit)
+				if (daRating == null)
 					return;
 
 				if (allowHealthModifiers && !daNote.withinCompensation)
 				{
-					if (FlxG.save.data.accuracyMod == 0 && mashPresses <= mashPressThreshold)
+					if (FlxG.save.data.accuracyMod == 0)
 					{
-						switch (daRating)
+						if (mashPresses <= mashPressThreshold)
 						{
-							case 'bad':
-								totalNotesHit += 0.50;
-							case 'good':
-								totalNotesHit += 0.75;
-							case 'sick':
-								totalNotesHit += 1;
+							switch (daRating)
+							{
+								case 'bad':
+									updateAccuracy(0.50);
+								case 'good':
+									updateAccuracy(0.75);
+								case 'sick':
+									updateAccuracy(1);
+							}
 						}
 					}
 					else
-						totalNotesHit += daNote.parentWife;
+						updateAccuracy(daNote.parentWife);
 				}
 
-				if (!PlayStateChangeables.botPlay)
+				if (!PlayStateChangeables.botPlay && !showNumShit)
 				{
 					//Early return for no combo
 					if (combo <= 0)
@@ -5426,10 +5434,15 @@ class PlayState extends MusicBeatState
 				var wife:Float = EtternaFunctions.wife3(-noteDiff, Conductor.timeScale);
 		
 				if (FlxG.save.data.accuracyMod == 1)
+				{
 					if (daRating != 'miss')
-						totalNotesHit += wife;
+						updateAccuracy(wife);
+						if (daNote.isParent)
+							for (i in daNote.children)
+								i.parentWife = wife;
+				}
 		
-				if (combo >= 5 && daRating != 'miss' && daRating != 'slip')
+				if (combo >= 10 && daRating != 'miss' && daRating != 'slip')
 					showNumShit = true;
 		
 				if (allowHealthModifiers && !daNote.withinCompensation)
@@ -5454,16 +5467,13 @@ class PlayState extends MusicBeatState
 						case 'shit':
 							if (allowHealthModifiers && !daNote.withinCompensation)
 							{
-								//if (FlxG.save.data.shitBreaksCombo)
-								//{
 								bypassOppMissCheck++;
 								timingColour = FlxColor.RED;
 								breakCombo();
 								slips++;
 								missesInSection++;
 								if (FlxG.save.data.accuracyMod == 0)
-									totalNotesHit -= 1;
-								//}
+									updateAccuracy();
 								//Health Drain
 								targetHealth += calculateHealth(4, targetHealth, accuracy);
 							}
@@ -5473,7 +5483,7 @@ class PlayState extends MusicBeatState
 							bads++;
 							if (FlxG.save.data.accuracyMod == 0)
 								if (mashPresses <= mashPressThreshold)
-									totalNotesHit += 0.50;
+									updateAccuracy(0.5);
 							timingColour = FlxColor.YELLOW;
 						case 'good':
 							bypassOppMissCheck--;
@@ -5482,7 +5492,7 @@ class PlayState extends MusicBeatState
 							goods++;
 							if (FlxG.save.data.accuracyMod == 0)
 								if (mashPresses <= mashPressThreshold)
-									totalNotesHit += 0.75;
+									updateAccuracy(0.75);
 							timingColour = FlxColor.LIME;
 						case 'sick':
 							bypassOppMissCheck -= 2;
@@ -5490,15 +5500,9 @@ class PlayState extends MusicBeatState
 							targetHealth += !mashing ? calculateHealth(7, targetHealth, accuracy, hurtVignette.alpha) * (isJack ? 1.25 : 1) : calculateHealth(7, targetHealth, accuracy, hurtVignette.alpha) / (4 * mashPresses - mashPressThreshold);
 							if (FlxG.save.data.accuracyMod == 0)
 								if (mashPresses <= mashPressThreshold)
-									totalNotesHit += 1;
+									updateAccuracy(1);
 							sicks++;
 							timingColour = FlxColor.CYAN;
-					}
-
-					if (FlxG.save.data.accuracyMod == 1 && daNote.isParent)
-					{
-						for (i in daNote.children)
-							i.parentWife = wife;
 					}
 				}
 		
@@ -6077,7 +6081,7 @@ class PlayState extends MusicBeatState
 				saveJudge.push("miss");
 			}
 
-			if (!PlayStateChangeables.Optimize && combo > 5)
+			if (!PlayStateChangeables.Optimize && showNumShit)
 			{
 				if (gf.animOffsets.exists('sad') && curSong != "Mic Test")
 					gf.playAnim('sad');
@@ -6160,8 +6164,9 @@ class PlayState extends MusicBeatState
 	}
 
 	//Making this void (4)
-	function updateAccuracy():Void
+	function updateAccuracy(?amt:Float = 0):Void
 	{
+		totalNotesHit += amt;
 		totalPlayed += 1;
 		totalNotesHitMax = totalPlayed;
 		accuracy = Math.max(0, totalNotesHit / totalPlayed * 100);
@@ -6171,7 +6176,6 @@ class PlayState extends MusicBeatState
 			campaignAccuracy += accuracy;
 			campAccDivider++;
 		}
-		//trace ('total hit: ' + totalNotesHit + ' | ' + totalNotesHitMax + ' || acc: ' + accuracy + ' | ' + accuracyDefault);
 	}
 
 	var mashPresses:Int = 0;
@@ -6754,8 +6758,8 @@ class PlayState extends MusicBeatState
 			else
 				note.delayedDeath = true;
 
-			if (allowHealthModifiers && !note.withinCompensation)
-				updateAccuracy();
+			//if (allowHealthModifiers && !note.withinCompensation)
+				//updateAccuracy();
 		}
 	}
 

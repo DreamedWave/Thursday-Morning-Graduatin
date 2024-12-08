@@ -89,6 +89,8 @@ class MinigameState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		Conductor.changeBPM(115);
+
+		//FlxG.fixedTimestep = true;
 		
 		//Volume shits
 		preEscMusGroup = new FlxSoundGroup(FlxG.sound.defaultMusicGroup.volume);
@@ -168,7 +170,7 @@ class MinigameState extends MusicBeatState
 		pseudoCamFade.cameras = [camHUD];
 		add(pseudoCamFade);
 		
-		darkenScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFFFFFFFF);
+		darkenScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.WHITE);
 		darkenScreen.scrollFactor.set();
 		darkenScreen.alpha = 0;
 		darkenScreen.cameras = [camGame];

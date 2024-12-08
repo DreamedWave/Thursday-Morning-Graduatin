@@ -375,7 +375,7 @@ class ResultsScreen extends MusicBeatSubstate
 	override function destroy()
 	{
         if (music != null && music.playing)
-		    music.destroy();
+            music.stop();
 		super.destroy();
 	}
 
