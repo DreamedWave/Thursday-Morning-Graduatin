@@ -324,7 +324,7 @@ class LoadingState extends MusicBeatMenu
 						screen.done++;
 					}
 					
-					screen.fadeOutShits();
+					screen.fadeOutFunction();
 					new FlxTimer().start(0.5, function(tmr:FlxTimer)
 					{
 						stopMusic = true;
@@ -338,51 +338,49 @@ class LoadingState extends MusicBeatMenu
 				screen = new LoadingScreen(instantShow, inPlayState);
 				add(screen);
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/music'))
+				for (a in sys.FileSystem.readDirectory('assets/minigame/music'))
 					screen.toDo++;
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
+				for (b in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
 					screen.toDo++;
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/sounds'))
+				for (c in sys.FileSystem.readDirectory('assets/minigame/sounds'))
 					screen.toDo++;
 
+				FlxG.log.add('creating thread shit');
 				Thread.create(() ->
 				{
-					for (i in sys.FileSystem.readDirectory('assets/minigame/music'))
+					for (a in sys.FileSystem.readDirectory('assets/minigame/music'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (a.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/' + i;
-							FlxG.sound.load(i);
+							a = 'assets/minigame/music/' + a;
+							FlxG.sound.load(a);
 							screen.done++;
 						}
 					}
 
-					for (i in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
+					for (b in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (b.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/map_1/' + i;
-							FlxG.sound.load(i);
+							b = 'assets/minigame/music/map_1/' + b;
+							FlxG.sound.load(b);
 							screen.done++;
 						}
 					}
 
-					for (i in sys.FileSystem.readDirectory('assets/minigame/sounds'))
+					for (c in sys.FileSystem.readDirectory('assets/minigame/sounds'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (c.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/sounds' + i;
-							FlxG.sound.load(i);
+							c = 'assets/minigame/music/sounds' + c;
+							FlxG.sound.load(c);
 							screen.done++;
 						}
 					}
 
-					screen.fadeOutShits();
+					screen.fadeOutFunction();
 					new FlxTimer().start(0.5, function(tmr:FlxTimer)
 					{
 						stopMusic = true;

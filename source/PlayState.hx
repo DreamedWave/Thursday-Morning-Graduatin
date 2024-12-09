@@ -3824,11 +3824,8 @@ class PlayState extends MusicBeatState
 		if (generatedMusic && startedCountdown)
 		{
 			//Updating of alphas
-			if (lagCompIcon.alpha > 0)
-			{
-				if (allowHealthModifiers)
-					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 10));
-			}
+			if (lagCompIcon.alpha != 0 && allowHealthModifiers)
+					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 5));
 
 			if (!paused && !endedSong)
 			{
@@ -4225,31 +4222,20 @@ class PlayState extends MusicBeatState
 						}
 					}
 		
-					if (!allowHealthModifiers && daNote.canBeHit && !daNote.delayedDeath && daNote.enabled)
+					if (!allowHealthModifiers && !daNote.withinCompensation && daNote.isOnScreen(camHUD) && !daNote.delayedDeath && daNote.enabled)
 					{
 						daNote.withinCompensation = true;
 						if ((daNote.strumTime <= Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale))
 						{
-							if (daNote.isSustainNote
-							&& daNote.sustainActive
-							&& daNote.spotInLine != daNote.parent.children.length)
+							if (daNote.isSustainNote && daNote.sustainActive && daNote.spotInLine != daNote.parent.children.length)
+							{
 								for (i in daNote.parent.children)
 								{
 									i.alpha = 0.1;
 									i.sustainActive = false;
 								}
-							else 
-							{
-								if (!daNote.isOnScreen(camHUD) && daNote.tooLate)
-								{
-									daNote.visible = false;
-									//daNote.finnaBeKilled = true;
-									daNote.kill();
-									notes.remove(daNote, true);
-								}
-								else if (daNote.enabled)
-									daNote.enabled = false;
 							}
+							daNote.enabled = false;
 						}
 					}
 				});
@@ -4614,12 +4600,18 @@ class PlayState extends MusicBeatState
 					if (allowLagComp && !PlayStateChangeables.botPlay)
 					{
 						//if (FlxG.updateFramerate < lagspikeDetectionThreshold && curBeat > 4 && !endedSong && allowHealthModifiers)
-						if (Main.fpsCounter.gameGoinThruIt && !endedSong && allowHealthModifiers)
+						//A better way to check the fps
+						if (Main.fpsCounter.gameGoinThruIt)
 						{
-							lagCompIcon.alpha = 1;
-							allowHealthModifiers = false;
-							compensatedViaLagSpike = true;
+							if (!endedSong && allowHealthModifiers)
+							{
+								lagCompIcon.alpha = 1;
+								allowHealthModifiers = false;
+								compensatedViaLagSpike = true;
+							}
 						}
+						else if (compensatedViaLagSpike && !allowHealthModifiers)
+							allowHealthModifiers = true;
 					}
 
 					if (compensatedViaLagSpike)
@@ -4644,6 +4636,10 @@ class PlayState extends MusicBeatState
 		}
 
 		#if debug
+		FlxG.watch.addQuick("Game is Going Thru It", Main.fpsCounter.gameGoinThruIt);
+		FlxG.watch.addQuick("Allow Health Modifiers", allowHealthModifiers);
+		FlxG.watch.addQuick("Compensated Via Lagspike", compensatedViaLagSpike);
+		FlxG.watch.addQuick("Compensation Timer Active", (compensationTimer != null ? compensationTimer.active : "currently NULL!"));
 		FlxG.watch.addQuick("curBPM", Conductor.bpm);
 		//Broken for some hecking reason
 		FlxG.watch.addQuick("Closest Note", (unspawnNotes.length > 0 ? unspawnNotes[0].strumTime - Conductor.songPosition : "No note"));

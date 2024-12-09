@@ -84,8 +84,9 @@ class LoadingScreen extends FlxSpriteGroup
 
     }
 
-	public function fadeOutShits():Void
+	public function fadeOutFunction():Void
 	{
+		FlxG.log.add('fading out');
 		FlxTween.tween(loadingIcon, {alpha: 0}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 		FlxTween.tween(loadProgressBar, {alpha: 0}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 	}

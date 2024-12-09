@@ -994,7 +994,7 @@ class FPSCapOption extends Option
 
 	override private function updateDisplay():String
 	{
-		return "FPS Cap: <" + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor Rate (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap) + ">";
+		return "FPS Cap: <" + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap) + ">";
 	}
 	
 	override function right():Bool
@@ -1034,7 +1034,7 @@ class FPSCapOption extends Option
 
 	override function getValue():String
 	{
-		return "Current FPS Cap: " + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "V-SYNC (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap);
+		return "Current FPS Cap: " + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap);
 	}
 }
 
