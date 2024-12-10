@@ -24,6 +24,7 @@ import flash.text.GridFitType;
 /**
  * The flixel sound tray, the little volume meter that pops down sometimes.
  * Accessed via `FlxG.game.soundTray` or `FlxG.sound.soundTray`.
+ * Customized for TMG by AmieeWuzHere!
  */
 class FlxSoundTray extends Sprite
 {
@@ -99,7 +100,7 @@ class FlxSoundTray extends Sprite
 		var dtf:TextFormat = new TextFormat('Monsterrat', 10, 0xffffff);
 		dtf.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = dtf;
-		text.text = "- VOLUME +";
+		text.text = "VOLUME: " + globalVolume;
 		text.y = 16;
 		addChild(text);
 
@@ -162,9 +163,9 @@ class FlxSoundTray extends Sprite
 				}
 				else if (visible && !trayTween.active)
 				{
-					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
+					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.35, 
 						{
-							ease: FlxEase.smootherStepIn,
+							ease: FlxEase.linear,
 							onComplete: function(twn:FlxTween)
 							{
 								trayTween = null;
@@ -185,7 +186,7 @@ class FlxSoundTray extends Sprite
 		}
 	}
 
-	var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
+	var globalVolume:Int = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 	var isRetreating:Bool = true;
 
 	/**
@@ -197,11 +198,18 @@ class FlxSoundTray extends Sprite
 	{
 		if (!tempDisable)
 		{
+			globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
+
 			if (!silent)
 			{
 				var sound;
-				if (!FlxG.sound.muted && text.text != "0  MUTE  0")
-					sound = FlxAssets.getSound(up ? volumeUpSound : volumeDownSound);
+				if (!FlxG.sound.muted && text.text != "MUTED")
+				{
+					if (globalVolume != 10)
+						sound = FlxAssets.getSound(up ? volumeUpSound : volumeDownSound);
+					else
+						sound = FlxAssets.getSound("assets/sounds/soundtray/volumeMax");
+				}
 				else
 					sound = FlxAssets.getSound("assets/sounds/soundtray/volumeUnmute");
 
@@ -232,18 +240,16 @@ class FlxSoundTray extends Sprite
 					});
 			}
 
-			globalVolume = Math.round(FlxG.sound.volume * 10);
-
 			if (FlxG.sound.muted)
 			{
 				globalVolume = 0;
-				if (text.text != "0  MUTE  0")
-					text.text = "0  MUTE  0";
+				if (text.text != "MUTED")
+					text.text = "MUTED";
 			}
 			else
-				text.text = "- VOLUME +";
+				text.text = "VOLUME: " + globalVolume;
 
-			trace('Global Volume: ' + globalVolume);
+			//trace('Global Volume: ' + globalVolume);
 
 			for (i in 0..._bars.length)
 			{

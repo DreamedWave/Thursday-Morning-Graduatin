@@ -434,7 +434,9 @@ class FreeplayState extends MusicBeatMenu
 						{
 							freeplayMusicPlaying = false;
 							Conductor.changeBPM(102);
-							FlxG.sound.music.stop();
+							FlxG.sound.music.tapeStop(0.4, 0.5, function(twn:FlxTween){FlxG.sound.music.stop();});
+							//FlxTween.tween(FlxG.sound.music, {volume: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepOut, startDelay: 0.2});
+							//FlxTween.tween(FlxG.sound.music, {pitch: 0.2}, 0.4, {type: ONESHOT, ease: FlxEase.quartOut, startDelay: 0.05, onComplete: function(twn:FlxTween){FlxG.sound.music.stop();}});
 						}
 						transitionTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
 						{
