@@ -532,7 +532,7 @@ class PlayState extends MusicBeatState
 			{
 				if (clearNumTwn != null)
 					clearNumTwn.cancel();
-				clearNumTwn = FlxTween.num(clearPercentage, 0, Conductor.crochet * 3.8 / 1000, {type: ONESHOT, ease: FlxEase.quadOut}, function(f:Float){clearPercentage = f;});
+				clearNumTwn = FlxTween.num(clearPercentage, 0, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut}, function(f:Float){clearPercentage = f;});
 				blackScreenAlpha = blackScreenFadeTo;
 				if (!playedCutscene && songDeaths == 0 && !hasReset)
 					health = prevHealth;
@@ -3971,6 +3971,7 @@ class PlayState extends MusicBeatState
 									switch (daNote.noteType)
 									{
 										case 'mine':
+											//totalCleared[0]++;
 											dodgeFuckingShot(false, daNote.noteData);
 											//la health none for mine
 											updateAccuracy(1);
@@ -4769,7 +4770,7 @@ class PlayState extends MusicBeatState
 						singFollowOffset = [15, 2];
 				}
 			}
-			camShake(true, false, 0.035, Conductor.crochet / 1000);
+			camShake(true, true, 0.035, Conductor.crochet / 1000);
 			camShake(true, true, 'camHUD', 0.01, Conductor.crochet / 1000);
 
 			if (playDodgeSound)
@@ -9169,7 +9170,6 @@ class PlayState extends MusicBeatState
 								}
 
 
-								//Variegated Skylines Camshake
 								if (inSongClimax)
 								{
 									camShake(true, false, 'camGame', 1, 0.005, idleCamShakeTimer);
@@ -9447,6 +9447,7 @@ class PlayState extends MusicBeatState
 											camHUD.alpha = 1;
 								}
 
+								//Variegated Skylines idle Camshake
 								if (stageParticles.visible)
 								{
 									if (!inSongClimax)
@@ -9456,7 +9457,7 @@ class PlayState extends MusicBeatState
 									}
 									else
 									{
-										camShake(false, false, 'camGame', 2, 0.015, idleCamShakeTimer);
+										camShake(false, false, 'camGame', 2, 0.0115, idleCamShakeTimer);
 										camShake(false, false, 'camHUD', 2, 0.002, idleCamShakeTimer);
 									}
 									

@@ -39,9 +39,13 @@ class DiffCalc
                 if (ii[5] != 'mine')
                 {
                     if (ii[1] > 3 && !i.mustHitSection)
-                        cleanedNotes.push(new SmallNote(ii[0],Math.floor(Math.abs(ii[1]))));
+                        cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                     else if (ii[1] < 4 && i.mustHitSection)
-                        cleanedNotes.push(new SmallNote(ii[0],Math.floor(Math.abs(ii[1]))));
+                        cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
+                }
+                else
+                {
+                    trace('didnt count note cuz it is a mine note');
                 }
             }
         }

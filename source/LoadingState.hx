@@ -324,8 +324,7 @@ class LoadingState extends MusicBeatMenu
 						screen.done++;
 					}
 					
-					screen.fadeOutFunction();
-					new FlxTimer().start(0.5, function(tmr:FlxTimer)
+					screen.fadeOutFunction(function(twn:FlxTween)
 					{
 						stopMusic = true;
 						loadAndSwitchState(target, stopMusic, false);
@@ -380,12 +379,11 @@ class LoadingState extends MusicBeatMenu
 						}
 					}
 
-					screen.fadeOutFunction();
-					new FlxTimer().start(0.5, function(tmr:FlxTimer)
-					{
-						stopMusic = true;
-						loadAndSwitchState(target, stopMusic, false);
-					});
+					screen.fadeOutFunction(function(twn:FlxTween)
+						{
+							stopMusic = true;
+							loadAndSwitchState(target, stopMusic, false);
+						});
 				});
 
 			default:

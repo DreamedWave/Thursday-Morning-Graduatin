@@ -17,7 +17,7 @@ class LoadingScreen extends FlxSpriteGroup
 
 	var loadProgressBar:FlxSprite;
 	var loadingIcon:FlxSprite;
-	var fadeInTime:Float = 1;
+	public var fadeTime:Float = 1;
 
     public function new(instantShow:Bool = false, inPlayState:Bool = false)
     {
@@ -70,11 +70,11 @@ class LoadingScreen extends FlxSpriteGroup
 
 		if (!instantShow)
 		{
-			fadeInTime = 0.5;
+			fadeTime = 0.5;
 			if (inPlayState)
-				fadeInTime = 0.25;
-			FlxTween.tween(loadingIcon, {alpha: 1}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
-			FlxTween.tween(loadProgressBar, {alpha: 0.3}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
+				fadeTime = 0.25;
+			FlxTween.tween(loadingIcon, {alpha: 1}, fadeTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
+			FlxTween.tween(loadProgressBar, {alpha: 0.3}, fadeTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 		}
 		else
 		{
@@ -84,11 +84,11 @@ class LoadingScreen extends FlxSpriteGroup
 
     }
 
-	public function fadeOutFunction():Void
+	public function fadeOutFunction(finishFadeOut:TweenCallback):Void
 	{
 		FlxG.log.add('fading out');
-		FlxTween.tween(loadingIcon, {alpha: 0}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
-		FlxTween.tween(loadProgressBar, {alpha: 0}, fadeInTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
+		FlxTween.tween(loadingIcon, {alpha: 0}, fadeTime, {type: ONESHOT, ease: FlxEase.smootherStepIn});
+		FlxTween.tween(loadProgressBar, {alpha: 0}, fadeTime, {type: ONESHOT, ease: FlxEase.smootherStepIn, onComplete: finishFadeOut});
 	}
 
     override function update(elapsed:Float)
