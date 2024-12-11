@@ -199,7 +199,7 @@ class FlxSoundTray extends Sprite
 		if (!tempDisable)
 		{
 			globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
-
+			
 			if (!silent)
 			{
 				var sound;

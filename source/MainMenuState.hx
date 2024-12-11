@@ -134,7 +134,7 @@ class MainMenuState extends MusicBeatMenu
 		menuBG = new FlxSprite(0, -7).loadGraphic(Paths.image('MainMenu_buttonsBG'));
 		//menuBG.scrollFactor.set();
 		if (!Main.nightMode && !FlxG.save.data.nightmode)
-			menuBG.alpha = 0.75;
+			menuBG.alpha = 0.8;
 		else
 			menuBG.alpha = 0.85;
 		menuBG.antialiasing = FlxG.save.data.antialiasing;

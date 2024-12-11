@@ -521,7 +521,7 @@ class PlayState extends MusicBeatState
 		camHUD.bgColor.alpha = 0;
 		camEXT.bgColor.alpha = 0;
 
-		blackScreenFadeTo = !Main.nightMode && !FlxG.save.data.nightmode ? 0 : 0.25;
+		blackScreenFadeTo = !Main.nightMode && !FlxG.save.data.nightmode ? 0 : 0.1;
 
 		if (isStoryMode)
 		{
@@ -538,6 +538,8 @@ class PlayState extends MusicBeatState
 				//trace('startupHealth = ' + health);
 			}
 		}
+		else
+			blackScreenAlpha = blackScreenFadeTo;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
@@ -3824,7 +3826,8 @@ class PlayState extends MusicBeatState
 		if (generatedMusic && startedCountdown)
 		{
 			//Updating of alphas
-			if (lagCompIcon.alpha != 0 && allowHealthModifiers)
+			if (FlxG.save.data.lagCompensation) //Prevents crash if lag compensation is off
+				if (lagCompIcon.alpha != 0 && allowHealthModifiers)
 					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 5));
 
 			if (!paused && !endedSong)
@@ -4509,14 +4512,10 @@ class PlayState extends MusicBeatState
 
 				if (tutorialText != null)
 				{
-					if (tutorialText.length > 0)
+					tutorialText.forEach(function(text:FlxSprite)
 					{
-						for (i in 0...tutorialText.length)
-						{
-							if (tutorialText.members[i] != null)
-								tutorialText.members[i].destroy();
-						}
-					}
+						text.destroy();
+					});
 					tutorialText.destroy();
 				}
 			}
@@ -5338,27 +5337,24 @@ class PlayState extends MusicBeatState
 						updateAccuracy(daNote.parentWife);
 				}
 
-				if (!PlayStateChangeables.botPlay && !showNumShit)
+				if (!PlayStateChangeables.botPlay && showNumShit && !daNote.isBehindParent)
 				{
 					//Early return for no combo
 					if (combo <= 0)
 						return;
 					
-					if (showNumShit)
+					grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
 					{
-						grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
+						prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
+						if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
 						{
-							prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
-							if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
-							{
-								prevNum.color = 0xFFd7d1e6;
-								if (prevNum.alpha == 1)
-									prevNum.alpha = 0.5;
-							}
-							else
-								prevNum.color = 0xFFEA417C;
-						});
-					}
+							prevNum.color = 0xFFd7d1e6;
+							if (prevNum.alpha == 1)
+								prevNum.alpha = 0.5;
+						}
+						else
+							prevNum.color = 0xFFEA417C;
+					});
 
 					var separatedScore:Array<Int> = [];
 					var daLoop2:Int = 0;
@@ -5504,33 +5500,18 @@ class PlayState extends MusicBeatState
 		
 				if (!PlayStateChangeables.botPlay)
 				{
-					if (showNumShit && daRating != 'shit' && daRating != 'miss')
+					grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
 					{
-						grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
+						prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
+						if (prevRating.color != 0xFFD09A9C)
 						{
-							prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
-							if (prevRating.color != 0xFFD09A9C)
-							{
-								prevRating.color = 0xFFB1A9C3;
-								if (prevRating.alpha == 1)
-									prevRating.alpha = 0.5;
-							}
-							else
-								prevRating.color = 0xFFD09A9C;
-						});
-						grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
-						{
-							prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
-							if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
-							{
-								prevNum.color = 0xFFd7d1e6;
-								if (prevNum.alpha == 1)
-									prevNum.alpha = 0.5;
-							}
-							else
-								prevNum.color = 0xFFEA417C;
-						});
-					}
+							prevRating.color = 0xFFB1A9C3;
+							if (prevRating.alpha == 1)
+								prevRating.alpha = 0.5;
+						}
+						else
+							prevRating.color = 0xFFD09A9C;
+					});
 					
 					var rating:FlxSprite = new FlxSprite().loadGraphic(Paths.image("rating_" + daRating));
 					var ratingStartDelay:Float = Conductor.crochet * 0.001;
@@ -5586,6 +5567,22 @@ class PlayState extends MusicBeatState
 		
 					if (showNumShit)
 					{
+						if (daRating != 'shit' && daRating != 'miss')
+						{
+							grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
+							{
+								prevNum.acceleration.y += 25 * (Conductor.bpm * 0.01);
+								if (prevNum.color != FlxColor.RED && prevNum.color != 0xFFEA417C)
+								{
+									prevNum.color = 0xFFd7d1e6;
+									if (prevNum.alpha == 1)
+										prevNum.alpha = 0.5;
+								}
+								else
+									prevNum.color = 0xFFEA417C;
+							});
+						}
+						
 						var separatedScore:Array<Int> = [];
 						var daLoop:Int = 0;
 						var comboSplit:Array<String> = (combo + "").split('');
@@ -6649,6 +6646,7 @@ class PlayState extends MusicBeatState
 					combo++;
 
 				//Experimental showing your numbers for sustain notes
+				//It works so we keepin it >:33
 				popUpScore('sustain', note);
 
 				//Health Gain for Sustain
@@ -7116,7 +7114,7 @@ class PlayState extends MusicBeatState
 				case "Mic Test":
 					switch (curBeat)
 					{ 
-						//NOTE FOR FUTURE SAMUELS:  PREVENT CRASH WHEN SKIPPING IN TUTORIAL USING BOOL preventTutorialTips
+						//NOTE FOR FUTURE ME:  PREVENT CRASH WHEN SKIPPING IN TUTORIAL USING BOOL preventTutorialTips
 						//Dopne!
 						case 6:
 							subtitleTimer = new FlxTimer().start(0.3, function(tmr:FlxTimer)
@@ -7128,8 +7126,10 @@ class PlayState extends MusicBeatState
 							if (!preventTutorialTips)
 							{
 								FlxTween.tween(tutorialGraphicA, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
-								for (i in 0...4)
-									FlxTween.tween(tutorialText.members[i], {alpha: 1}, 0.35, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								tutorialText.forEach(function(text:FlxSprite)
+								{
+									FlxTween.tween(text, {alpha: 1}, 0.35, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								});
 							}
 						case 20:
 							if (!preventTutorialTips)
@@ -7143,30 +7143,24 @@ class PlayState extends MusicBeatState
 								});
 
 								//Im giving up on tweening this shit bro im crying SDGKKHDKHS
+								//I am now a changed person - will try again!!!
 								if (tutorialText != null)
 								{
-									if (bindTxtLeft != null)
-										tutorialText.remove(bindTxtLeft);
-									if (bindTxtDown != null)
-										tutorialText.remove(bindTxtDown);
-									if (bindTxtUp != null)
-										tutorialText.remove(bindTxtUp);
-									if (bindTxtRight != null)
-										tutorialText.remove(bindTxtRight);
-
-									if (tutorialText.length > 0)
+									tutorialText.forEach(function(text:FlxSprite)
 									{
-										for (i in 0...tutorialText.length)
-										{
-											if (tutorialText.members[i] != null)
+										FlxTween.tween(text, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete:
+											function(twn:FlxTween)
 											{
-												tutorialText.members[i].kill();
-												tutorialText.members[i].destroy();
+												text.destroy();
 											}
-										}
-									}
-									tutorialText.kill();
-									tutorialText.destroy();
+										});
+									});
+									new FlxTimer().start(0.6, function(tmr:FlxTimer)
+									{
+										FlxG.log.add('this might cause a crash ermm ermmm');
+										if (tutorialText != null)
+											tutorialText.destroy();
+									});
 								}
 							}
 						case 22:

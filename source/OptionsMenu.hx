@@ -618,9 +618,10 @@ class OptionsMenu extends MusicBeatMenu
 						FlxG.save.flush();
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 						//Cool Flashing Red Effect
-						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('[Reset'))
+						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
 						{
 							//Placeholder - flash this and do sum cool shit with it!
+							FlxG.log.add('changed color to red');
 							grpControls.members[curSelected].color = 0xFFFF0000;
 						}
 					}
@@ -675,7 +676,7 @@ class OptionsMenu extends MusicBeatMenu
 						if (currentSelectedCat.getOptions()[i].getDisplay().contains('[Reset'))
 						{
 							if (DisclaimerState.wentOptions)
-								controlLabel.color = 0xFFC77070;
+								controlLabel.color = 0xFF7E7070;
 						}
 						grpControls.add(controlLabel);
 					}
@@ -705,6 +706,7 @@ class OptionsMenu extends MusicBeatMenu
 				//resets the 'reset story/scores/settings' options to default upon scrolling
 				if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('?'))
 				{
+					FlxG.log.add('changed back color and reset confirm bool');
 					currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
 					grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 					grpControls.members[curSelected].color = 0xFFFFFFFF;
