@@ -238,7 +238,7 @@ class GhostTapOption extends Option
 	}
 }
 
-class AccuracyOption extends Option
+class ClearPercentOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -260,7 +260,7 @@ class AccuracyOption extends Option
 
 	override private function updateDisplay():String
 	{
-		return "Accuracy Display: " + (!FlxG.save.data.accuracyDisplay ? "OFF" : "ON");
+		return "Show Clear Percentage: " + (!FlxG.save.data.accuracyDisplay ? "NO" : "YES");
 	}
 }
 
@@ -1195,33 +1195,6 @@ class ShowPresenceOption extends Option
 	override private function updateDisplay():String
 	{
 		return "Discord Presence: " + (!FlxG.save.data.showPresence ? "OFF" : "ON");
-	}
-}
-
-class AccuracyDOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	override public function press():Bool
-	{
-		FlxG.save.data.accuracyMod = FlxG.save.data.accuracyMod == 1 ? 0 : 1;
-
-		if (FlxG.save.data.accuracyMod == 0)
-			FlxG.sound.play(Paths.sound("optionsToggleOff"), 0.8);
-		else
-			FlxG.sound.play(Paths.sound("optionsToggleOn"), 0.8);
-
-		display = updateDisplay();
-		return true;
-	}
-
-	override private function updateDisplay():String
-	{
-		return "Accuracy Mode: " + (FlxG.save.data.accuracyMod == 0 ? "Simple" : "Complex");
 	}
 }
 

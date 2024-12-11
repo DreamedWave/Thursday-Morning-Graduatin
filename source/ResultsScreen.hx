@@ -37,9 +37,6 @@ class ResultsScreen extends MusicBeatSubstate
     public var text:FlxText;
 
     public var anotherdarkenScreen:FlxSprite;
-    public var graph:HitGraph;
-    public var graphSprite:OFLSprite;
-
     public var comboText:FlxText;
     public var contText:FlxText;
     public var settingsText:FlxText;
@@ -47,10 +44,7 @@ class ResultsScreen extends MusicBeatSubstate
     public var music:FlxSound;
     var rewardSound:FlxSound;
 
-    public var graphData:BitmapData;
-
     public var ranking:String;
-    public var accuracy:String;
 
     var rewardSpamPrevention:Bool = false;
     var reward:FlxSprite;
@@ -168,7 +162,7 @@ class ResultsScreen extends MusicBeatSubstate
         }
         text.updateHitbox();
 
-        comboText = new FlxText(text.x + 20, text.y + text.height, 0,'Judgements:\nSicks - ${(!PlayState.isStoryMode ? PlayState.instance.sicks : PlayState.campaignSicks)}\nGoods - ${(!PlayState.isStoryMode ? PlayState.instance.goods : PlayState.campaignGoods)}\nBads - ${(!PlayState.isStoryMode ? PlayState.instance.bads : PlayState.campaignBads)}\nSlips - ${(PlayState.isStoryMode ? PlayState.campaignMisses : PlayState.instance.misses)}\n\nTotal Fails: ${PlayState.campaignDeaths}\nHighest Combo: ${PlayState.highestCombo + 1}\nScore: ${(PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore)}\nAccuracy: ${(PlayState.isStoryMode ? HelperFunctions.truncateFloat(PlayState.campaignAccuracy,2) : HelperFunctions.truncateFloat(PlayState.instance.accuracy,2))}%\n\nRank: ${(PlayState.isStoryMode ? Ratings.GenerateLetterRank(PlayState.campaignAccuracy, PlayState.instance.keeledOver) : Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver))}' + (PauseSubState.skippedSong ? '*' : '') + (!PlayState.isStoryMode ? '\n\nF1 - Claim prize\nF2 - Replay song' : ''));
+        comboText = new FlxText(text.x + 20, text.y + text.height, 0, "we are\nfuckingn\nfixing it\nokay????");
         comboText.setFormat(Paths.font("playtime.ttf"), 30);
         comboText.antialiasing = true;
         comboText.setBorderStyle(FlxTextBorderStyle.OUTLINE,FlxColor.BLACK,4,1);
@@ -180,14 +174,6 @@ class ResultsScreen extends MusicBeatSubstate
         anotherdarkenScreen.scrollFactor.set();
         anotherdarkenScreen.alpha = 0;
         add(anotherdarkenScreen);
-        
-        graph = new HitGraph(anotherdarkenScreen.x, 45, 500, 300);
-        graph.alpha = 0;
-
-        graphSprite = new OFLSprite(anotherdarkenScreen.x, 45, 500, 300, graph);
-        graphSprite.scrollFactor.set();
-        graphSprite.alpha = 0;
-        add(graphSprite);
 
 
 
@@ -202,31 +188,7 @@ class ResultsScreen extends MusicBeatSubstate
 
         var mean:Float = 0;
 
-        for (i in 0...PlayState.rep.replay.songNotes.length)
-        {
-            // 0 = time
-            // 1 = length
-            // 2 = type
-            // 3 = diff
-            var obj = PlayState.rep.replay.songNotes[i];
-            // judgement
-            var obj2 = PlayState.rep.replay.songJudgements[i];
-
-            var obj3 = obj[0];
-
-            var diff = obj[3];
-            var judge = obj2;
-            if (diff != (166 * Math.floor((PlayState.rep.replay.sf / 60) * 1000) / 166))
-                mean += diff;
-            if (obj[1] != -1)
-                graph.addToHistory(diff, judge, obj3);
-        }
-
-        graph.update();
-
-        mean = HelperFunctions.truncateFloat(mean / PlayState.rep.replay.songNotes.length,2);
-
-        settingsText = new FlxText(3, FlxG.height, 0,'SF: ${PlayState.rep.replay.sf} | Ratio (SA/GA): ${Math.round(sicks)}:1 ${Math.round(goods)}:1 | Mean: ${mean}ms | Played on ${(!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]")} ${CoolUtil.difficultyFromInt(PlayState.storyDifficulty).toUpperCase()}');
+        settingsText = new FlxText(3, FlxG.height, 0,'SF: ${PlayStateChangeables.safeZoneOffset} | Ratio (SA/GA): ${Math.round(sicks)}:1 ${Math.round(goods)}:1 | Mean: ${mean}ms | Played on ${(!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]")} ${CoolUtil.difficultyFromInt(PlayState.storyDifficulty).toUpperCase()}');
         settingsText.setFormat(Paths.font("vcr.ttf"), 16);
         settingsText.setBorderStyle(FlxTextBorderStyle.OUTLINE,FlxColor.BLACK,2,1);
         settingsText.color = FlxColor.WHITE;
@@ -247,10 +209,7 @@ class ResultsScreen extends MusicBeatSubstate
         FlxTween.tween(comboText, {y: 10 + text.height + 25 - smolTxtAdjuster}, 0.6, {type: ONESHOT, ease: FlxEase.expoOut});
         FlxTween.tween(contText, {y: FlxG.height - contText.height - 10}, 0.7, {type: ONESHOT, ease: FlxEase.expoOut});
         FlxTween.tween(settingsText, {y: FlxG.height - settingsText.height - 3}, 0.55, {type: ONESHOT, ease: FlxEase.expoOut});
-        FlxTween.tween(anotherdarkenScreen, {alpha: 0.7}, 0.5, {ease: FlxEase.smootherStepOut, onUpdate: function(tween:FlxTween) {
-            graph.alpha = FlxMath.lerp(0, 1, tween.percent);
-            graphSprite.alpha = FlxMath.lerp(0, 1, tween.percent);
-        }});
+        FlxTween.tween(anotherdarkenScreen, {alpha: 0.7}, 0.5, {ease: FlxEase.smootherStepOut});
 
         cameras = [PlayState.instance.camEXT];
         camZoomValues = [PlayState.instance.camGame.zoom, PlayState.instance.camHUD.zoom];
@@ -260,7 +219,7 @@ class ResultsScreen extends MusicBeatSubstate
         #if windows
 		if (FlxG.save.data.showPresence)
         {
-            var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + (PlayState.isStoryMode ? Ratings.GenerateLetterRank(PlayState.campaignAccuracy, PlayState.instance.keeledOver) : Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver)) + ' (' + (PlayState.isStoryMode ? HelperFunctions.truncateFloat(PlayState.campaignAccuracy, 2) : HelperFunctions.truncateFloat(PlayState.instance.accuracy,2)) + '%)]';
+            var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver) + ' (' + PlayState.clearPercentage + '%)]';
 			DiscordClient.changePresence("The Results!", funnyTextLol);
         }
 		#end

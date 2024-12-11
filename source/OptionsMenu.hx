@@ -39,7 +39,6 @@ class OptionsMenu extends MusicBeatMenu
 			new Judgement("Change the amount of frames it takes before the note counts as a 'MISS'.\n([←] / [→] to change   |   [SHIFT] + [←] / [→] to speed up)"),
 			//new ShitBreaksCombo("If on, getting a 'SLIP' rating causes a miss and counts as a combo break."),
 			new ScrollSpeedOption("Change the chart's scroll speed multiplier.\n(0.5 is 50% speed, 2 is 200% speed, etc.)\n([←] / [→] to change   |   [SHIFT] + [←] / [→] to speed up)"),
-			new AccuracyDOption("Change how accuracy is calculated.\n(Simple: Rating-Based, Complex: Milisecond-Based)"),
 			new DownscrollOption("If on, notes will scroll DOWN rather than UP."),
 			new ShowStrumLine("Toggle the background for your strumline in-game."),
 			new PauseOnLostFocus("If on, auto-pauses the game when you switch to a different window."),
@@ -91,7 +90,7 @@ class OptionsMenu extends MusicBeatMenu
 		new OptionCategory("Saves and Data", [
 			new WatermarkOption("Toggle if you want to hide the faces of people (such as Guy or Priest.)\nThis DOES NOT work yet though! LMAO!"),
 			#if desktop
-			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Selected changes will apply when you press [ESC].)"),
+			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Selected changes will apply after you press [ESC].)"),
 			//new ReplayOption("View saved song replays."),
 			#end
 			new ResetScoreOption("Reset your scores on all songs and weeks.\n(This is irreversible!)"),
@@ -102,7 +101,7 @@ class OptionsMenu extends MusicBeatMenu
 		new OptionCategory("Miscellaneous", [
 			new LagCompensation("If on, will attempt to prevent you from taking damage or missing when your game freezes or lags."),
 			new ScoreScreen("If on, will show a score screen after the end of a freeplay song."),
-			new AccuracyOption("If on, will show your current Accuracy on the info bar."),
+			new ClearPercentOption("If on, will show your current Clear Percentage on the info bar."),
 			new NPSDisplayOption("If on, will show your current Notes Per Second on the info bar."),
 			new ShowInput("Whether to display every single input on the score screen."),
 			new BotPlay("While on, any song will have it's chart automatically played.\n(Scores and progress won't be saved while this is enabled.)"),

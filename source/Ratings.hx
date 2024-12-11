@@ -16,18 +16,44 @@ class Ratings
                     ranking = "[BotPlay]";
                 else
                 {
-                    if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads == 0 && PlayState.instance.goods == 0) // Perfect (SICK) Full Combo
+                    var sicks:Int = 0;
+                    var goods:Int = 0;
+                    var bads = 0;
+                    var slips = 0;
+                    var misses = 0;
+
+                    //lazygurl's way :3
+                    //For readability porpoises!!
+                    //if (!PlayState.isStoryMode)
+                    //{
+                        sicks = PlayState.instance.sicks;
+                        goods = PlayState.instance.goods;
+                        bads = PlayState.instance.bads;
+                        slips = PlayState.instance.slips;
+                        misses = PlayState.instance.misses;
+                    /*}
+                    else
+                    {
+                        sicks = PlayState.campaignSicks;
+                         goods = PlayState.campaignGoods;
+                        bads = PlayState.campaignBads;
+                        slips = PlayState.campaignSlips;
+                        misses = PlayState.campaignMisses;
+                        
+                    }*/
+
+                    if (misses == 0 && slips == 0 && bads == 0 && goods == 0) // Perfect (SICK) Full Combo
                         ranking = "PFC";
-                    else if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads == 0 && PlayState.instance.goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
+                    else if (misses == 0 && slips == 0 && bads == 0 && goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
                         ranking = "GFC";
-                    else if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads >= 1) // Regular FC
-                        ranking = "FC";
-                    else if (PlayState.instance.misses < 10) // Single Digit Combo Breaks
-                        ranking = "SDCB";
-                    else if (PlayState.instance.misses < 30) // Double Digit Combo Breaks
-                        ranking = "DDCB";
-                    else if ((PlayState.instance.misses < 50 && accuracy > 70) || accuracy > 20)
-                        ranking = "CLEAR";
+                    else if (misses == 0 && slips == 0 && bads >= 1) // Regular FC
+                        ranking = "BFC";
+                    else if (misses < 10) // Single Digit Combo Breaks
+                        ranking = "SDR";
+                    else if (misses < 30) // Double Digit Combo Breaks
+                        ranking = "DDR";
+                    else if ((misses < 50 && accuracy > 70) || accuracy > 50)
+                        ranking = "CLR";
                     else
                         ranking = "RETRY";
                 }
@@ -64,19 +90,6 @@ class Ratings
         else
             rating = "shit";
         return rating;
-    }
-
-    public static function CalculateRanking(score:Int, NPS:Int, maxNPS:Int, accuracy:Float, ?keeledOver:Bool = false):String
-    {
-        return
-         (!PlayStateChangeables.botPlay ?
-         (FlxG.save.data.npsDisplay ? "NPS:" + NPS + "/" + maxNPS + " | " : "") //NPS
-         + "Score:" + score //Score
-         + (FlxG.save.data.accuracyDisplay ? //Accuracy																						 // Accuracy Toggle
-         " | RIPs:" + (PlayState.instance.misses + PlayState.instance.slips) + 																				         // Misses/Combo Breaks
-         " | Rating:" + GenerateLetterRank(accuracy, keeledOver) + //Rating				                                                         // Accuracy
-         " (" + HelperFunctions.truncateFloat(accuracy, 2) + "%)" : "") 													     // Letter Rank
-         : "(Press [1] to hide HUD) | Score: " + score); //BotplayScoreText
     }
 
     public static function DetermineWeekRating(ratingArray:Array<String>):String

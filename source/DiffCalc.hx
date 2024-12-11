@@ -20,6 +20,7 @@ class DiffCalc
 
     public static var lastDiffHandOne:Array<Float> = [];
     public static var lastDiffHandTwo:Array<Float> = [];
+    public static var totalPlayableNotes:Int = 0;
 
     public static function CalculateDiff(song:SwagSong, ?accuracy:Float = .93)
     {
@@ -45,6 +46,7 @@ class DiffCalc
             }
         }
 
+        totalPlayableNotes = cleanedNotes.length;
         trace(cleanedNotes.length + " - playable notes");
 
         var handOne:Array<SmallNote> = [];

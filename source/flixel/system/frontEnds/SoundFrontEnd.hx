@@ -378,7 +378,7 @@ class SoundFrontEnd
 		x = Math.min(1, x);
 
 		// Convert linear scale to logarithmic
-		trace('soundVol Lin->Log: ' + Math.exp(Math.log(minValue) * (1 - x)));
+		//trace('soundVol Lin->Log: ' + Math.exp(Math.log(minValue) * (1 - x)));
 		return Math.exp(Math.log(minValue) * (1 - x));
 	}
 
@@ -392,7 +392,7 @@ class SoundFrontEnd
 
 		var toReturn:Float = 1 - (Math.log(Math.max(x, minValue)) / Math.log(minValue));
 		// Convert logarithmic scale to linear
-		trace('soundVol Log->Lin: ' + toReturn);
+		//trace('soundVol Log->Lin: ' + toReturn);
 		return toReturn;
 	}
 
@@ -428,11 +428,11 @@ class SoundFrontEnd
 			list.update(elapsed);
 
 		#if FLX_KEYBOARD
-		if (FlxG.keys.anyJustReleased(muteKeys))
-			toggleMuted();
 		#if FLX_SOUND_TRAY
-		else if (!FlxG.game.soundTray.tempDisable)
+		if (!FlxG.game.soundTray.tempDisable)
 		{
+			if (FlxG.keys.anyJustReleased(muteKeys))
+				toggleMuted();
 			if(FlxG.keys.anyJustReleased(volumeUpKeys))
 				changeVolume(0.1);
 			else if (FlxG.keys.anyJustReleased(volumeDownKeys))
