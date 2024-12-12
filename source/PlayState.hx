@@ -6308,10 +6308,13 @@ class PlayState extends MusicBeatState
 			}
 
 			//Enemy Sing Shit
+			if (SONG.needsMiscs)
+				miscs.volume = vocalsVolume;
+			else if (SONG.needsVoices)
+				vocals.volume = vocalsVolume;
 			switch (SONG.song)
 			{
 				case "Sudden Confrontation" | "Sprouting Irritation" | "Striking Tribulation":
-					miscs.volume = vocalsVolume;
 					//"Enemy Sing" health drain
 					if (healthBar.percent >= 25 && allowHealthModifiers && !note.withinCompensation)
 					{
@@ -6320,15 +6323,12 @@ class PlayState extends MusicBeatState
 						else
 							targetHealth -= calculateHealth(11, targetHealth, accuracy);
 					}
-				default:
-					if (SONG.needsVoices)
-						vocals.volume = vocalsVolume;
 			}
 
 			if (!PlayStateChangeables.Optimize)
 			{
 				//Weird double anim prevention attempt?
-				if ((!dad.animation.curAnim.name.startsWith("sing") || dad.animation.curAnim.curFrame >= 1) && (dad.animation.curAnim.name != "gunSHOOT" && !dad.animation.curAnim.name.startsWith("cheer") || dad.animation.curAnim.curFrame >= 3) && (dad.animation.curAnim.name != "gunLOAD" || dad.animation.curAnim.finished))
+				if (((!dad.animation.curAnim.name.startsWith("sing") && !dad.animation.curAnim.name.contains("miss")) || dad.animation.curAnim.curFrame >= 1) && (dad.animation.curAnim.name != "gunSHOOT" && !dad.animation.curAnim.name.startsWith("cheer") || dad.animation.curAnim.curFrame >= 3) && (dad.animation.curAnim.name != "gunLOAD" || dad.animation.curAnim.finished))
 					dad.playAnim('sing' + dataSuffix[singData] + altAnim, true);
 
 				if (!isBFTurn && FlxG.save.data.distractions)
@@ -6505,7 +6505,7 @@ class PlayState extends MusicBeatState
 						if (boyfriend.animation.curAnim.name != 'hey' || boyfriend.animation.curAnim.curFrame >= 5)
 						{
 							//Weird double anim prevention attempt?
-							if (!boyfriend.animation.curAnim.name.startsWith("sing") || boyfriend.animation.curAnim.curFrame >= 1)
+							if ((!boyfriend.animation.curAnim.name.startsWith("sing") && !boyfriend.animation.curAnim.name.contains("miss")) || boyfriend.animation.curAnim.curFrame >= 1)
 								boyfriend.playAnim('sing' + dataSuffix[singData], true);
 							if (isBFTurn && FlxG.save.data.distractions)
 							{
@@ -9502,7 +9502,7 @@ class PlayState extends MusicBeatState
 										camGame.shake(0.05, 0.3, true, true);
 									case 896:
 										camFollowSpeed = 0.5;
-										FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.quadOut});
+										//FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.quadOut});
 									case 932:
 										miscs.volume = vocalsVolume;
 										remove(boyfriend);

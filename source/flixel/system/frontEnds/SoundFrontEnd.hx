@@ -404,9 +404,7 @@ class SoundFrontEnd
 	public function showSoundTray(up:Bool = false):Void
 	{
 		if (FlxG.game.soundTray != null && soundTrayEnabled)
-		{
 			FlxG.game.soundTray.show(up);
-		}
 	}
 	#end
 
@@ -440,6 +438,13 @@ class SoundFrontEnd
 		}
 		#end
 		#end
+
+		//To show soundtray when the game starts out muted
+		if (forceShowSoundtray)
+		{
+			forceShowSoundtray = false;
+			showSoundTray(true);
+		}
 	}
 
 	@:allow(flixel.FlxGame)
@@ -479,6 +484,7 @@ class SoundFrontEnd
 	/**
 	 * Loads saved sound preferences if they exist.
 	 */
+	var forceShowSoundtray:Bool = false; //For when the game starts out muted
 	function loadSavedPrefs():Void
 	{
 		if (!FlxG.save.isBound)
@@ -493,6 +499,10 @@ class SoundFrontEnd
 		{
 			muted = FlxG.save.data.mute;
 		}
+
+		var globalVol:Float = Math.round(logToLinear(volume) * 10);
+		if (globalVol <= 0 || muted)
+			forceShowSoundtray = true;
 	}
 
 	@:haxe.warning("-WDeprecated")

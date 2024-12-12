@@ -39,6 +39,11 @@ class FlxSoundTray extends Sprite
 	var _timer:Float;
 
 	/**
+	 * CUSTOM: Helps us keep track and save settings incase the soundtray does not hide.
+	 */
+	var forceSave:Bool = false;
+
+	/**
 	 * Tweens the sound tray.
 	 */
 	var trayTween:FlxTween;
@@ -127,7 +132,19 @@ class FlxSoundTray extends Sprite
 	 * This function just updates the soundtray object.
 	 */
 	 public function update(elapsedMS:Float):Void
-	{
+	{	
+		if (forceSave)
+		{
+			forceSave = false;
+			// Save sound preferences
+			if (FlxG.save.isBound)
+			{
+				FlxG.save.data.mute = FlxG.sound.muted;
+				FlxG.save.data.volume = FlxG.sound.volume;
+				FlxG.save.flush();
+			}
+		}
+
 		if (FlxG.sound.volume > 0 && globalVolume != 0 && !FlxG.sound.muted)
 		{
 			if (_timer > 0)
@@ -138,10 +155,10 @@ class FlxSoundTray extends Sprite
 			{
 				if (!isRetreating)
 				{
+					isRetreating = true;
 					if (trayTween != null)
 						trayTween.cancel();
 
-					isRetreating = true;
 					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
 						{
 							ease: FlxEase.cubeIn,
@@ -196,71 +213,76 @@ class FlxSoundTray extends Sprite
 	 */
 	public function show(up:Bool = false):Void
 	{
-		if (!tempDisable)
+		globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
+		
+		if (!silent && !FlxG.sound.muted && globalVolume > 0)
 		{
-			globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
-			
-			if (!silent)
+			var sound;
+			if (!FlxG.sound.muted && text.text != "MUTED")
 			{
-				var sound;
-				if (!FlxG.sound.muted && text.text != "MUTED")
-				{
-					if (globalVolume != 10)
-						sound = FlxAssets.getSound(up ? volumeUpSound : volumeDownSound);
-					else
-						sound = FlxAssets.getSound("assets/sounds/soundtray/volumeMax");
-				}
+				if (globalVolume != 10)
+					sound = FlxAssets.getSound(up ? volumeUpSound : volumeDownSound);
 				else
-					sound = FlxAssets.getSound("assets/sounds/soundtray/volumeUnmute");
-
-				if (sound != null)
-					FlxG.sound.load(sound).play();
-			}
-
-			_timer = 1.5; //in seconds
-
-			//Only tween if shit is about to hide, otherwise, nothing happens
-			if (isRetreating)
-			{
-				//Cancel any tween that might be happening right meow
-				if (trayTween != null)
-					trayTween.cancel();
-
-				isRetreating = false;
-				visible = true;
-				active = true;
-
-				trayTween = FlxTween.tween(this, {y: 0, alpha: 1}, 0.75, 
-					{
-						ease: FlxEase.elasticOut, 
-						onComplete: function(twn:FlxTween)
-						{
-							trayTween = null;
-						}
-					});
-			}
-
-			if (FlxG.sound.muted)
-			{
-				globalVolume = 0;
-				if (text.text != "MUTED")
-					text.text = "MUTED";
+					sound = FlxAssets.getSound("assets/sounds/soundtray/volumeMax");
 			}
 			else
-				text.text = "VOLUME: " + globalVolume;
-
-			//trace('Global Volume: ' + globalVolume);
-
-			for (i in 0..._bars.length)
 			{
-				if (i < globalVolume)
+				sound = FlxAssets.getSound("assets/sounds/soundtray/volumeUnmute");
+				forceSave = true; //Here so that it saves as soon as you unmute - incase you exit the app before the tween can save it
+			}
+
+			if (sound != null)
+				FlxG.sound.load(sound).play();
+		}
+
+		_timer = 1.5; //in seconds
+
+		//Only tween if shit is about to hide, otherwise, nothing happens
+		if (isRetreating)
+		{
+			//Cancel any tween that might be happening right meow
+			if (trayTween != null)
+				trayTween.cancel();
+
+			isRetreating = false;
+			visible = true;
+			active = true;
+
+			trayTween = FlxTween.tween(this, {y: 0, alpha: 1}, 0.75, 
 				{
-					_bars[i].alpha = 1;
-				}
-				else
-				{
-					_bars[i].alpha = 0.5;
-				}
+					ease: FlxEase.elasticOut, 
+					onComplete: function(twn:FlxTween)
+					{
+						trayTween = null;
+					}
+				});
+		}
+
+		if (FlxG.sound.muted)
+		{
+			forceSave = true; //here so that it saves when the app is muted - to prevent main the FlxG.sound.muted variable obsolete
+			globalVolume = 0;
+			if (text.text != "MUTED")
+				text.text = "MUTED";
+		}
+		else
+		{
+			text.text = "VOLUME: " + globalVolume;
+			if (globalVolume <= 0)
+				forceSave = true; //here so that it saves when the app's vol is set to 0
+		}
+
+		//trace('Global Volume: ' + globalVolume);
+
+		for (i in 0..._bars.length)
+		{
+			if (i < globalVolume)
+			{
+				_bars[i].alpha = 1;
+			}
+			else
+			{
+				_bars[i].alpha = 0.5;
 			}
 		}
 	}
