@@ -122,7 +122,7 @@ class SoundFrontEnd
 				return;
 			}
 
-			loadMusic(embeddedMusic, volume, looped, group);
+			loadMusic(embeddedMusic, volume, looped, group, false);
 		}
 		else
 			queuedUpMusic = false;
@@ -140,7 +140,7 @@ class SoundFrontEnd
 	 * @param   group          The group to add this sound to.
 	 */
 	var queuedUpMusic:Bool = false;
-	public function loadMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup):Void
+	public function loadMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup, ?calledStandalone:Bool = true):Void
 	{
 		if (embeddedMusic == null)
 		{
@@ -148,7 +148,7 @@ class SoundFrontEnd
 			FlxG.log.warn("[playMusic() SoundFrontEnd.hx] You didn't specify a music path!");
 			return;
 		}
-		
+
 		if (music == null)
 			music = new FlxSound();
 		else if (music.active)
@@ -158,7 +158,7 @@ class SoundFrontEnd
 		music.volume = volume;
 		music.persist = true;
 		music.group = (group == null) ? defaultMusicGroup : group;
-		queuedUpMusic = true;
+		queuedUpMusic = calledStandalone;
 	}
 
 	/**
