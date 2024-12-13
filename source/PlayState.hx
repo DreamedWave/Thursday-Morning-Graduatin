@@ -3494,6 +3494,8 @@ class PlayState extends MusicBeatState
 								i.triggerCheck = true;
 								switch(i.type)
 								{
+									//To Do: move mid song anims and events here
+									//For example: case "Play Character Animation":x
 									case "Scroll Speed Change":
 										prevScrollCheck = false;
 										prevScroll = newScroll;
@@ -3504,40 +3506,6 @@ class PlayState extends MusicBeatState
 										fakeCrochet = (60 / i.value) * 1000;
 										idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
 										compensationTime = Conductor.crochet * 2 / 1000;
-										
-										//Kade- gurl- why is this so convoluted-
-										//var timingSeg = TimingStruct.getTimingAtTimestamp(Conductor.songPosition);
-										/*if (timingSeg != null)
-										{
-											var timingSegBpm = timingSeg.bpm;
-							
-											if (timingSegBpm != Conductor.bpm)
-											{
-												trace("BPM CHANGE to " + timingSegBpm);
-												Conductor.changeBPM(timingSegBpm, false);
-												fakeCrochet = (60 / timingSegBpm) * 1000;
-												idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-												compensationTime = Conductor.crochet * 2 / 1000;			
-											}
-
-											TimingStruct.clearTimings();
-
-											var currentIndex = 0;
-											var beat:Float = i.position;
-											var endBeat:Float = Math.POSITIVE_INFINITY;
-					
-											TimingStruct.addTiming(beat,i.value,endBeat, 0); // offset in this case = start time since we don't have a offset
-											
-											if (currentIndex != 0)
-											{
-												var data = TimingStruct.AllTimings[currentIndex - 1];
-												data.endBeat = beat;
-												data.length = (data.endBeat - data.startBeat) / (data.bpm / 60);
-												TimingStruct.AllTimings[currentIndex].startTime = data.startTime + data.length;
-											}
-					
-											currentIndex++;
-										}*/
 								}
 							}
 						}
