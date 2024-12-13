@@ -250,7 +250,7 @@ class ResultsScreen extends MusicBeatSubstate
         if (PlayerSettings.player1.controls.ACCEPT || FlxG.mouse.justPressed)
         {   
             if (music != null && music.playing)
-                FlxTween.tween(music, {pitch: 1.5}, 0.15, {ease: FlxEase.quartInOut, type: ONESHOT, onComplete: function(twn:FlxTween){music.tapeStop(0.35, 0);}});
+                FlxTween.tween(music, {pitch: 1.5}, 0.075, {ease: FlxEase.quartInOut, type: ONESHOT, onComplete: function(twn:FlxTween){music.tapeStop(0.425, 0);}});
 
             trace("Deleting Temp Shit");
             CleanUpAfterYoself('assets/temp');
