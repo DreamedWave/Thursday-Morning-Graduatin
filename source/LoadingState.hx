@@ -64,13 +64,13 @@ class LoadingState extends MusicBeatMenu
 				
 				//if (!FlxG.save.data.cacheMusic)
 				//{
-				preloadList.set(PlayState.SONG.song, 'inst');
+				/*preloadList.set(PlayState.SONG.song, 'inst');
 				if (PlayState.SONG.needsVoices)
 					preloadList.set(PlayState.SONG.song, 'voices');
 				if (PlayState.SONG.needsMiscs)
 					preloadList.set(PlayState.SONG.song, 'miscs');
 				if (PlayState.SONG.needsAdaptiveMus)
-					preloadList.set(PlayState.SONG.song, 'adaptiveMus');
+					preloadList.set(PlayState.SONG.song, 'adaptiveMus');*/
 				//}
 
 				switch (songLowercase)

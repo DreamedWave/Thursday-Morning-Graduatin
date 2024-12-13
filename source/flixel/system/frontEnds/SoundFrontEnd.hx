@@ -111,22 +111,54 @@ class SoundFrontEnd
 	 * @param   looped         Whether to loop this music.
 	 * @param   group          The group to add this sound to.
 	 */
-	public function playMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup):Void
+	public function playMusic(?embeddedMusic:FlxSoundAsset, ?volume = 1.0, ?looped = true, ?group:FlxSoundGroup):Void
 	{
+		if (!queuedUpMusic)
+		{
+			if (embeddedMusic == null)
+			{
+				trace("You didn't specify a music path!");
+				FlxG.log.warn("[playMusic() SoundFrontEnd.hx] You didn't specify a music path!");
+				return;
+			}
+
+			loadMusic(embeddedMusic, volume, looped, group);
+		}
+		else
+			queuedUpMusic = false;
+		music.play();
+	}
+
+	/**
+	 * CUSTOM for TMG
+	 * Set up a looping background soundtrack. Separated from play() to allow the music to be "queued up"
+	 * Pls no judge i am beginner programmer :<
+	 *
+	 * @param   embeddedMusic  The sound file you want to loop in the background.
+	 * @param   volume         How loud the sound should be, from 0 to 1.
+	 * @param   looped         Whether to loop this music.
+	 * @param   group          The group to add this sound to.
+	 */
+	var queuedUpMusic:Bool = false;
+	public function loadMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup):Void
+	{
+		if (embeddedMusic == null)
+		{
+			trace("You didn't specify a music path!");
+			FlxG.log.warn("[playMusic() SoundFrontEnd.hx] You didn't specify a music path!");
+			return;
+		}
+		
 		if (music == null)
-		{
 			music = new FlxSound();
-		}
 		else if (music.active)
-		{
 			music.stop();
-		}
 
 		music.loadEmbedded(embeddedMusic, looped);
 		music.volume = volume;
 		music.persist = true;
 		music.group = (group == null) ? defaultMusicGroup : group;
-		music.play();
+		queuedUpMusic = true;
 	}
 
 	/**

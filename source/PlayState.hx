@@ -2316,6 +2316,8 @@ class PlayState extends MusicBeatState
 							}
 						});
 						FlxG.sound.play(Paths.sound('introGo' + altSuffix), 0.6);
+					case 5:
+						startSong();
 				}
 			}
 		}, startTimerLoops);
@@ -2529,13 +2531,13 @@ class PlayState extends MusicBeatState
 
 		if (!FlxG.sound.music.playing) //don't restart the music if it's already playing
 		{
-			FlxG.sound.playMusic(Paths.inst(SONG.song), musicVolume, false, musicGroup);
 			//FlxG.sound.music.play(true);
 			//FlxG.sound.music.volume = 1;
 			if (SONG.song != "Finale")
 			{
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = endSong;
+				FlxG.sound.playMusic();
 			}
 			else
 			{
@@ -2563,6 +2565,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.music.looped = true;
 				FlxG.sound.music.autoDestroy = false;
 				FlxG.sound.music.onComplete = generateSong;
+				FlxG.sound.playMusic();
 				playFinaleMusic();
 			}
 		}
@@ -2761,6 +2764,7 @@ class PlayState extends MusicBeatState
 	{
 		if (!generatedSong)
 		{
+			FlxG.sound.loadMusic(Paths.inst(SONG.song), musicVolume, false, musicGroup);
 			if (SONG.needsVoices)
 				vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
 			else
@@ -3173,7 +3177,7 @@ class PlayState extends MusicBeatState
 			
 			if (paused && !died)
 			{
-				if (FlxG.sound.music != null && !startingSong)
+				if (FlxG.sound.music != null && songStarted)
 				{
 					if (!showedResults && !inCutscene)
 						resyncVocals();
@@ -4111,7 +4115,7 @@ class PlayState extends MusicBeatState
 						}
 					}
 				});
-				if (!startingSong && songStarted && !inCutscene)
+				if (songStarted && !inCutscene)
 					keyShit();
 			}	
 
@@ -4419,19 +4423,7 @@ class PlayState extends MusicBeatState
 			});
 		}
 
-		//Starting Countdown Shit
-		//Portal
-		if (startingSong)
-		{
-			if (!died && startedCountdown)
-			{	
-				Conductor.songPosition += FlxG.elapsed * 1000;
-				if (Conductor.songPosition >= 0 && !songStarted)
-					
-					startSong();
-			}
-		}
-		else
+		if (songStarted)
 		{
 			if (!paused && !showedResults)
 			{
@@ -4497,6 +4489,9 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
+		else
+			if (Conductor.songPosition < FlxG.sound.music.length)
+				Conductor.songPosition += FlxG.elapsed * 1000;
 
 		if (!paused && camZooming && !camZoomUsesTween)
 		{
@@ -5271,10 +5266,10 @@ class PlayState extends MusicBeatState
 				if (daRating != 'miss')
 				{
 					//Clear Percent Calculations
-					if (daRating == 'sick' || daRating == 'good')
+					if (daRating == 'sick' || daRating == 'good' || daRating == 'bad')
 						totalCleared[0]++;
-					else if (daRating == 'bad')
-						totalCleared[0] += 0.5;
+					else if (daRating == 'slip')
+						totalCleared[0] += 0.25;
 					clearPercentage = (totalCleared[0] / totalCleared[1]) * 100;
 					//trace ('clearcalced all over the place??? ' + clearPercentage + ' | ' + totalCleared + ' out of ' + totalPlayed);
 
