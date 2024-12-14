@@ -180,7 +180,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		tipText.setFormat("VCR OSD Mono", 18, FlxColor.WHITE, CENTER);
 		tipText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3, 1);
 		
-		var textLol:String = getTips(PlayState.storyWeek, PlayState.naturalDeaths, PlayState.instance.causeOfDeath) + '^[ESC] or [R. CLICK] - Exit.' + '                                                   ' + '[ENTER] or [L. CLICK] - Retry.^';
+		var textLol:String = getTips(PlayState.storyWeek, PlayState.normalPityDeaths, PlayState.instance.causeOfDeath) + '^[ESC] or [R. CLICK] - Exit.' + '                                                   ' + '[ENTER] or [L. CLICK] - Retry.^';
 		var tip:FlxTextFormat = new FlxTextFormat("VCR OSD Mono", 23, FlxColor.YELLOW, true, false);
 		var lore:FlxTextFormat = new FlxTextFormat("Times New Roman", 20, 0x000000, true, true, 0xFF740D55);
 		var corrupt:FlxTextFormat = new FlxTextFormat("Monsterrat", 25, 0xFFFF0000, true, false);
@@ -229,7 +229,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			camOverlay.zoom = FlxMath.lerp(defaultOverlayZoom, camOverlay.zoom, CoolUtil.boundTo(1 - (elapsed * 2.5), 0, 1));
 		}
 
-		if ((controls.ACCEPT || (FlxG.mouse.justPressed && Main.isFocused)) || (FlxG.keys.justPressed.R && FlxG.save.data.resetButton))
+		if ((controls.ACCEPT || (FlxG.mouse.justPressed && Main.isFocused)) || (FlxG.keys.justPressed.R && FlxG.save.data.resetButton && gameOverCheckShit >= 1))
 		{
 			pressedConfirm = true;
 			endBullshit();
@@ -240,8 +240,8 @@ class GameOverSubstate extends MusicBeatSubstate
 		{
 			FlxTransitionableState.skipNextTransOut = false;
 			FlxTransitionableState.skipNextTransIn = false;
-			FlxG.sound.music.fadeOut(0.2);
-			deathSound.fadeOut(0.3);
+			//FlxG.sound.music.tapeStop(0.3);
+			deathSound.fadeOut(0.2);
 
 			if (gameOverCheckShit >= 2)
 			{
@@ -254,21 +254,28 @@ class GameOverSubstate extends MusicBeatSubstate
 				tipTween.cancel();
 			tipTween = FlxTween.tween(tipText,{alpha: 0, y: FlxG.height}, 0.5,{ease: FlxEase.smoothStepOut});
 			camOverlay.fade(FlxColor.BLACK, 0.25, false);
-			camMain.fade(FlxColor.BLACK, 0.3, false, function()
-			{
-				FlxG.sound.music.stop();
-				FlxG.bitmap.clearCache();
-				if (PlayState.isStoryMode)
+			camMain.fade(FlxColor.BLACK, 0.3, false);
+			//Tapestop lol
+			//Different tweens for pitch and vol cuz it dont sound good when it's a singular one
+			//Now added tapeStop as a function for FlxSound - but like this is still ideal for here so that it don't cut off the effect and also for that cool FlxEase!
+			FlxTween.tween(FlxG.sound.music, {volume: 0}, 0.45, {type: ONESHOT, ease: FlxEase.smootherStepOut, startDelay: 0.1});
+			FlxTween.tween(FlxG.sound.music, {pitch: 0.25}, 0.4, {type: ONESHOT, ease: FlxEase.quartOut, onComplete: 
+				function(twn:FlxTween)
 				{
-					Conductor.changeBPM(102);
-					PlayState.instance.clear();
-					FlxG.switchState(new StoryMenuState());
-					//FlxG.sound.playMusic(Paths.music('freakyMenu'));
-				}
-				else
-				{
-					PlayState.instance.clear();
-					FlxG.switchState(new FreeplayState());
+					FlxG.sound.music.stop();
+					FlxG.bitmap.clearCache();
+					if (PlayState.isStoryMode)
+					{
+						Conductor.changeBPM(102);
+						PlayState.instance.clear();
+						FlxG.switchState(new StoryMenuState());
+						//FlxG.sound.playMusic(Paths.music('freakyMenu'));
+					}
+					else
+					{
+						PlayState.instance.clear();
+						FlxG.switchState(new FreeplayState());
+					}
 				}
 			});
         }
@@ -300,7 +307,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 				camMain.followLerp = 1.5;
 
-				if ((!doCorruptTips && !doLoreTips || PlayState.naturalDeaths < 3))
+				if ((!doCorruptTips && !doLoreTips || PlayState.normalPityDeaths < 3))
 				{
 					tipTween = FlxTween.tween(tipText,{alpha: 1, y: FlxG.height - tipText.height - 4}, 1.25,{ease: FlxEase.smoothStepOut, onComplete:
 						function (twn:FlxTween)

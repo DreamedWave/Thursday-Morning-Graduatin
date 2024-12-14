@@ -4,6 +4,7 @@ import lime.app.Application;
 import lime.system.DisplayMode;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
 import Controls.KeyboardScheme;
 //import flixel.FlxG;
 import openfl.display.FPS;
@@ -237,7 +238,7 @@ class GhostTapOption extends Option
 	}
 }
 
-class AccuracyOption extends Option
+class ClearPercentOption extends Option
 {
 	public function new(desc:String)
 	{
@@ -259,7 +260,7 @@ class AccuracyOption extends Option
 
 	override private function updateDisplay():String
 	{
-		return "Accuracy Display: " + (!FlxG.save.data.accuracyDisplay ? "OFF" : "ON");
+		return "Show Clear Percentage: " + (!FlxG.save.data.accuracyDisplay ? "NO" : "YES");
 	}
 }
 
@@ -993,7 +994,7 @@ class FPSCapOption extends Option
 
 	override private function updateDisplay():String
 	{
-		return "FPS Cap: <" + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor Rate (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap) + ">";
+		return "FPS Cap: <" + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap) + ">";
 	}
 	
 	override function right():Bool
@@ -1033,7 +1034,7 @@ class FPSCapOption extends Option
 
 	override function getValue():String
 	{
-		return "Current FPS Cap: " + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "V-SYNC (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap);
+		return "Current FPS Cap: " + (FlxG.save.data.fpsCap == Application.current.window.displayMode.refreshRate ? "Monitor (" + FlxG.save.data.fpsCap + " Hz)" : FlxG.save.data.fpsCap);
 	}
 }
 
@@ -1194,33 +1195,6 @@ class ShowPresenceOption extends Option
 	override private function updateDisplay():String
 	{
 		return "Discord Presence: " + (!FlxG.save.data.showPresence ? "OFF" : "ON");
-	}
-}
-
-class AccuracyDOption extends Option
-{
-	public function new(desc:String)
-	{
-		super();
-		description = desc;
-	}
-	
-	override public function press():Bool
-	{
-		FlxG.save.data.accuracyMod = FlxG.save.data.accuracyMod == 1 ? 0 : 1;
-
-		if (FlxG.save.data.accuracyMod == 0)
-			FlxG.sound.play(Paths.sound("optionsToggleOff"), 0.8);
-		else
-			FlxG.sound.play(Paths.sound("optionsToggleOn"), 0.8);
-
-		display = updateDisplay();
-		return true;
-	}
-
-	override private function updateDisplay():String
-	{
-		return "Accuracy Mode: " + (FlxG.save.data.accuracyMod == 0 ? "Simple" : "Complex");
 	}
 }
 
@@ -1485,7 +1459,7 @@ class LockWeeksOption extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 
@@ -1501,11 +1475,7 @@ class LockWeeksOption extends Option
 		confirm = false;
 		trace('Weeks Locked');
 		display = updateDisplay();
-		new FlxTimer().start(0.14, function(tmr:FlxTimer)
-		{
-			FlxG.sound.music.stop();
-			Conductor.changeBPM(102);
-		});
+		FlxG.sound.music.tapeStop(0.2, 0, function(twn:FlxTween){FlxG.sound.music.stop(); Conductor.changeBPM(102);});
 		FlxG.sound.play(Paths.sound("optionsResetConfirm"));
 		return true;
 	}
@@ -1536,7 +1506,7 @@ class ResetScoreOption extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 
@@ -1590,7 +1560,7 @@ class ResetSettings extends Option
 	{
 		if (DisclaimerState.wentOptions)
 		{
-			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.8);
+			FlxG.sound.play(Paths.sound("scrollMenuFail"), 0.5);
 			return false;
 		}
 

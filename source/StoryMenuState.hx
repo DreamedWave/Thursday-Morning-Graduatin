@@ -112,31 +112,31 @@ class StoryMenuState extends MusicBeatMenu
 			case 0 | 1:
 				if (FlxG.sound.music != null)
 					if (!FlxG.sound.music.playing)
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.5);
 				bgColor = 0xFF000000;
 				TitleState.weekAdderThingy = "";
 			case 2:
 				if (FlxG.sound.music != null)
 					if (!FlxG.sound.music.playing)
-						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.5);
 				bgColor = 0xFF120005;
 				TitleState.weekAdderThingy = "-glitchy";
 			case 3:
 				if (FlxG.sound.music != null)
 					if (!FlxG.sound.music.playing)
-						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.5);
 				bgColor = 0xFF0b0d1d;
 				TitleState.weekAdderThingy = "-city";
 			case 4:
 				if (FlxG.sound.music != null)
 					if (!FlxG.sound.music.playing)
-						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.5);
 				bgColor = 0xff00171c;
 				TitleState.weekAdderThingy = "-village";
 			default:
 				if (FlxG.sound.music != null)
 					if (!FlxG.sound.music.playing)
-						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.5);
 				bgColor = 0xFF051c31;
 		}
 

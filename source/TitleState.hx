@@ -18,9 +18,9 @@ import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
 
-#if cpp
-import sys.thread.Thread;
-#end
+//#if cpp
+//import sys.thread.Thread;
+//#end
 
 using StringTools;
 
@@ -186,6 +186,7 @@ class TitleState extends MusicBeatMenu
 			#end
 
 			trace('Hello There!');
+			//trace("Hello! Characters currently not working for Alphabet are: ` ~ @ # $ % ^ [ { ] } | : ; , / _"); //I cant add '\' here for some reason but yes that too
 		}
 
 		FlxG.mouse.visible = true;
@@ -252,7 +253,7 @@ class TitleState extends MusicBeatMenu
 
 			jkSpr.visible = false;
 			ptSpr.visible = false;
-			createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
+			//createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
 		}
 	}
 
@@ -297,7 +298,7 @@ class TitleState extends MusicBeatMenu
 						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.3);
 			}
 
-			FlxG.sound.music.fadeIn(5, 0.3, 0.65);
+			FlxG.sound.music.fadeIn(5, 0.3, 0.5);
 
 			if (!FreeplayState.freeplayMusicPlaying)
 				Conductor.changeBPM(102);
@@ -352,7 +353,8 @@ class TitleState extends MusicBeatMenu
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
-		deleteCoolText();
+		deleteCoolText();//Delete previously created cool text
+		trace('text says: ' + textArray);
 		if(textGroup != null && credGroup != null) 
 		{
 			for (i in 0...textArray.length)
@@ -554,7 +556,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.log.add('WackyText');
 
 			case 'ayearago':
-				wackyXtraText.text = 'holy shit wow--';
+				wackyXtraText.text = 'holy shit wow-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 

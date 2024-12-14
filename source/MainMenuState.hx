@@ -45,7 +45,7 @@ class MainMenuState extends MusicBeatMenu
 	var bgGroup:FlxTypedGroup<FlxSprite> = null;
 	var bgGroupTargetY:Float = 0;
 
-	var camFollow:FlxObject;
+	//var camFollow:FlxObject;
 
 	var finishedFunnyMove:Bool = false;
 	var arrowTween:FlxTween;
@@ -69,25 +69,25 @@ class MainMenuState extends MusicBeatMenu
 				switch (FlxG.save.data.weekUnlocked)
 				{
 					case 1:
-						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('freakyMenu'), 0.5);
 						TitleState.weekAdderThingy = "";
 						bgColor = 0xFF000000;
 					case 2:
-						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('glitchyMenu'), 0.5);
 						TitleState.weekAdderThingy = "-glitchy";
 						bgColor = 0xFF120005;
 					case 3:
-						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('cityMenu'), 0.5);
 						TitleState.weekAdderThingy = "-city";
 						bgColor = 0xFF0b0d1d;
 					case 4:
-						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('villageMenu'), 0.5);
 						if (FlxG.random.bool(40))
 							FlxG.sound.music.time = 122355;
 						TitleState.weekAdderThingy = "-village";
 						bgColor = 0xff00171c;
 					default:
-						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.65);
+						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.5);
 						bgColor = 0xFF051c31;
 				}
 			}
@@ -114,9 +114,9 @@ class MainMenuState extends MusicBeatMenu
 			bg.alpha = 0.65;
 		bgGroup.add(bg);
 
-		camFollow = new FlxObject(0, 0, 1, 1);
-		camFollow.screenCenter();
-		add(camFollow);
+		//camFollow = new FlxObject(0, 0, 1, 1);
+		//camFollow.screenCenter();
+		//add(camFollow);
 
 		magenta = new FlxSprite(0, 0).loadGraphic(Paths.image('menuBGMagenta'));
 		//magenta.scrollFactor.set();
@@ -134,7 +134,7 @@ class MainMenuState extends MusicBeatMenu
 		menuBG = new FlxSprite(0, -7).loadGraphic(Paths.image('MainMenu_buttonsBG'));
 		//menuBG.scrollFactor.set();
 		if (!Main.nightMode && !FlxG.save.data.nightmode)
-			menuBG.alpha = 0.75;
+			menuBG.alpha = 0.8;
 		else
 			menuBG.alpha = 0.85;
 		menuBG.antialiasing = FlxG.save.data.antialiasing;
@@ -609,9 +609,9 @@ class MainMenuState extends MusicBeatMenu
 								FlxG.sound.music.stop();
 								FlxG.sound.playMusic(Paths.sound('boh'), 1, false);
 								FlxG.sound.music.onComplete = endJumpscare;
-								camFollow.screenCenter();
-								FlxG.camera.focusOn(camFollow.getPosition());
-								FlxG.camera.follow(camFollow, LOCKON);
+								//camFollow.screenCenter();
+								//FlxG.camera.focusOn(camFollow.getPosition());
+								//FlxG.camera.follow(camFollow, LOCKON);
 								FlxG.camera.shake(0.05, FlxG.sound.music.length, true);
 								jumpscareSprite.visible = true;
 								startMovingJumpscareSprite = true;
