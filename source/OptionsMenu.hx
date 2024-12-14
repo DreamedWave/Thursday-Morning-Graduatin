@@ -482,9 +482,9 @@ class OptionsMenu extends MusicBeatMenu
 							{
 								//update the option and alphabet text itself
 								currentSelectedCat.getOptions()[curSelected].right();
+								currentSelectedCat.getOptions()[curSelected].playSliderSnd(true);
 								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
-								FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 							}
 							else
 								antiSpam++;
@@ -495,9 +495,9 @@ class OptionsMenu extends MusicBeatMenu
 							{
 								//update the option and alphabet text itself
 								currentSelectedCat.getOptions()[curSelected].left();
+								currentSelectedCat.getOptions()[curSelected].playSliderSnd();
 								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
-								FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 							}
 							else
 								antiSpam++;
@@ -506,16 +506,16 @@ class OptionsMenu extends MusicBeatMenu
 					else if (FlxG.keys.justPressed.RIGHT)
 					{
 						currentSelectedCat.getOptions()[curSelected].right();
+						currentSelectedCat.getOptions()[curSelected].playSliderSnd(true);
 						//update the alphabet text itself
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 					}
 					else if (FlxG.keys.justPressed.LEFT)
 					{
 						currentSelectedCat.getOptions()[curSelected].left();
+						currentSelectedCat.getOptions()[curSelected].playSliderSnd();
 						//update the alphabet text itself
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 					}
 
 					offsetNumberShit.text = currentSelectedCat.getOptions()[curSelected].getValue();

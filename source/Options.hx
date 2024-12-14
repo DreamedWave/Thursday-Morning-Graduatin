@@ -47,6 +47,7 @@ class OptionCategory
 
 class Option
 {
+	private var canPlaySliderSnd:Bool = true;
 	private var description:String = "";
 	private var display:String;
 	private var isSlider:Bool = false;
@@ -70,6 +71,17 @@ class Option
 	public final function checkIfSlider():Bool
 	{
 		return isSlider;
+	}
+
+	public function playSliderSnd(?isUp:Bool = false)
+	{
+		if (canPlaySliderSnd)
+		{
+			if (isUp)
+				FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
+			else
+				FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
+		}
 	}
 
 	public function getValue():String { return throw "stub!"; };
@@ -478,7 +490,7 @@ class MusVolOption extends Option
 
 	override function right():Bool 
 	{
-		FlxG.save.data.musicVol += 1;
+		FlxG.save.data.musicVol += 5;
 
 		if (FlxG.save.data.musicVol > 100)
 			FlxG.save.data.musicVol = 100;
@@ -489,10 +501,10 @@ class MusVolOption extends Option
 
 	override function left():Bool 
 	{
-		FlxG.save.data.musicVol -= 1;
+		FlxG.save.data.musicVol -= 5;
 
-		if (FlxG.save.data.musicVol < 1)
-			FlxG.save.data.musicVol = 1;
+		if (FlxG.save.data.musicVol < 5)
+			FlxG.save.data.musicVol = 5;
 
 		display = updateDisplay();
 		return true;
@@ -524,7 +536,7 @@ class VocVolOption extends Option
 
 	override function right():Bool 
 	{
-		FlxG.save.data.vocalsVol += 1;
+		FlxG.save.data.vocalsVol += 5;
 
 		if (FlxG.save.data.vocalsVol > 100)
 			FlxG.save.data.vocalsVol = 100;
@@ -535,10 +547,10 @@ class VocVolOption extends Option
 
 	override function left():Bool 
 	{
-		FlxG.save.data.vocalsVol -= 1;
+		FlxG.save.data.vocalsVol -= 5;
 
-		if (FlxG.save.data.vocalsVol < 1)
-			FlxG.save.data.vocalsVol = 1;
+		if (FlxG.save.data.vocalsVol < 5)
+			FlxG.save.data.vocalsVol = 5;
 
 		display = updateDisplay();
 		return true;
@@ -571,7 +583,7 @@ class SFXVolOption extends Option
 
 	override function right():Bool 
 	{
-		FlxG.save.data.gamesfxVol += 1;
+		FlxG.save.data.gamesfxVol += 5;
 
 		if (FlxG.save.data.gamesfxVol > 100)
 			FlxG.save.data.gamesfxVol = 100;
@@ -582,10 +594,10 @@ class SFXVolOption extends Option
 
 	override function left():Bool 
 	{
-		FlxG.save.data.gamesfxVol -= 1;
+		FlxG.save.data.gamesfxVol -= 5;
 
-		if (FlxG.save.data.gamesfxVol < 1)
-			FlxG.save.data.gamesfxVol = 1;
+		if (FlxG.save.data.gamesfxVol < 0)
+			FlxG.save.data.gamesfxVol = 0;
 
 		display = updateDisplay();
 		return true;
@@ -713,7 +725,7 @@ class HitSFXVolOption extends Option
 
 	override function right():Bool 
 	{
-		FlxG.save.data.notesfxVol += 1;
+		FlxG.save.data.notesfxVol += 5;
 
 		if (FlxG.save.data.notesfxVol > 100)
 			FlxG.save.data.notesfxVol = 100;
@@ -724,10 +736,10 @@ class HitSFXVolOption extends Option
 
 	override function left():Bool 
 	{
-		FlxG.save.data.notesfxVol -= 1;
+		FlxG.save.data.notesfxVol -= 5;
 
-		if (FlxG.save.data.notesfxVol < 1)
-			FlxG.save.data.notesfxVol = 1;
+		if (FlxG.save.data.notesfxVol < 5)
+			FlxG.save.data.notesfxVol = 5;
 
 		display = updateDisplay();
 		return true;
@@ -889,13 +901,17 @@ class Judgement extends Option
 	override function left():Bool {
 
 		if (Conductor.safeFrames == 1)
+		{
+			canPlaySliderSnd = false;
 			return false;
+		}
 
 		Conductor.safeFrames -= 1;
 		FlxG.save.data.frames = Conductor.safeFrames;
 
 		Conductor.recalculateTimings();
 		display = updateDisplay();
+		canPlaySliderSnd = true;
 		return true;
 	}
 
@@ -911,13 +927,17 @@ class Judgement extends Option
 	override function right():Bool {
 
 		if (Conductor.safeFrames == 20)
+		{
+			canPlaySliderSnd = false;
 			return false;
+		}
 
 		Conductor.safeFrames += 1;
 		FlxG.save.data.frames = Conductor.safeFrames;
 
 		Conductor.recalculateTimings();
 		display = updateDisplay();
+		canPlaySliderSnd = true;
 		return true;
 	}
 }
@@ -1000,12 +1020,16 @@ class FPSCapOption extends Option
 	override function right():Bool
 	{
 		if (FlxG.save.data.setFpsCap >= 290)
+		{
 			FlxG.save.data.setFpsCap = 290;
+			canPlaySliderSnd = false;
+		}
 		else
 		{
 			FlxG.save.data.setFpsCap = FlxG.save.data.setFpsCap + 10;
 			FlxG.save.data.fpsCap = FlxG.save.data.setFpsCap;
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
+			canPlaySliderSnd = true;
 		}
 		display = updateDisplay();
 		return true;
@@ -1018,6 +1042,7 @@ class FPSCapOption extends Option
 			FlxG.save.data.setFpsCap = 50;
 			FlxG.save.data.fpsCap = Application.current.window.displayMode.refreshRate;
 			(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
+			canPlaySliderSnd = false;
 		}
 		else
 		{
@@ -1027,6 +1052,7 @@ class FPSCapOption extends Option
 				FlxG.save.data.fpsCap = FlxG.save.data.setFpsCap;
 				(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
 			}
+			canPlaySliderSnd = true;
 		}
 		display = updateDisplay();
 		return true;
@@ -1061,12 +1087,19 @@ class ScrollSpeedOption extends Option
 	override function right():Bool 
 	{
 		FlxG.save.data.scrollSpeed += 0.1;
+		canPlaySliderSnd = true;
 
 		if (FlxG.save.data.scrollSpeed < 0.5)
+		{
 			FlxG.save.data.scrollSpeed = 0.5;
+			canPlaySliderSnd = false;
+		}
 
 		if (FlxG.save.data.scrollSpeed > 2)
+		{
 			FlxG.save.data.scrollSpeed = 2;
+			canPlaySliderSnd = false;
+		}
 		display = updateDisplay();
 		return true;
 	}
@@ -1078,12 +1111,19 @@ class ScrollSpeedOption extends Option
 	override function left():Bool 
 	{
 		FlxG.save.data.scrollSpeed -= 0.1;
+		canPlaySliderSnd = true;
 
 		if (FlxG.save.data.scrollSpeed < 0.5)
+		{
 			FlxG.save.data.scrollSpeed = 0.5;
+			canPlaySliderSnd = false;
+		}
 
 		if (FlxG.save.data.scrollSpeed > 2)
+		{
 			FlxG.save.data.scrollSpeed = 2;
+			canPlaySliderSnd = false;
+		}
 		display = updateDisplay();
 		return true;
 	}

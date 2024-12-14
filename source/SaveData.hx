@@ -174,6 +174,9 @@ class SaveData
 		Main.watermarks = FlxG.save.data.watermark;
 		
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
+
+		FlxG.sound.defaultSoundGroup.volume = FlxG.save.data.gamesfxVol * 0.01;
+		FlxG.sound.defaultMusicGroup.volume = FlxG.save.data.musicVol * 0.01;
 	}
 
 	public static function resetAllData():Void
