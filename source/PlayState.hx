@@ -1859,18 +1859,6 @@ class PlayState extends MusicBeatState
 				camZooming = true;
 				startCountdown();
 		}
-
-		// pre lowercasing the song name (generateSong)
-		var songPath = 'assets/data/' + songLowercase + '/';
-		generateChart(songPath);
-	
-		if (FlxG.save.data.subtitles)
-		{
-			add(subtitleBackground);
-			add(subtitleText);
-
-			startVideoSubtitles(videoPathArray[videoArrayProgress]);
-		}
 	}
 
 	function startVideoSubtitles(key:String = ''):Void
