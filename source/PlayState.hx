@@ -124,7 +124,7 @@ class PlayState extends MusicBeatState
 	var soundsVolume:Float = 0;
 	var noteHitVolume:Float = 0;
 	
-	private var lowHPHeartBeat:FlxSound;
+	private var lowHPHeartBeat:FlxFilteredSound;
 	private var lowHPOverlay:FlxSprite;
 	var allowHeartBeatSounds:Bool = true;
 
@@ -135,12 +135,12 @@ class PlayState extends MusicBeatState
 	//var specilNoteHitSFXGroup:FlxSoundGroup;
 
 	//Note Hit SFX
-	private var noteHitSFX:FlxSound;
-	private var noteHitSustainSFX:FlxSound;
-	private var specialNoteHitSFX:FlxSound;
+	private var noteHitSFX:FlxFilteredSound;
+	private var noteHitSustainSFX:FlxFilteredSound;
+	private var specialNoteHitSFX:FlxFilteredSound;
 
 	//Sound filters
-	var coolSoundFilter:FlxSoundFilter;
+	//var coolSoundFilter:FlxSoundFilter;
 	var coolSoundFilterTween:FlxTween;
 
 	//Note Hit SFX Shits
@@ -148,23 +148,23 @@ class PlayState extends MusicBeatState
 	var allowNoteHitSounds:Bool = true;
 
 	//for the adaptive Music
-	public var instLowHP:FlxSound;
+	public var instLowHP:FlxFilteredSound;
 	//For the FNF voices
-	public var vocals:FlxSound;
+	public var vocals:FlxFilteredSound;
 	//For things such as Playing With Fire Guns and other shits that I am yet to do
-	public var miscs:FlxSound;
+	public var miscs:FlxFilteredSound;
 	//ADAPTIVE MUSIC AAAAA FUKC
 	//good god this has gYATT to be turned into a soundgroup LMFAO
-	private var drums:FlxSound;
-	private var taiko:FlxSound;
-	private var choir:FlxSound;
-	private var hats:FlxSound;
-	private var adders:FlxSound;
-	private var slayer:FlxSound;
-	private var retalHats:FlxSound;
-	private var bells:FlxSound;
-	private var pads:FlxSound;
-	private var danger:FlxSound;
+	private var drums:FlxFilteredSound;
+	private var taiko:FlxFilteredSound;
+	private var choir:FlxFilteredSound;
+	private var hats:FlxFilteredSound;
+	private var adders:FlxFilteredSound;
+	private var slayer:FlxFilteredSound;
+	private var retalHats:FlxFilteredSound;
+	private var bells:FlxFilteredSound;
+	private var pads:FlxFilteredSound;
+	private var danger:FlxFilteredSound;
 	public static var pauseMusicName:String = "";
 	//FINALE BATTLE SH THIT
 	private var dangerLevel:Float = 0;
@@ -325,7 +325,7 @@ class PlayState extends MusicBeatState
 	var blackScreenFadeTo:Float = 0;
 	var stageGradient:PsychEngineFancyStageShit.FancyStageGradient;
 	var stageParticles:FlxTypedGroup<PsychEngineFancyStageShit.FancyStageParticle>;
-	var stageSound:FlxSound;
+	var stageSound:FlxFilteredSound;
 	//Making this public static??? cause making this visible in the pause menu wouldnt work
 	public var safeVignette:FlxSprite;
 
@@ -395,7 +395,7 @@ class PlayState extends MusicBeatState
 	public static var startTime:Float = 0.0;
 
 	var video:VideoHandler;
-	var videoMusic:FlxSound;
+	var videoMusic:FlxFilteredSound;
 	var videoSprite:FlxSprite;
 	public static var videoPathArray:Array<String> = [];
 	var videoArrayProgress:Int = 0;
@@ -470,7 +470,6 @@ class PlayState extends MusicBeatState
 		}
 
 		//Startup Shit
-		songStarted = false;
 		PauseSubState.resyncToLastPos = false;
 		highestCombo = 0;
 
@@ -530,9 +529,14 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				if (clearNumTwn != null)
-					clearNumTwn.cancel();
-				clearNumTwn = FlxTween.num(clearPercentage, 0, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut}, function(f:Float){clearPercentage = f;});
+				if (campaignDeaths == 0 && songDeaths == 0 && !hasReset && storyWeek != 0)
+				{
+					if (clearNumTwn != null)
+						clearNumTwn.cancel();
+					clearNumTwn = FlxTween.num(clearPercentage, 0, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut}, function(f:Float){clearPercentage = f;});
+				}
+				else
+					clearPercentage = 0;
 				blackScreenAlpha = blackScreenFadeTo;
 				if (!playedCutscene && songDeaths == 0 && !hasReset)
 					health = prevHealth;
@@ -540,7 +544,10 @@ class PlayState extends MusicBeatState
 			}
 		}
 		else
+		{
+			clearPercentage = 0;
 			blackScreenAlpha = blackScreenFadeTo;
+		}
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
@@ -558,15 +565,15 @@ class PlayState extends MusicBeatState
 			//Paths.voices(key);
 		
 		//NoteHitSFX
-		noteHitSFX = new FlxSound();
-		noteHitSustainSFX = new FlxSound();
-		specialNoteHitSFX = new FlxSound();
+		noteHitSFX = new FlxFilteredSound();
+		noteHitSustainSFX = new FlxFilteredSound();
+		specialNoteHitSFX = new FlxFilteredSound();
 		FlxG.sound.list.add(noteHitSFX);
 		FlxG.sound.list.add(noteHitSustainSFX);
 		FlxG.sound.list.add(specialNoteHitSFX);
 
-		lowHPHeartBeat = new FlxSound();
-		styleSound = new FlxSound().loadEmbedded(Paths.sound('styleOnEm'));
+		lowHPHeartBeat = new FlxFilteredSound();
+		styleSound = new FlxFilteredSound().loadEmbedded(Paths.sound('styleOnEm'));
 		FlxG.sound.list.add(lowHPHeartBeat);
 		FlxG.sound.list.add(styleSound);
 		//ermmm does this work..? theehee~
@@ -1265,10 +1272,10 @@ class PlayState extends MusicBeatState
 			grabbedScreen.dispose();
 		}
 
-		coolSoundFilter = new FlxSoundFilter();
-		coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
-		coolSoundFilter.gainHF = 1;
-		coolSoundFilter.gainLF = 1;
+		// = new FlxSoundFilter();
+		//coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
+		//coolSoundFilter.gainHF = 1;
+		//coolSoundFilter.gainLF = 1;
 
 		//UI Vignettes
 		//The detail thing that appears when you get shot
@@ -1364,8 +1371,6 @@ class PlayState extends MusicBeatState
 			healthAndScoreGroup.alpha = 0;
 		healthAndScoreGroup.cameras = [camHUD];
 		add(healthAndScoreGroup);
-
-		generateSong();
 
 		//this was where the cameradata was
 
@@ -1664,7 +1669,7 @@ class PlayState extends MusicBeatState
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
-		scoreTxt.cameras = [camHUD];
+		scoreTxt.cameras = [camEXT];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		//doof.cameras = [camHUD];
@@ -1863,6 +1868,8 @@ class PlayState extends MusicBeatState
 
 			startVideoSubtitles(videoPathArray[videoArrayProgress]);
 		}
+
+		generateSong();
 	}
 
 	function startVideoSubtitles(key:String = ''):Void
@@ -2111,10 +2118,11 @@ class PlayState extends MusicBeatState
 		//subtitleText.clearFormats();
 	}
 
+	var vidSubTmrArray:Array<FlxTimer> = [];
 	function setTimedSubtitle(text:String, textColour:FlxColor, ?textBorderColor:FlxColor = FlxColor.BLACK, occurTime:Float, ?endTime:Float = 0)
 	{
 		//do a better way of stoppin these lol
-		new FlxTimer().start(occurTime, function(tmr:FlxTimer)
+		var videoSubtitleTimer = new FlxTimer().start(occurTime, function(tmr:FlxTimer)
 		{
 			if (video.isPlaying && !songStarted)
 			{
@@ -2129,6 +2137,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 		});
+		vidSubTmrArray.push (videoSubtitleTimer);
 	}
 
 	var startTimer:FlxTimer;
@@ -2507,7 +2516,7 @@ class PlayState extends MusicBeatState
 		return data;
 	}
 
-	public static var songStarted = false;
+	public var songStarted = false;
 	//1 beat before music end
 	var musicTimeCusp:Float = 0;
 	var musicBeatCusp:Int = 0;
@@ -2547,25 +2556,25 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				drums = new FlxSound();
+				drums = new FlxFilteredSound();
 				FlxG.sound.list.add(drums);
-				taiko = new FlxSound();
+				taiko = new FlxFilteredSound();
 				FlxG.sound.list.add(taiko);
-				choir = new FlxSound();
+				choir = new FlxFilteredSound();
 				FlxG.sound.list.add(choir);
-				hats = new FlxSound();
+				hats = new FlxFilteredSound();
 				FlxG.sound.list.add(hats);
-				adders = new FlxSound();
+				adders = new FlxFilteredSound();
 				FlxG.sound.list.add(adders);
-				slayer = new FlxSound();
+				slayer = new FlxFilteredSound();
 				FlxG.sound.list.add(slayer);
-				retalHats = new FlxSound();
+				retalHats = new FlxFilteredSound();
 				FlxG.sound.list.add(retalHats);
-				bells = new FlxSound();
+				bells = new FlxFilteredSound();
 				FlxG.sound.list.add(bells);
-				pads = new FlxSound();
+				pads = new FlxFilteredSound();
 				FlxG.sound.list.add(pads);
-				danger = new FlxSound();
+				danger = new FlxFilteredSound();
 				FlxG.sound.list.add(danger);
 
 				FlxG.sound.music.looped = true;
@@ -2775,27 +2784,31 @@ class PlayState extends MusicBeatState
 		if (!generatedSong)
 		{
 			FlxG.sound.loadMusic(Paths.inst(SONG.song), musicVolume, false, musicGroup);
+			FlxG.sound.music.filter = new FlxSoundFilter();
+			FlxG.sound.music.filter.filterType = FlxSoundFilterType.BANDPASS;
 			if (SONG.needsVoices)
-				vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
+				vocals = new FlxFilteredSound().loadEmbedded(Paths.voices(SONG.song));
 			else
-				vocals = new FlxSound();
+				vocals = new FlxFilteredSound();
 			vocals.volume = vocalsVolume;
 			FlxG.sound.list.add(vocals);
 	
 	
 	
 			if (SONG.needsMiscs)
-				miscs = new FlxSound().loadEmbedded(Paths.miscs(SONG.song));
+				miscs = new FlxFilteredSound().loadEmbedded(Paths.miscs(SONG.song));
 			else
-				miscs = new FlxSound();
+				miscs = new FlxFilteredSound();
+			miscs.filter = new FlxSoundFilter();
+			miscs.filter.filterType = FlxSoundFilterType.BANDPASS;
 			FlxG.sound.list.add(miscs);
 	
 	
 	
 			if (SONG.needsAdaptiveMus)
-				instLowHP = new FlxSound().loadEmbedded(Paths.adaptiveMus(SONG.song), FlxG.sound.music.looped);
+				instLowHP = new FlxFilteredSound().loadEmbedded(Paths.adaptiveMus(SONG.song), FlxG.sound.music.looped);
 			else
-				instLowHP = new FlxSound();
+				instLowHP = new FlxFilteredSound();
 			instLowHP.volume = 0;
 			FlxG.sound.list.add(instLowHP);
 			musicGroup.add(instLowHP);
@@ -3283,7 +3296,7 @@ class PlayState extends MusicBeatState
 	var compensatedViaLagSpike:Bool = false;
 	public var keeledOver:Bool = false;
 
-	var styleSound:FlxSound;
+	var styleSound:FlxFilteredSound;
 	var goodStyleHits:Int = 0;
 	var improvStyleHits:Int = 0;
 	var badStyleHits:Int = 0;
@@ -3572,11 +3585,11 @@ class PlayState extends MusicBeatState
 			}
 
 			//Sound/Music Filter List Shit! :33
-			if (coolSoundFilter != null)
+			/*if (coolSoundFilter != null)
 			{
 				coolSoundFilter.applyFilter(FlxG.sound.music);
 				coolSoundFilter.applyFilter(miscs);
-			}
+			}*/
 		}
 
 		if (!cannotDie && !endedSong)
@@ -4278,16 +4291,22 @@ class PlayState extends MusicBeatState
 				{
 					case "Mic Test":
 						if (health < 1)
-							coolSoundFilter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
-						else if (coolSoundFilter.gainHF < 1)
-							coolSoundFilter.gainLF = 1;
+							FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
+						else if (FlxG.sound.music.filter.gainLF < 1)
+							FlxG.sound.music.filter.gainLF = 1;
 					case "Sudden Confrontation" | "Sprouting Irritation" | "Striking Tribulation":
 						//INTENTIONALLY do NATHIN
 					default:
 						if (health < 1)
-							coolSoundFilter.gainLF = FlxMath.lerp(1, coolSoundFilter.gainLF, calculateLerpTime(elapsed, 5 * (Conductor.bpm * 0.01)));
-						else if (coolSoundFilter.gainHF < 1)
-							coolSoundFilter.gainLF = 1;
+						{
+							FlxG.sound.music.filter.gainLF = FlxMath.lerp(1, FlxG.sound.music.filter.gainLF, calculateLerpTime(elapsed, 5 * (Conductor.bpm * 0.01)));
+							miscs.filter.gainLF = FlxG.sound.music.filter.gainLF;
+						}
+						else if (FlxG.sound.music.filter.gainLF < 1)
+						{
+							FlxG.sound.music.filter.gainLF = 1;
+							miscs.filter.gainLF = 1;
+						}
 				}
 				//}
 			}
@@ -4296,12 +4315,12 @@ class PlayState extends MusicBeatState
 			scoreTxt.screenCenter(X);
 		}
 		//Might aswell update this every frame lmao
-		scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
+		//scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
 		//And here we see a local devgirl using scoretext as a testing visual aid
-		//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(coolSoundFilter.gainLF, 3);
+		//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainLF, 3);
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
-		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+		scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -4406,6 +4425,7 @@ class PlayState extends MusicBeatState
 				if (camTween != null)
 					camTween.cancel();
 				camGame.zoom = 1.5;
+				//This Keeps Crashing ugh
 				if (tutorialGraphicA != null)
 					tutorialGraphicA.destroy();
 				if (tutorialGraphicB != null)
@@ -4601,18 +4621,24 @@ class PlayState extends MusicBeatState
 
 	var vignetteChecker:Int = 0;
 	var gotShotBlurVal:Float = 0;
+	var iconTrailTimer:FlxTimer;
 	//Turned them into functions for consistency's sake :3
 	function getFuckingShot(purelyVisual:Bool = false):Void
 	{
 		vocals.volume = 0;
 		//Cool Lowpass Shit
-		coolSoundFilter.gainHF = 0;
+		FlxG.sound.music.filter.gainHF = 0;
+		miscs.filter.gainHF = 0;
 		if (coolSoundFilterTween != null)
 			coolSoundFilterTween.cancel();
-		coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
+		coolSoundFilterTween = FlxTween.tween(FlxG.sound.music.filter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
 			{
 				ease: FlxEase.smootherStepInOut,
 				startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
+				onUpdate: function(twn:FlxTween)
+				{
+					miscs.filter.gainHF = FlxG.sound.music.filter.gainHF;
+				},
 				onComplete: function(twn:FlxTween) 
 				{
 					coolSoundFilterTween = null;
@@ -4639,9 +4665,11 @@ class PlayState extends MusicBeatState
 			iconP1.playAnimation('lowHP'); //PlaceholderAnim
 			if (health >= 0.5)
 			{
+				if (iconTrailTimer != null && iconTrailTimer.active)
+					iconTrailTimer.cancel();
 				iconTrail1.active = true;
 				iconTrail2.active = true;
-				new FlxTimer().start(0.3, function(tmr:FlxTimer)
+				iconTrailTimer = new FlxTimer().start(0.3, function(tmr:FlxTimer)
 				{
 					iconTrail1.active = false;
 					iconTrail1.resetTrail();
@@ -5570,7 +5598,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	var comboBreakSound:FlxSound;
+	var comboBreakSound:FlxFilteredSound;
 	function breakCombo():Void //Breaks combo and plays combobreak noise
 	{
 		//The cool 000 effect when breaking a combo
@@ -9643,12 +9671,13 @@ class PlayState extends MusicBeatState
 								lowHPHeartBeat = FlxG.sound.play(Paths.sound('lowHP'), lowHPEffectVol);
 								lowHPHeartBeat.pitch = FlxG.random.float(0.85, 1.15);
 
-								coolSoundFilter.gainLF = ((lowHPEffectVol * 0.75) - 1) * -1; //LMAO I HOPE THIS WORKS
+								FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.75) - 1) * -1; //LMAO I HOPE THIS WORKS
+								miscs.filter.gainLF = FlxG.sound.music.filter.gainLF;
 								
 								if (FlxG.save.data.flashing)
 									lowHPOverlay.alpha = lowHPEffectVol;
 								
-								//coolSoundFilter.gainLF = (lowHPEffectVol * 0.75) - 1;
+								//FlxG.sound.music.filter.gainLF = (lowHPEffectVol * 0.75) - 1;
 								/*#if cpp
 								@:privateAccess
 								{

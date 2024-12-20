@@ -6,7 +6,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.system.FlxAssets.FlxSoundAsset;
-import flixel.system.FlxSound;
+//import flixel.system.FlxSound; We replaced all of them with FlxFilteredSound - I dunno if that is good or not
 import flixel.system.FlxSoundGroup;
 import flixel.system.ui.FlxSoundTray;
 import flixel.util.FlxSignal;
@@ -25,7 +25,7 @@ class SoundFrontEnd
 	/**
 	 * A handy container for a background music object.
 	 */
-	public var music:FlxSound;
+	public var music:FlxFilteredSound;
 
 	/**
 	 * Whether or not the game sounds are muted.
@@ -96,7 +96,7 @@ class SoundFrontEnd
 	/**
 	 * A list of all the sounds being played in the game.
 	 */
-	public var list(default, null):FlxTypedGroup<FlxSound> = new FlxTypedGroup<FlxSound>();
+	public var list(default, null):FlxTypedGroup<FlxFilteredSound> = new FlxTypedGroup<FlxFilteredSound>();
 
 	/**
 	 * Set this to a number between 0 and 1 to change the global volume.
@@ -150,7 +150,7 @@ class SoundFrontEnd
 		}
 
 		if (music == null)
-			music = new FlxSound();
+			music = new FlxFilteredSound();
 		else if (music.active)
 			music.stop();
 
@@ -162,22 +162,22 @@ class SoundFrontEnd
 	}
 
 	/**
-	 * Creates a new FlxSound object.
+	 * Creates a new FlxFilteredSound object.
 	 *
 	 * @param   embeddedSound   The embedded sound resource you want to play.  To stream, use the optional URL parameter instead.
 	 * @param   volume          How loud to play it (0 to 1).
 	 * @param   looped          Whether to loop this sound.
 	 * @param   group           The group to add this sound to.
 	 * @param   autoDestroy     Whether to destroy this sound when it finishes playing.
-	 *                          Leave this value set to "false" if you want to re-use this FlxSound instance.
+	 *                          Leave this value set to "false" if you want to re-use this FlxFilteredSound instance.
 	 * @param   autoPlay        Whether to play the sound.
 	 * @param   url             Load a sound from an external web resource instead.  Only used if EmbeddedSound = null.
 	 * @param   onComplete      Called when the sound finished playing.
 	 * @param   onLoad          Called when the sound finished loading.  Called immediately for succesfully loaded embedded sounds.
-	 * @return  A FlxSound object.
+	 * @return  A FlxFilteredSound object.
 	 */
 	public function load(?embeddedSound:FlxSoundAsset, volume = 1.0, looped = false, ?group:FlxSoundGroup, autoDestroy = false, autoPlay = false, ?url:String,
-			?onComplete:Void->Void, ?onLoad:Void->Void):FlxSound
+			?onComplete:Void->Void, ?onLoad:Void->Void):FlxFilteredSound
 	{
 		if ((embeddedSound == null) && (url == null))
 		{
@@ -185,7 +185,7 @@ class SoundFrontEnd
 			return null;
 		}
 
-		var sound:FlxSound = list.recycle(FlxSound);
+		var sound:FlxFilteredSound = list.recycle(FlxFilteredSound);
 
 		if (embeddedSound != null)
 		{
@@ -217,7 +217,7 @@ class SoundFrontEnd
 		return sound;
 	}
 
-	function loadHelper(sound:FlxSound, volume:Float, group:FlxSoundGroup, autoPlay = false):FlxSound
+	function loadHelper(sound:FlxFilteredSound, volume:Float, group:FlxSoundGroup, autoPlay = false):FlxFilteredSound
 	{
 		sound.volume = volume;
 
@@ -266,17 +266,17 @@ class SoundFrontEnd
 	 * @param   looped         Whether to loop this sound.
 	 * @param   group          The group to add this sound to.
 	 * @param   autoDestroy    Whether to destroy this sound when it finishes playing.
-	 *                         Leave this value set to "false" if you want to re-use this FlxSound instance.
+	 *                         Leave this value set to "false" if you want to re-use this FlxFilteredSound instance.
 	 * @param   onComplete     Called when the sound finished playing
-	 * @return  A FlxSound object.
+	 * @return  A FlxFilteredSound object.
 	 */
-	public function play(embeddedSound:FlxSoundAsset, volume = 1.0, looped = false, ?group:FlxSoundGroup, autoDestroy = true, ?onComplete:Void->Void):FlxSound
+	public function play(embeddedSound:FlxSoundAsset, volume = 1.0, looped = false, ?group:FlxSoundGroup, autoDestroy = true, ?onComplete:Void->Void):FlxFilteredSound
 	{
 		if ((embeddedSound is String))
 		{
 			embeddedSound = cache(embeddedSound);
 		}
-		var sound = list.recycle(FlxSound).loadEmbedded(embeddedSound, looped, autoDestroy, onComplete);
+		var sound = list.recycle(FlxFilteredSound).loadEmbedded(embeddedSound, looped, autoDestroy, onComplete);
 		return loadHelper(sound, volume, group, true);
 	}
 
@@ -289,13 +289,13 @@ class SoundFrontEnd
 	 * @param   looped       Whether to loop this sound.
 	 * @param   group        The group to add this sound to.
 	 * @param   autoDestroy  Whether to destroy this sound when it finishes playing.
-	 *                       Leave this value set to "false" if you want to re-use this FlxSound instance.
+	 *                       Leave this value set to "false" if you want to re-use this FlxFilteredSound instance.
 	 * @param   onComplete   Called when the sound finished playing
 	 * @param   onLoad       Called when the sound finished loading.
-	 * @return  A FlxSound object.
+	 * @return  A FlxFilteredSound object.
 	 */
 	public function stream(url:String, volume = 1.0, looped = false, ?group:FlxSoundGroup, autoDestroy = true, ?onComplete:Void->Void,
-			?onLoad:Void->Void):FlxSound
+			?onLoad:Void->Void):FlxFilteredSound
 	{
 		return load(null, volume, looped, group, autoDestroy, true, url, onComplete, onLoad);
 	}
@@ -360,7 +360,7 @@ class SoundFrontEnd
 		}
 	}
 
-	function destroySound(sound:FlxSound):Void
+	function destroySound(sound:FlxFilteredSound):Void
 	{
 		defaultMusicGroup.remove(sound);
 		defaultSoundGroup.remove(sound);

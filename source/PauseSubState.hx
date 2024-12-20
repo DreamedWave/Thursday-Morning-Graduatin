@@ -31,7 +31,7 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
 	var curSelected:Int = 0;
 
-	var pauseMusic:FlxSound;
+	var pauseMusic:FlxFilteredSound;
 	//var oldPauseVolume:Float = 0;
 	#if cpp
 	#if debug
@@ -55,7 +55,7 @@ class PauseSubState extends MusicBeatSubstate
 	var levelDifficulty:FlxText;
 	var failCount:FlxText;
 
-	var pauseSound:FlxSound;
+	var pauseSound:FlxFilteredSound;
 
 	var blurTweenGoBrr:FlxTween = null;
 	var funnyBlur:Float;
@@ -72,7 +72,7 @@ class PauseSubState extends MusicBeatSubstate
 		//HUD Tween cuz cool
 		if (playHUDTwn != null)
 			playHUDTwn.cancel();
-		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.5, {ease: FlxEase.expoOut,
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.7, {ease: FlxEase.quadIn,
 			onComplete: function(twn:FlxTween) 
 			{
 				playHUDTwn = null;
@@ -110,7 +110,7 @@ class PauseSubState extends MusicBeatSubstate
 		if (PlayStateChangeables.botPlay || PlayState.SONG.song.toLowerCase() == "mic test")
 			menuItems.remove("Toggle Practice Mode");
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
+		pauseMusic = new FlxFilteredSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
 		if (PlayState.pauseMusicName != 'pause_screen/holy_shit_the_stalemate_is_on_fire')
 			pauseMusic.volume = 0;
 		else
@@ -230,7 +230,7 @@ class PauseSubState extends MusicBeatSubstate
 		cameras = [PlayState.instance.camEXT];
 
 		FlxG.mouse.visible = true;
-		pauseSound = new FlxSound().loadEmbedded(Paths.sound('pauseMenu'));
+		pauseSound = new FlxFilteredSound().loadEmbedded(Paths.sound('pauseMenu'));
 		FlxG.sound.list.add(pauseSound);
 		pauseSound.volume = 0.7;
 		pauseSound.play();
@@ -395,7 +395,7 @@ class PauseSubState extends MusicBeatSubstate
 						//FlxG.game.soundTray.silent = true;
 						randomMusicTime = true;
 						resyncToLastPos = true;
-						if (doFancyCountdownShit && PlayState.songStarted) //(FlxG.save.data.pauseCountdown)
+						if (doFancyCountdownShit && PlayState.instance.songStarted) //(FlxG.save.data.pauseCountdown)
 						{
 							//Blur Tween cuz cool electric boogaloo
 							if (blurTweenGoBrr != null)
@@ -517,6 +517,7 @@ class PauseSubState extends MusicBeatSubstate
 							skippedSong = false;
 						}
 					case "Exit to menu":
+						FlxTransitionableState.skipNextTransOut = false;
 						FlxG.sound.play(Paths.sound('returnMenu'));
 						PlayState.instance.subtitleText.visible = false;
 						PlayState.instance.subtitleBackground.visible = false;
@@ -555,7 +556,7 @@ class PauseSubState extends MusicBeatSubstate
 		FlxTween.tween(bg, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
 		if (playHUDTwn != null)
 			playHUDTwn.cancel();
-		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: playHUDPrevAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.circOut});
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: playHUDPrevAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut});
 		#if cpp
 		#if debug
 		FlxTween.tween(perSongOffset, {y: FlxG.height + 21}, 0.9, {type: ONESHOT, ease: FlxEase.elasticInOut});

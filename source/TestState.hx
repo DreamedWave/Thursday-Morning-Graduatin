@@ -32,7 +32,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
-import flixel.system.FlxSound;
+//import flixel.system.FlxSound;
 import flixel.system.FlxSoundGroup;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;

@@ -105,7 +105,7 @@ class DisclaimerState extends MusicBeatMenu
 	}
 
 	var spedran:Bool = false;
-	var exitSound:FlxSound;
+	var exitSound:FlxFilteredSound;
 	
 	function exitDisclaimerState():Void
 	{

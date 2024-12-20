@@ -109,8 +109,8 @@ class ChartingState extends MusicBeatState
 
 	var tempBpm:Float = 0;
 	var gridBlackLine:FlxSprite;
-	var vocals:FlxSound;
-	var miscs:FlxSound;
+	var vocals:FlxFilteredSound;
+	var miscs:FlxFilteredSound;
 
 	var player2:Character = new Character(0,0, "demon-dad");
 	var player1:Boyfriend = new Boyfriend(0,0, "guy-default");
@@ -1176,15 +1176,15 @@ class ChartingState extends MusicBeatState
 		// WONT WORK FOR TUTORIAL OR TEST SONG!!! REDO LATER
 		//FIXED IT(?) but it now needs a reload
 		if (_song.needsVoices)
-			vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
+			vocals = new FlxFilteredSound().loadEmbedded(Paths.voices(daSong));
 		else
-			vocals = new FlxSound();
+			vocals = new FlxFilteredSound();
 		FlxG.sound.list.add(vocals);
 
 		if (_song.needsMiscs)
-			miscs = new FlxSound().loadEmbedded(Paths.miscs(daSong));
+			miscs = new FlxFilteredSound().loadEmbedded(Paths.miscs(daSong));
 		else
-			miscs = new FlxSound();
+			miscs = new FlxFilteredSound();
 		FlxG.sound.list.add(miscs);
 
 		FlxG.sound.music.pause();

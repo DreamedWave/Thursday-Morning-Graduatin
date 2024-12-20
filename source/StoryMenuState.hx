@@ -72,7 +72,7 @@ class StoryMenuState extends MusicBeatMenu
 
 	var combo:String = '';
 
-	var weekLockedSound:FlxSound;
+	var weekLockedSound:FlxFilteredSound;
 
 	function unlockWeeks():Array<Bool>
 	{
@@ -97,7 +97,7 @@ class StoryMenuState extends MusicBeatMenu
 	override function create()
 	{
 		//FlxG.camera.fade(FlxColor.BLACK, 0.5, true);
-		confirmSound = new FlxSound();
+		confirmSound = new FlxFilteredSound();
 
 		weekUnlocked = unlockWeeks();
 		if (firstStart)

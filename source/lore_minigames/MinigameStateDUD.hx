@@ -51,7 +51,7 @@ class MinigameState extends MusicBeatState
 
 	public static var camGame:FlxCamera;
 	public static var camHUD:FlxCamera;
-	var defaultCamZoom:Float = 4;
+	var defaultCamZoom:Float = 3;
 	var camFollow:FlxObject;
 	var doCamFollowing:Bool = false;
 
@@ -64,7 +64,7 @@ class MinigameState extends MusicBeatState
 
 	var escapeTimer:FlxTimer;
 	var escapeTimerTween:FlxTween;
-	var defaultEscapeTime:Int = 170;
+	var defaultEscapeTime:Int = 120;
 	var escapeTimerGroup:FlxSpriteGroup = null;
 	var escapeTimerText:FlxText;
 	var escTimeBG:FlxSprite;
@@ -335,12 +335,6 @@ class MinigameState extends MusicBeatState
 
 		//Collides
 		FlxG.collide(player, walls);
-		//Overlaps
-		if (FlxG.keys.justPressed.UP)
-			FlxG.overlap(player, interactiblesGroup, interactFunct);
-		if (player.curAction != SNEAK && player.curAction != SLIDE)
-			FlxG.overlap(player, clatterGroup, clatterFunct);
-		FlxG.overlap(player, collectiblesGroup, pickupFunct);
 
 		//EVIL ASS FUNCTION!!! FIX AND REMOVE THIS ASAP!!!!!
 		if (lockTheNextDoorThePlayerOverlapsWith)
@@ -366,7 +360,7 @@ class MinigameState extends MusicBeatState
 				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
 			//}
 
-			//FlxG.overlap(player, theManUpstairs, playerDied);
+			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
 			if (fatherElapsedCheck < 1)
 			{
 				theManUpstairs.playerPosition = player.getMidpoint();
@@ -428,8 +422,6 @@ class MinigameState extends MusicBeatState
 			darkenScreen.alpha = FlxMath.lerp(0.15, darkenScreen.alpha, calculateLerpTime(elapsed, 1.5, 0, 1));
 		}
 	}
-
-	var stopActiveTweening:Bool = false;
 
 	var droneDeterminator:Int = 1;
 	var uniformDeterminator:Int = 1;
@@ -754,10 +746,10 @@ class MinigameState extends MusicBeatState
 				if (timerMultTween != null)
 				{
 					timerMultTween.cancel();
+					timerMult = 1;
 				}
 				if (musicTween != null)
 					musicTween.cancel();
-				timerMult = 1;
 				seqCheck = 3;
 				FlxG.sound.music.stop();
 				Conductor.changeBPM(240);
@@ -846,7 +838,6 @@ class MinigameState extends MusicBeatState
 									ease: FlxEase.smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
-										suspenseEscMusicIntro.stop();
 										preSusMusGroup.stop();
 										musicTween = null;
 									}
@@ -885,7 +876,7 @@ class MinigameState extends MusicBeatState
 
 						//player.stopAction(true, true);
 						player.canMove = false;
-						player.setPosition(object.x, object.y - (player.height - object.height));
+						player.setPosition(object.x + 7, object.y + (object.height - player.height));
 						if (theManUpstairs != null && theManUpstairs.exists)
 						{
 							//he dont know what hit em
@@ -915,7 +906,7 @@ class MinigameState extends MusicBeatState
 							camMovementOffset[1] = 0;
 							camMovementLerp[0] = 0;
 							camMovementLerp[1] = 0;
-							player.setPosition(object.destination[0], object.destination[1] - (player.height - object.height));
+							player.setPosition(object.destination[0] + 7, object.destination[1] + (object.height - player.height));
 							camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
 							player.canMove = true;
 							lockTheNextDoorThePlayerOverlapsWith = true;
@@ -924,7 +915,7 @@ class MinigameState extends MusicBeatState
 					else
 					{
 						//player.stopAction(true, true);
-						player.setPosition(object.x, object.y - (player.height - object.height));
+						player.setPosition(object.destination[0] + 7, object.destination[1] + (object.height - player.height));
 						//if (theManUpstairs != null && theManUpstairs.exists)
 							//theManUpstairs.quellTheDemon(15, true, true);
 						player.canMove = false;
@@ -945,7 +936,7 @@ class MinigameState extends MusicBeatState
 								camMovementOffset[1] = 0;
 								camMovementLerp[0] = 0;
 								camMovementLerp[1] = 0;
-								player.setPosition(object.destination[0], object.destination[1] - (player.height - object.height));
+								player.setPosition(object.destination[0] + 7, object.destination[1] + 3);
 								camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
 								/*if (theManUpstairs != null && theManUpstairs.exists)
 								{
@@ -997,6 +988,145 @@ class MinigameState extends MusicBeatState
 		}
 	}
 
+	function pickupFunct(player:Player, object:Collectibles)
+	{
+		if (object.isActive)
+		{
+			object.isActive = false;
+			switch (object.type)
+			{
+				case FINAL:
+					object.kill();
+					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
+					//player.stopAction(true, true);
+					player.canMove = false;
+					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
+					{	
+						type: ONESHOT, 
+						ease: FlxEase.smoothStepOut,
+						onComplete: function(twn:FlxTween)
+						{
+							preEscMusGroup.stop();
+						}
+					});
+					FlxTween.tween(this, {defaultCamZoom: 4.5}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+					onComplete: function(twn:FlxTween)
+						{
+							defaultCamZoom = 2.5;
+							player.canMove = true;
+							FlxG.camera.flash(DisclaimerState.flashColor, Conductor.crochet * 4 / 1000);
+							triggerEscapeSeq();
+						}});
+				case SECRET:
+					object.kill();
+					FlxG.sound.play('assets/minigame/sounds/doorSND_Placeholder.ogg', 0.5);
+			}
+		}
+	}
+
+	function clatterFunct(player:Player, clatterer:Clatterer)
+	{
+		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
+		{
+			if (clatterCoyote != null && clatterCoyote.active)
+				clatterCoyote.cancel();
+			
+			clatterCoyote = new FlxTimer().start(0.01, function(tmr:FlxTimer)
+			{
+				if (player.status != SNEAKING && !player.forceSneak)
+				{
+					clatterer.canClatter = false;
+					clatter += clatterer.clatterAmt;
+					clatterer.playerMadeNoise();
+					new FlxTimer().start(3, function(tmr:FlxTimer)
+					{
+						clatterer.canClatter = true;
+						clatterer.alpha = 0.25;
+					});
+		
+					//Subtract some time from the timer
+					if (inEscSeq)
+					{
+						if (escapeTimer.timeLeft >= 75)
+						{
+							escapeTimer.reset(escapeTimer.timeLeft - 15 > 0 ? escapeTimer.timeLeft - 15 : 3);
+							if (escapeTimerTween != null)
+								escapeTimerTween.cancel();				
+							escapeTimerTween = FlxTween.color(escapeTimerText, 1.5, FlxColor.RED, 0xFFFFFFFF, 
+							{
+								type: ONESHOT,
+								ease: FlxEase.smoothStepOut,
+								onComplete: function(twn:FlxTween)
+								{
+									escapeTimerTween = null;
+								}
+							});
+						}
+					}
+				}
+				else
+					trace ('saved by the clatter coyote time');
+			});
+		}
+	}
+
+	var stopActiveTweening:Bool = false;
+	var jumpscareSprite:FlxSprite;
+	var jumpscaredPlayer:Bool = false;
+	function jumpscareGameOver(player:Player, him:TheManUpstairs)
+	{
+		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
+		{
+			//#if windows
+			// Updating Discord Rich Presence
+			//if (FlxG.save.data.showPresence)
+				//DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
+			//#end
+
+			//camGame.shakeFlashSprite = false;
+			//camHUD.shakeFlashSprite = false;
+			him.aiStatus = 'inactive';
+			him.kill();
+			him.destroy();
+			FlxG.sound.music.stop();
+			preSusMusGroup.stop();
+			preEscMusGroup.stop();
+			darkenScreen.alpha = 1;
+			player.canMove = false;
+			camGame.visible = false;
+			var dedSound:FlxSound;
+			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
+			dedSound.pitch = 0.5;
+
+			//Jumpscare Shit
+			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
+			jumpscareSprite.angle = -6;
+			jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
+			jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
+			jumpscareSprite.scrollFactor.set(1, 1);
+			jumpscareSprite.updateHitbox();
+			jumpscareSprite.screenCenter();
+			jumpscareSprite.cameras = [camHUD];
+			jumpscareSprite.visible = false;
+			add(jumpscareSprite);
+
+			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
+
+			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
+			{
+				FlxG.sound.play(Paths.sound('boh'), 1, false);
+				jumpscareSprite.visible = true;
+				jumpscaredPlayer = true;
+				//camHUD.focusOn(jumpscareSprite.getPosition());
+				camHUD.shake(0.075, 2, true);
+				new FlxTimer().start(0.35, function(tmr:FlxTimer)
+				{
+					showGameoverScreen();
+				});
+			});
+		}
+	}
+
 	private function playerDied()
 	{
 		if (theManUpstairs != null && theManUpstairs.exists)
@@ -1018,14 +1148,13 @@ class MinigameState extends MusicBeatState
 			showGameoverScreen();
 		});
 	}
-
+	
 	var textAlpha:Float = 0;
 	private function showGameoverScreen()
 	{
 		//PLACE OF HOLDER SDKBSFKB
 		//jumpscareSprite.visible = false;
 		//camHUD.stopFX();
-		player.visible = false;
 
 		var dummyBlackScreen:FlxSprite = new FlxSprite(-FlxG.width * defaultCamZoom,
 			-FlxG.height * defaultCamZoom).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFF160025);
@@ -1077,6 +1206,8 @@ class MinigameState extends MusicBeatState
 
 			onComplete: function(twn:FlxTween)
 			{
+				if (jumpscareSprite != null)
+					jumpscareSprite.visible = false;
 				dummyBlackScreen.alpha = 0.25;
 				FlxTween.tween(textLol.scale, {x: 1, y: 1}, 0.35,
 				{
@@ -1099,88 +1230,6 @@ class MinigameState extends MusicBeatState
 				});
 			}
 		});
-	}
-
-	function pickupFunct(player:Player, object:Collectibles)
-	{
-		if (object.isActive)
-		{
-			object.isActive = false;
-			switch (object.type)
-			{
-				case FINAL:
-					object.kill();
-					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
-					//player.stopAction(true, true);
-					player.canMove = false;
-					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
-					{	
-						type: ONESHOT, 
-						ease: FlxEase.smoothStepOut,
-						onComplete: function(twn:FlxTween)
-						{
-							preEscMusGroup.stop();
-						}
-					});
-					FlxTween.tween(this, {defaultCamZoom: 6}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut,
-					onComplete: function(twn:FlxTween)
-						{
-							defaultCamZoom = 3.5;
-							player.canMove = true;
-							FlxG.camera.flash(DisclaimerState.flashColor, Conductor.crochet * 4 / 1000);
-							triggerEscapeSeq();
-						}});
-				case SECRET:
-					object.kill();
-					FlxG.sound.play('assets/minigame/sounds/doorSND_Placeholder.ogg', 0.5);
-			}
-		}
-	}
-
-	function clatterFunct(player:Player, clatterer:Clatterer)
-	{
-		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
-		{
-			if (clatterCoyote != null && clatterCoyote.active)
-				clatterCoyote.cancel();
-			
-			clatterCoyote = new FlxTimer().start(0.01, function(tmr:FlxTimer)
-			{
-				if (player.curAction != SNEAK && player.curAction != SLIDE)
-				{
-					clatterer.canClatter = false;
-					clatter += clatterer.clatterAmt;
-					clatterer.playerMadeNoise();
-					new FlxTimer().start(3, function(tmr:FlxTimer)
-					{
-						clatterer.canClatter = true;
-						clatterer.alpha = 0.25;
-					});
-		
-					//Subtract some time from the timer
-					if (inEscSeq)
-					{
-						if (escapeTimer.timeLeft >= 75)
-						{
-							escapeTimer.reset(escapeTimer.timeLeft - 15 > 0 ? escapeTimer.timeLeft - 15 : 3);
-							if (escapeTimerTween != null)
-								escapeTimerTween.cancel();				
-							escapeTimerTween = FlxTween.color(escapeTimerText, 1.5, FlxColor.RED, 0xFFFFFFFF, 
-							{
-								type: ONESHOT,
-								ease: FlxEase.smoothStepOut,
-								onComplete: function(twn:FlxTween)
-								{
-									escapeTimerTween = null;
-								}
-							});
-						}
-					}
-				}
-				else
-					trace ('saved by the clatter coyote time');
-			});
-		}
 	}
 
 	//Copied from playstate :33
