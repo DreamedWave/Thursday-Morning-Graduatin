@@ -285,7 +285,6 @@ class PlayState extends MusicBeatState
 
 	private var generatedSong:Bool = false;
 	private var generatedArrows:Bool = false;
-	private var startingSong:Bool = false;
 
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
@@ -1336,7 +1335,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		Conductor.songPosition = -5000;
+		//Conductor.songPosition = -5000;
 
 		//Centering Offset Shit (1) V Doink
 		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
@@ -1720,9 +1719,9 @@ class PlayState extends MusicBeatState
 		transOut.camera = camEXT;
 		//trace('set transInCam to camHUD');
 
-		super.create();
+		generateSong();
 
-		startingSong = true;
+		super.create();
 
 		timesShot = -mechanicPityDeaths;
 
@@ -1745,7 +1744,7 @@ class PlayState extends MusicBeatState
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
 						videoSprite.visible = false;
@@ -1765,7 +1764,7 @@ class PlayState extends MusicBeatState
 					playedCutscene = true;
 					screenshotForNextSong = true;
 					videoSprite.visible = true;	
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
 						videoSprite.visible = false;
@@ -1786,7 +1785,7 @@ class PlayState extends MusicBeatState
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
 						videoSprite.visible = false;
@@ -1813,7 +1812,7 @@ class PlayState extends MusicBeatState
 					videoMusic.autoDestroy = true;
 					videoMusic.looped = false;
 					videoSprite.visible = true;	
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
 						videoSprite.visible = false;
@@ -1860,6 +1859,10 @@ class PlayState extends MusicBeatState
 				camZooming = true;
 				startCountdown();
 		}
+
+		// pre lowercasing the song name (generateSong)
+		var songPath = 'assets/data/' + songLowercase + '/';
+		generateChart(songPath);
 	
 		if (FlxG.save.data.subtitles)
 		{
@@ -1868,8 +1871,6 @@ class PlayState extends MusicBeatState
 
 			startVideoSubtitles(videoPathArray[videoArrayProgress]);
 		}
-
-		generateSong();
 	}
 
 	function startVideoSubtitles(key:String = ''):Void
@@ -2221,12 +2222,12 @@ class PlayState extends MusicBeatState
 
 			if (skipCountdown)
 			{
-				Conductor.songPosition = 0;
+				//Conductor.songPosition = 0;
 				startTimerTime = 0;
 				startTimerLoops = 1;
 			}
-			else
-				Conductor.songPosition = -Conductor.crochet * 5;
+			//else
+				//Conductor.songPosition = -Conductor.crochet * 5;
 		}
 
 		startTimer = new FlxTimer().start(startTimerTime, function(tmr:FlxTimer)
@@ -2524,6 +2525,7 @@ class PlayState extends MusicBeatState
 
 	private function startSong():Void
 	{
+		trace('starting song?');
 		//tempDisableResyncVocals = false;
 		if (prevHealthTwn != null)
 		{
@@ -2538,7 +2540,6 @@ class PlayState extends MusicBeatState
 		}
 
 		doStrumLineBGTweening = true;
-		startingSong = false;
 		songStarted = true;
 
 		inCutscene = false;
@@ -2553,6 +2554,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = endSong;
 				FlxG.sound.playMusic();
+				trace('playedMusic');
 			}
 			else
 			{
@@ -2593,6 +2595,8 @@ class PlayState extends MusicBeatState
 
 		//Beat 0 Events (cause beathit doesnt update properly lmao)
 		doSubtitleShit();
+
+		//trace('isMusicPlaying? = ' + FlxG.sound.music.playing);
 		
 		if (mashPresses < mashPressThreshold)
 		{
@@ -2794,7 +2798,6 @@ class PlayState extends MusicBeatState
 			FlxG.sound.list.add(vocals);
 	
 	
-	
 			if (SONG.needsMiscs)
 				miscs = new FlxFilteredSound().loadEmbedded(Paths.miscs(SONG.song));
 			else
@@ -2804,7 +2807,6 @@ class PlayState extends MusicBeatState
 			FlxG.sound.list.add(miscs);
 	
 	
-	
 			if (SONG.needsAdaptiveMus)
 				instLowHP = new FlxFilteredSound().loadEmbedded(Paths.adaptiveMus(SONG.song), FlxG.sound.music.looped);
 			else
@@ -2812,7 +2814,6 @@ class PlayState extends MusicBeatState
 			instLowHP.volume = 0;
 			FlxG.sound.list.add(instLowHP);
 			musicGroup.add(instLowHP);
-	
 	
 	
 			switch (SONG.song)
@@ -4539,9 +4540,6 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		else
-			if (Conductor.songPosition < FlxG.sound.music.length)
-				Conductor.songPosition += FlxG.elapsed * 1000;
 
 		if (!paused && camZooming && !camZoomUsesTween)
 		{
@@ -5034,6 +5032,8 @@ class PlayState extends MusicBeatState
 
 	override function destroy()
 	{
+		Conductor.songPosition = 0;
+
 		if (!nextStateIsPlayState)
 		{
 			trace ('CLEARING PLAYSTATE DATA!!!!!!');
@@ -5132,7 +5132,7 @@ class PlayState extends MusicBeatState
 				{
 					//FlxG.switchState(new MinigameState());
 					inCutscene = true;
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					videoSprite.visible = true;
 					camGame.visible = false;
 					camGame.active = false;
@@ -5150,7 +5150,7 @@ class PlayState extends MusicBeatState
 					{
 						FlxG.switchState(new StoryMenuState());
 					}
-					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					videoSprite.visible = true;
 					video.finishCallback = function()
 					{
@@ -5161,7 +5161,7 @@ class PlayState extends MusicBeatState
 			case 'thorns':
 				FlxTransitionableState.skipNextTransOut = true;
 				inCutscene = true;
-				video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false, false);
+				video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 				videoSprite.visible = true;
 				new FlxTimer().start(0.3, function(tmr:FlxTimer)
 				{
@@ -9686,7 +9686,7 @@ class PlayState extends MusicBeatState
 								#end*/
 								//trace ("Played Low HP Noise || BPM > 300");
 							}
-							trace ('lowHPVOL ' + lowHPHeartBeat.volume);
+							//trace ('lowHPVOL ' + lowHPHeartBeat.volume);
 						}
 				}
 

@@ -122,11 +122,15 @@ class SoundFrontEnd
 				return;
 			}
 
+			//trace('loaded music in playMusic()');
 			loadMusic(embeddedMusic, volume, looped, group, false);
 		}
 		else
 			queuedUpMusic = false;
+		//trace('playin music: ' + music);
 		music.play();
+		//trace('is music playng? = ' + music.playing);
+
 	}
 
 	/**
@@ -138,6 +142,7 @@ class SoundFrontEnd
 	 * @param   volume         How loud the sound should be, from 0 to 1.
 	 * @param   looped         Whether to loop this music.
 	 * @param   group          The group to add this sound to.
+	 * @param	calledStandalone	internal function that determines if this funct was called on it's own rather than thru playMusic.
 	 */
 	var queuedUpMusic:Bool = false;
 	public function loadMusic(embeddedMusic:FlxSoundAsset, volume = 1.0, looped = true, ?group:FlxSoundGroup, ?calledStandalone:Bool = true):Void
@@ -152,13 +157,18 @@ class SoundFrontEnd
 		if (music == null)
 			music = new FlxFilteredSound();
 		else if (music.active)
+		//{
 			music.stop();
+			//trace('stoppedMusic');
+		//}
 
 		music.loadEmbedded(embeddedMusic, looped);
 		music.volume = volume;
 		music.persist = true;
 		music.group = (group == null) ? defaultMusicGroup : group;
 		queuedUpMusic = calledStandalone;
+		//if (calledStandalone)
+			//trace("loaded standalone: " + music);
 	}
 
 	/**
