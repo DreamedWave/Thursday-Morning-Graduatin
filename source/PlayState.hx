@@ -4048,6 +4048,7 @@ class PlayState extends MusicBeatState
 												if (FlxG.save.data.notesplash)
 													sploshThisShitUp(daNote, 'miss');
 												popUpScore('', daNote);
+												trace('failed sus popup');
 												if(FlxG.save.data.missSounds)
 												{
 													missSoundGroup.stop();
@@ -4316,12 +4317,12 @@ class PlayState extends MusicBeatState
 			scoreTxt.screenCenter(X);
 		}
 		//Might aswell update this every frame lmao
-		//scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
+		scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
 		//And here we see a local devgirl using scoretext as a testing visual aid
 		//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainLF, 3);
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
-		scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -5394,6 +5395,7 @@ class PlayState extends MusicBeatState
 		
 				if (!PlayStateChangeables.botPlay)
 				{
+					trace('huh????');
 					grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
 					{
 						prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
@@ -5932,7 +5934,10 @@ class PlayState extends MusicBeatState
 
 			daNote.rating = 'miss';
 			if (daNote.noteType != "trigger")
+			{
 				popUpScore('', daNote);
+				trace('noteMiss popupscore');
+			}
 			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay)
 				sploshThisShitUp(daNote, daNote.rating);
 
@@ -6457,6 +6462,7 @@ class PlayState extends MusicBeatState
 					}
 					notesHitArray.unshift(Date.now());
 					popUpScore('', note, noteDiff, isJack);
+					trace('goodnotehit nonsustain popupscore');
 				}
 				else if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && allowHealthModifiers && !note.withinCompensation)
 					sploshThisShitUp(note, note.rating);
@@ -6487,6 +6493,7 @@ class PlayState extends MusicBeatState
 				//Experimental showing your numbers for sustain notes
 				//It works so we keepin it >:33
 				popUpScore('sustain', note, noteDiff);
+				trace('goodnotehit sustain popupscore');
 
 				//Health Gain for Sustain
 				if (allowHealthModifiers)
