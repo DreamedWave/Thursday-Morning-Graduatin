@@ -11,14 +11,14 @@ enum EnemyType
 class Enemy extends FlxSprite
 {
 	static inline var WALK_SPEED:Float = 40;
-	static inline var CHASE_SPEED:Float = 70;
+	static inline var CHASE_SPEED:Float = 200;
 
 	var type:EnemyType;
 
 	public function new(x:Float, y:Float, type:EnemyType)
 	{
 		super(x, y);
-		makeGraphic(32, 32, 0xFF640000);
+		makeGraphic(64, 64, 0xFF640000);
 		/*this.type = type;
 		var graphic = if (type == BOSS) AssetPaths.boss__png else AssetPaths.enemy__png;
 		loadGraphic(graphic, true, 16, 16);

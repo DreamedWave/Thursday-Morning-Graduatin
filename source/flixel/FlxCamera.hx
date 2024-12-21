@@ -1374,13 +1374,32 @@ class FlxCamera extends FlxBasic
 			_fxShakeDuration -= elapsed;
 			if (_fxShakeDuration <= 0)
 			{
-				if (!shakeFlashSprite)
+				if (scroll != null && !shakeFlashSprite) //We have to do this or else it causes a crash
 				{
 					if (scrollShakeTween != null)
 						scrollShakeTween.cancel();
 
-					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {type: ONESHOT, ease: FlxEase.circOut, 
-						onComplete: function (twn:FlxTween){scrollShakeTween = null;}});
+					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {
+						type: ONESHOT, 
+						ease: FlxEase.circOut, 
+						onUpdate: function (twn:FlxTween)
+						{
+							if (scroll != null && target == null)
+							{
+								scroll.x = scrollShakeX;
+								scroll.y = scrollShakeY;
+							}
+						},
+						onComplete: function (twn:FlxTween)	
+						{	
+							if (scroll != null && target == null)
+							{
+								scroll.x = 0;
+								scroll.y = 0;
+							}
+							scrollShakeTween = null;
+						}
+					});
 					nextScrollShakeX = 0;
 					nextScrollShakeY = 0;
 				}
@@ -1403,7 +1422,7 @@ class FlxCamera extends FlxBasic
 			}
 			else 
 			{
-				if (target != null && !shakeFlashSprite)
+				if (scroll != null && !shakeFlashSprite)
 				{
 					if (scrollShakeTween != null && scrollShakeTween.active)
 						scrollShakeTween.cancel();
@@ -1444,9 +1463,22 @@ class FlxCamera extends FlxBasic
 							scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
 						}
 					}
+
+					//Manually Shake the follow here if target is null
+					if (target == null)
+					{
+						scroll.x = scrollShakeX;
+						scroll.y = scrollShakeY;
+					}
 				}
 				else
 				{
+					if (scroll != null && (scroll.x != 0 || scroll.y != 0) && target == null)
+					{
+						scroll.x = 0;
+						scroll.y = 0;
+					}
+					
 					if (_fxShakeAxes != FlxAxes.Y)
 						flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * 0.5 * width, _fxShakeIntensity * 0.5 * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
 

@@ -23,12 +23,15 @@ class PauseSubState extends MusicBeatSubstate
 	public static var resyncToLastPos:Bool = false;
 	public static var randomMusicTime:Bool = false;
 
+	var playHUDPrevAlpha:Float;
+	var playHUDTwn:FlxTween;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
 	var curSelected:Int = 0;
 
-	var pauseMusic:FlxSound;
+	var pauseMusic:FlxFilteredSound;
 	//var oldPauseVolume:Float = 0;
 	#if cpp
 	#if debug
@@ -52,7 +55,7 @@ class PauseSubState extends MusicBeatSubstate
 	var levelDifficulty:FlxText;
 	var failCount:FlxText;
 
-	var pauseSound:FlxSound;
+	var pauseSound:FlxFilteredSound;
 
 	var blurTweenGoBrr:FlxTween = null;
 	var funnyBlur:Float;
@@ -64,10 +67,21 @@ class PauseSubState extends MusicBeatSubstate
 		super();
 		PlayState.instance.camGame.filtersEnabled = true;
 
+		playHUDPrevAlpha = PlayState.instance.camHUD.alpha; //here cuz we cannot guarantee that CamHUD will always be at 1 alpha
+
+		//HUD Tween cuz cool
+		if (playHUDTwn != null)
+			playHUDTwn.cancel();
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.7, {ease: FlxEase.quadIn,
+			onComplete: function(twn:FlxTween) 
+			{
+				playHUDTwn = null;
+			}
+		});
+
 		//Blur Tween cuz cool
 		if (blurTweenGoBrr != null)
 			blurTweenGoBrr.cancel();
-
 		blurTweenGoBrr = FlxTween.tween(this, {funnyBlur: 3}, 1, {ease: FlxEase.cubeOut,
 			onUpdate: function(twn:FlxTween) 
 			{
@@ -96,7 +110,7 @@ class PauseSubState extends MusicBeatSubstate
 		if (PlayStateChangeables.botPlay || PlayState.SONG.song.toLowerCase() == "mic test")
 			menuItems.remove("Toggle Practice Mode");
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
+		pauseMusic = new FlxFilteredSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
 		if (PlayState.pauseMusicName != 'pause_screen/holy_shit_the_stalemate_is_on_fire')
 			pauseMusic.volume = 0;
 		else
@@ -216,7 +230,7 @@ class PauseSubState extends MusicBeatSubstate
 		cameras = [PlayState.instance.camEXT];
 
 		FlxG.mouse.visible = true;
-		pauseSound = new FlxSound().loadEmbedded(Paths.sound('pauseMenu'));
+		pauseSound = new FlxFilteredSound().loadEmbedded(Paths.sound('pauseMenu'));
 		FlxG.sound.list.add(pauseSound);
 		pauseSound.volume = 0.7;
 		pauseSound.play();
@@ -381,7 +395,7 @@ class PauseSubState extends MusicBeatSubstate
 						//FlxG.game.soundTray.silent = true;
 						randomMusicTime = true;
 						resyncToLastPos = true;
-						if (doFancyCountdownShit && PlayState.songStarted) //(FlxG.save.data.pauseCountdown)
+						if (doFancyCountdownShit && PlayState.instance.songStarted) //(FlxG.save.data.pauseCountdown)
 						{
 							//Blur Tween cuz cool electric boogaloo
 							if (blurTweenGoBrr != null)
@@ -404,10 +418,18 @@ class PauseSubState extends MusicBeatSubstate
 							doCountdownShit();
 						}
 						else
+						{
+							FlxG.sound.play(Paths.sound('returnMenu'));
+							if (playHUDTwn != null)
+								playHUDTwn.cancel();
+							PlayState.instance.camHUD.alpha = playHUDPrevAlpha;
 							close();
+						}
 					case "Restart Song":
 						PlayState.instance.subtitleText.visible = false;
 						PlayState.instance.subtitleBackground.visible = false;
+
+						FlxG.sound.play(Paths.sound('returnMenu'));
 						
 						if (blurTweenGoBrr != null)
 							blurTweenGoBrr.cancel();
@@ -477,7 +499,7 @@ class PauseSubState extends MusicBeatSubstate
 							skippedSong = true;
 							trace("Skipped song");
 							PlayState.instance.camGame.alpha = 0;
-							PlayState.instance.camHUD.alpha = 0;
+							//PlayState.instance.camHUD.alpha = 0;
 							FlxG.sound.music.volume = 0;
 							FlxG.sound.music.pause();
 							PlayState.instance.vocals.volume = 0;
@@ -490,19 +512,27 @@ class PauseSubState extends MusicBeatSubstate
 						}
 						else
 						{
-							FlxG.sound.play(Paths.sound('scrollMenuFail'), 0.7);
+							FlxG.sound.play(Paths.sound('scrollMenuFail'), 0.5);
 							trace("Cannot Skip");
 							skippedSong = false;
 						}
 					case "Exit to menu":
+						FlxTransitionableState.skipNextTransOut = false;
+						FlxG.sound.play(Paths.sound('returnMenu'));
 						PlayState.instance.subtitleText.visible = false;
 						PlayState.instance.subtitleBackground.visible = false;
 						randomMusicTime = false;
+						FlxTween.tween(bg, {alpha: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 
-						if (PlayState.isStoryMode)
-							FlxG.switchState(new StoryMenuState());
-						else
-							FlxG.switchState(new FreeplayState());
+						pauseMusic.tapeStop(0.3, 0.3, function(twn:FlxTween)
+							{
+								pauseMusic.stop();
+
+								if (PlayState.isStoryMode)
+									FlxG.switchState(new StoryMenuState());
+								else
+									FlxG.switchState(new FreeplayState());
+							});
 				}
 			}
 		}
@@ -524,6 +554,9 @@ class PauseSubState extends MusicBeatSubstate
 		didCountdownShit = true;
 
 		FlxTween.tween(bg, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
+		if (playHUDTwn != null)
+			playHUDTwn.cancel();
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: playHUDPrevAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut});
 		#if cpp
 		#if debug
 		FlxTween.tween(perSongOffset, {y: FlxG.height + 21}, 0.9, {type: ONESHOT, ease: FlxEase.elasticInOut});
@@ -535,7 +568,8 @@ class PauseSubState extends MusicBeatSubstate
 			item.isMenuItem = false;
 			FlxTween.tween(item, {alpha: 0, y: item.y + 500}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
 		}
-		pauseMusic.fadeOut(Conductor.crochet / 1000);
+
+		pauseMusic.tapeStop(Conductor.crochet / 1000, 0.9);
 
 		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -619,13 +653,14 @@ class PauseSubState extends MusicBeatSubstate
 	override function destroy()
 	{
 		FlxG.mouse.visible = false;
-		if (pauseSound.playing)
-			pauseSound.stop();
-		if (!doFancyCountdownShit && !skippedSong)
-			FlxG.sound.play(Paths.sound('returnMenu'));
+		//if (!doFancyCountdownShit && !skippedSong)
+			//FlxG.sound.play(Paths.sound('returnMenu'));
 		if (PlayState.cannotDie)
 			PlayState.toggledPracticeMode = true;
-		pauseMusic.destroy();
+		if (pauseMusic != null)
+			if (pauseSound.playing)
+				pauseSound.stop();
+			pauseMusic.destroy();
 
 		if (blurTweenGoBrr != null)
 			blurTweenGoBrr.cancel();

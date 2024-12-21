@@ -3029,7 +3029,7 @@
    }
   ],
   "player2": "priest-theborderpray",
-  "needsMiscs": false,
+  "needsMiscs": true,
   "eventObjects": [
    {
     "name": "Init BPM",

@@ -7,7 +7,7 @@ import flixel.math.FlxMath;
 
 class GitarooPause extends MusicBeatSubstate
 {
-	var pauseMusic:FlxSound;
+	var pauseMusic:FlxFilteredSound;
 
 	var replayButton:FlxSprite;
 	var cancelButton:FlxSprite;
@@ -18,7 +18,7 @@ class GitarooPause extends MusicBeatSubstate
 	{
 		super();
 
-		pauseMusic = new FlxSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
+		pauseMusic = new FlxFilteredSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
 		pauseMusic.volume = 0.1;
 		pauseMusic.play(false);
 

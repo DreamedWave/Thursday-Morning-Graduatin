@@ -35,12 +35,12 @@ class VideoHandler
 	}
 
 	public function playMP4(path:String, ?repeat:Bool = false, ?outputTo:FlxSprite = null, ?isWindow:Bool = false, ?isFullscreen:Bool = false,
-			?stopMusic:Bool = false):Void
+			?stopMusic:Bool = true):Void
 	{
 		#if cpp
-		if (!stopMusic)
+		if (stopMusic)
 		{
-			if (FlxG.sound.music != null)
+			if (FlxG.sound.music != null && FlxG.sound.music.playing)
 			{
 				FlxG.sound.music.stop();
 			}
@@ -65,8 +65,8 @@ class VideoHandler
 		bitmap.set_height(FlxG.stage.stageHeight);
 		bitmap.set_width(FlxG.stage.stageHeight * (16 / 9));
 
-		trace("Setting width to " + FlxG.stage.stageHeight * (16 / 9));
-		trace("Setting height to " + FlxG.stage.stageHeight);
+		//trace("Setting width to " + FlxG.stage.stageHeight * (16 / 9));
+		//trace("Setting height to " + FlxG.stage.stageHeight);
 
 		bitmap.onVideoReady = onVLCVideoReady;
 		bitmap.onComplete = onVLCComplete;
@@ -117,7 +117,7 @@ class VideoHandler
 
 	function onVLCVideoReady()
 	{
-		trace("video loaded!");
+		//trace("video loaded!");
 
 		#if cpp
 		if (sprite != null)
@@ -156,7 +156,7 @@ class VideoHandler
 			FlxG.camera.fade(FlxColor.BLACK, 1, true);
 		}
 
-		trace("Big, Big Chungus, Big Chungus!");
+		//trace("Big, Big Chungus, Big Chungus!");
 
 		if (FlxG.save.data.pauseOnUnfocus && !FlxG.autoPause)
 			FlxG.autoPause = true;

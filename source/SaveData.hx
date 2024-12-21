@@ -102,9 +102,6 @@ class SaveData
 		if (FlxG.save.data.frames == null)
 			FlxG.save.data.frames = 10;
 
-		if (FlxG.save.data.accuracyMod == null)
-			FlxG.save.data.accuracyMod = 1;
-
 		if (FlxG.save.data.watermark == null)
 			FlxG.save.data.watermark = true;
 
@@ -177,6 +174,9 @@ class SaveData
 		Main.watermarks = FlxG.save.data.watermark;
 		
 		(cast (Lib.current.getChildAt(0), Main)).setFPSCap(FlxG.save.data.fpsCap);
+
+		FlxG.sound.defaultSoundGroup.volume = FlxG.save.data.gamesfxVol * 0.01;
+		FlxG.sound.defaultMusicGroup.volume = FlxG.save.data.musicVol * 0.01;
 	}
 
 	public static function resetAllData():Void
@@ -216,7 +216,6 @@ class SaveData
 		FlxG.save.data.scrollSpeed = null;
 		FlxG.save.data.npsDisplay = null;
 		FlxG.save.data.frames = null;
-		FlxG.save.data.accuracyMod = null;
 		FlxG.save.data.watermark = null;
 		FlxG.save.data.ghost = null;
 		FlxG.save.data.flashing = null;
