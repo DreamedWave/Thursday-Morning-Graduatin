@@ -1668,7 +1668,7 @@ class PlayState extends MusicBeatState
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
-		scoreTxt.cameras = [camEXT];
+		scoreTxt.cameras = [camHUD];
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		//doof.cameras = [camHUD];
@@ -3238,7 +3238,7 @@ class PlayState extends MusicBeatState
 			funnyReturn +="Score:" + (score + campaignScore) + " | RIPs:" + (misses + campaignMisses + slips + campaignSlips) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")";
 			//Clear Percentage
 			if (FlxG.save.data.accuracyDisplay)
-				funnyReturn += " | Clear:" + Math.floor(clearPercentage) + "%";
+				funnyReturn += " | Clear:" + Math.floor(clearPercentage) + "%" + " | [TEMP] Acc:" + accuracy + "%";
 		}
 		return funnyReturn;
 	}
@@ -4288,15 +4288,9 @@ class PlayState extends MusicBeatState
 						//INTENTIONALLY do NATHIN
 					default:
 						if (health < 1)
-						{
 							FlxG.sound.music.filter.gainLF = FlxMath.lerp(1, FlxG.sound.music.filter.gainLF, calculateLerpTime(elapsed, 5 * (Conductor.bpm * 0.01)));
-							miscs.filter.gainLF = FlxG.sound.music.filter.gainLF;
-						}
 						else if (FlxG.sound.music.filter.gainLF < 1)
-						{
 							FlxG.sound.music.filter.gainLF = 1;
-							miscs.filter.gainLF = 1;
-						}
 				}
 				//}
 			}
