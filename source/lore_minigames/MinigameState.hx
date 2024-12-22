@@ -51,7 +51,7 @@ class MinigameState extends MusicBeatState
 
 	public static var camGame:FlxCamera;
 	public static var camHUD:FlxCamera;
-	var defaultCamZoom:Float = 4;
+	var defaultCamZoom:Float = 5;
 	var camFollow:FlxObject;
 	var doCamFollowing:Bool = false;
 
@@ -574,7 +574,7 @@ class MinigameState extends MusicBeatState
 			});
 
 			curBeat = 0;
-			fakeBeat = 0;
+			//fakeBeat = 0;
 			Conductor.songPosition = 0;
 			seqCheck = 1;
 
@@ -674,7 +674,7 @@ class MinigameState extends MusicBeatState
 					FlxG.sound.music.stop();
 					Conductor.changeBPM(180);
 					curBeat = 0;
-					fakeBeat = 0;
+					//fakeBeat = 0;
 					Conductor.songPosition = 0;
 					FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeLoop.ogg', 1, false, preSusMusGroup);
 					FlxG.sound.music.looped = true;
@@ -723,6 +723,7 @@ class MinigameState extends MusicBeatState
 				cid = 2;
 
 				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1, FlxG.sound.defaultMusicGroup);
+				FlxTween.tween(this, {defaultCamZoom: 5}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut});
 				suspenseEscMusicIntro.onComplete = getTheFuckOutMusic;
 			case 2:
 				trace ('HAUR?????');
@@ -737,11 +738,12 @@ class MinigameState extends MusicBeatState
 				FlxG.sound.music.stop();
 				Conductor.changeBPM(240);
 				curBeat = 0;
-				fakeBeat = 0;
+				//fakeBeat = 0;
 				Conductor.songPosition = 0;
 				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false, FlxG.sound.defaultMusicGroup);
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = checkAndSwapMusic;
+				defaultCamZoom = 0.38;
 		}
 	}
 
@@ -1092,6 +1094,10 @@ class MinigameState extends MusicBeatState
 					{	
 						type: ONESHOT, 
 						ease: FlxEase.smoothStepOut,
+						onUpdate: function(twn:FlxTween)
+						{
+							FlxG.sound.music.volume = preEscMusGroup.volume;
+						},
 						onComplete: function(twn:FlxTween)
 						{
 							preEscMusGroup.stop();
@@ -1100,7 +1106,7 @@ class MinigameState extends MusicBeatState
 					FlxTween.tween(this, {defaultCamZoom: 6}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut,
 					onComplete: function(twn:FlxTween)
 						{
-							defaultCamZoom = 3.5;
+							defaultCamZoom = 4;
 							player.canMove = true;
 							FlxG.camera.flash(DisclaimerState.flashColor, Conductor.crochet * 4 / 1000);
 							triggerEscapeSeq();
