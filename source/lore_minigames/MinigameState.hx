@@ -482,46 +482,46 @@ class MinigameState extends MusicBeatState
 					switch (clatter)
 					{
 						case 1:
-							if (FlxG.random.bool(50))
+							if (FlxG.random.bool(30))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
-							else if (FlxG.random.bool(50))
+							else if (FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 1, false, preEscMusGroup);
 
 
 						case 2 | 3:
 							if (FlxG.random.bool(50))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.8, false, preEscMusGroup);
-							else if (FlxG.random.bool(70))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.9, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.8, false, preEscMusGroup);
+							else if (FlxG.random.bool(30))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.9, false, preEscMusGroup);
 
 							if (clatter == 3 && FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
 						case 4 | 5:
-							if (FlxG.random.bool(60))
+							if (FlxG.random.bool(50))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
-							else if (FlxG.random.bool(90))
+							else if (FlxG.random.bool(50))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.7, false, preEscMusGroup);
 
-							if (FlxG.random.bool(40))
+							if (FlxG.random.bool(30))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
-							else if (clatter == 5 && FlxG.random.bool(50))
+							else if (clatter == 5 && FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
 							case 6 | 7:
 							if (clatter ==6)
 							{
-								if (FlxG.random.bool(60))
+								if (FlxG.random.bool(50))
 									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.3, false, preEscMusGroup);
-								else if (FlxG.random.bool(90))
+								else if (FlxG.random.bool(60))
 									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.5, false, preEscMusGroup);
 							}
 
-							if (FlxG.random.bool(60))
+							if (FlxG.random.bool(50))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
-							else if (clatter == 7 && FlxG.random.bool(80))
+							else if (clatter == 7 && FlxG.random.bool(35))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
@@ -743,7 +743,7 @@ class MinigameState extends MusicBeatState
 				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false, FlxG.sound.defaultMusicGroup);
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = checkAndSwapMusic;
-				defaultCamZoom = 0.38;
+				defaultCamZoom = 3.8;
 		}
 	}
 
@@ -1090,14 +1090,11 @@ class MinigameState extends MusicBeatState
 					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
 					//player.stopAction(true, true);
 					player.canMove = false;
+					FlxG.sound.music.fadeOut(3.8);
 					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
 					{	
 						type: ONESHOT, 
 						ease: FlxEase.smoothStepOut,
-						onUpdate: function(twn:FlxTween)
-						{
-							FlxG.sound.music.volume = preEscMusGroup.volume;
-						},
 						onComplete: function(twn:FlxTween)
 						{
 							preEscMusGroup.stop();
