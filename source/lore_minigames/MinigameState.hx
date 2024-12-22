@@ -211,7 +211,6 @@ class MinigameState extends MusicBeatState
 		
 		super.create();
 
-		heartBeatLevel = 0;
 		FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
 		FlxG.sound.music.looped = true;
 		FlxG.sound.music.autoDestroy = false;
@@ -430,12 +429,7 @@ class MinigameState extends MusicBeatState
 	}
 
 	var stopActiveTweening:Bool = false;
-
-	var droneDeterminator:Int = 1;
-	var uniformDeterminator:Int = 1;
-	var additionsDeterminator:Int = 1;
-	var flavourDeterminator:Int = 0;
-	var fakeBeat:Int = 0;
+	//var fakeBeat:Int = 0;
 
 	var beatOffset:Int = 0;
 	var beatFlavoured:Int = 0;
@@ -477,84 +471,66 @@ class MinigameState extends MusicBeatState
 	{
 		super.beatHit();
 
-		trace('realBeat ' + curBeat + ' | fakeBeat ' + fakeBeat);
-
 		switch (seqCheck)
 		{
 			//Normal
 			case 0:
-				if (!inEscSeq && clatter >= 0)
+				//trace('realBeat ' + curBeat + ' | fakeBeat ' + fakeBeat);
+				if (curBeat % 32 == 0)
 				{
-					if (fakeBeat % 2 == 0)
-					{
-						camHoldShakeAdditive[0] = FlxG.random.int(-clatter, clatter) / 8;
-						camHoldShakeAdditive[1] = FlxG.random.int(-clatter, clatter) / 8;
-					}
-
-					if (fakeBeat % 32 == 0)
-					{
-						//Randomise Tracks
-						switch (clatter)
-						{
-							case 0:
-								droneDeterminator = 1;
-								additionsDeterminator = 1;
-								uniformDeterminator = 0;
-							case 1 | 2:
-								uniformDeterminator = 1;
-								if (FlxG.random.bool(50))
-									droneDeterminator = FlxG.random.int(1, 2);
-				
-								if (FlxG.random.bool(50))
-									additionsDeterminator = FlxG.random.int(1, 2);
-							case 3:
-								uniformDeterminator = 1;
-								if (FlxG.random.bool(80))
-									droneDeterminator = FlxG.random.int(1, 2);
-								
-								if (FlxG.random.bool(80))
-									additionsDeterminator = FlxG.random.int(1, 2);
-							case 4:
-								uniformDeterminator = 2;
-								droneDeterminator = FlxG.random.int(1, 2);
-								additionsDeterminator = FlxG.random.int(1, 2);
-							default:
-								uniformDeterminator = 2;
-								droneDeterminator = 2;
-								additionsDeterminator = 2;
-						}
-
-						FlxG.sound.play('assets/minigame/music/map_1/PadsDrone' + droneDeterminator + '.ogg', 1, false, preEscMusGroup);
-						if (uniformDeterminator > 0)
-							FlxG.sound.play('assets/minigame/music/map_1/BackingPads' + uniformDeterminator + '.ogg', 0.75, false, preEscMusGroup);
-						FlxG.sound.play('assets/minigame/music/map_1/Additions' + additionsDeterminator + '.ogg', 1, false, preEscMusGroup);
-					}
-
+					FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_Layer' + clatter + '.ogg', 1, false, preEscMusGroup);
 					switch (clatter)
 					{
-						case 0:
-							flavourDeterminator = 0;
-						case 1 | 2 | 3:
+						case 1:
 							if (FlxG.random.bool(50))
-								flavourDeterminator = FlxG.random.int(1, 2);
-			
-							if (FlxG.random.bool(50))
-								flavourDeterminator = FlxG.random.int(1, 2);
-						default:
-							flavourDeterminator = FlxG.random.int(1, 4);
-					}
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
+							else if (FlxG.random.bool(50))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 1, false, preEscMusGroup);
 
-					if (flavourDeterminator > 0)
-					{
-						if(FlxG.random.bool(0.85) && fakeBeat >= beatFlavoured + beatOffset)
-						{
-							beatFlavoured = fakeBeat;
-							beatOffset = FlxG.random.int(0, 16);
-							FlxG.sound.play('assets/minigame/music/map_1/FlavourSFX' + flavourDeterminator + '.ogg', FlxG.random.float(0.5, 0.8), false, preEscMusGroup);
-						}
+
+						case 2 | 3:
+							if (FlxG.random.bool(50))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.8, false, preEscMusGroup);
+							else if (FlxG.random.bool(70))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.9, false, preEscMusGroup);
+
+							if (clatter == 3 && FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+
+
+						case 4 | 5:
+							if (FlxG.random.bool(60))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
+							else if (FlxG.random.bool(90))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.7, false, preEscMusGroup);
+
+							if (FlxG.random.bool(40))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
+							else if (clatter == 5 && FlxG.random.bool(50))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+
+
+							case 6 | 7:
+							if (clatter ==6)
+							{
+								if (FlxG.random.bool(60))
+									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.3, false, preEscMusGroup);
+								else if (FlxG.random.bool(90))
+									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.5, false, preEscMusGroup);
+							}
+
+							if (FlxG.random.bool(60))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
+							else if (clatter == 7 && FlxG.random.bool(80))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+
+
+						default:
+							if (FlxG.random.bool(30))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
 					}
 				}
-				fakeBeat++;
+				//fakeBeat++;
 			case 2 | 3:
 				//camShake(false, false, 0.01 * timerMult, Conductor.crochet / 1200);
 				if (curBeat % 4 == 0)
@@ -565,7 +541,6 @@ class MinigameState extends MusicBeatState
 						darkenScreen.alpha = 0.25 * FlxG.sound.music.volume;
 					}
 				}
-				fakeBeat++;
 		}
 	}
 
@@ -659,7 +634,7 @@ class MinigameState extends MusicBeatState
 	private function checkAndSwapMusic()
 	{
 		trace('sequenceCheck' + seqCheck);
-		if (!inEscSeq && clatter < 7)
+		if (!inEscSeq)
 		{
 			if (heartBeatLevel < clatter)
 			{
@@ -1193,15 +1168,16 @@ class MinigameState extends MusicBeatState
 	var isResetting:Bool = false;
 	override function destroy()
 	{
-		FlxG.sound.music.stop();
 		if (!isResetting)
 		{
+			FlxG.sound.music.stop();
+
 			transIn.camera = FlxCamera.defaultCameras[FlxCamera.defaultCameras.length];
 			transOut.camera = FlxCamera.defaultCameras[FlxCamera.defaultCameras.length];
-		}
 
-		//Dumping of cache
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
+			//Dumping of cache
+			Paths.clearStoredMemory();
+			Paths.clearUnusedMemory();
+		}
 	}
 }
