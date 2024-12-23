@@ -352,7 +352,7 @@ class MinigameState extends MusicBeatState
 			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
 			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
 	
-			camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 15 + camMovementLerp[1]);
+			camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 5 + camMovementLerp[1]);
 		}
 
 		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq)
@@ -476,31 +476,37 @@ class MinigameState extends MusicBeatState
 			//Normal
 			case 0:
 				//trace('realBeat ' + curBeat + ' | fakeBeat ' + fakeBeat);
+				if (curBeat % 4 == 0)
+				{
+					camHoldShakeAdditive[0] = FlxG.random.float(0.5, -0.5) * clatter;
+					camHoldShakeAdditive[1] = FlxG.random.float(-0.5, 0.5) * clatter;
+				}
+
 				if (curBeat % 32 == 0)
 				{
 					FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_Layer' + clatter + '.ogg', 1, false, preEscMusGroup);
 					switch (clatter)
 					{
 						case 1:
+							if (FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
+							else if (FlxG.random.bool(10))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
+
+
+						case 2 | 3:
 							if (FlxG.random.bool(30))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
 							else if (FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 1, false, preEscMusGroup);
-
-
-						case 2 | 3:
-							if (FlxG.random.bool(50))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.8, false, preEscMusGroup);
-							else if (FlxG.random.bool(30))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.9, false, preEscMusGroup);
 
 							if (clatter == 3 && FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
 						case 4 | 5:
-							if (FlxG.random.bool(50))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
+							if (FlxG.random.bool(40))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.8, false, preEscMusGroup);
 							else if (FlxG.random.bool(50))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.7, false, preEscMusGroup);
 
@@ -520,9 +526,9 @@ class MinigameState extends MusicBeatState
 							}
 
 							if (FlxG.random.bool(50))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 1, false, preEscMusGroup);
 							else if (clatter == 7 && FlxG.random.bool(35))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.9, false, preEscMusGroup);
 
 
 						default:
@@ -723,7 +729,7 @@ class MinigameState extends MusicBeatState
 				cid = 2;
 
 				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1, FlxG.sound.defaultMusicGroup);
-				FlxTween.tween(this, {defaultCamZoom: 5}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+				FlxTween.tween(this, {defaultCamZoom: 4.5}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.smoothStepOut});
 				suspenseEscMusicIntro.onComplete = getTheFuckOutMusic;
 			case 2:
 				trace ('HAUR?????');
@@ -1110,7 +1116,7 @@ class MinigameState extends MusicBeatState
 						}});
 				case SECRET:
 					object.kill();
-					FlxG.sound.play('assets/minigame/sounds/doorSND_Placeholder.ogg', 0.5);
+					FlxG.sound.play(Paths.sound('confirmMenu'), 0.5);
 			}
 		}
 	}
@@ -1119,14 +1125,17 @@ class MinigameState extends MusicBeatState
 	{
 		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
 		{
+			clatterer.canClatter = false;
 			if (clatterCoyote != null && clatterCoyote.active)
+			{
+				trace('le cancel');
 				clatterCoyote.cancel();
+			}
 			
-			clatterCoyote = new FlxTimer().start(0.01, function(tmr:FlxTimer)
+			clatterCoyote = new FlxTimer().start(0.05, function(tmr:FlxTimer)
 			{
 				if (player.curAction != SNEAK && player.curAction != SLIDE)
 				{
-					clatterer.canClatter = false;
 					clatter += clatterer.clatterAmt;
 					clatterer.playerMadeNoise();
 					new FlxTimer().start(3, function(tmr:FlxTimer)

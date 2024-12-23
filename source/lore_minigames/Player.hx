@@ -27,6 +27,7 @@ class Player extends FlxSprite
 	public var queuedActions:Array<PlayerActions> = [];
 	public var curAction:PlayerActions = IDLE;
 	public var canMove:Bool = true;
+	public var stamina:Int = 100;
 
 	public var defaultSpeedCaps:Array<Float> = [65, 100, 300]; //In Order: Sneaking, Walking, Running
 
@@ -58,6 +59,8 @@ class Player extends FlxSprite
 			}*/
 		};
 
+		health = 100;
+
 		setSize(32, 61);
 		offset.set(16, -3);
 
@@ -67,6 +70,14 @@ class Player extends FlxSprite
 
 		fsm = new FlxFSM(this);
 		initializeFSM(chosenMoveset);
+	}
+
+	override public function hurt(damage:Float):Void
+	{
+		if (damage <= health)
+			health -= damage;
+		else
+			health = 0;
 	}
 	
 	private function initializeFSM(moveset:String):Void
@@ -179,8 +190,11 @@ class Idle extends FlxFSMState<Player>
 
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
-		owner.maxVelocity.x = owner.defaultSpeedCaps[1];
-		owner.drag.x = owner.maxVelocity.x * 2;
+		if (owner.curAction != JUMP)
+		{
+			owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+			owner.drag.x = owner.maxVelocity.x * 2;
+		}
 		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
 		owner.curAction = IDLE;
 		if (owner.animation.curAnim.name != 'unsneak')
@@ -298,6 +312,12 @@ class Jump extends FlxFSMState<Player>
 			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -20 : 20;
 		}
 
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			owner.acceleration.x = 0;
+			owner.velocity.x *= 0.5;
+		}
+
 		if(jumpBuffer == null)
 			jumpBuffer = new FlxTimer().start(0.2, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP);});
 		else if (jumpBuffer.active && FlxG.keys.justPressed.SPACE && !owner.queuedActions.contains(JUMP))
@@ -369,7 +389,7 @@ class Slide extends FlxFSMState<Player>
 	{
 		owner.curAction = SLIDE;
 		owner.animation.play("sneak");
-		owner.drag.x = 325;
+		owner.drag.x = 310;
 	}
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void

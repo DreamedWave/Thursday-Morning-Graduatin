@@ -34,7 +34,7 @@ class SaveData
 			FlxG.save.data.notesfx = true;
 
 		if (FlxG.save.data.notesfxVol == null)
-			FlxG.save.data.notesfxVol = 45;
+			FlxG.save.data.notesfxVol = 40;
 
 		if (FlxG.save.data.musicVol == null)
 			FlxG.save.data.musicVol = 100;

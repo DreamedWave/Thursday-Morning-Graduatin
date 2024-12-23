@@ -139,7 +139,7 @@ class PlayState extends MusicBeatState
 	private var noteHitSustainSFX:FlxFilteredSound;
 	private var specialNoteHitSFX:FlxFilteredSound;
 
-	//Sound filters
+	//Sound filter shit
 	//var coolSoundFilter:FlxSoundFilter;
 	var coolSoundFilterTween:FlxTween;
 
@@ -1252,7 +1252,7 @@ class PlayState extends MusicBeatState
 
 		if (grabbedScreen != null)
 		{
-			trace('hello???');
+			trace('grabbed screen??');
 			if (loadScreenshot)
 			{
 				var fakeScreen:FlxSprite = new FlxSprite(0, 0);
@@ -1345,6 +1345,7 @@ class PlayState extends MusicBeatState
 			strumLine.y = FlxG.height - 165;
 
 		grpStrumLine = new FlxSpriteGroup();
+		grpStrumLine.alpha = 0.4;
 		add(grpStrumLine);
 
 		//ratings layering
@@ -1696,6 +1697,8 @@ class PlayState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON);
 		camGame.followLerp = camFollowSpeed;
 
+		generateSong();
+
 		//For CamHUD to fix itself after shake
 		//var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
 		//camHUDFollow.screenCenter();
@@ -1718,8 +1721,6 @@ class PlayState extends MusicBeatState
 		transIn.camera = camEXT;
 		transOut.camera = camEXT;
 		//trace('set transInCam to camHUD');
-
-		generateSong();
 
 		super.create();
 
@@ -1858,6 +1859,14 @@ class PlayState extends MusicBeatState
 			default:
 				camZooming = true;
 				startCountdown();
+		}
+
+		if (FlxG.save.data.subtitles)
+		{
+			add(subtitleBackground);
+			add(subtitleText);
+
+			startVideoSubtitles(videoPathArray[videoArrayProgress]);
 		}
 	}
 
@@ -2169,7 +2178,7 @@ class PlayState extends MusicBeatState
 			if (justFinishedVideo)
 				forceCoolIntro = true;
 
-			trace ('intro will be: ' + forceCoolIntro);
+			//trace ('intro will be: ' + forceCoolIntro);
 
 			if (!generatedArrows)
 			{
@@ -2210,19 +2219,19 @@ class PlayState extends MusicBeatState
 
 			if (skipCountdown)
 			{
-				//Conductor.songPosition = 0;
+				Conductor.songPosition = 0;
 				startTimerTime = 0;
 				startTimerLoops = 1;
 			}
-			//else
-				//Conductor.songPosition = -Conductor.crochet * 5;
+			else
+				Conductor.songPosition = -Conductor.crochet * 5;
 		}
 
 		startTimer = new FlxTimer().start(startTimerTime, function(tmr:FlxTimer)
 		{
 			if (!skipCountdown)
 			{
-				trace('Countdown = ' + swagCounter);
+				//trace('Countdown = ' + swagCounter);
 				
 				if (!PlayStateChangeables.Optimize)
 				{
@@ -2424,7 +2433,7 @@ class PlayState extends MusicBeatState
 				{
 					//Ghost Tapping Antimash
 					mashPresses++;
-					trace('mash detection increased');
+					trace('mash detection increased (' + mashPresses + '|' + mashPressThreshold + ')');
 				
 					if (mashPresses > mashPressThreshold)
 					{
@@ -2434,7 +2443,7 @@ class PlayState extends MusicBeatState
 						//Starts filling your accuracy with duds, causing you to have issues with score and health
 						updateAccuracy(1 - (0.025 * mashPresses));
 						//#if debug
-						trace("BRO STOP SPAMMING - " + mashPresses + ' | ' + mashPressThreshold);
+						trace("BRO STOP SPAMMING");
 						//#end
 					}
 					else
@@ -2513,7 +2522,7 @@ class PlayState extends MusicBeatState
 
 	private function startSong():Void
 	{
-		trace('starting song?');
+		//trace('starting song?');
 		//tempDisableResyncVocals = false;
 		if (prevHealthTwn != null)
 		{
@@ -2542,7 +2551,7 @@ class PlayState extends MusicBeatState
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = endSong;
 				FlxG.sound.playMusic();
-				trace('playedMusic');
+				//trace('playedMusic');
 			}
 			else
 			{
@@ -3033,13 +3042,10 @@ class PlayState extends MusicBeatState
 					if (forceIntro || (storyProgress <= 0 && !hasReset))
 					{
 						strumlineBG.alpha = 0;
-						FlxTween.tween(strumlineBG, {y: 0, alpha: 0.5}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.crochet / 500 + (0.2 * i)});
+						FlxTween.tween(strumlineBG, {y: 0, alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoOut, startDelay: Conductor.crochet / 500 + (0.2 * i)});
 					}
 					else
-					{
 						strumlineBG.y = 0;
-						strumlineBG.alpha = 0.5;
-					}
 					
 					if (PlayStateChangeables.useDownscroll)
 						strumlineBG.flipY = true;
@@ -3238,7 +3244,7 @@ class PlayState extends MusicBeatState
 			funnyReturn +="Score:" + (score + campaignScore) + " | RIPs:" + (misses + campaignMisses + slips + campaignSlips) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")";
 			//Clear Percentage
 			if (FlxG.save.data.accuracyDisplay)
-				funnyReturn += " | Clear:" + Math.floor(clearPercentage) + "%" + " | [TEMP] Acc:" + accuracy + "%";
+				funnyReturn += " | Clear:" + Math.floor(clearPercentage) + "%";// + " | [TEMP] Acc:" + accuracy + "%";
 		}
 		return funnyReturn;
 	}
@@ -3728,7 +3734,7 @@ class PlayState extends MusicBeatState
 		{
 			//Updating of alphas
 			if (FlxG.save.data.lagCompensation) //Prevents crash if lag compensation is off
-				if (lagCompIcon.alpha != 0 && allowHealthModifiers)
+				if (lagCompIcon.alpha != 0)
 					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 5));
 
 			if (!paused && !endedSong)
@@ -4250,16 +4256,20 @@ class PlayState extends MusicBeatState
 					lowHPOverlay.alpha = FlxMath.lerp(lowHPEffectVol, lowHPOverlay.alpha, calculateLerpTime(elapsed, 6 * (Conductor.bpm * 0.01)));
 			}
 
+			//Low HP Effects
 			if (!skippingIntro)
 			{
-				if (SONG.needsAdaptiveMus)
+				switch (songLowercase)
 				{
-					//Least Audio Volume during Low Health
-					//FIX THIS SHIT
-					//Yes this is song dependent :3
-					switch (songLowercase)
-					{
-						default:
+					case 'mic-test':
+						/*if (health < 1)
+							FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
+						else if (FlxG.sound.music.filter.gainLF < 1)
+							FlxG.sound.music.filter.gainLF = 1;*/
+
+					default:
+						if (SONG.needsAdaptiveMus)
+						{
 							if (health < 1)
 							{
 								FlxG.sound.music.volume = FlxMath.lerp((health - 0.3), FlxG.sound.music.volume, calculateLerpTime(elapsed, 15));
@@ -4271,28 +4281,8 @@ class PlayState extends MusicBeatState
 								instLowHP.volume = 0;
 								lowHPOverlay.alpha = 0;
 							}
-					}
+						}
 				}
-				//Make sure that the bass of the heartbeat doesnt clash with the bass of the song
-				//else
-				//{
-				//Song Dependent tuah :3
-				switch (curSong)
-				{
-					case "Mic Test":
-						if (health < 1)
-							FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
-						else if (FlxG.sound.music.filter.gainLF < 1)
-							FlxG.sound.music.filter.gainLF = 1;
-					case "Sudden Confrontation" | "Sprouting Irritation" | "Striking Tribulation":
-						//INTENTIONALLY do NATHIN
-					default:
-						if (health < 1)
-							FlxG.sound.music.filter.gainLF = FlxMath.lerp(1, FlxG.sound.music.filter.gainLF, calculateLerpTime(elapsed, 5 * (Conductor.bpm * 0.01)));
-						else if (FlxG.sound.music.filter.gainLF < 1)
-							FlxG.sound.music.filter.gainLF = 1;
-				}
-				//}
 			}
 
 			dummySongScore = FlxMath.lerp(dummySongScore, songScore, 0.15);
@@ -4357,6 +4347,7 @@ class PlayState extends MusicBeatState
 		//Pause Skip Song Shit
 		if (isStoryMode && storyPlaylist.length > 0 && PauseSubState.skippedSong)
 		{
+
 			nextStateIsPlayState = true;
 			playedCutscene = false;
 			songPosGroup.visible = false;
@@ -4409,6 +4400,11 @@ class PlayState extends MusicBeatState
 				if (camTween != null)
 					camTween.cancel();
 				camGame.zoom = 1.5;
+
+				for (twn in tutorialTweenArray)
+					if (twn != null && twn.active)
+						twn.cancel();
+
 				//This Keeps Crashing ugh
 				if (tutorialGraphicA != null)
 					tutorialGraphicA.destroy();
@@ -4418,13 +4414,7 @@ class PlayState extends MusicBeatState
 					tutorialGraphicC.destroy();
 
 				if (tutorialText != null)
-				{
-					tutorialText.forEach(function(text:FlxSprite)
-					{
-						text.destroy();
-					});
 					tutorialText.destroy();
-				}
 			}
 
 			if (skipButton != null)
@@ -4523,6 +4513,8 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
+		else if (!endedSong)
+			Conductor.songPosition += FlxG.elapsed * 1000;
 
 		if (!paused && camZooming && !camZoomUsesTween)
 		{
@@ -4936,7 +4928,7 @@ class PlayState extends MusicBeatState
 				
 				nextStateIsPlayState = true;
 
-				if (!skippedSong && storyProgress > 0)
+				if (storyProgress > 0)
 				{
 					FlxTransitionableState.skipNextTransOut = true;
 					FlxTransitionableState.skipNextTransIn = true;
@@ -4961,6 +4953,12 @@ class PlayState extends MusicBeatState
 				{
 					FlxTransitionableState.skipNextTransOut = false;
 					FlxTransitionableState.skipNextTransIn = false;
+				}
+
+				if (skippedSong)
+				{
+					FlxTransitionableState.skipNextTransOut = true;
+					FlxTransitionableState.skipNextTransIn = true;
 				}
 
 				prevCamFollow = camFollow;
@@ -5218,6 +5216,9 @@ class PlayState extends MusicBeatState
 				if (daRating == null)
 					return;
 
+				if (combo >= 20 && daRating != 'miss' && daRating != 'slip')
+					showNumShit = true;
+
 				if (allowHealthModifiers && !daNote.withinCompensation)
 					updateAccuracy(daNote.parentWife);
 
@@ -5377,7 +5378,7 @@ class PlayState extends MusicBeatState
 		
 				if (!PlayStateChangeables.botPlay)
 				{
-					trace('huh????');
+					//trace('huh????');
 					grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
 					{
 						prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
@@ -5916,10 +5917,10 @@ class PlayState extends MusicBeatState
 
 			daNote.rating = 'miss';
 			if (daNote.noteType != "trigger")
-			{
+			//{
 				popUpScore('', daNote);
-				trace('noteMiss popupscore');
-			}
+				//trace('noteMiss popupscore');
+			//}
 			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay)
 				sploshThisShitUp(daNote, daNote.rating);
 
@@ -6444,7 +6445,7 @@ class PlayState extends MusicBeatState
 					}
 					notesHitArray.unshift(Date.now());
 					popUpScore('', note, noteDiff, isJack);
-					trace('goodnotehit nonsustain popupscore');
+					//trace('goodnotehit nonsustain popupscore');
 				}
 				else if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && allowHealthModifiers && !note.withinCompensation)
 					sploshThisShitUp(note, note.rating);
@@ -6475,7 +6476,7 @@ class PlayState extends MusicBeatState
 				//Experimental showing your numbers for sustain notes
 				//It works so we keepin it >:33
 				popUpScore('sustain', note, noteDiff);
-				trace('goodnotehit sustain popupscore');
+				//trace('goodnotehit sustain popupscore');
 
 				//Health Gain for Sustain
 				if (allowHealthModifiers)
@@ -6755,7 +6756,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = false;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 1}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: FlxEase.smootherStepOut, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.6}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: FlxEase.smootherStepOut, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -6770,7 +6771,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = true;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.7}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -6926,18 +6927,18 @@ class PlayState extends MusicBeatState
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
 	var lowHPEffectVol:Float = 0;
+	var tutorialTweenArray:Array<FlxTween> = [];
+	var TutorialTipTwn:FlxTween;		
 
 	function doSubtitleShit():Void
 	{
-		if (hasSubtitles && FlxG.save.data.subtitles)
+		if (hasSubtitles && FlxG.save.data.subtitles && songStarted)
 		{
 			switch (curSong)
 			{
 				case "Mic Test":
 					switch (curBeat)
 					{ 
-						//NOTE FOR FUTURE ME:  PREVENT CRASH WHEN SKIPPING IN TUTORIAL USING BOOL preventTutorialTips
-						//Dopne!
 						case 6:
 							subtitleTimer = new FlxTimer().start(0.3, function(tmr:FlxTimer)
 							{
@@ -6947,38 +6948,45 @@ class PlayState extends MusicBeatState
 							clearSubtitles();
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicA, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								
+								var TutorialTipTwn = FlxTween.tween(tutorialGraphicA, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete: function(twn:FlxTween){TutorialTipTwn = null;}});
+								tutorialTweenArray.push(TutorialTipTwn);
 								tutorialText.forEach(function(text:FlxSprite)
 								{
-									FlxTween.tween(text, {alpha: 1}, 0.35, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+									var Twn:FlxTween;
+									Twn = FlxTween.tween(text, {alpha: 1}, 0.35, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete: function(twn:FlxTween){tutorialTweenArray.remove(Twn);}});
+									tutorialTweenArray.push(Twn);
 								});
 							}
 						case 20:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicA, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								TutorialTipTwn = FlxTween.tween(tutorialGraphicA, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
+										TutorialTipTwn = null;
 										if (tutorialGraphicA != null)
 											tutorialGraphicA.destroy();
 									}
 								});
 
-								//Im giving up on tweening this shit bro im crying SDGKKHDKHS
-								//I am now a changed person - will try again!!!
 								if (tutorialText != null)
 								{
-									tutorialText.forEach(function(text:FlxSprite)
+									tutorialText.forEachAlive(function(text:FlxSprite)
 									{
-										FlxTween.tween(text, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete:
+										var Twn:FlxTween;
+										Twn = FlxTween.tween(text, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete:
 											function(twn:FlxTween)
 											{
+												tutorialTweenArray.remove(Twn);
+												text.kill();
 												text.destroy();
-												FlxG.log.add('this might cause a crash ermm ermmm');
+												//FlxG.log.add('this might cause a crash ermm ermmm');
 												if (tutorialText != null)
 													tutorialText.destroy();
 											}
 										});
+										tutorialTweenArray.push(Twn);
 									});
 								}
 							}
@@ -6987,13 +6995,14 @@ class PlayState extends MusicBeatState
 						case 24:
 							clearSubtitles();
 							if (!preventTutorialTips)
-								FlxTween.tween(tutorialGraphicB, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								TutorialTipTwn = FlxTween.tween(tutorialGraphicB, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete: function(twn:FlxTween){TutorialTipTwn = null;}});
 						case 39:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicB, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								TutorialTipTwn = FlxTween.tween(tutorialGraphicB, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
+										TutorialTipTwn = null;
 										if (tutorialGraphicB != null)
 											tutorialGraphicB.destroy();
 									}
@@ -7001,13 +7010,15 @@ class PlayState extends MusicBeatState
 							}
 						case 40:
 							if (!preventTutorialTips)
-								FlxTween.tween(tutorialGraphicC, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+								TutorialTipTwn = FlxTween.tween(tutorialGraphicC, {alpha: 1}, 0.3, {type: ONESHOT, ease: FlxEase.smoothStepOut, onComplete: function(twn:FlxTween){TutorialTipTwn = null;}});
 						case 52:
 							if (!preventTutorialTips)
 							{
-								FlxTween.tween(tutorialGraphicC, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+								TutorialTipTwn = FlxTween.tween(tutorialGraphicC, {alpha: 0}, 0.5, {type: ONESHOT, ease: FlxEase.smoothStepOut,
 									onComplete: function(twn:FlxTween)
 									{
+										TutorialTipTwn = null;
+										tutorialTweenArray.remove(TutorialTipTwn);
 										if (tutorialGraphicC != null)
 											tutorialGraphicC.destroy();
 									}
@@ -7026,7 +7037,8 @@ class PlayState extends MusicBeatState
 						case 64:
 							clearSubtitles();
 						case 70:
-							changeSubtitles("Good job!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("Good job!", 0xFFfff300);
 						case 72:
 							if (PlayStateChangeables.Optimize)
 								vocals.volume = 1;
@@ -7040,7 +7052,8 @@ class PlayState extends MusicBeatState
 						case 80:
 							clearSubtitles();
 						case 86:
-							changeSubtitles("Yes, good job!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("Yes, good job!", 0xFFfff300);
 						case 88:
 							if (PlayStateChangeables.Optimize)
 								vocals.volume = 1;
@@ -7054,10 +7067,10 @@ class PlayState extends MusicBeatState
 						case 96:
 							clearSubtitles();
 						case 102:
-							changeSubtitles("That's how you do it!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("That's how you do it!", 0xFFfff300);
 						case 104:
-							if (PlayStateChangeables.Optimize)
-								vocals.volume = 1;
+							vocals.volume = 1;
 							changeSubtitles("Right,", 0xFFfff300);
 						case 106:
 							changeSubtitles("Right, Down.", 0xFFfff300);
@@ -7068,18 +7081,15 @@ class PlayState extends MusicBeatState
 						case 112:
 							clearSubtitles();
 						case 118:
-							if (PlayStateChangeables.Optimize)
-								vocals.volume = 1;
+							vocals.volume = 1;
 							changeSubtitles("Now, free-style it!", 0xFFfff300);
 						case 120:
 							clearSubtitles();
 						case 150:
-							if (PlayStateChangeables.Optimize)
-								vocals.volume = 1;
+							vocals.volume = 1;
 							changeSubtitles("Ok, here we go-", 0xFFfff300);
 						case 152:
-							if (PlayStateChangeables.Optimize)
-								vocals.volume = 1;
+							vocals.volume = 1;
 							changeSubtitles("You may rise.", 0xFFfff300);
 						case 156:
 							changeSubtitles("You may fall.", 0xFFfff300);
@@ -7092,10 +7102,10 @@ class PlayState extends MusicBeatState
 						case 168:
 							clearSubtitles();
 						case 180:
-							changeSubtitles("That's how you do it, good job!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("That's how you do it, good job!", 0xFFfff300);
 						case 184:
-							if (PlayStateChangeables.Optimize)
-								vocals.volume = 1;
+							vocals.volume = 1;
 							changeSubtitles("Ok up, rise, down, left, right.", 0xFFfff300);
 						case 188:
 							changeSubtitles("Down, left, right, right, fall.", 0xFFfff300);
@@ -7108,7 +7118,8 @@ class PlayState extends MusicBeatState
 						case 200:
 							clearSubtitles();
 						case 212:
-							changeSubtitles("That's how you do it!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("That's how you do it!", 0xFFfff300);
 						case 214:
 							if (PlayStateChangeables.Optimize)
 								vocals.volume = 1;
@@ -7116,7 +7127,8 @@ class PlayState extends MusicBeatState
 						case 216:
 							clearSubtitles();
 						case 278:
-							changeSubtitles("That's how you do it!!", 0xFFfff300);
+							if (vocals.volume > 0.5)
+								changeSubtitles("That's how you do it!!", 0xFFfff300);
 						case 280:
 							clearSubtitles();
 					}
@@ -8739,11 +8751,11 @@ class PlayState extends MusicBeatState
 										gf.playAnim('scared', true);
 										//Hides the HUD and zooms the camera out once daddy dearest flips off bf
 										camHUD.alpha = 0;
-										doStrumLineBGTweening = false;
-										grpStrumLine.forEach(function(strumlineBG:FlxSprite)
+										if (FlxG.save.data.strumline)
 										{
-											strumlineBG.alpha = 0;
-										});
+											doStrumLineBGTweening = false;
+											grpStrumLine.alpha = 0;
+										}
 										playerStrums.forEach(function(strumNote:FlxSprite)
 										{
 											strumNote.alpha = 0;
@@ -8764,14 +8776,15 @@ class PlayState extends MusicBeatState
 										boyfriend.playAnim('awkward', true);
 										//trace("AWKWARD LMAO");
 									case 260:
-										grpStrumLine.forEach(function(strumlineBG:FlxSprite)
+										if (FlxG.save.data.strumline)
 										{
-											FlxTween.tween(strumlineBG, {alpha: 0.5}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut,
+											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut,
 											onComplete: function (twn:FlxTween)
 											{
+												strumLineBGTween = null;
 												doStrumLineBGTweening = true;
 											}});
-										});
+										}
 										playerStrums.forEach(function(strumNote:FlxSprite)
 										{
 											FlxTween.tween(strumNote, {alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut});
@@ -9243,10 +9256,7 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
-											grpStrumLine.forEach(function(leStrussy:FlxSprite)
-											{
-												FlxTween.tween(leStrussy, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn});
-											});
+											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
 										}
 										camFollowSpeed = 0.875;
 									case 174:
@@ -9272,15 +9282,15 @@ class PlayState extends MusicBeatState
 											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: FlxEase.quadIn});
 										});
 										if (FlxG.save.data.strumline)
-											grpStrumLine.forEach(function(leStrussy:FlxSprite)
-											{
-												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete: 
-													function(twn:FlxTween)
-													{
-														doStrumLineBGTweening = true;
-													}
-												});
+										{
+											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete: 
+												function(twn:FlxTween)
+												{
+													strumLineBGTween = null;
+													doStrumLineBGTweening = true;
+												}
 											});
+										}
 										gfSpeed = 1;
 									case 180:
 										doPityDeaths = true;
@@ -9318,10 +9328,7 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
-											grpStrumLine.forEach(function(leStrussy:FlxSprite)
-											{
-												FlxTween.tween(leStrussy, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadIn});
-											});
+											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
 										}
 										dad.playAnim('gunSHOCKED', true);
 										gf.playAnim('singDOWN-alt', true);
@@ -9358,15 +9365,15 @@ class PlayState extends MusicBeatState
 											FlxTween.tween(babyArrow, {alpha: 1}, Conductor.crochet / 2000, {type: ONESHOT, ease: FlxEase.quadIn});
 										});
 										if (FlxG.save.data.strumline)
-											grpStrumLine.forEach(function(leStrussy:FlxSprite)
+										{
+											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete:
+											function(twn:FlxTween)
 											{
-												FlxTween.tween(leStrussy, {alpha: 0.45}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete:
-												function(twn:FlxTween)
-												{
-													doStrumLineBGTweening = true;
-												}
-												});
+												strumLineBGTween = null;
+												doStrumLineBGTweening = true;
+											}
 											});
+										}
 										camFollowSpeed = 1;
 										camZooming = true;
 										gfSpeed = 1;
@@ -9659,23 +9666,10 @@ class PlayState extends MusicBeatState
 									lowHPHeartBeat.stop();
 								lowHPHeartBeat = FlxG.sound.play(Paths.sound('lowHP'), lowHPEffectVol);
 								lowHPHeartBeat.pitch = FlxG.random.float(0.85, 1.15);
-
-								FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.75) - 1) * -1; //LMAO I HOPE THIS WORKS
-								miscs.filter.gainLF = FlxG.sound.music.filter.gainLF;
 								
 								if (FlxG.save.data.flashing)
 									lowHPOverlay.alpha = lowHPEffectVol;
-								
-								//FlxG.sound.music.filter.gainLF = (lowHPEffectVol * 0.75) - 1;
-								/*#if cpp
-								@:privateAccess
-								{
-									lime.media.openal.AL.sourcef(lowHPHeartBeat._channel.__source.__backend.handle, lime.media.openal.AL.PITCH, FlxG.random.float(0.85, 1.15));
-								}
-								#end*/
-								//trace ("Played Low HP Noise || BPM > 300");
 							}
-							//trace ('lowHPVOL ' + lowHPHeartBeat.volume);
 						}
 				}
 
