@@ -418,8 +418,8 @@ class MinigameState extends MusicBeatState
 			FlxG.resetState();
 		}
 		
-		if (clatter > 7)
-			clatter = 7;
+		if (clatter > 8)
+			clatter = 8;
 
 		if (seqCheck > 1 && !stopActiveTweening)
 		{
@@ -484,50 +484,50 @@ class MinigameState extends MusicBeatState
 
 				if (curBeat % 32 == 0)
 				{
-					FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_Layer' + clatter + '.ogg', 1, false, preEscMusGroup);
-					switch (clatter)
+					FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_Layer' + heartBeatLevel + '.ogg', 1, false, preEscMusGroup);
+					switch (heartBeatLevel)
 					{
 						case 1:
 							if (FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
 							else if (FlxG.random.bool(10))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.5, false, preEscMusGroup);
 
 
 						case 2 | 3:
 							if (FlxG.random.bool(30))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
 							else if (FlxG.random.bool(20))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 1, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
 
-							if (clatter == 3 && FlxG.random.bool(20))
+							if (heartBeatLevel == 3 && FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
 						case 4 | 5:
 							if (FlxG.random.bool(40))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.8, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.7, false, preEscMusGroup);
 							else if (FlxG.random.bool(50))
-								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.7, false, preEscMusGroup);
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.8, false, preEscMusGroup);
 
 							if (FlxG.random.bool(30))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
-							else if (clatter == 5 && FlxG.random.bool(20))
+							else if (heartBeatLevel == 5 && FlxG.random.bool(20))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
 
 
 							case 6 | 7:
-							if (clatter ==6)
+							if (heartBeatLevel == 6)
 							{
 								if (FlxG.random.bool(50))
-									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.3, false, preEscMusGroup);
+									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.5, false, preEscMusGroup);
 								else if (FlxG.random.bool(60))
 									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.5, false, preEscMusGroup);
 							}
 
 							if (FlxG.random.bool(50))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 1, false, preEscMusGroup);
-							else if (clatter == 7 && FlxG.random.bool(35))
+							else if (heartBeatLevel == 7 && FlxG.random.bool(35))
 								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.9, false, preEscMusGroup);
 
 
@@ -639,38 +639,44 @@ class MinigameState extends MusicBeatState
 
 	private function checkAndSwapMusic()
 	{
-		trace('sequenceCheck' + seqCheck);
 		if (!inEscSeq)
 		{
-			if (heartBeatLevel < clatter)
+			if (clatter < 8)
 			{
-				trace('increased heartrate');
-				heartBeatLevel = clatter;
-				FlxG.sound.music.stop();
-				FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
-				FlxG.sound.music.looped = true;
-				FlxG.sound.music.onComplete = checkAndSwapMusic;
+				if (heartBeatLevel < clatter)
+				{
+					trace('sequenceCheck' + seqCheck);
+					trace('increased heartrate');
+					heartBeatLevel = clatter;
+					FlxG.sound.music.stop();
+					FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
+					FlxG.sound.music.looped = true;
+					FlxG.sound.music.onComplete = checkAndSwapMusic;
+				}
+			}
+			else
+			{
+				//Moved to a funct for easy??
+				defaultEscapeTime = 60;
+				escTimeBar.setRange(0, defaultEscapeTime);
+				FlxG.sound.play('assets/minigame/sounds/MaxClatter.ogg', 1, false);
+				FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 4 / 1000, 
+				{	
+					type: ONESHOT, 
+					ease: FlxEase.smoothStepOut,
+					onComplete: function(twn:FlxTween)
+					{
+						preEscMusGroup.stop();
+					}
+				});
+				triggerEscapeSeq();
 			}
 		}
 		else
 		{
+			trace('sequenceCheck' + seqCheck);
 			switch (seqCheck)
 			{
-				case 0:
-					//Moved to a funct for easy??
-					defaultEscapeTime = 60;
-					escTimeBar.setRange(0, defaultEscapeTime);
-					FlxG.sound.play('assets/minigame/sounds/MaxClatter.ogg', 1, false);
-					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 4 / 1000, 
-					{	
-						type: ONESHOT, 
-						ease: FlxEase.smoothStepOut,
-						onComplete: function(twn:FlxTween)
-						{
-							preEscMusGroup.stop();
-						}
-					});
-					triggerEscapeSeq();
 				case 1:
 					trace('SKIBIDI !!!!!');
 					if (timerMultTween != null)
@@ -1138,11 +1144,6 @@ class MinigameState extends MusicBeatState
 				{
 					clatter += clatterer.clatterAmt;
 					clatterer.playerMadeNoise();
-					new FlxTimer().start(3, function(tmr:FlxTimer)
-					{
-						clatterer.canClatter = true;
-						clatterer.alpha = 0.25;
-					});
 		
 					//Subtract some time from the timer
 					if (inEscSeq)

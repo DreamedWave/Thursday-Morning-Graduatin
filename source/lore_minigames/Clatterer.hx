@@ -26,5 +26,10 @@ class Clatterer extends FlxSprite
 		//switch (clatterAMt)
 		FlxG.sound.play('assets/minigame/sounds/clatterSND_Placeholder.ogg', 1);
 		alpha = 0.1;
+		new FlxTimer().start(3, function(tmr:FlxTimer)
+		{
+			canClatter = true;
+			alpha = 0.25;
+		});
 	}
 }

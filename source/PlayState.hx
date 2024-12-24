@@ -1271,6 +1271,8 @@ class PlayState extends MusicBeatState
 			grabbedScreen.dispose();
 		}
 
+		generateSong();
+
 		// = new FlxSoundFilter();
 		//coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
 		//coolSoundFilter.gainHF = 1;
@@ -1697,8 +1699,6 @@ class PlayState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON);
 		camGame.followLerp = camFollowSpeed;
 
-		generateSong();
-
 		//For CamHUD to fix itself after shake
 		//var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
 		//camHUDFollow.screenCenter();
@@ -1889,6 +1889,8 @@ class PlayState extends MusicBeatState
 
 	function desperationIntro():Void
 	{
+		clearSubtitles();
+		
 		if (fakeScreen != null)
 		{
 			fakeScreen.kill();
@@ -3961,7 +3963,7 @@ class PlayState extends MusicBeatState
 					}
 
 					if (daNote.sustainActive && !daNote.withinCompensation)
-						daNote.alpha = daNote.baseAlpha * playerStrums.members[daNote.noteData].alpha;
+						daNote.alpha = daNote.baseAlpha * (daNote.mustPress ? playerStrums.members[daNote.noteData].alpha : cpuStrums.members[daNote.noteData].alpha);
 
 					if (!daNote.noteWasActive && !daNote.canBeHit && !daNote.isOnScreen(camHUD)) //testing an early return that skips all this shit when it's far away from being seen on camera
 						return;
@@ -4513,7 +4515,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-		else if (!endedSong)
+		else if (!endedSong && startedCountdown)
 			Conductor.songPosition += FlxG.elapsed * 1000;
 
 		if (!paused && camZooming && !camZoomUsesTween)
