@@ -27,7 +27,8 @@ class Player extends FlxSprite
 	public var queuedActions:Array<PlayerActions> = [];
 	public var curAction:PlayerActions = IDLE;
 	public var canMove:Bool = true;
-	public var stamina:Int = 100;
+	public var stamina:Float = 100;
+	public var ranOutOfBreath:Bool = false;
 
 	public var defaultSpeedCaps:Array<Float> = [65, 100, 300]; //In Order: Sneaking, Walking, Running
 
@@ -113,6 +114,41 @@ class Player extends FlxSprite
 	{
 		fsm.update(elapsed);
 		super.update(elapsed);
+
+		//Stamina gains/drains
+		if (canMove)
+		{
+			switch (curAction)
+			{
+				case RUN:
+					stamina -= elapsed * 20;
+				case SLIDE:
+					if (stamina < 100)
+						stamina += elapsed * 25;
+				case IDLE:
+					if (stamina < 100)
+						stamina += elapsed * 20;
+				case JUMP:
+					if (stamina < 100)
+						stamina += elapsed * 7.5;
+				default:
+					if (stamina < 100)
+						stamina += elapsed * 10;
+			}
+
+			if (stamina <= 0)
+			{
+				stamina = 0;//make sure we don't overdrain the player
+				ranOutOfBreath = true;
+			}
+			else if (ranOutOfBreath && stamina >= 25)
+				ranOutOfBreath = false;
+		}
+		else
+		{
+			if (stamina < 100)
+				stamina = 100;
+		}
 	}
 
 	override function destroy():Void
@@ -208,38 +244,7 @@ class Idle extends FlxFSMState<Player>
 			//Placeholder SND and anims
 			walkSnd.play();
 			
-			if (!FlxG.keys.pressed.SHIFT) //Walk
-			{
-				owner.animation.play("walk");
-				owner.animation.curAnim.frameRate = 8 + owner.velocity.x / (owner.facing != LEFT ? owner.maxVelocity.x : -owner.maxVelocity.x);
-				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
-				owner.curAction = WALK;
-				if (FlxG.keys.pressed.RIGHT)
-				{
-					owner.facing = RIGHT;
-		
-					//Flip player (2)
-					if (owner.velocity.x < 0)
-						owner.velocity.x *= -0.75;
-	
-					if (owner.velocity.x < owner.maxVelocity.x / 2)
-						owner.velocity.x = owner.maxVelocity.x / 2;
-					owner.acceleration.x = owner.maxVelocity.x * 2;
-				}
-				else
-				{
-					owner.facing = LEFT;
-		
-					//Flip player (1)
-					if (owner.velocity.x > 0)
-						owner.velocity.x *= -0.75;
-
-					if (owner.velocity.x > -owner.maxVelocity.x / 2)
-						owner.velocity.x = -owner.maxVelocity.x / 2;
-					owner.acceleration.x = -owner.maxVelocity.x * 2;
-				}
-			}
-			else //Run
+			if (FlxG.keys.pressed.SHIFT && !owner.ranOutOfBreath) //RUN
 			{
 				owner.animation.play("run-mach1");
 				owner.animation.curAnim.frameRate = 12 + owner.velocity.x / (owner.facing != LEFT ? owner.maxVelocity.x : -owner.maxVelocity.x);
@@ -270,6 +275,37 @@ class Idle extends FlxFSMState<Player>
 					owner.acceleration.x = -owner.maxVelocity.x * 0.85;
 				}
 			}
+			else //WALK
+			{
+				owner.animation.play("walk");
+				owner.animation.curAnim.frameRate = 8 + owner.velocity.x / (owner.facing != LEFT ? owner.maxVelocity.x : -owner.maxVelocity.x);
+				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+				owner.curAction = WALK;
+				if (FlxG.keys.pressed.RIGHT)
+				{
+					owner.facing = RIGHT;
+		
+					//Flip player (2)
+					if (owner.velocity.x < 0)
+						owner.velocity.x *= -0.75;
+	
+					if (owner.velocity.x < owner.maxVelocity.x / 2)
+						owner.velocity.x = owner.maxVelocity.x / 2;
+					owner.acceleration.x = owner.maxVelocity.x * 2;
+				}
+				else
+				{
+					owner.facing = LEFT;
+		
+					//Flip player (1)
+					if (owner.velocity.x > 0)
+						owner.velocity.x *= -0.75;
+
+					if (owner.velocity.x > -owner.maxVelocity.x / 2)
+						owner.velocity.x = -owner.maxVelocity.x / 2;
+					owner.acceleration.x = -owner.maxVelocity.x * 2;
+				}
+			}
 		}
 		
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
@@ -298,6 +334,9 @@ class Jump extends FlxFSMState<Player>
 		if (owner.queuedActions.contains(JUMP))
 			owner.queuedActions.remove(JUMP);
 
+		owner.stamina -= 10;
+		owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+
 		owner.curAction = JUMP;
 		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
 		//owner.animation.play("jumping");
@@ -314,7 +353,7 @@ class Jump extends FlxFSMState<Player>
 
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
 		{
-			owner.acceleration.x = 0;
+			owner.acceleration.x = 0.25;
 			owner.velocity.x *= 0.5;
 		}
 
@@ -328,6 +367,11 @@ class Jump extends FlxFSMState<Player>
 
 	override function exit(owner:Player) 
 	{
+		if (!FlxG.keys.pressed.LEFT || !FlxG.keys.pressed.RIGHT)
+		{
+			owner.acceleration.x = 0;
+			owner.velocity.x *= 0.1;
+		}
 		//jump land animation here?
 		//walkSnd.stop();
 		super.exit(owner);
@@ -389,7 +433,8 @@ class Slide extends FlxFSMState<Player>
 	{
 		owner.curAction = SLIDE;
 		owner.animation.play("sneak");
-		owner.drag.x = 310;
+		owner.drag.x = 300;
+		owner.stamina -= 25;
 	}
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
@@ -405,13 +450,14 @@ class Slide extends FlxFSMState<Player>
 				if (!oneShot)
 				{
 					owner.velocity.x = owner.maxVelocity.x;
+					owner.acceleration.x += 80;
 					oneShot = true;
 				}
 
 				if (owner.velocity.x > 0)
 				{
 					if (FlxG.keys.justPressed.RIGHT)
-						owner.acceleration.x = -5;
+						owner.acceleration.x += -5;
 					else
 						owner.acceleration.x = 0;
 				}
@@ -420,13 +466,14 @@ class Slide extends FlxFSMState<Player>
 				if (!oneShot)
 				{
 					owner.velocity.x = -owner.maxVelocity.x;
+					owner.acceleration.x -= 80;
 					oneShot = true;
 				}
 					
 				if (owner.velocity.x < 0)
 				{
 					if (FlxG.keys.justPressed.RIGHT)
-						owner.acceleration.x = 5;
+						owner.acceleration.x += 5;
 					else
 						owner.acceleration.x = 0;
 				}
@@ -438,6 +485,7 @@ class Slide extends FlxFSMState<Player>
 
 	override function exit(owner:Player) 
 	{
+		owner.acceleration.x = 0;
 		//unslide animation here
 		super.exit(owner);
 	}

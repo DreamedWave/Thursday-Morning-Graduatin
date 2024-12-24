@@ -108,7 +108,7 @@ class PlayState extends MusicBeatState
 
 	public static var noteBools:Array<Bool> = [false, false, false, false];
 
-	var songNameTXT:FlxText;
+	//var songNameTXT:FlxText;
 
 	#if windows
 	// Discord RPC variables
@@ -1438,14 +1438,14 @@ class PlayState extends MusicBeatState
 		subtitleBackground.alpha = 0;
 
 		// Add Kade Engine watermark
-		songNameTXT = new FlxText(4, 0, 0,
+		/*songNameTXT = new FlxText(4, 0, 0,
 			SONG.song
 			+ " - "
 			+ CoolUtil.difficultyFromInt(storyDifficulty), 16);
 		songNameTXT.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
 		songNameTXT.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1.3);
 		songNameTXT.y = (!PlayStateChangeables.useDownscroll ? FlxG.height - songNameTXT.height - 4 : songNameTXT.height - 10);
-		add(songNameTXT);
+		add(songNameTXT);*/
 
 		//Song-dependent tutorial cards
 		//also health icon trails
@@ -1675,7 +1675,7 @@ class PlayState extends MusicBeatState
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		//doof.cameras = [camHUD];
-		songNameTXT.cameras = [camHUD];
+		//songNameTXT.cameras = [camHUD];
 
 		songPosGroup = new FlxSpriteGroup(0, 1);
 		add(songPosGroup);
@@ -2224,6 +2224,7 @@ class PlayState extends MusicBeatState
 				Conductor.songPosition = 0;
 				startTimerTime = 0;
 				startTimerLoops = 1;
+				startSong();
 			}
 			else
 				Conductor.songPosition = -Conductor.crochet * 5;
@@ -3129,7 +3130,7 @@ class PlayState extends MusicBeatState
 		FlxTween.tween(iconP1, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
 		FlxTween.tween(iconP2, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
 		FlxTween.tween(scoreTxt, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
-		FlxTween.tween(songNameTXT, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
+		//FlxTween.tween(songNameTXT, {alpha: 0}, 0.5 * delayMultiplier, {type: ONESHOT, ease: FlxEase.quadOut});
 		finishedHUDFadeOutFunction = true;
 	}
 
@@ -3782,8 +3783,8 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							daNote.y = (strumLineNotes.members[daNote.noteData].y + 0.45 * (Conductor.songPosition - daNote.strumTime) * daNote.scrollSpeed);
-							if (daNote.y > strumLineNotes.members[daNote.noteData].y + 50 && !daNote.startSpeeding && daNote.forceMiss)
+							daNote.y = (cpuStrums.members[daNote.noteData].y + 0.45 * (Conductor.songPosition - daNote.strumTime) * daNote.scrollSpeed);
+							if (daNote.y > cpuStrums.members[daNote.noteData].y + 50 && !daNote.startSpeeding && daNote.forceMiss)
 							{
 								daNote.startSpeeding = true;
 								if (daNote.isParent)
@@ -3844,8 +3845,8 @@ class PlayState extends MusicBeatState
 						}
 						else
 						{
-							daNote.y = (strumLineNotes.members[daNote.noteData].y - 0.45 * (Conductor.songPosition - daNote.strumTime) * daNote.scrollSpeed);
-							if (!daNote.startSpeeding && daNote.y < strumLineNotes.members[daNote.noteData].y - 50 && daNote.forceMiss)
+							daNote.y = (cpuStrums.members[daNote.noteData].y - 0.45 * (Conductor.songPosition - daNote.strumTime) * daNote.scrollSpeed);
+							if (!daNote.startSpeeding && daNote.y < cpuStrums.members[daNote.noteData].y - 50 && daNote.forceMiss)
 							{
 								daNote.startSpeeding = true;
 								if (daNote.isParent)
@@ -3944,10 +3945,10 @@ class PlayState extends MusicBeatState
 					else if (!daNote.wasGoodHit || daNote.forceMiss)
 					{
 						//trace ("test");
-						daNote.visible = strumLineNotes.members[daNote.noteData].visible;
-						if (daNote.x != strumLineNotes.members[daNote.noteData].x)
+						daNote.visible = cpuStrums.members[daNote.noteData].visible;
+						if (daNote.x != cpuStrums.members[daNote.noteData].x)
 						{
-							daNote.x = strumLineNotes.members[daNote.noteData].x;
+							daNote.x = cpuStrums.members[daNote.noteData].x;
 							if (daNote.isSustainNote)
 							{
 								daNote.x += daNote.width / 2 + 20;
@@ -3963,12 +3964,12 @@ class PlayState extends MusicBeatState
 					}
 
 					if (daNote.sustainActive && !daNote.withinCompensation)
-						daNote.alpha = daNote.baseAlpha * (daNote.mustPress ? playerStrums.members[daNote.noteData].alpha : strumLineNotes.members[daNote.noteData].alpha);
+						daNote.alpha = daNote.baseAlpha * (daNote.mustPress ? playerStrums.members[daNote.noteData].alpha : cpuStrums.members[daNote.noteData].alpha);
 
 					if (!daNote.noteWasActive && !daNote.canBeHit && !daNote.isOnScreen(camHUD)) //testing an early return that skips all this shit when it's far away from being seen on camera
 						return;
 		
-					if (!daNote.mustPress && daNote.wasGoodHit)		
+					if (!daNote.mustPress && daNote.wasGoodHit && daNote.enabled)		
 						enemyNoteHit(daNote);
 		
 					if (daNote.tooLate)
@@ -6397,6 +6398,8 @@ class PlayState extends MusicBeatState
 			notes.remove(note, true);
 			note.destroy();
 		}
+		else if (note.isSustainNote)
+			note.enabled = false;
 	}
 
 	var sustainSoundBool:Bool = false; //reduction of the amount of sounds the sustainnotes play
@@ -8531,16 +8534,16 @@ class PlayState extends MusicBeatState
 									case 1:
 										clearSubtitles();
 									case 47 | 71 | 79:
-										midsongCutscene = true;
+										dad.doIdle = false;
 										dad.playAnim('cheer', true);
 									case 48 | 72 | 80:
-										midsongCutscene = false;
+										dad.doIdle = true;
 									case 63:
 										changeSubtitles("Fuck.", 0xffc0c7ff);
 									case 64: 
 										clearSubtitles();
 									case 96:
-										midsongCutscene = true;
+										dad.doIdle = false;
 										doCamFollowing = false;
 										camFollow.setPosition(dad.getMidpoint().x, dad.getMidpoint().y);
 										dad.playAnim('cheer', true);
@@ -8873,6 +8876,7 @@ class PlayState extends MusicBeatState
 										camZooming = true;
 										midsongCutscene = false;
 									case 255:
+										midsongCutscene = true;
 										new FlxTimer().start(0.1, function(tmr:FlxTimer)
 										{
 											boyfriend.playAnim('concerned', true);
@@ -8891,20 +8895,7 @@ class PlayState extends MusicBeatState
 												});	
 										}
 										dad.playAnim('angryLoop', true);
-									case 258:
-										dad.playAnim('angryLoop', true);
-									case 260:
-										dad.playAnim('angryLoop', true);
-									case 262:
-										dad.playAnim('angryLoop', true);
-									case 264:
-										dad.playAnim('angryLoop', true);
-									case 265:
-										dad.playAnim('angryLoop', true);
-									case 266:
-										dad.playAnim('angryLoop', true);
-									case 267:
-										dad.playAnim('angryLoop', true);
+										boyfriend.playAnim('awkward', true);
 								}
 
 
@@ -8931,7 +8922,7 @@ class PlayState extends MusicBeatState
 									case 207:
 										boyfriend.playAnim('singRIGHT', true);
 										doCamFollowing = false;
-										midsongCutscene = true;
+										boyfriend.doIdle = false;
 										camFollow.setPosition(boyfriend.getMidpoint().x - 100, boyfriend.getMidpoint().y - 100);
 									case 208:
 										boyfriend.playAnim('singLEFTmiss', true);
@@ -8939,7 +8930,7 @@ class PlayState extends MusicBeatState
 									case 212:
 										defaultCamZoom = 1.15;
 										doCamFollowing = true;
-										midsongCutscene = false;
+										boyfriend.doIdle = true;
 									case 254:
 										dad.playAnim('gotPissed', true);
 									case 256:
@@ -8975,6 +8966,7 @@ class PlayState extends MusicBeatState
 										defaultCamZoom = 0.875;
 										camZoomUsesTween = true;
 									case 400:
+										dad.doIdle = false;
 										defaultCamZoom = 1;
 										dadFollowOffset[1] += 10;
 										dad.playAnim('angryLoop', true);
@@ -9204,10 +9196,10 @@ class PlayState extends MusicBeatState
 									case 3:
 										camZooming = true;
 									case 169:
-										midsongCutscene = true;
+										boyfriend.doIdle = false;
 										boyfriend.playAnim('scaredHOLD', false);
 									case 172:
-										midsongCutscene = false;
+										boyfriend.doIdle = true;
 									case 192:
 										camZooming = false;
 										defaultCamZoom = 0.82;
@@ -9237,16 +9229,16 @@ class PlayState extends MusicBeatState
 									case 32:
 										camZooming = true;
 									case 108:
-										midsongCutscene = true;
+										boyfriend.doIdle = false;
 										boyfriend.playAnim('scaredHOLD', false);
 									case 112:
-										midsongCutscene = false;
+										boyfriend.doIdle = true;
 									case 140:
-										midsongCutscene = true;
+										boyfriend.doIdle = false;
 										boyfriend.playAnim('scared', false);
 										gf.playAnim('cheerFail');
 									case 144:
-										midsongCutscene = false;
+										boyfriend.doIdle = true;
 									case 159:
 										camZooming = false;
 									case 160:
@@ -9506,26 +9498,27 @@ class PlayState extends MusicBeatState
 										camZooming = true;
 									case 864:
 										iconP2.color = 0xFFBEBEBE;
-										iconP2.playAnimation('lowHP');
+										health = 2;
 										camHUD.alpha = 0;
 										camZooming = false;
 										midsongCutscene = true;
 										boyfriend.playAnim('scaredHOLD', true);
+										boyfriend.alpha = 0;
 										dad.playAnim('firstDeath', true);
 										dadFollowOffset[0] -= 100;
 										dadFollowOffset[1] += 60;
 										dummyBlackScreen.alpha = 1;
 										camGame.shake(0.05, 0.3, true, true);
+										miscs.volume = vocalsVolume;
 									case 896:
+										FlxTween.tween(boyfriend, {alpha: 1}, Conductor.crochet / 4000, {type: ONESHOT, ease: FlxEase.smoothStepOut});
 										camFollowSpeed = 0.5;
 										//FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.quadOut});
 									case 932:
 										miscs.volume = vocalsVolume;
 										remove(boyfriend);
 										remove(dad);
-										if (isStoryMode)
-											camHUD.alpha = 0;
-										else
+										if (!isStoryMode)
 											camHUD.alpha = 1;
 								}
 
@@ -9678,14 +9671,14 @@ class PlayState extends MusicBeatState
 				//Idle shits
 				if (songStarted && !midsongCutscene && !endedSong && !PlayStateChangeables.Optimize)
 				{
-					if (gfSpeed > 0 && curBeat % gfSpeed == 0)
+					if (gfSpeed > 0 && curBeat % gfSpeed == 0 && gf.doIdle)
 						gf.dance();
 
 					//(IDK???)> (╯°□°）╯︵ ┻━┻
 					if (!boyfriend.animation.curAnim.name.startsWith('sing') && preventBFIdleAnim)
 						preventBFIdleAnim = false;
 
-					if (((boyfriend.animation.curAnim.name != 'idleAfterSing' && !boyfriend.animation.curAnim.name.startsWith('sing') && boyfriend.animation.curAnim.name != "hurt" && !boyfriend.animation.curAnim.name.startsWith("dodge") || boyfriend.animation.curAnim.finished) && (boyfriend.animation.curAnim.name != 'hey' && boyfriend.animation.curAnim.name != 'style' || boyfriend.animation.curAnim.curFrame >= 5)) && curBeat % idleBeat == 0)
+					if (((boyfriend.animation.curAnim.name != 'idleAfterSing' && !boyfriend.animation.curAnim.name.startsWith('sing') && boyfriend.animation.curAnim.name != "hurt" && !boyfriend.animation.curAnim.name.startsWith("dodge") || boyfriend.animation.curAnim.finished) && (boyfriend.animation.curAnim.name != 'hey' && boyfriend.animation.curAnim.name != 'style' || boyfriend.animation.curAnim.curFrame >= 5)) && curBeat % idleBeat == 0 && boyfriend.doIdle)
 					{
 						//Let players hold the anim if they want lol
 						if (!holdArray.contains(true) || !preventBFIdleAnim || PlayStateChangeables.botPlay)
@@ -9698,7 +9691,7 @@ class PlayState extends MusicBeatState
 						//trace("Idle (line 8468)");
 
 					// Here so that Dad doesnt interrupt his own notes
-					if (!dad.animation.curAnim.name.startsWith("sing") && (!dad.animation.curAnim.name.startsWith("gun") && !dad.animation.curAnim.name.startsWith("cheer") || dad.animation.curAnim.curFrame >= 3))
+					if (!dad.animation.curAnim.name.startsWith("sing") && (!dad.animation.curAnim.name.startsWith("gun") && !dad.animation.curAnim.name.startsWith("cheer") || dad.animation.curAnim.curFrame >= 3) && dad.doIdle)
 					{
 						if (curBeat % idleBeat == 0 || dad.curCharacter == "priest-theborderpray" || dad.curCharacter == "table-default")
 						{

@@ -207,7 +207,13 @@ class MinigameState extends MusicBeatState
 		escapeTimerGroup.add(escapeTimerText);
 
 		escapeTimerGroup.y -= 100;
-		
+
+		var staminaBar:FlxBar = new FlxBar(10, FlxG.height - 30, LEFT_TO_RIGHT, 120, 20, player, 'stamina', 0, 100);
+		staminaBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		staminaBar.antialiasing = FlxG.save.data.antialiasing;
+		staminaBar.angle = 2;
+		staminaBar.cameras = [camHUD];
+		add(staminaBar);
 		
 		super.create();
 
@@ -1131,13 +1137,14 @@ class MinigameState extends MusicBeatState
 	{
 		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
 		{
-			if (clatterCoyote != null && clatterCoyote.active)
+			clatterer.canClatter = false;
+			/*if (clatterCoyote != null && clatterCoyote.active)
 			{
 				trace('le cancel');
 				clatterCoyote.cancel();
-			}
+			}*/
 			
-			clatterCoyote = new FlxTimer().start(0.05, function(tmr:FlxTimer)
+			clatterCoyote = new FlxTimer().start(0.1, function(tmr:FlxTimer)
 			{
 				if (player.curAction != SNEAK && player.curAction != SLIDE)
 				{
@@ -1165,7 +1172,10 @@ class MinigameState extends MusicBeatState
 					}
 				}
 				else
+				{
+					clatterer.canClatter = true;
 					trace ('saved by the clatter coyote time');
+				}
 			});
 		}
 	}

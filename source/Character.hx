@@ -21,6 +21,8 @@ class Character extends FlxSprite
 	public var holdTimer:Float = 0;
 	public var dodgetime:Float = 0;
 
+	public var doIdle:Bool = true;
+
 	public function new(x:Float, y:Float, ?character:String = "guy-default", ?isPlayer:Bool = false)
 	{
 		super(x, y);
