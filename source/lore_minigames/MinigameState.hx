@@ -1131,7 +1131,6 @@ class MinigameState extends MusicBeatState
 	{
 		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
 		{
-			clatterer.canClatter = false;
 			if (clatterCoyote != null && clatterCoyote.active)
 			{
 				trace('le cancel');

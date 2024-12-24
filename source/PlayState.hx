@@ -1271,8 +1271,6 @@ class PlayState extends MusicBeatState
 			grabbedScreen.dispose();
 		}
 
-		generateSong();
-
 		// = new FlxSoundFilter();
 		//coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
 		//coolSoundFilter.gainHF = 1;
@@ -1373,6 +1371,8 @@ class PlayState extends MusicBeatState
 			healthAndScoreGroup.alpha = 0;
 		healthAndScoreGroup.cameras = [camHUD];
 		add(healthAndScoreGroup);
+
+		generateSong();
 
 		//this was where the cameradata was
 
@@ -3963,7 +3963,7 @@ class PlayState extends MusicBeatState
 					}
 
 					if (daNote.sustainActive && !daNote.withinCompensation)
-						daNote.alpha = daNote.baseAlpha * (daNote.mustPress ? playerStrums.members[daNote.noteData].alpha : cpuStrums.members[daNote.noteData].alpha);
+						daNote.alpha = daNote.baseAlpha * (daNote.mustPress ? playerStrums.members[daNote.noteData].alpha : strumLineNotes.members[daNote.noteData].alpha);
 
 					if (!daNote.noteWasActive && !daNote.canBeHit && !daNote.isOnScreen(camHUD)) //testing an early return that skips all this shit when it's far away from being seen on camera
 						return;
@@ -6390,7 +6390,7 @@ class PlayState extends MusicBeatState
 			//OK so it aint deleting the note, find out why.
 		}
 
-		if (!note.forceMiss || (!note.isOnScreen(camHUD) && note.tooLate))
+		if (!note.forceMiss && !note.isSustainNote || (!note.isOnScreen(camHUD) && note.tooLate))
 		{
 			note.active = false;
 			note.kill();
