@@ -2861,8 +2861,6 @@ class PlayState extends MusicBeatState
 		// NEW SHIT
 		noteData = songData.notes;
 
-		var playerCounter:Int = 0;
-
 		// Per song offset check
 		#if windows
 		for (file in sys.FileSystem.readDirectory(chartPath))
@@ -4282,12 +4280,12 @@ class PlayState extends MusicBeatState
 			scoreTxt.screenCenter(X);
 		}
 		//Might aswell update this every frame lmao
-		scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
+		//scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
 		//And here we see a local devgirl using scoretext as a testing visual aid
 		//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainLF, 3);
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
-		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+		scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -5077,6 +5075,8 @@ class PlayState extends MusicBeatState
 			Paths.clearUnusedMemory();
 
 			Main.doFocusShit = true;
+
+			FlxG.sound.music.stop(); //Unloads the preloaded music
 
 			//We uhhh we uhhh ermm uhhhhhh;;;
 			//FlxG.fixedTimestep = true;

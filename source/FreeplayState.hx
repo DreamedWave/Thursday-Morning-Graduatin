@@ -71,6 +71,7 @@ class FreeplayState extends MusicBeatMenu
 			// do nada
 		}
 	}
+	
 	override function create()
 	{
 		instance = this;

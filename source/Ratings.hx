@@ -24,22 +24,11 @@ class Ratings
 
                     //lazygurl's way :3
                     //For readability porpoises!!
-                    if (!PlayState.isStoryMode)
-                    {
-                        sicks = PlayState.instance.sicks;
-                        goods = PlayState.instance.goods;
-                        bads = PlayState.instance.bads;
-                        slips = PlayState.instance.slips;
-                        misses = PlayState.instance.misses;
-                    }
-                    else
-                    {
-                        sicks = PlayState.campaignSicks;
-                         goods = PlayState.campaignGoods;
-                        bads = PlayState.campaignBads;
-                        slips = PlayState.campaignSlips;
-                        misses = PlayState.campaignMisses;   
-                    }
+                    sicks = PlayState.instance.sicks + PlayState.campaignSicks;
+                    goods = PlayState.instance.goods + PlayState.campaignGoods;
+                    bads = PlayState.instance.bads + PlayState.campaignBads;
+                    slips = PlayState.instance.slips + PlayState.campaignSlips;
+                    misses = PlayState.instance.misses + PlayState.campaignMisses; 
 
                     if (misses == 0 && slips == 0 && bads == 0 && goods == 0) // Perfect (SICK) Full Combo
                         ranking = "PFC";

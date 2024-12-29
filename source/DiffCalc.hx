@@ -38,6 +38,7 @@ class DiffCalc
             {
                 if (ii[5] != 'mine')
                 {
+                    trace(ii);
                     if (ii[1] > 3 && !i.mustHitSection)
                         cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                     else if (ii[1] < 4 && i.mustHitSection)
