@@ -53,6 +53,7 @@ import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.filters.BitmapFilter;
 import openfl.filters.BlurFilter;
+import openfl.filters.ShaderFilter;
 import IndieCrossShaders;
 import openfl.events.KeyboardEvent;
 import shaders.WiggleEffect;
@@ -266,7 +267,7 @@ class PlayState extends MusicBeatState
 
 	public static var forceCoolIntro:Bool = false;
 
-	public var accuracy:Float = 0.00; //an internal-use only var keeping track of the player's accuracy
+	public static var accuracy:Float = 0.00; //an internal-use only var keeping track of the player's accuracy
 	public static var clearPercentage:Float = 0; //The var we ACTUALLY show to the player - how much we cleared the song
 	static var totalCleared:Array<Float> = [0, 0]; //What we use for calculating the clearPercentage - updated in the popUpScore function
 	var clearNumTwn:FlxTween;
@@ -359,7 +360,7 @@ class PlayState extends MusicBeatState
 
 	//public static var theFunne:Bool = true;
 
-	static var inCutscene:Bool = false;
+	var inCutscene:Bool = false;
 	public static var playedCutscene:Bool = false;
 	var midsongCutscene:Bool = false;
 	var skippingIntro:Bool = false;
@@ -605,6 +606,7 @@ class PlayState extends MusicBeatState
 		compensationTime = Conductor.crochet * 2 / 1000;
 
 		defaultScroll = SONG.speed * FlxG.save.data.scrollSpeed;
+		defaultScroll += storyDifficulty - 2 * 0.1;
 		curScroll = defaultScroll;
 		prevScroll = defaultScroll;
 		newScroll = defaultScroll;
@@ -1335,7 +1337,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		//Conductor.songPosition = -5000;
+		Conductor.songPosition = -Conductor.crochet * 5;
 
 		//Centering Offset Shit (1) V Doink
 		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
@@ -1371,8 +1373,6 @@ class PlayState extends MusicBeatState
 			healthAndScoreGroup.alpha = 0;
 		healthAndScoreGroup.cameras = [camHUD];
 		add(healthAndScoreGroup);
-
-		generateSong();
 
 		//this was where the cameradata was
 
@@ -1725,6 +1725,8 @@ class PlayState extends MusicBeatState
 		super.create();
 
 		timesShot = -mechanicPityDeaths;
+
+		generateSong();
 
 		//Song Start Events
 		//trace("Song Startup Shit");
@@ -3746,18 +3748,6 @@ class PlayState extends MusicBeatState
 
 				notes.forEachAlive(function(daNote:Note)
 				{
-					// instead of doing stupid y > FlxG.height
-					// we be men and actually calculate the time :)
-
-					// hii it's me the tmg modder
-					// uhhmm~ actually, i like to present myself a little feminine
-					// so uhmm yea~ we men and femboys alike acually calculate it this time :DDD
-
-					//hi it's me again the tmg modder
-					//turns out the stupid y > height thing is actually useful this time
-					//so i be doing both >:)))))
-					//look idk how bad this is but like idfk this is my first time making something this big
-					//also hey no longer a femboy im a girl now hello hi :3
 					if (!daNote.tooLate)
 					{
 						daNote.visible = true;
@@ -4350,7 +4340,6 @@ class PlayState extends MusicBeatState
 		//Pause Skip Song Shit
 		if (isStoryMode && storyPlaylist.length > 0 && PauseSubState.skippedSong)
 		{
-
 			nextStateIsPlayState = true;
 			playedCutscene = false;
 			songPosGroup.visible = false;
@@ -5022,6 +5011,8 @@ class PlayState extends MusicBeatState
 		{
 			trace ('CLEARING PLAYSTATE DATA!!!!!!');
 			Paths.clearCurrentLevel();
+
+			accuracy = 0;
 
 			if (grabbedScreen != null)
 				grabbedScreen.dispose();

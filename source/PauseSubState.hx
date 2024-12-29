@@ -496,6 +496,7 @@ class PauseSubState extends MusicBeatSubstate
 								PlayState.instance.removedVideo = true;
 							}*/
 							FlxTransitionableState.skipNextTransOut = true;
+							LoadingState.doScreenshotShit = false;
 							skippedSong = true;
 							trace("Skipped song");
 							PlayState.instance.camGame.alpha = 0;

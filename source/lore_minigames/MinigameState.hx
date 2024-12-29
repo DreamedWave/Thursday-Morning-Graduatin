@@ -1,5 +1,6 @@
 package lore_minigames;
 
+import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.FlxObject;
 import flixel.FlxState;
@@ -18,6 +19,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.system.FlxSoundGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 
 import flixel.util.FlxStringUtil;
 
@@ -78,6 +81,9 @@ class MinigameState extends MusicBeatState
 	public static var weekNum:Int = 0;
 
 	var killDepth:Float = 720; //what height to kill the player in
+	var playerResetPos:Array<Float> = [];
+
+	var camGameFilters:Array<BitmapFilter> = [];
 
 	override public function create()
 	{
@@ -143,6 +149,7 @@ class MinigameState extends MusicBeatState
 		add(collectiblesGroup);
 
 		player = new Player();
+		//player.shader = new shaders.TestShader();
 		map.loadEntities(placeEntities, "entities");
 
 		add(player);
@@ -156,6 +163,9 @@ class MinigameState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON);
 		//camGame.followLerp = camFollowSpeed;
 		camGame.followLerp = 50;
+		camGame.filters = camGameFilters;
+		//var bloom:ShaderFilter = new ShaderFilter(new shaders.BloomShader(0.3, 0.75, 3));
+		//camGameFilters.push(bloom);
 
 		//For CamHUD to fix itself after shake
 		/*var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
@@ -209,11 +219,18 @@ class MinigameState extends MusicBeatState
 		escapeTimerGroup.y -= 100;
 
 		var staminaBar:FlxBar = new FlxBar(10, FlxG.height - 30, LEFT_TO_RIGHT, 120, 20, player, 'stamina', 0, 100);
-		staminaBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		staminaBar.createFilledBar(0xFF5A003C, 0xFF33FFE4);
 		staminaBar.antialiasing = FlxG.save.data.antialiasing;
 		staminaBar.angle = 2;
 		staminaBar.cameras = [camHUD];
 		add(staminaBar);
+
+		var healthBar:FlxBar = new FlxBar(10, FlxG.height - 50, LEFT_TO_RIGHT, 120, 20, player, 'health', 0, 100);
+		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.antialiasing = FlxG.save.data.antialiasing;
+		healthBar.angle = 2;
+		healthBar.cameras = [camHUD];
+		add(healthBar);
 		
 		super.create();
 
@@ -236,6 +253,7 @@ class MinigameState extends MusicBeatState
 		{
 			case 'player':
 				player.setPosition(entity.x, (entity.y));
+				playerResetPos = [player.x, player.y];
 				doCamFollowing = true;
 			case 'portal_door':
 				//definitely make a class for this
@@ -354,7 +372,7 @@ class MinigameState extends MusicBeatState
 		if (doCamFollowing)
 		{
 			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
-			camMovementOffset[1] = (0.05 * player.velocity.y) + camHoldShakeAdditive[1];
+			camMovementOffset[1] = (0.1 * player.velocity.y) + camHoldShakeAdditive[1];
 			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
 			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
 	
@@ -405,7 +423,7 @@ class MinigameState extends MusicBeatState
 		}
 
 		if (player.y >= killDepth && player.canMove)
-			playerDied();
+			playerFell();
 
 		if (controls.BACK && !movedBack)
 		{
@@ -437,8 +455,8 @@ class MinigameState extends MusicBeatState
 	var stopActiveTweening:Bool = false;
 	//var fakeBeat:Int = 0;
 
-	var beatOffset:Int = 0;
-	var beatFlavoured:Int = 0;
+	//var beatOffset:Int = 0;
+	//var beatFlavoured:Int = 0;
 	
 	//Ripped from playstate???\
 	//stfu im very prouc of this function it is cool
@@ -881,6 +899,7 @@ class MinigameState extends MusicBeatState
 						//player.stopAction(true, true);
 						player.canMove = false;
 						player.setPosition(object.x, object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0], object.destination[1] - (player.height - object.height)];
 						if (theManUpstairs != null && theManUpstairs.exists)
 						{
 							//he dont know what hit em
@@ -920,6 +939,7 @@ class MinigameState extends MusicBeatState
 					{
 						//player.stopAction(true, true);
 						player.setPosition(object.x, object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0], object.destination[1] - (player.height - object.height)];
 						//if (theManUpstairs != null && theManUpstairs.exists)
 							//theManUpstairs.quellTheDemon(15, true, true);
 						player.canMove = false;
@@ -991,6 +1011,27 @@ class MinigameState extends MusicBeatState
 				}, object.dialogueArray.length + 1);
 		}
 	}
+	
+	private function playerFell():Void
+	{
+		player.canMove = false;
+		player.hurt(10);
+		if (player.health <= 0)
+			playerDied();
+		else
+		{
+			//placeholder snd
+			FlxG.sound.play(Paths.soundRandom('comboBreakBig', 1, 3), 0.75);
+			FlxTween.tween(darkenScreen, {alpha: 1}, 0.5, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
+				function(twn:FlxTween)
+				{
+					player.setPosition(playerResetPos[0], playerResetPos[1]);
+					FlxG.sound.play(Paths.sound("Note_Trigger"), 0.5, false);
+					FlxTween.tween(darkenScreen, {alpha: 0}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut});
+					player.canMove = true;
+				}});
+		}
+	}
 
 	private function playerDied()
 	{
@@ -1006,6 +1047,7 @@ class MinigameState extends MusicBeatState
 		darkenScreen.alpha = 0.15;
 		player.canMove = false;
 		var dedSound:FlxSound;
+		//placeholder snd
 		dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
 		dedSound.pitch = 1.5;
 		new FlxTimer().start(0.5, function(tmr:FlxTimer)

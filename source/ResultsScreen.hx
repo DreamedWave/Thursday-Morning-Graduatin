@@ -94,7 +94,7 @@ class ResultsScreen extends MusicBeatSubstate
         FlxG.sound.play(Paths.sound('ResultsScreenAppear'));
         if (!PlayState.isStoryMode || PlayState.storyWeek == 0)
         {
-            if (PlayState.instance.accuracy > 50)
+            if (PlayState.accuracy > 50)
             {
                 switch (songPlayed)
                 {
@@ -219,7 +219,7 @@ class ResultsScreen extends MusicBeatSubstate
         #if windows
 		if (FlxG.save.data.showPresence)
         {
-            var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + Ratings.GenerateLetterRank(PlayState.instance.accuracy, PlayState.instance.keeledOver) + ' (' + PlayState.clearPercentage + '%)]';
+            var funnyTextLol:String = (!PlayState.isStoryMode ? PlayState.SONG.song : "Campaign [Part " + PlayState.storyWeek + "]") + ' - Score: ' + (PlayState.isStoryMode ? PlayState.campaignScore : PlayState.instance.songScore) + " [" + Ratings.GenerateLetterRank(PlayState.accuracy, PlayState.instance.keeledOver) + ' (' + PlayState.clearPercentage + '%)]';
 			DiscordClient.changePresence("The Results!", funnyTextLol);
         }
 		#end

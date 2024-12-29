@@ -173,7 +173,7 @@ class ChromaticAberration extends FlxShader
 
 
 
-class WhiteOverlayShader extends FlxGraphicsShader
+class WhiteOverlayShader extends FlxShader
 {
 	@:glFragmentSource("
 	#pragma header

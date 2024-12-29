@@ -24,23 +24,22 @@ class Ratings
 
                     //lazygurl's way :3
                     //For readability porpoises!!
-                    //if (!PlayState.isStoryMode)
-                    //{
+                    if (!PlayState.isStoryMode)
+                    {
                         sicks = PlayState.instance.sicks;
                         goods = PlayState.instance.goods;
                         bads = PlayState.instance.bads;
                         slips = PlayState.instance.slips;
                         misses = PlayState.instance.misses;
-                    /*}
+                    }
                     else
                     {
                         sicks = PlayState.campaignSicks;
                          goods = PlayState.campaignGoods;
                         bads = PlayState.campaignBads;
                         slips = PlayState.campaignSlips;
-                        misses = PlayState.campaignMisses;
-                        
-                    }*/
+                        misses = PlayState.campaignMisses;   
+                    }
 
                     if (misses == 0 && slips == 0 && bads == 0 && goods == 0) // Perfect (SICK) Full Combo
                         ranking = "PFC";
@@ -53,7 +52,7 @@ class Ratings
                     else if (misses < 30) // Double Digit Combo Breaks
                         ranking = "DDR";
                     else if ((misses < 50 && accuracy > 70) || accuracy > 50)
-                        ranking = "CLR";
+                        ranking = "CLEAR";
                     else
                         ranking = "RETRY";
                 }

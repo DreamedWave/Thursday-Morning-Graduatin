@@ -171,7 +171,7 @@ class Conditions
 		{return !Player.isTouching(FLOOR);}
 
 	public static function startJump(Player:Player):Bool
-		{return Player.isTouching(FLOOR) && ((FlxG.keys.justPressed.SPACE) || Player.queuedActions.contains(JUMP));}
+		{return (Player.isTouching(FLOOR) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
 
 	public static function landFromAir(Player:Player):Bool
 		{return Player.isTouching(FLOOR);}
@@ -228,7 +228,8 @@ class Idle extends FlxFSMState<Player>
 	{
 		if (owner.curAction != JUMP)
 		{
-			owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+			if (owner.curAction != SLIDE)
+				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
 			owner.drag.x = owner.maxVelocity.x * 2;
 		}
 		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
@@ -335,7 +336,8 @@ class Jump extends FlxFSMState<Player>
 			owner.queuedActions.remove(JUMP);
 
 		owner.stamina -= 10;
-		owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+			owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
 
 		owner.curAction = JUMP;
 		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
@@ -348,7 +350,8 @@ class Jump extends FlxFSMState<Player>
 		//owner.acceleration.x = 0;
 		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
 		{
-			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -20 : 20;
+			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -45 : 45;
+			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
 		}
 
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
@@ -428,13 +431,15 @@ class Sneak extends FlxFSMState<Player>
 class Slide extends FlxFSMState<Player>
 {
 	var oneShot:Bool = false;
+	var slowTmr:FlxTimer;
 
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
 		owner.curAction = SLIDE;
 		owner.animation.play("sneak");
-		owner.drag.x = 300;
-		owner.stamina -= 25;
+		owner.stamina -= 10;
+		owner.drag *= 0.65;
+		slowTmr = new FlxTimer().start(0.45, function(tmr:FlxTimer){owner.drag.x = 250; trace ('player slowed'); owner.stamina -= 10;});
 	}
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
@@ -485,7 +490,15 @@ class Slide extends FlxFSMState<Player>
 
 	override function exit(owner:Player) 
 	{
-		owner.acceleration.x = 0;
+		if (slowTmr != null && slowTmr.active)
+		{
+			slowTmr.cancel();
+			if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+				owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+			owner.stamina += 5;
+		}
+		else
+			owner.acceleration.x = 0;
 		//unslide animation here
 		super.exit(owner);
 	}

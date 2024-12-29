@@ -51,6 +51,7 @@ class Note extends FlxSprite
 
 	public var noteStyleCheck:String = 'normal';
 	public var noteType:String = 'normal';
+	public var noteDifficulty:Int = '2';
 
 	public static var swagWidth:Float = 160 * 0.7;
 	//public static var PURP_NOTE:Int = 0;
