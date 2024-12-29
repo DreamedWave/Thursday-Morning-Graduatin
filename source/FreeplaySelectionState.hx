@@ -47,7 +47,7 @@ class FreeplaySelectionState extends MusicBeatMenu
 
 	override function create()
 	{
-		confirmSound = new FlxFilteredSound();
+		confirmSound = new FlxSound();
 
 		//Week-dependent Menu theme and BG colours
 		switch (FlxG.save.data.weekUnlocked)

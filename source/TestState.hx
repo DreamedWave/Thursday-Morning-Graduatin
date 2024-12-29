@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxRandom;
 #if sys
 import sys.io.File;
 #end
@@ -290,6 +291,16 @@ class TestState extends MusicBeatState
 							frameRateCap++;
 							tauntRating.text = "Taunt Rating: 0.00 ms (No Rating)\nBGSC: " + stageBG.scrollFactor.x + ", " + stageBG.scrollFactor.y + "\nFGSC: " + stageFloor.scrollFactor.x + ", " + stageFloor.scrollFactor.y + "\nShake FlashSprite: " + camGame.shakeFlashSprite + "\nFrameRateHold(60): " + frameRateCap;
 						}
+					}
+
+					if (FlxG.keys.justPressed.R)
+					{
+						var num:Float = FlxG.random.float(50, 5000);
+						//trace('generated truncate float test: ' + num);
+						var num1:Float = HelperFunctions.truncateFloat(num, 3);
+						tauntRating.text = "origin: " + num;
+						tauntRating.text += "\ntrunc: " + num1;
+						//num1 = HelperFunctions.truncateFloatUsingTheOtherWay(num, 3);
 					}
 					
 					if (FlxG.keys.justPressed.ONE)

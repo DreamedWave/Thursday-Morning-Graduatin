@@ -36,18 +36,18 @@ class DiffCalc
         {
             for (ii in i.sectionNotes) // notes
             {
-                if (ii[5] != 'mine')
+                if (ii[3] != 'mine')
                 {
-                    trace(ii);
+                    //trace(ii[3]);
                     if (ii[1] > 3 && !i.mustHitSection)
                         cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                     else if (ii[1] < 4 && i.mustHitSection)
                         cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                 }
-                else
+                /*else
                 {
                     trace('didnt count note cuz it is a mine note');
-                }
+                }*/
             }
         }
 

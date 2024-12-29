@@ -60,7 +60,7 @@ class MainMenuState extends MusicBeatMenu
 			DiscordClient.changePresence("Perusing the Menus", null);
 		#end
 
-		confirmSound = new FlxFilteredSound();
+		confirmSound = new FlxSound();
 
 		if (FlxG.sound.music != null)
 		{

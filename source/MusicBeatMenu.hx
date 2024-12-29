@@ -27,7 +27,7 @@ class MusicBeatMenu extends FlxUIState
 	public var tipTextBG:FlxSprite;
 	public var camUI:FlxCamera;
 	public var camLoad:FlxCamera;
-	public var confirmSound:FlxFilteredSound;//to make it persist heehee
+	public var confirmSound:FlxSound;//to make it persist heehee
 	//public var mouseHoverGrp:FlxTypedGroup<FlxObject>; //More robust Mouse Support'
 	//public var hasMouseSupport:Bool = false;
 	

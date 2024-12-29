@@ -34,8 +34,8 @@ class CachingState extends MusicBeatMenu
 	public static var bitmapData:Map<String,FlxGraphic>;
 
 	//Public Static so that it can be destroyed in disclaimerscreen
-	public static var cacheMusic:FlxFilteredSound;
-	public static var disclaimerMusic:FlxFilteredSound;
+	public static var cacheMusic:FlxSound;
+	public static var disclaimerMusic:FlxSound;
 
 	var images:Array<String> = [];
 	var music:Array<String> = [];
@@ -181,10 +181,10 @@ class CachingState extends MusicBeatMenu
 		//Thank you past Samuel!
 		//no this is bullshit, both of y'all past samuels are dumb af
 		//...all samuels are dead now- Everyone, welcome Amiee to the dev team :33
-		cacheMusic = new FlxFilteredSound().loadEmbedded(Paths.music('preMusic-loading'), true, false);
+		cacheMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-loading'), true, false);
 		cacheMusic.volume = 0;
 		FlxG.sound.list.add(cacheMusic);
-		disclaimerMusic = new FlxFilteredSound().loadEmbedded(Paths.music('preMusic-disclaimer'), true, false);
+		disclaimerMusic = new FlxSound().loadEmbedded(Paths.music('preMusic-disclaimer'), true, false);
 		disclaimerMusic.persist = true;
 		disclaimerMusic.volume = 0;
 		FlxG.sound.list.add(disclaimerMusic);

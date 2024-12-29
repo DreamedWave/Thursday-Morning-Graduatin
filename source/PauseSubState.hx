@@ -31,7 +31,7 @@ class PauseSubState extends MusicBeatSubstate
 	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
 	var curSelected:Int = 0;
 
-	var pauseMusic:FlxFilteredSound;
+	var pauseMusic:FlxSound;
 	//var oldPauseVolume:Float = 0;
 	#if cpp
 	#if debug
@@ -55,7 +55,7 @@ class PauseSubState extends MusicBeatSubstate
 	var levelDifficulty:FlxText;
 	var failCount:FlxText;
 
-	var pauseSound:FlxFilteredSound;
+	var pauseSound:FlxSound;
 
 	var blurTweenGoBrr:FlxTween = null;
 	var funnyBlur:Float;
@@ -110,7 +110,7 @@ class PauseSubState extends MusicBeatSubstate
 		if (PlayStateChangeables.botPlay || PlayState.SONG.song.toLowerCase() == "mic test")
 			menuItems.remove("Toggle Practice Mode");
 
-		pauseMusic = new FlxFilteredSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
+		pauseMusic = new FlxSound().loadEmbedded(Paths.music(PlayState.pauseMusicName), true, true);
 		if (PlayState.pauseMusicName != 'pause_screen/holy_shit_the_stalemate_is_on_fire')
 			pauseMusic.volume = 0;
 		else
@@ -230,7 +230,7 @@ class PauseSubState extends MusicBeatSubstate
 		cameras = [PlayState.instance.camEXT];
 
 		FlxG.mouse.visible = true;
-		pauseSound = new FlxFilteredSound().loadEmbedded(Paths.sound('pauseMenu'));
+		pauseSound = new FlxSound().loadEmbedded(Paths.sound('pauseMenu'));
 		FlxG.sound.list.add(pauseSound);
 		pauseSound.volume = 0.7;
 		pauseSound.play();
@@ -446,6 +446,7 @@ class PauseSubState extends MusicBeatSubstate
 						FlxG.resetState();
 						Paths.clearUnusedMemory();
 						FlxTransitionableState.skipNextTransOut = true;
+						FlxTransitionableState.skipNextTransIn = false;
 						if (!PlayState.songsCheatedOn.contains(true))
 							PlayState.toggledPracticeMode = false;
 					case "Toggle Practice Mode":
@@ -495,8 +496,7 @@ class PauseSubState extends MusicBeatSubstate
 								PlayState.instance.remove(PlayState.instance.videoSprite);
 								PlayState.instance.removedVideo = true;
 							}*/
-							FlxTransitionableState.skipNextTransOut = true;
-							LoadingState.doScreenshotShit = false;
+							FlxTransitionableState.skipNextTransIn = true;
 							skippedSong = true;
 							trace("Skipped song");
 							PlayState.instance.camGame.alpha = 0;

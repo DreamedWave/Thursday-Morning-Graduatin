@@ -76,13 +76,49 @@ class FlxFilteredSound extends FlxSound
 		return this;
 	}
 
-	override public function update(elapsed:Float)
+	/*override public function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
 		if (filter != null)
 			filter.applyFilter(this);
+	}*/
+
+	#if FLX_SOUND_SYSTEM
+	@:allow(flixel.system.frontEnds.SoundFrontEnd)
+	override function onFocus():Void
+	{
+		if (!_alreadyPaused)
+			resume();
+		if (filter != null)
+			filter.applyFilter(this);
 	}
+
+	@:allow(flixel.system.frontEnds.SoundFrontEnd)
+	override function onFocusLost():Void
+	{
+		_alreadyPaused = _paused;
+		pause();
+	}
+	#end
+
+	//Modified to include the destroying of filters as there's some weirdness going on when you recycle the sounds.
+	/*override function externCleanup(destroySound:Bool):Void
+	{
+		if (destroySound)
+		{
+			if (filter != null && filter.destroyWithSound)
+				FlxDestroyUtil.destroy(filter);
+			reset();
+			return;
+		}
+
+		if (filter != null && filter.destroyWithSound)
+		{
+			filter.removeFilter(this);
+			//filter = null;
+		}
+	}*/
 
 	override public function destroy()
 	{

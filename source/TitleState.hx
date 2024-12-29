@@ -60,7 +60,7 @@ class TitleState extends MusicBeatMenu
 
 	override public function create()
 	{
-		confirmSound = new FlxFilteredSound();
+		confirmSound = new FlxSound();
 
 		//trace("Sound List MaxSize = " + FlxG.sound.list.maxSize);
 		//Week dependent BgColours

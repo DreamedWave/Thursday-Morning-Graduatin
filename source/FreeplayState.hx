@@ -76,7 +76,7 @@ class FreeplayState extends MusicBeatMenu
 	{
 		instance = this;
 
-		confirmSound = new FlxFilteredSound();
+		confirmSound = new FlxSound();
 
 		mouseTimer = new FlxTimer().start(0.5, function(swagTimer:FlxTimer)
 		{

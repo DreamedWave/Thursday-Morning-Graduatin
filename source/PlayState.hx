@@ -125,7 +125,7 @@ class PlayState extends MusicBeatState
 	var soundsVolume:Float = 0;
 	var noteHitVolume:Float = 0;
 	
-	private var lowHPHeartBeat:FlxFilteredSound;
+	private var lowHPHeartBeat:FlxSound;
 	private var lowHPOverlay:FlxSprite;
 	var allowHeartBeatSounds:Bool = true;
 
@@ -136,12 +136,12 @@ class PlayState extends MusicBeatState
 	//var specilNoteHitSFXGroup:FlxSoundGroup;
 
 	//Note Hit SFX
-	private var noteHitSFX:FlxFilteredSound;
-	private var noteHitSustainSFX:FlxFilteredSound;
-	private var specialNoteHitSFX:FlxFilteredSound;
+	private var noteHitSFX:FlxSound;
+	private var noteHitSustainSFX:FlxSound;
+	private var specialNoteHitSFX:FlxSound;
 
 	//Sound filter shit
-	//var coolSoundFilter:FlxSoundFilter;
+	var coolSoundFilter:FlxSoundFilter;
 	var coolSoundFilterTween:FlxTween;
 
 	//Note Hit SFX Shits
@@ -149,23 +149,23 @@ class PlayState extends MusicBeatState
 	var allowNoteHitSounds:Bool = true;
 
 	//for the adaptive Music
-	public var instLowHP:FlxFilteredSound;
+	public var instLowHP:FlxSound;
 	//For the FNF voices
-	public var vocals:FlxFilteredSound;
+	public var vocals:FlxSound;
 	//For things such as Playing With Fire Guns and other shits that I am yet to do
-	public var miscs:FlxFilteredSound;
+	public var miscs:FlxSound;
 	//ADAPTIVE MUSIC AAAAA FUKC
 	//good god this has gYATT to be turned into a soundgroup LMFAO
-	private var drums:FlxFilteredSound;
-	private var taiko:FlxFilteredSound;
-	private var choir:FlxFilteredSound;
-	private var hats:FlxFilteredSound;
-	private var adders:FlxFilteredSound;
-	private var slayer:FlxFilteredSound;
-	private var retalHats:FlxFilteredSound;
-	private var bells:FlxFilteredSound;
-	private var pads:FlxFilteredSound;
-	private var danger:FlxFilteredSound;
+	private var drums:FlxSound;
+	private var taiko:FlxSound;
+	private var choir:FlxSound;
+	private var hats:FlxSound;
+	private var adders:FlxSound;
+	private var slayer:FlxSound;
+	private var retalHats:FlxSound;
+	private var bells:FlxSound;
+	private var pads:FlxSound;
+	private var danger:FlxSound;
 	public static var pauseMusicName:String = "";
 	//FINALE BATTLE SH THIT
 	private var dangerLevel:Float = 0;
@@ -325,7 +325,7 @@ class PlayState extends MusicBeatState
 	var blackScreenFadeTo:Float = 0;
 	var stageGradient:PsychEngineFancyStageShit.FancyStageGradient;
 	var stageParticles:FlxTypedGroup<PsychEngineFancyStageShit.FancyStageParticle>;
-	var stageSound:FlxFilteredSound;
+	var stageSound:FlxSound;
 	//Making this public static??? cause making this visible in the pause menu wouldnt work
 	public var safeVignette:FlxSprite;
 
@@ -395,7 +395,7 @@ class PlayState extends MusicBeatState
 	public static var startTime:Float = 0.0;
 
 	var video:VideoHandler;
-	var videoMusic:FlxFilteredSound;
+	var videoMusic:FlxSound;
 	var videoSprite:FlxSprite;
 	public static var videoPathArray:Array<String> = [];
 	var videoArrayProgress:Int = 0;
@@ -413,8 +413,6 @@ class PlayState extends MusicBeatState
 	//private var dummyBeats:Int = 0;//A thing to allow for beat skip compensation
 	
 	public static var grabbedScreen:BitmapData;
-	public static var screenshotForNextSong:Bool = false;
-	public static var loadScreenshot:Bool = false;
 	var fakeScreen:FlxSprite;
 
 	//Mechanic Jam Time!
@@ -521,11 +519,15 @@ class PlayState extends MusicBeatState
 
 		if (isStoryMode)
 		{
-			if (storyProgress == 0 && campaignDeaths == 0 && songDeaths == 0 && !hasReset && storyWeek != 0) //we dont have a hasVideo field, so we gotta manually add weeks here LMAOOO
+			if (storyProgress == 0)
 			{
-				//trace('me mama');
-				blackScreenAlpha = 1;
+				accuracy = 0.0;
 				clearPercentage = 0;
+				if(campaignDeaths == 0 && songDeaths == 0 && !hasReset && storyWeek != 0) //we dont have a hasVideo field, so we gotta manually add weeks here LMAOOO
+				{
+					//trace('me mama');
+					blackScreenAlpha = 1;
+				}
 			}
 			else
 			{
@@ -547,6 +549,7 @@ class PlayState extends MusicBeatState
 		{
 			clearPercentage = 0;
 			blackScreenAlpha = blackScreenFadeTo;
+			accuracy = 0.0;
 		}
 
 		FlxG.cameras.reset(camGame);
@@ -565,15 +568,15 @@ class PlayState extends MusicBeatState
 			//Paths.voices(key);
 		
 		//NoteHitSFX
-		noteHitSFX = new FlxFilteredSound();
-		noteHitSustainSFX = new FlxFilteredSound();
-		specialNoteHitSFX = new FlxFilteredSound();
+		noteHitSFX = new FlxSound();
+		noteHitSustainSFX = new FlxSound();
+		specialNoteHitSFX = new FlxSound();
 		FlxG.sound.list.add(noteHitSFX);
 		FlxG.sound.list.add(noteHitSustainSFX);
 		FlxG.sound.list.add(specialNoteHitSFX);
 
-		lowHPHeartBeat = new FlxFilteredSound();
-		styleSound = new FlxFilteredSound().loadEmbedded(Paths.sound('styleOnEm'));
+		lowHPHeartBeat = new FlxSound();
+		styleSound = new FlxSound().loadEmbedded(Paths.sound('styleOnEm'));
 		FlxG.sound.list.add(lowHPHeartBeat);
 		FlxG.sound.list.add(styleSound);
 		//ermmm does this work..? theehee~
@@ -587,10 +590,10 @@ class PlayState extends MusicBeatState
 		musicGroup = new FlxSoundGroup(musicVolume);
 		//specilNoteHitSFXGroup = new FlxSoundGroup(soundsVolume);
 		if(FlxG.save.data.missSounds)
-			missSoundGroup = new FlxSoundGroup(musicVolume);
+			missSoundGroup = new FlxSoundGroup(soundsVolume);
 		if (FlxG.save.data.notesfx)
 		//{
-			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume * soundsVolume);
+			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
 			//susNoteHitSFXGroup = new FlxSoundGroup(noteHitVolume * soundsVolume);
 		//}
 
@@ -606,7 +609,7 @@ class PlayState extends MusicBeatState
 		compensationTime = Conductor.crochet * 2 / 1000;
 
 		defaultScroll = SONG.speed * FlxG.save.data.scrollSpeed;
-		defaultScroll += storyDifficulty - 2 * 0.1;
+		defaultScroll += (storyDifficulty - 2) * 0.1;
 		curScroll = defaultScroll;
 		prevScroll = defaultScroll;
 		newScroll = defaultScroll;
@@ -1252,31 +1255,10 @@ class PlayState extends MusicBeatState
 		blackScreen.cameras = [camEXT];
 		add(blackScreen);
 
-		if (grabbedScreen != null)
-		{
-			trace('grabbed screen??');
-			if (loadScreenshot)
-			{
-				var fakeScreen:FlxSprite = new FlxSprite(0, 0);
-				fakeScreen.loadGraphic(grabbedScreen, false);
-				//Calculates the scale!
-				fakeScreen.setGraphicSize(Math.round(fakeScreen.width / FlxG.scaleMode.scale.x), Math.round(fakeScreen.height / FlxG.scaleMode.scale.y));
-				fakeScreen.updateHitbox();
-				fakeScreen.screenCenter();
-				fakeScreen.antialiasing = true;
-				fakeScreen.cameras = [camHUD];
-				add(fakeScreen);
-			}
-			screenshotForNextSong = false;
-			loadScreenshot = false;
-			
-			grabbedScreen.dispose();
-		}
-
-		// = new FlxSoundFilter();
-		//coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
-		//coolSoundFilter.gainHF = 1;
-		//coolSoundFilter.gainLF = 1;
+		coolSoundFilter = new FlxSoundFilter();
+		coolSoundFilter.filterType = FlxSoundFilterType.BANDPASS;
+		coolSoundFilter.gainHF = 1;
+		coolSoundFilter.gainLF = 1;
 
 		//UI Vignettes
 		//The detail thing that appears when you get shot
@@ -1765,7 +1747,6 @@ class PlayState extends MusicBeatState
 					blackScreen.alpha = 1;
 					inCutscene = true;
 					playedCutscene = true;
-					screenshotForNextSong = true;
 					videoSprite.visible = true;	
 					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
@@ -2560,25 +2541,25 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				drums = new FlxFilteredSound();
+				drums = new FlxSound();
 				FlxG.sound.list.add(drums);
-				taiko = new FlxFilteredSound();
+				taiko = new FlxSound();
 				FlxG.sound.list.add(taiko);
-				choir = new FlxFilteredSound();
+				choir = new FlxSound();
 				FlxG.sound.list.add(choir);
-				hats = new FlxFilteredSound();
+				hats = new FlxSound();
 				FlxG.sound.list.add(hats);
-				adders = new FlxFilteredSound();
+				adders = new FlxSound();
 				FlxG.sound.list.add(adders);
-				slayer = new FlxFilteredSound();
+				slayer = new FlxSound();
 				FlxG.sound.list.add(slayer);
-				retalHats = new FlxFilteredSound();
+				retalHats = new FlxSound();
 				FlxG.sound.list.add(retalHats);
-				bells = new FlxFilteredSound();
+				bells = new FlxSound();
 				FlxG.sound.list.add(bells);
-				pads = new FlxFilteredSound();
+				pads = new FlxSound();
 				FlxG.sound.list.add(pads);
-				danger = new FlxFilteredSound();
+				danger = new FlxSound();
 				FlxG.sound.list.add(danger);
 
 				FlxG.sound.music.looped = true;
@@ -2790,32 +2771,35 @@ class PlayState extends MusicBeatState
 		if (!generatedSong)
 		{
 			FlxG.sound.loadMusic(Paths.inst(SONG.song), musicVolume, false, musicGroup);
-			FlxG.sound.music.filter = new FlxSoundFilter();
-			FlxG.sound.music.filter.filterType = FlxSoundFilterType.BANDPASS;
 			if (SONG.needsVoices)
-				vocals = new FlxFilteredSound().loadEmbedded(Paths.voices(SONG.song));
+				vocals = new FlxSound().loadEmbedded(Paths.voices(SONG.song));
 			else
-				vocals = new FlxFilteredSound();
+				vocals = new FlxSound();
 			vocals.volume = vocalsVolume;
 			FlxG.sound.list.add(vocals);
 	
 	
 			if (SONG.needsMiscs)
-				miscs = new FlxFilteredSound().loadEmbedded(Paths.miscs(SONG.song));
+				miscs = new FlxSound().loadEmbedded(Paths.miscs(SONG.song));
 			else
-				miscs = new FlxFilteredSound();
-			miscs.filter = new FlxSoundFilter();
-			miscs.filter.filterType = FlxSoundFilterType.BANDPASS;
+				miscs = new FlxSound();
 			FlxG.sound.list.add(miscs);
 	
 	
 			if (SONG.needsAdaptiveMus)
-				instLowHP = new FlxFilteredSound().loadEmbedded(Paths.adaptiveMus(SONG.song), FlxG.sound.music.looped);
+				instLowHP = new FlxSound().loadEmbedded(Paths.adaptiveMus(SONG.song), FlxG.sound.music.looped);
 			else
-				instLowHP = new FlxFilteredSound();
+				instLowHP = new FlxSound();
 			instLowHP.volume = 0;
 			FlxG.sound.list.add(instLowHP);
 			musicGroup.add(instLowHP);
+
+			if (coolSoundFilter != null)
+			{
+				coolSoundFilter.applyFilter(FlxG.sound.music);
+				if (SONG.needsMiscs)
+					coolSoundFilter.applyFilter(miscs);
+			}
 	
 	
 			switch (SONG.song)
@@ -2837,6 +2821,7 @@ class PlayState extends MusicBeatState
 			setSongTime(0, true);
 			clearNotesBefore(0);
 			vocals.play();
+			playFinaleMusic();
 		}
 
 		// pre lowercasing the song name (generateSong)
@@ -3011,7 +2996,7 @@ class PlayState extends MusicBeatState
 			//babyArrow.scrollFactor.set();
 
 
-			if (forceIntro||(storyProgress <= 0 && !hasReset))
+			if (forceIntro || (storyProgress <= 0 && !hasReset))
 			{
 				babyArrow.alpha = 0;
 				FlxTween.tween(babyArrow, {y: babyArrow.y + (!PlayStateChangeables.useDownscroll ? 10 : -10), alpha: 1}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.circOut, startDelay: Conductor.crochet / 1000 + (0.2 * i)});
@@ -3294,7 +3279,7 @@ class PlayState extends MusicBeatState
 	var compensatedViaLagSpike:Bool = false;
 	public var keeledOver:Bool = false;
 
-	var styleSound:FlxFilteredSound;
+	var styleSound:FlxSound;
 	var goodStyleHits:Int = 0;
 	var improvStyleHits:Int = 0;
 	var badStyleHits:Int = 0;
@@ -3517,7 +3502,15 @@ class PlayState extends MusicBeatState
 		if (FlxG.sound.music.playing)
 		{
 			if (!showedResults && !endedSong)
-			{				
+			{		
+				//Sound/Music Filter List Shit! :33
+				if (coolSoundFilter != null)
+				{
+					coolSoundFilter.applyFilter(FlxG.sound.music);
+					if (SONG.needsMiscs)
+						coolSoundFilter.applyFilter(miscs);
+				}		
+
 				if (SONG.eventObjects != null && SONG.eventObjects.length != 0)
 				{
 					for (i in SONG.eventObjects)
@@ -3581,13 +3574,6 @@ class PlayState extends MusicBeatState
 						maxNps = nps;
 				}
 			}
-
-			//Sound/Music Filter List Shit! :33
-			/*if (coolSoundFilter != null)
-			{
-				coolSoundFilter.applyFilter(FlxG.sound.music);
-				coolSoundFilter.applyFilter(miscs);
-			}*/
 		}
 
 		if (!cannotDie && !endedSong)
@@ -4253,10 +4239,10 @@ class PlayState extends MusicBeatState
 				switch (songLowercase)
 				{
 					case 'mic-test':
-						/*if (health < 1)
-							FlxG.sound.music.filter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
-						else if (FlxG.sound.music.filter.gainLF < 1)
-							FlxG.sound.music.filter.gainLF = 1;*/
+						if (health < 1)
+							coolSoundFilter.gainLF = ((lowHPEffectVol * 0.7) - 1) * -1;
+						else if (coolSoundFilter.gainLF < 1)
+							coolSoundFilter.gainLF = 1;
 
 					default:
 						if (SONG.needsAdaptiveMus)
@@ -4280,12 +4266,12 @@ class PlayState extends MusicBeatState
 			scoreTxt.screenCenter(X);
 		}
 		//Might aswell update this every frame lmao
-		//scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
+		scoreTxt.text = setScoreText(Math.round(dummySongScore)); //why was this in another fucking state LMFAO
 		//And here we see a local devgirl using scoretext as a testing visual aid
 		//scoreTxt.text = "Gain HighFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainHF, 3) + " | Gain LowFreq: " + FlxMath.roundDecimal(FlxG.sound.music.filter.gainLF, 3);
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
-		scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -4485,7 +4471,7 @@ class PlayState extends MusicBeatState
 								compensatedViaLagSpike = true;
 							}
 						}
-						else if (compensatedViaLagSpike && !allowHealthModifiers)
+						else if (!compensatedViaLagSpike && !allowHealthModifiers)
 							allowHealthModifiers = true;
 					}
 
@@ -4590,18 +4576,13 @@ class PlayState extends MusicBeatState
 	{
 		vocals.volume = 0;
 		//Cool Lowpass Shit
-		FlxG.sound.music.filter.gainHF = 0;
-		miscs.filter.gainHF = 0;
+		coolSoundFilter.gainHF = 0;
 		if (coolSoundFilterTween != null)
 			coolSoundFilterTween.cancel();
-		coolSoundFilterTween = FlxTween.tween(FlxG.sound.music.filter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
+		coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
 			{
 				ease: FlxEase.smootherStepInOut,
 				startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
-				onUpdate: function(twn:FlxTween)
-				{
-					miscs.filter.gainHF = FlxG.sound.music.filter.gainHF;
-				},
 				onComplete: function(twn:FlxTween) 
 				{
 					coolSoundFilterTween = null;
@@ -4618,7 +4599,8 @@ class PlayState extends MusicBeatState
 
 		if (specialNoteHitSFX.playing)
 			specialNoteHitSFX.stop();
-		specialNoteHitSFX = FlxG.sound.play(Paths.sound('Note_Mine'), 1, false);
+		specialNoteHitSFX = FlxG.sound.load(Paths.sound('Note_Mine'), false);
+		specialNoteHitSFX.play();
 		camShake(true, false, 'camGame', 0.2, Conductor.crochet / 1000);
 		camShake(true, true, 'camHUD', 0.05, Conductor.crochet / 800, X);
 		
@@ -4758,7 +4740,12 @@ class PlayState extends MusicBeatState
 			camShake(true, true, 'camHUD', 0.01, Conductor.crochet / 1000);
 
 			if (playDodgeSound)
-				specialNoteHitSFX = FlxG.sound.play(Paths.sound('Note_Trigger'), 1, false);
+			{
+				if (specialNoteHitSFX.playing)
+					specialNoteHitSFX.stop();
+				specialNoteHitSFX = FlxG.sound.play(Paths.sound('Note_Trigger'), false);
+				specialNoteHitSFX.play();
+			}
 	}
 
 	var loadingNextSong:Bool = false;
@@ -4817,10 +4804,15 @@ class PlayState extends MusicBeatState
 			campaignMisses += misses + slips;
 		else*/
 		campaignMisses += misses;
+		misses = 0;
 		campaignSlips += slips;
+		slips = 0;
 		campaignBads += bads;
+		bads = 0;
 		campaignGoods += goods;
+		goods = 0;
 		campaignSicks += sicks;
+		sicks = 0;
 
 		playedCutscene = false;
 		if (!toggledPracticeMode)
@@ -4925,30 +4917,19 @@ class PlayState extends MusicBeatState
 					
 					prevHealth = health;
 
-					if (screenshotForNextSong)
-						loadScreenshot = true;
-					
-					//For loadingState
-					LoadingState.doScreenshotShit = true;
-					//var camHUDWasVisible:Bool = camHUD.visible;
-					//if (camHUDWasVisible)
-						//camHUD.visible = false;
-					FlxScreenGrab.defineCaptureRegion(Math.round(FlxG.scaleMode.offset.x), Math.round(FlxG.scaleMode.offset.y), Math.round(FlxG.scaleMode.gameSize.x), Math.round(FlxG.scaleMode.gameSize.y));
-					FlxScreenGrab.grab(false, true);
-					grabbedScreen = FlxScreenGrab.screenshot.bitmapData;
-					//if (camHUDWasVisible)
-						//camHUD.visible = true;
+					if (!skippedSong)
+					{
+						//For loadingState
+						LoadingState.doScreenshotShit = true;
+						FlxScreenGrab.defineCaptureRegion(Math.round(FlxG.scaleMode.offset.x), Math.round(FlxG.scaleMode.offset.y), Math.round(FlxG.scaleMode.gameSize.x), Math.round(FlxG.scaleMode.gameSize.y));
+						FlxScreenGrab.grab(false, true);
+						grabbedScreen = FlxScreenGrab.screenshot.bitmapData;
+					}
 				}
 				else
 				{
 					FlxTransitionableState.skipNextTransOut = false;
 					FlxTransitionableState.skipNextTransIn = false;
-				}
-
-				if (skippedSong)
-				{
-					FlxTransitionableState.skipNextTransOut = true;
-					FlxTransitionableState.skipNextTransIn = true;
 				}
 
 				prevCamFollow = camFollow;
@@ -5017,9 +4998,6 @@ class PlayState extends MusicBeatState
 			
 			FlxG.mouse.visible = true;
 			//FlxG.game.soundTray.silent = false;
-
-			screenshotForNextSong = false;
-			loadScreenshot = false;
 
 			videoPathArray = [];
 
@@ -5577,7 +5555,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	var comboBreakSound:FlxFilteredSound;
+	var comboBreakSound:FlxSound;
 	function breakCombo():Void //Breaks combo and plays combobreak noise
 	{
 		//The cool 000 effect when breaking a combo
@@ -5870,7 +5848,10 @@ class PlayState extends MusicBeatState
 						+ "%)");
 					}
 					#end
+
+				//FocusIn
 				default:
+
 					lagCompTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
 					{
 						allowLagComp = true;
@@ -6132,35 +6113,41 @@ class PlayState extends MusicBeatState
 			//	SFX for hitting notes (such as SICK, GOOD, BAD, SHIT, and SPECIAL NOTEs);
 			if (!PlayStateChangeables.botPlay && !note.withinCompensation)
 			{
-				if (noteHitSFX.playing)
-					noteHitSFX.stop();
 				//Converted from nested if-else statements and 2 switch statements to a one switch! You're welcome!
 				switch (rating)
 				{
 					case 'sick':
 						//For Sick Rating
-						noteHitSFX = FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
+						if (noteHitSFX.playing)
+							noteHitSFX.stop();
+						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume;
 
 					case 'good':
+						if (noteHitSFX.playing)
+							noteHitSFX.stop();
 						//For Good Rating
-						noteHitSFX = FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
+						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.85;
 
 					case 'bad':
+						if (noteHitSFX.playing)
+							noteHitSFX.stop();
 						//For Bad Rating
-						noteHitSFX = FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.55;
 
 					case 'shit':
+						if (noteHitSFX.playing)
+							noteHitSFX.stop();
 						//For Shit Rating
 						if (allowHealthModifiers && !note.withinCompensation)
-							noteHitSFX = FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Crap"), false, noteHitSFXGroup);
+							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Crap"), false, noteHitSFXGroup);
 						else
-							noteHitSFX = FlxG.sound.play(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
 						//Vocal Shit
 						//if (FlxG.save.data.shitBreaksCombo)
 						vocals.volume = vocalsVolume * 0.1;
@@ -6172,12 +6159,14 @@ class PlayState extends MusicBeatState
 						//Vocal Shit
 						vocals.volume = 0;
 				}
+				noteHitSFX.play();
 			}
 			else
 			{
 				if (noteHitSFX.playing)
 					noteHitSFX.stop();
-				noteHitSFX = FlxG.sound.play(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
+				noteHitSFX = FlxG.sound.load(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
+				noteHitSFX.play();
 				vocals.volume = vocalsVolume;
 			}
 		}
@@ -6185,7 +6174,8 @@ class PlayState extends MusicBeatState
 		{
 			if (noteHitSustainSFX.playing)
 				noteHitSustainSFX.stop();
-			FlxG.sound.play(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, noteHitSFXGroup);
+			noteHitSustainSFX = FlxG.sound.load(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, noteHitSFXGroup);
+			noteHitSustainSFX.play();
 		}	
 	}
 

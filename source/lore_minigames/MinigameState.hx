@@ -1083,7 +1083,7 @@ class MinigameState extends MusicBeatState
 		textLol.alpha = 0;
 		textLol.antialiasing = true;
 		textLol.cameras = [camHUD];
-		textLol.angle = randAngle;
+		textLol.angularVelocity = -randAngle;
 		add(textLol);
 
 		FlxG.sound.play('assets/minigame/sounds/SND_GameOver.ogg', 1, false);
@@ -1100,7 +1100,7 @@ class MinigameState extends MusicBeatState
 				textLol.alpha = textAlpha;
 			},
 		});
-		FlxTween.tween(textLol, {angle: -randAngle}, 0.4, {type: ONESHOT, ease: FlxEase.elasticOut});
+		FlxTween.tween(textLol, {angle: randAngle}, 0.3, {type: ONESHOT, ease: FlxEase.elasticOut, startDelay: 0.5, onComplete: function (twn:FlxTween){textLol.angularVelocity = 0;}});
 		FlxTween.tween(textLol.scale, {x: 0.8,  y: 0.8}, 0.25, 
 		{
 			type: ONESHOT,

@@ -26,8 +26,8 @@ class GameOverSubstate extends MusicBeatSubstate
 	private var cameraAnchor:FlxObject;
 	private var cameraAnchorXAdditive:Int = -20;
 	private var cameraAnchorYAdditive:Int = 20;
-	var deathSound:FlxFilteredSound = new FlxFilteredSound();
-	var retrySound:FlxFilteredSound = new FlxFilteredSound();
+	var deathSound:FlxSound = new FlxSound();
+	var retrySound:FlxSound = new FlxSound();
 	var retryFade:FlxTween;
 	var gameOverTimer:FlxTimer;
 	var gameOverFrameRandomizer:Int = 0;
@@ -257,7 +257,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			camMain.fade(FlxColor.BLACK, 0.3, false);
 			//Tapestop lol
 			//Different tweens for pitch and vol cuz it dont sound good when it's a singular one
-			//Now added tapeStop as a function for FlxFilteredSound - but like this is still ideal for here so that it don't cut off the effect and also for that cool FlxEase!
+			//Now added tapeStop as a function for FlxSound - but like this is still ideal for here so that it don't cut off the effect and also for that cool FlxEase!
 			FlxTween.tween(FlxG.sound.music, {volume: 0}, 0.45, {type: ONESHOT, ease: FlxEase.smootherStepOut, startDelay: 0.1});
 			FlxTween.tween(FlxG.sound.music, {pitch: 0.25}, 0.4, {type: ONESHOT, ease: FlxEase.quartOut, onComplete: 
 				function(twn:FlxTween)

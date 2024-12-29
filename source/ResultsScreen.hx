@@ -41,8 +41,8 @@ class ResultsScreen extends MusicBeatSubstate
     public var contText:FlxText;
     public var settingsText:FlxText;
 
-    public var music:FlxFilteredSound;
-    var rewardSound:FlxFilteredSound;
+    public var music:FlxSound;
+    var rewardSound:FlxSound;
 
     public var ranking:String;
 
@@ -89,7 +89,7 @@ class ResultsScreen extends MusicBeatSubstate
         darkenScreen.scrollFactor.set();
         add(darkenScreen);
 
-        music = new FlxFilteredSound();
+        music = new FlxSound();
 
         FlxG.sound.play(Paths.sound('ResultsScreenAppear'));
         if (!PlayState.isStoryMode || PlayState.storyWeek == 0)
