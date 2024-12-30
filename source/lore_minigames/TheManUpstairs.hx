@@ -17,7 +17,7 @@ enum FinalChaserType
 class TheManUpstairs extends FlxSprite
 {
 	//static inline 
-	var CHASE_SPEED:Float = 180;
+	var CHASE_SPEED:Float = 400;
 
 	var type:FinalChaserType;
 
@@ -47,10 +47,10 @@ class TheManUpstairs extends FlxSprite
 		//Might remove this and merge it with the below
 		dadSuspenseMusFar = FlxG.sound.load('assets/minigame/music/dadSuspense_Far.ogg', 0);
 		dadSuspenseMusFar.looped = true;
-		dadSuspenseMusFar.proximity(x, y, lore_minigames.MinigameState.player, 2500);
+		dadSuspenseMusFar.proximity(x, y, lore_minigames.MinigameState.player, 5000);
 		dadSuspenseMusNear = FlxG.sound.load('assets/minigame/music/dadSuspense_Near.ogg', 0);
 		dadSuspenseMusNear.looped = true;
-		dadSuspenseMusNear.proximity(x, y, lore_minigames.MinigameState.player, 1000);
+		dadSuspenseMusNear.proximity(x, y, lore_minigames.MinigameState.player, 2000);
 
 		dadSuspenseMusFar.play();
 		dadSuspenseMusNear.play();
@@ -58,10 +58,10 @@ class TheManUpstairs extends FlxSprite
 		//SND like rush or ambush
 		dadSNDFar = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Far.ogg', 0);
 		dadSNDFar.looped = true;
-		dadSNDFar.proximity(x, y, lore_minigames.MinigameState.player, 800, true);
+		dadSNDFar.proximity(x, y, lore_minigames.MinigameState.player, 1600, true);
 		dadSNDNear = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Near.ogg', 0);
 		dadSNDNear.looped = true;
-		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 300, true);
+		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 800, true);
 
 		dadSuspenseMusFar.setPosition(x + (width / 2), y + (height / 2));
 		dadSuspenseMusNear.setPosition(x + (width / 2), y + (height / 2));

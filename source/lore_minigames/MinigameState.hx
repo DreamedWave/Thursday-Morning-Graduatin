@@ -85,6 +85,8 @@ class MinigameState extends MusicBeatState
 
 	var camGameFilters:Array<BitmapFilter> = [];
 
+	var chromAbb:ShaderFilter;
+
 	override public function create()
 	{
 		#if windows
@@ -166,6 +168,8 @@ class MinigameState extends MusicBeatState
 		camGame.filters = camGameFilters;
 		//var bloom:ShaderFilter = new ShaderFilter(new shaders.BloomShader(0.3, 0.75, 3));
 		//camGameFilters.push(bloom);
+		chromAbb = new ShaderFilter(new shaders.ChromAbb(0.0015, 0, -0.0015));
+		camGameFilters.push(chromAbb);
 
 		//For CamHUD to fix itself after shake
 		/*var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
@@ -372,7 +376,7 @@ class MinigameState extends MusicBeatState
 		if (doCamFollowing)
 		{
 			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
-			camMovementOffset[1] = (0.1 * player.velocity.y) + camHoldShakeAdditive[1];
+			camMovementOffset[1] = (player.velocity.y > 0 ? 1.25 * player.velocity.y : 0.5 * player.velocity.y) + camHoldShakeAdditive[1];
 			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
 			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
 	
@@ -389,6 +393,8 @@ class MinigameState extends MusicBeatState
 				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
 			//}
 
+			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
+			
 			//FlxG.overlap(player, theManUpstairs, playerDied);
 			if (fatherElapsedCheck < 1)
 			{
@@ -397,6 +403,21 @@ class MinigameState extends MusicBeatState
 			}
 			else
 				fatherElapsedCheck--;
+		}
+
+		if (jumpscaredPlayer)
+		{
+			if (jumpscareSprite != null && jumpscareSprite.exists)
+			{
+				var mult1:Float = FlxMath.lerp(1, jumpscareSprite.scale.x, 0.9);
+				var mult2:Float = FlxMath.lerp(7, jumpscareSprite.angle, calculateLerpTime(elapsed * 2.5, 1, 0, 1));
+				jumpscareSprite.scale.set(mult1, mult1);
+				jumpscareSprite.angle = mult2;
+				jumpscareSprite.updateHitbox();
+				jumpscareSprite.screenCenter();
+			}
+			else
+				trace('hey, if you turned on this bool before making the jumpscare sprite then you messed up buddy!! :D');
 		}
 
 		if (inEscSeq && escapeTimer != null)
@@ -453,6 +474,60 @@ class MinigameState extends MusicBeatState
 	}
 
 	var stopActiveTweening:Bool = false;
+		var jumpscareSprite:FlxSprite;
+	var jumpscaredPlayer:Bool = false;
+	function jumpscareGameOver(player:Player, him:TheManUpstairs)
+	{
+		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
+		{
+			#if windows
+			// Updating Discord Rich Presence
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
+			#end
+
+			//camGame.shakeFlashSprite = false;
+			//camHUD.shakeFlashSprite = false;
+			him.aiStatus = 'inactive';
+			him.kill();
+			him.destroy();
+			FlxG.sound.music.stop();
+			darkenScreen.alpha = 1;
+			player.canMove = false;
+			camGame.visible = false;
+			var dedSound:FlxSound;
+			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
+			dedSound.pitch = 0.5;
+
+			//Jumpscare Shit
+			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
+			jumpscareSprite.angle = -6;
+			jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
+			jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
+			jumpscareSprite.scrollFactor.set(1, 1);
+			jumpscareSprite.updateHitbox();
+			jumpscareSprite.screenCenter();
+			jumpscareSprite.cameras = [camHUD];
+			jumpscareSprite.visible = false;
+			add(jumpscareSprite);
+
+			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
+
+			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
+			{
+				FlxG.sound.play(Paths.sound('boh'), 1, false);
+				jumpscareSprite.visible = true;
+				jumpscaredPlayer = true;
+				//camHUD.focusOn(jumpscareSprite.getPosition());
+				camHUD.shake(0.075, 2, true);
+				new FlxTimer().start(0.35, function(tmr:FlxTimer)
+				{
+					showGameoverScreen();
+				});
+			});
+		}
+	}
+
 	//var fakeBeat:Int = 0;
 
 	//var beatOffset:Int = 0;
@@ -680,6 +755,7 @@ class MinigameState extends MusicBeatState
 			}
 			else
 			{
+				//chromAbb.setValues(0.2, 0, 0.25);
 				//Moved to a funct for easy??
 				defaultEscapeTime = 60;
 				escTimeBar.setRange(0, defaultEscapeTime);
@@ -1052,6 +1128,8 @@ class MinigameState extends MusicBeatState
 		dedSound.pitch = 1.5;
 		new FlxTimer().start(0.5, function(tmr:FlxTimer)
 		{
+			jumpscareSprite.alpha = 0.15;
+			camHUD.stopFX();
 			showGameoverScreen();
 		});
 	}

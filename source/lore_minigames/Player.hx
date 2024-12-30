@@ -62,8 +62,8 @@ class Player extends FlxSprite
 
 		health = 100;
 
-		setSize(32, 61);
-		offset.set(16, -3);
+		setSize(26, 60);
+		offset.set(19, -4);
 
 		acceleration.y = GRAVITY;
 		maxVelocity.set(defaultSpeedCaps[1], GRAVITY);

@@ -441,6 +441,8 @@ class LoadingState extends MusicBeatMenu
 				PlayState.videoPathArray = ['week2/midcutscene1'];
 			case "Retaliation":
 				PlayState.videoPathArray = ['week2/midcutscene2', 'week2/endcutscene'];
+			case "Kid With a Gun":
+				PlayState.videoPathArray = ['week3/startcutscene'];
 		}
 
 		//for Gameover StageSuffix. Moved here to allow pre-caching of the sounds.

@@ -18,6 +18,9 @@ import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
 
+import openfl.filters.ShaderFilter;
+import openfl.filters.BitmapFilter;
+
 //#if cpp
 //import sys.thread.Thread;
 //#end
@@ -838,6 +841,9 @@ class TitleState extends MusicBeatMenu
 				DiscordClient.changePresence("[Goodbye, World]", null, 'apppresence-dark');
 				#end
 
+				FlxG.autoPause = false;
+				FlxG.mouse.visible = false;
+
 				didThePress = true;	
 				failSafeAugh = true;
 				transitioning = true;
@@ -855,7 +861,13 @@ class TitleState extends MusicBeatMenu
 				menuEyeCandy.animation.play('disappear');
 				titleText.alpha = 0.25;
 				titleText.animation.play('press-static');
-				FlxTween.tween(titleText,{y: 720, alpha: 0}, 0.25, {type: ONESHOT, ease: FlxEase.expoInOut});
+				FlxTween.tween(titleText,{y: 720, alpha: 0}, 2, {type: ONESHOT, ease: FlxEase.elasticIn});
+
+				var effect = new shaders.MosaicEffect();
+				var mosaic = new ShaderFilter(effect.shader);
+				var camFilters:Array<BitmapFilter> = [];
+				camUI.filters = camFilters;
+				camFilters.push(mosaic);
 	
 				trace ('Closing Game...');
 	
@@ -866,7 +878,12 @@ class TitleState extends MusicBeatMenu
 	
 				FlxG.sound.play(Paths.sound('exitMenu' + weekAdderThingy), 1);
 
-				
+				var coolNumThing:Float = 1.5;
+				new FlxTimer().start(1.4, function(tmr:FlxTimer)
+				{	//																																This is highkey cursed
+					new FlxTimer().start(0.05, function(tmr:FlxTimer){effect.setStrength(coolNumThing, coolNumThing); if(coolNumThing < 250){coolNumThing *= Math.sqrt(Math.sqrt(Math.sqrt(coolNumThing)));}else{coolNumThing *= Math.sqrt(Math.sqrt(Math.sqrt(coolNumThing))) / 2;}}, 100);
+				});
+
 				new FlxTimer().start(0.04, function(tmr:FlxTimer)
 				{
 					if (FlxG.save.data.camzoom)
@@ -874,18 +891,21 @@ class TitleState extends MusicBeatMenu
 						camUI.zoom -= 0.01;
 					}
 					FlxG.sound.music.stop();
-						closeButtonTween = FlxTween.tween(closeButton, {alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 2.5, onComplete:
-							function(twn:FlxTween) 
-							{
-								closeButtonTween = null;
-								logoTween = FlxTween.tween(logoBl, {y: -1000}, 1.4, {type: ONESHOT, ease: FlxEase.expoInOut});
-							}
-						});
-					camLoad.fade(FlxColor.BLACK, 5, false, function()
-					{
-						trace ('Goodbye');
-						System.exit(0);
-					}, true);
+					logoTween = FlxTween.tween(logoBl, {y: -1000}, 1.5, {type: ONESHOT, ease: FlxEase.expoInOut, startDelay: 2});
+					closeButtonTween = FlxTween.tween(closeButton, {alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 1.5, onComplete:
+						function(twn:FlxTween) 
+						{
+							closeButtonTween = null;
+							camLoad.fade(FlxColor.BLACK, 2, false, function()
+								{
+									new FlxTimer().start(0.05, function(tmr:FlxTimer)
+									{
+										trace ('Goodbye');
+										System.exit(0);
+									});
+								}, true);
+						}
+					});
 				});
 
 			default:

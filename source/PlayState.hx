@@ -610,6 +610,8 @@ class PlayState extends MusicBeatState
 
 		defaultScroll = SONG.speed * FlxG.save.data.scrollSpeed;
 		defaultScroll += (storyDifficulty - 2) * 0.1;
+		if (defaultScroll <= 0)
+			defaultScroll = 0.1;
 		curScroll = defaultScroll;
 		prevScroll = defaultScroll;
 		newScroll = defaultScroll;
@@ -1744,7 +1746,7 @@ class PlayState extends MusicBeatState
 				hasSubtitles = true;
 				if (isStoryMode && !playedCutscene)
 				{
-					blackScreen.alpha = 1;
+					//blackScreen.alpha = 1;
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
@@ -1765,7 +1767,7 @@ class PlayState extends MusicBeatState
 				if (isStoryMode && !playedCutscene)
 				{
 					health = 1;
-					blackScreen.alpha = 1;
+					//blackScreen.alpha = 1;
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
@@ -1781,12 +1783,12 @@ class PlayState extends MusicBeatState
 				camZooming = true;
 			case 'retaliation':
 				//trace("YOU BETTER BE CHANGED FROM " + camFollowSpeed);
-				health = 1;
 				camFollowSpeed = 0.25;
 				hasSubtitles = true;
 				//trace("TO " + camFollowSpeed);
 				if (isStoryMode && !playedCutscene)
 				{
+					health = 1;					
 					camFollow.x = dad.getGraphicMidpoint().x;
 					camFollow.y = dad.getGraphicMidpoint().y - 50;
 					blackScreen.alpha = 1;
@@ -1819,7 +1821,20 @@ class PlayState extends MusicBeatState
 					startCountdown();
 			case 'kid-with-a-gun':
 				hasSubtitles = true;
-				startCountdown();
+				if (isStoryMode && !playedCutscene)
+				{
+					inCutscene = true;
+					playedCutscene = true;
+					videoSprite.visible = true;	
+					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
+					video.finishCallback = function()
+					{
+						videoSprite.visible = false;
+						startCountdown(true);
+					}
+				}
+				else
+					startCountdown();
 			case 'playing-with-fire':
 				hasSubtitles = true;
 				camFollowSpeed = 0.875;
@@ -2380,6 +2395,7 @@ class PlayState extends MusicBeatState
 							goodNoteHit(epicNote, true);
 							pressNotes.push(epicNote);
 							var noteDiff:Float = -(epicNote.strumTime - Conductor.songPosition);
+							trace('jack?');
 						}
 					}
 				}
@@ -2720,10 +2736,9 @@ class PlayState extends MusicBeatState
 			// Updating Discord Rich Presence (with Time Left)
 			DiscordClient.changePresence(detailsText
 				+ SONG.song + " (" + storyDifficultyText + ")",
-				"Score: " + songScore
-				+ " | RIPs: " + (misses + slips)
-				+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-				+ "%)");
+				"Score:" + (songScore + campaignScore)
+				+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+				+ ", Clear:" + Math.floor(clearPercentage) + "%");
 		}
 		#end
 
@@ -3148,10 +3163,9 @@ class PlayState extends MusicBeatState
 				{
 					DiscordClient.changePresence("[PAUSED] "
 						+ SONG.song + " (" + storyDifficultyText + ")",
-						"Score: " + songScore
-						+ " | RIPs: " + (misses + slips)
-						+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-						+ "%)");
+						"Score:" + (songScore + campaignScore)
+						+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+						+ ", Clear:" + Math.floor(clearPercentage) + "%");
 				}
 				#end
 			}
@@ -3161,7 +3175,7 @@ class PlayState extends MusicBeatState
 				// Game Over doesn't get his own variable because it's only used here
 				if (FlxG.save.data.showPresence)
 				{
-					DiscordClient.changePresence("[GAME OVER] " + SONG.song + " (" + storyDifficultyText + ")", "Score: " + songScore, "apppresence-dark");
+					DiscordClient.changePresence("[GAME OVER] " + SONG.song + " (" + storyDifficultyText + ")", "Score: " + songScore + campaignScore, "apppresence-dark");
 				}
 				#end
 			}
@@ -3206,10 +3220,9 @@ class PlayState extends MusicBeatState
 					{
 						DiscordClient.changePresence(detailsText
 							+ SONG.song + " (" + storyDifficultyText + ")",
-							"Score: " + songScore
-							+ " | RIPs: " + (misses + slips)
-							+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-							+ "%)");
+							"Score:" + (songScore + campaignScore)
+							+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+							+ ", Clear:" + Math.floor(clearPercentage) + "%");
 					}
 				}
 				#end
@@ -3229,7 +3242,7 @@ class PlayState extends MusicBeatState
 			//NPS shit
 			funnyReturn = (FlxG.save.data.npsDisplay ? "NPS:" + nps + "/" + maxNps + " | " : "");
 			//Score, Combo Breaks, and Rating
-			funnyReturn +="Score:" + (score + campaignScore) + " | RIPs:" + (misses + campaignMisses + slips + campaignSlips) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")";
+			funnyReturn += "Score:" + (score + campaignScore) + " | RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")";
 			//Clear Percentage
 			if (FlxG.save.data.accuracyDisplay)
 				funnyReturn += " | Clear:" + Math.floor(clearPercentage) + "%";// + " | [TEMP] Acc:" + accuracy + "%";
@@ -4840,6 +4853,7 @@ class PlayState extends MusicBeatState
 		if (isStoryMode)
 		{
 			campaignScore += songScore;
+			songScore = 0;
 
 			if (playlistLength > 1 && songsCheatedOn.length >= storyProgress + 1)
 			{
@@ -5280,9 +5294,9 @@ class PlayState extends MusicBeatState
 				if (daRating != 'miss')
 				{
 					//Clear Percent Calculations
-					if (daRating == 'sick' || daRating == 'good' || daRating == 'bad')
+					if (daRating == 'sick' || daRating == 'good')
 						totalCleared[0]++;
-					else if (daRating == 'slip')
+					else
 						totalCleared[0] += 0.25;
 					clearPercentage = (totalCleared[0] / totalCleared[1]) * 100;
 					//trace ('clearcalced all over the place??? ' + clearPercentage + ' | ' + totalCleared + ' out of ' + totalPlayed);
@@ -5311,14 +5325,14 @@ class PlayState extends MusicBeatState
 						//To did: Add(ed) difficulty-dependent health drains
 						//oh oop i have not done customization yet
 						case 'miss':
-							if (allowHealthModifiers && !daNote.withinCompensation)
+							if (!daNote.withinCompensation)
 							{
 								timingColour = FlxColor.RED;
 								breakCombo();
 								//noteMiss() handles this mostly lol
 							}
 						case 'shit':
-							if (allowHealthModifiers && !daNote.withinCompensation)
+							if (!daNote.withinCompensation)
 							{
 								bypassOppMissCheck++;
 								timingColour = FlxColor.RED;
@@ -5326,13 +5340,17 @@ class PlayState extends MusicBeatState
 								slips++;
 								missesInSection++;
 								//Health Drain
-								targetHealth += calculateHealth(4, targetHealth, accuracy);
 							}
+							targetHealth += calculateHealth(4, targetHealth, accuracy);
 						case 'bad':
 							//Health Drain
+							if (!daNote.withinCompensation)
+							{
+								breakCombo();
+								bads++;
+								timingColour = FlxColor.YELLOW;
+							}
 							targetHealth += calculateHealth(5, targetHealth, accuracy);
-							bads++;
-							timingColour = FlxColor.YELLOW;
 						case 'good':
 							bypassOppMissCheck--;
 							//Health Gain
@@ -5842,10 +5860,9 @@ class PlayState extends MusicBeatState
 					{
 						DiscordClient.changePresence("[AUTO-PAUSED] "
 						+ SONG.song + " (" + storyDifficultyText + ")",
-						"Score: " + songScore
-						+ " | RIPs: " + (misses + slips)
-						+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-						+ "%)");
+						"Score:" + (songScore + campaignScore)
+						+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+						+ ", Clear:" + Math.floor(clearPercentage) + "%");
 					}
 					#end
 
@@ -5862,10 +5879,9 @@ class PlayState extends MusicBeatState
 					{
 						DiscordClient.changePresence(detailsText
 							+ SONG.song + " (" + storyDifficultyText + ")",
-							"Score: " + songScore
-							+ " | RIPs: " + (misses + slips)
-							+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-							+ "%)");
+							"Score:" + (songScore + campaignScore)
+							+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+							+ ", Clear:" + Math.floor(clearPercentage) + "%");
 					}
 					#end
 			}
@@ -6880,10 +6896,9 @@ class PlayState extends MusicBeatState
 			{
 				DiscordClient.changePresence(detailsText
 					+ SONG.song + " (" + storyDifficultyText + ")",
-					"Score: " + songScore
-					+ " | RIPs: " + (misses + slips)
-					+ " | Rating: " + Ratings.GenerateLetterRank(accuracy) + " (" + HelperFunctions.truncateFloat(accuracy, 2)
-					+ "%)");
+					"Score:" + (songScore + campaignScore)
+					+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+					+ ", Clear:" + Math.floor(clearPercentage) + "%");
 			}
 			#end
 		}
