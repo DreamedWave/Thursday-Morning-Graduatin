@@ -838,7 +838,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.mouse.visible = false;
 
 				//didThePress = true;
-				/transitioning =true;
+				transitioning =true;
 
 				if (closeButtonTween != null)
 					closeButtonTween.cancel();
