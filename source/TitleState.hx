@@ -55,7 +55,6 @@ class TitleState extends MusicBeatMenu
 	var closeButton:FlxSprite;
 	
 	var transitioning:Bool = false;
-	var failSafeAugh:Bool = false;
 	var doCamZooming:Bool = true;
 	var skippedIntro:Bool = false;
 
@@ -268,18 +267,9 @@ class TitleState extends MusicBeatMenu
 		if (FlxG.sound.music.volume < 0.65 && changedMenu && !FreeplayState.freeplayMusicPlaying)
 			FlxG.sound.music.volume = 0.65;
 
-		#if mobile
-		for (touch in FlxG.touches.list)
-			if (touch.justPressed)
-				pressedEnter = true;
-		#end
-
-		var pressedEnter:Bool = controls.ACCEPT;
-		var pressedBackspace:Bool = controls.BACK;
-
 		super.update(elapsed);
 
-		if (!FlxG.sound.music.playing && !didThePress)
+		if (!FlxG.sound.music.playing && !transitioning)
 		{
 			//Week-dependent Menu theme
 			switch (FlxG.save.data.weekUnlocked)
@@ -310,24 +300,25 @@ class TitleState extends MusicBeatMenu
 		if (initialized && FlxG.sound.music != null)
 		{
 			//Future sam here, yeah i know these suck LMAO
-			if ((pressedEnter || !FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed && !FlxG.mouse.justPressedRight && Main.isFocused) && !pressedBackspace && skippedIntro)
+			//sam is dead, Amiee here, we will make these better! :3
+			if ((controls.ACCEPT || !FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed && !FlxG.mouse.justPressedRight && Main.isFocused) && !controls.BACK && skippedIntro)
 			{
 				//Go to Main Menu
 				pressedAnything(1);
 			}
-			else if((pressedBackspace || (FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed || FlxG.mouse.justPressedRight) && Main.isFocused) && !pressedEnter && !transitioning && skippedIntro)
+			else if((controls.BACK || (FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed || FlxG.mouse.justPressedRight) && Main.isFocused) && !controls.ACCEPT && !transitioning && skippedIntro)
 			{
 				//Exit
 				pressedAnything(2);
 			}
-			else if ((pressedEnter || FlxG.mouse.justPressed && Main.isFocused) && !skippedIntro && initialized)
+			else if ((controls.ACCEPT || FlxG.mouse.justPressed && Main.isFocused) && !skippedIntro && initialized)
 			{
 				//SkipIntro
 				pressedAnything(0);
 			}
 		}
 
-		if (!transitioning && !failSafeAugh && closeButton.y == 10)
+		if (!transitioning && closeButton.y == 10)
 		{
 			//trace('doin your mom');
 			if (FlxG.mouse.overlaps(closeButton) && Main.isFocused && !isHovering)
@@ -760,19 +751,20 @@ class TitleState extends MusicBeatMenu
 		}
 	}
 
-	var didThePress:Bool = false;
+	//var didThePress:Bool = false;
 
 	function pressedAnything(pressedWhat:Int)
 	{
 		switch (pressedWhat)
 		{
 			case 1:
-				if (!transitioning && !failSafeAugh)
+				if (!transitioning)
 				{
-					didThePress = true;
+					//didThePress = true;
 					//this is dummy code, achievements are not confirmed for TMG
 					//if (Main.curDayString == 'Thursday') doAchienvementshit()
-		
+					transitioning = true;
+
 					if (closeButtonTween != null)
 						closeButtonTween.cancel();
 					if(!closeButton.isOnScreen(FlxG.cameras.list[0]))
@@ -812,9 +804,8 @@ class TitleState extends MusicBeatMenu
 					confirmSound.persist = true;
 					confirmSound.autoDestroy = true;
 
-					FlxG.camera.shake(0.01, 1, true, true);
-		
-					transitioning = true;
+					FlxG.camera.shake(0.015, 0.7, true, true);
+							
 					changedMenu = true;
 		
 					transitionTimer = new FlxTimer().start(1.76, function(tmr:FlxTimer)
@@ -823,10 +814,12 @@ class TitleState extends MusicBeatMenu
 						FlxG.switchState(new MainMenuState());
 					});
 				}
-				else
+				else if (transitionTimer != null && transitionTimer.active)
 				{
-					if (!failSafeAugh)
+					var spedran:Bool = false;
+					if (!spedran)
 					{
+						spedran = true;
 						transitionTimer.active = false;
 						confirmSound.persist = false;
 						//Speedrun Skip
@@ -844,9 +837,8 @@ class TitleState extends MusicBeatMenu
 				FlxG.autoPause = false;
 				FlxG.mouse.visible = false;
 
-				didThePress = true;	
-				failSafeAugh = true;
-				transitioning = true;
+				//didThePress = true;
+				/transitioning =true;
 
 				if (closeButtonTween != null)
 					closeButtonTween.cancel();
@@ -861,7 +853,7 @@ class TitleState extends MusicBeatMenu
 				menuEyeCandy.animation.play('disappear');
 				titleText.alpha = 0.25;
 				titleText.animation.play('press-static');
-				FlxTween.tween(titleText,{y: 720, alpha: 0}, 2, {type: ONESHOT, ease: FlxEase.elasticIn});
+				FlxTween.tween(titleText,{y: 720, alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.expoIn});
 
 				var effect = new shaders.MosaicEffect();
 				var mosaic = new ShaderFilter(effect.shader);
@@ -877,11 +869,34 @@ class TitleState extends MusicBeatMenu
 				add(black);
 	
 				FlxG.sound.play(Paths.sound('exitMenu' + weekAdderThingy), 1);
+				FlxG.camera.shake(0.02, 1.25, true, true);
 
-				var coolNumThing:Float = 1.5;
-				new FlxTimer().start(1.4, function(tmr:FlxTimer)
-				{	//																																This is highkey cursed
-					new FlxTimer().start(0.05, function(tmr:FlxTimer){effect.setStrength(coolNumThing, coolNumThing); if(coolNumThing < 250){coolNumThing *= Math.sqrt(Math.sqrt(Math.sqrt(coolNumThing)));}else{coolNumThing *= Math.sqrt(Math.sqrt(Math.sqrt(coolNumThing))) / 2;}}, 100);
+				var coolNumThing:Float = 1;
+				var counter:Int = 0;
+				new FlxTimer().start(1.3, function(tmr:FlxTimer)
+				{
+					new FlxTimer().start(0.025, function(tmr:FlxTimer)
+					{
+						effect.setStrength(coolNumThing, coolNumThing);
+						if (coolNumThing < 80)
+							coolNumThing += 2.5;
+						else if (coolNumThing < 185)
+						{
+							if (counter == 0)
+								coolNumThing += 13.125;
+							counter++;
+							if (counter > 1)
+								counter = 0;
+						}
+						else
+						{
+							if (counter == 0)
+								coolNumThing += 40;
+							counter++;
+							if (counter > 3)
+								counter = 0;
+						}
+					}, 200);
 				});
 
 				new FlxTimer().start(0.04, function(tmr:FlxTimer)
@@ -896,13 +911,11 @@ class TitleState extends MusicBeatMenu
 						function(twn:FlxTween) 
 						{
 							closeButtonTween = null;
-							camLoad.fade(FlxColor.BLACK, 2, false, function()
+							camLoad.stopFX('fade');
+							camLoad.fade(FlxColor.BLACK, 1.1, false, function()
 								{
-									new FlxTimer().start(0.05, function(tmr:FlxTimer)
-									{
-										trace ('Goodbye');
-										System.exit(0);
-									});
+									trace ('Goodbye');
+									System.exit(0);
 								}, true);
 						}
 					});

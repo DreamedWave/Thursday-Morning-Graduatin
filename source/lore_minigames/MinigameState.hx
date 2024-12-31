@@ -376,7 +376,7 @@ class MinigameState extends MusicBeatState
 		if (doCamFollowing)
 		{
 			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
-			camMovementOffset[1] = (player.velocity.y > 0 ? 1.25 * player.velocity.y : 0.5 * player.velocity.y) + camHoldShakeAdditive[1];
+			camMovementOffset[1] = (player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1];
 			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
 			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
 	
@@ -474,59 +474,6 @@ class MinigameState extends MusicBeatState
 	}
 
 	var stopActiveTweening:Bool = false;
-		var jumpscareSprite:FlxSprite;
-	var jumpscaredPlayer:Bool = false;
-	function jumpscareGameOver(player:Player, him:TheManUpstairs)
-	{
-		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
-		{
-			#if windows
-			// Updating Discord Rich Presence
-			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
-			#end
-
-			//camGame.shakeFlashSprite = false;
-			//camHUD.shakeFlashSprite = false;
-			him.aiStatus = 'inactive';
-			him.kill();
-			him.destroy();
-			FlxG.sound.music.stop();
-			darkenScreen.alpha = 1;
-			player.canMove = false;
-			camGame.visible = false;
-			var dedSound:FlxSound;
-			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
-			dedSound.pitch = 0.5;
-
-			//Jumpscare Shit
-			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
-			jumpscareSprite.angle = -6;
-			jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
-			jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
-			jumpscareSprite.scrollFactor.set(1, 1);
-			jumpscareSprite.updateHitbox();
-			jumpscareSprite.screenCenter();
-			jumpscareSprite.cameras = [camHUD];
-			jumpscareSprite.visible = false;
-			add(jumpscareSprite);
-
-			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
-
-			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
-			{
-				FlxG.sound.play(Paths.sound('boh'), 1, false);
-				jumpscareSprite.visible = true;
-				jumpscaredPlayer = true;
-				//camHUD.focusOn(jumpscareSprite.getPosition());
-				camHUD.shake(0.075, 2, true);
-				new FlxTimer().start(0.35, function(tmr:FlxTimer)
-				{
-					showGameoverScreen();
-				});
-			});
-		}
-	}
 
 	//var fakeBeat:Int = 0;
 
@@ -1102,6 +1049,8 @@ class MinigameState extends MusicBeatState
 				function(twn:FlxTween)
 				{
 					player.setPosition(playerResetPos[0], playerResetPos[1]);
+					camMovementLerp[0] *= -1;
+					camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 20);
 					FlxG.sound.play(Paths.sound("Note_Trigger"), 0.5, false);
 					FlxTween.tween(darkenScreen, {alpha: 0}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut});
 					player.canMove = true;
@@ -1128,18 +1077,69 @@ class MinigameState extends MusicBeatState
 		dedSound.pitch = 1.5;
 		new FlxTimer().start(0.5, function(tmr:FlxTimer)
 		{
-			jumpscareSprite.alpha = 0.15;
-			camHUD.stopFX();
 			showGameoverScreen();
 		});
+	}
+
+	var jumpscareSprite:FlxSprite;
+	var jumpscaredPlayer:Bool = false;
+	function jumpscareGameOver(player:Player, him:TheManUpstairs)
+	{
+		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
+		{
+			#if windows
+			// Updating Discord Rich Presence
+			if (FlxG.save.data.showPresence)
+				DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
+			#end
+
+			//camGame.shakeFlashSprite = false;
+			//camHUD.shakeFlashSprite = false;
+			him.aiStatus = 'inactive';
+			him.kill();
+			him.destroy();
+			FlxG.sound.music.stop();
+			darkenScreen.alpha = 1;
+			player.canMove = false;
+			camGame.visible = false;
+			var dedSound:FlxSound;
+			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
+			dedSound.pitch = 0.5;
+
+			//Jumpscare Shit
+			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
+			jumpscareSprite.angle = -6;
+			jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
+			jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
+			jumpscareSprite.scrollFactor.set(1, 1);
+			jumpscareSprite.updateHitbox();
+			jumpscareSprite.screenCenter();
+			jumpscareSprite.cameras = [camHUD];
+			jumpscareSprite.visible = false;
+			add(jumpscareSprite);
+
+			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
+
+			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
+			{
+				FlxG.sound.play(Paths.sound('boh'), 1, false);
+				jumpscareSprite.visible = true;
+				jumpscaredPlayer = true;
+				//camHUD.focusOn(jumpscareSprite.getPosition());
+				camHUD.shake(0.075, 2, true);
+				new FlxTimer().start(0.35, function(tmr:FlxTimer)
+				{
+					jumpscareSprite.alpha = 0.15;
+					camHUD.stopFX();
+					showGameoverScreen();
+				});
+			});
+		}
 	}
 
 	var textAlpha:Float = 0;
 	private function showGameoverScreen()
 	{
-		//PLACE OF HOLDER SDKBSFKB
-		//jumpscareSprite.visible = false;
-		//camHUD.stopFX();
 		player.visible = false;
 
 		var dummyBlackScreen:FlxSprite = new FlxSprite(-FlxG.width * defaultCamZoom,

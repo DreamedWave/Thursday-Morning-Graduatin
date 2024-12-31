@@ -61,7 +61,7 @@ class TheManUpstairs extends FlxSprite
 		dadSNDFar.proximity(x, y, lore_minigames.MinigameState.player, 1600, true);
 		dadSNDNear = FlxG.sound.load('assets/minigame/sounds/SND_dadMoving_Near.ogg', 0);
 		dadSNDNear.looped = true;
-		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 800, true);
+		dadSNDNear.proximity(x, y, lore_minigames.MinigameState.player, 500, true);
 
 		dadSuspenseMusFar.setPosition(x + (width / 2), y + (height / 2));
 		dadSuspenseMusNear.setPosition(x + (width / 2), y + (height / 2));

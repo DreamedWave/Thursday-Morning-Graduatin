@@ -21,7 +21,7 @@ enum PlayerActions
 
 class Player extends FlxSprite
 {
-	public static inline var GRAVITY:Float = 600;
+	public var GRAVITY:Float = 750;
 	public var fsm:FlxFSM<Player>;
 	public var chosenMoveset:String = 'default';//Making this changable so that we can add custom abilities in the future if ever
 	public var queuedActions:Array<PlayerActions> = [];
@@ -30,7 +30,7 @@ class Player extends FlxSprite
 	public var stamina:Float = 100;
 	public var ranOutOfBreath:Bool = false;
 
-	public var defaultSpeedCaps:Array<Float> = [65, 100, 300]; //In Order: Sneaking, Walking, Running
+	public var defaultSpeedCaps:Array<Float> = [75, 150, 400]; //In Order: Sneaking, Walking, Running
 
 	public function new(x:Float = 0, y:Float = 0)
 	{
@@ -73,6 +73,17 @@ class Player extends FlxSprite
 		initializeFSM(chosenMoveset);
 	}
 
+	public var quickTimer:FlxTimer = new FlxTimer();
+	public var quickTimeCaller:PlayerActions = NONE;
+	public function startQuickTimer(timeInSecs:Float, ?onComplete:FlxTimer -> Void):Void
+	{
+		quickTimeCaller = curAction;
+		if (onComplete != null)
+			quickTimer.start(timeInSecs, onComplete);
+		else
+			quickTimer.start(timeInSecs);
+	}
+
 	override public function hurt(damage:Float):Void
 	{
 		if (damage <= health)
@@ -88,6 +99,7 @@ class Player extends FlxSprite
 			default:
 				//                  From   To     Conditions
 				fsm.transitions.add(Idle, Jump, Conditions.startJump);
+				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
 				fsm.transitions.add(Jump, Idle, Conditions.landFromAir);
 
 				fsm.transitions.add(Idle, Falling, Conditions.startFall);
@@ -149,6 +161,9 @@ class Player extends FlxSprite
 			if (stamina < 100)
 				stamina = 100;
 		}
+
+		if (!quickTimer.active && quickTimeCaller != NONE)
+			quickTimeCaller = NONE;
 	}
 
 	override function destroy():Void
@@ -203,6 +218,7 @@ class StillIdle extends FlxFSMState<Player>
 		owner.maxVelocity.x = owner.defaultSpeedCaps[1];
 		owner.drag.x = owner.maxVelocity.x * 2;
 		owner.velocity.x = 0;
+		owner.velocity.y = 0;
 		owner.acceleration.x = 0;
 		owner.curAction = NONE;
 		owner.animation.play("idle");
@@ -259,9 +275,10 @@ class Idle extends FlxFSMState<Player>
 					if (owner.velocity.x < 0)
 						owner.velocity.x *= -0.8;
 	
-					if (owner.velocity.x < owner.maxVelocity.x / 1.8)
-						owner.velocity.x = owner.maxVelocity.x / 1.8;
-					owner.acceleration.x = owner.maxVelocity.x * 0.85;
+					if (owner.velocity.x < owner.maxVelocity.x * 0.5)
+						owner.velocity.x = owner.maxVelocity.x * 0.5;
+					if (owner.acceleration.x < owner.maxVelocity.x)
+						owner.acceleration.x += owner.maxVelocity.x * 0.05;
 				}
 				else
 				{
@@ -271,9 +288,10 @@ class Idle extends FlxFSMState<Player>
 					if (owner.velocity.x > 0)
 						owner.velocity.x *= -0.8;
 	
-					if (owner.velocity.x > -owner.maxVelocity.x / 1.8)
-						owner.velocity.x = -owner.maxVelocity.x / 1.8;
-					owner.acceleration.x = -owner.maxVelocity.x * 0.85;
+					if (owner.velocity.x > -owner.maxVelocity.x * 0.5)
+						owner.velocity.x = -owner.maxVelocity.x * 0.5;
+					if (owner.acceleration.x > -owner.maxVelocity.x)
+						owner.acceleration.x += -owner.maxVelocity.x * 0.05;
 				}
 			}
 			else //WALK
@@ -329,20 +347,29 @@ class Idle extends FlxFSMState<Player>
 class Jump extends FlxFSMState<Player>
 {
 	var jumpBuffer:FlxTimer;
+	var jumpHoldTimer:FlxTimer;
 
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
 		if (owner.queuedActions.contains(JUMP))
 			owner.queuedActions.remove(JUMP);
 
-		owner.stamina -= 10;
-		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+		if (owner.curAction != RUN && (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT))
 			owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+
+		if (owner.curAction != SNEAK || !owner.quickTimer.active)
+			owner.velocity.y = -250;
+		else
+		{
+			owner.velocity.y = -400;
+			owner.stamina -= 10;
+		}
 
 		owner.curAction = JUMP;
 		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
+
+		jumpHoldTimer = new FlxTimer().start(0.14);
 		//owner.animation.play("jumping");
-		owner.velocity.y = -200;
 	}
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
@@ -350,8 +377,50 @@ class Jump extends FlxFSMState<Player>
 		//owner.acceleration.x = 0;
 		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
 		{
-			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -45 : 45;
+			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -50 : 50;
 			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
+			if (FlxG.keys.pressed.RIGHT)
+			{
+				if (owner.velocity.x < 0)
+					owner.velocity.x *= -0.3;
+			}
+			if (FlxG.keys.pressed.LEFT)
+			{
+				if (owner.velocity.x > 0)
+					owner.velocity.x *= -0.3;
+			}
+		}
+
+		//Maybe this will stop the floatyt as fuck controls?
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			owner.acceleration.x *= 0.5;
+			owner.velocity.x *= 0.5;
+		}
+
+		//Jump Hold
+		if (!jumpHoldTimer.active)
+		{
+			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
+			{
+				trace('jumpElapsed: ' + elapsed);
+				owner.velocity.y -= 250 * elapsed;
+				if (owner.maxVelocity.y != owner.GRAVITY * 0.5)
+				{
+					trace('FORCED FLOATY');
+					owner.maxVelocity.y = owner.GRAVITY * 0.5;
+				}
+			}
+			else if (FlxG.keys.pressed.DOWN && owner.velocity.y > -200)
+			{
+				trace('downElapsed: ' + elapsed);
+				owner.velocity.y += 500 * elapsed;
+				if (owner.maxVelocity.y != owner.GRAVITY * 2)
+				{
+					trace('FORCED DOWN');
+					owner.maxVelocity.y = owner.GRAVITY * 2;
+				}
+			}
 		}
 
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
@@ -361,7 +430,7 @@ class Jump extends FlxFSMState<Player>
 		}
 
 		if(jumpBuffer == null)
-			jumpBuffer = new FlxTimer().start(0.2, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP);});
+			jumpBuffer = new FlxTimer().start(0.2666666666666667, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP);});
 		else if (jumpBuffer.active && FlxG.keys.justPressed.SPACE && !owner.queuedActions.contains(JUMP))
 		{
 			owner.queuedActions.push(JUMP);
@@ -370,6 +439,8 @@ class Jump extends FlxFSMState<Player>
 
 	override function exit(owner:Player) 
 	{
+		jumpHoldTimer.cancel();
+		owner.maxVelocity.y = owner.GRAVITY;
 		if (!FlxG.keys.pressed.LEFT || !FlxG.keys.pressed.RIGHT)
 		{
 			owner.acceleration.x = 0;
@@ -391,6 +462,7 @@ class Sneak extends FlxFSMState<Player>
 		owner.maxVelocity.x = owner.defaultSpeedCaps[0];
 		owner.drag.x = owner.defaultSpeedCaps[1] * 2;
 		owner.curAction = SNEAK;
+		owner.startQuickTimer(0.16666666666666666);
 		owner.animation.play("sneak");
 	}
 
@@ -438,8 +510,8 @@ class Slide extends FlxFSMState<Player>
 		owner.curAction = SLIDE;
 		owner.animation.play("sneak");
 		owner.stamina -= 10;
-		owner.drag *= 0.65;
-		slowTmr = new FlxTimer().start(0.45, function(tmr:FlxTimer){owner.drag.x = 250; trace ('player slowed'); owner.stamina -= 10;});
+		owner.drag *= 0.2;
+		slowTmr = new FlxTimer().start(0.2, function(tmr:FlxTimer){owner.drag.x = 400; trace ('player slowed'); owner.stamina -= 10;});
 	}
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
@@ -511,7 +583,8 @@ class Falling extends FlxFSMState<Player>
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
 		//maybe this serves as both coyote and jumpbuffer
-		coyoteTime = new FlxTimer().start(0.35);
+		//nuh uh
+		coyoteTime = new FlxTimer().start(0.08333333333333333); //5 frames (in 60 fps) lol
 		//Falling anim and state maybe?
 	}
 
@@ -528,52 +601,3 @@ class Falling extends FlxFSMState<Player>
 		super.exit(owner);
 	}
 }
-
-/*class SuperJump extends Jump
-{
-	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
-	{
-		FlxG.sound.play("assets/superjump.ogg", FlxG.random.float(0.9, 1.0));
-		owner.animation.play("jumping");
-		owner.velocity.y = -300;
-	}
-}
-
-class GroundPound extends FlxFSMState<Player>
-{
-	var time:Float;
-
-	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
-	{
-		FlxG.sound.play("assets/groundpound.ogg");
-		owner.animation.play("pound");
-		owner.velocity.x = 0;
-		owner.acceleration.x = 0;
-		time = 0;
-	}
-
-	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
-	{
-		time += elapsed;
-		if (time < 0.25)
-		{
-			owner.velocity.y = 0;
-		}
-		else
-		{
-			owner.velocity.y = Player.GRAVITY;
-		}
-	}
-}
-
-class GroundPoundFinish extends FlxFSMState<Player>
-{
-	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
-	{
-		FlxG.sound.play("assets/groundpoundfinish.ogg");
-		owner.animation.play("landing");
-		FlxG.camera.shake(0.025, 0.25);
-		owner.velocity.x = 0;
-		owner.acceleration.x = 0;
-	}
-}*/
