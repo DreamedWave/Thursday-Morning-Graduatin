@@ -1129,7 +1129,7 @@ class MinigameState extends MusicBeatState
 				camHUD.shake(0.075, 2, true);
 				new FlxTimer().start(0.35, function(tmr:FlxTimer)
 				{
-					jumpscareSprite.alpha = 0.15;
+					new FlxTimer().start(0.35, function(tmr:FlxTimer){jumpscareSprite.alpha = 0.15;});
 					camHUD.stopFX();
 					showGameoverScreen();
 				});
@@ -1178,7 +1178,7 @@ class MinigameState extends MusicBeatState
 				textLol.alpha = textAlpha;
 			},
 		});
-		FlxTween.tween(textLol, {angle: randAngle}, 0.3, {type: ONESHOT, ease: FlxEase.elasticOut, startDelay: 0.5, onComplete: function (twn:FlxTween){textLol.angularVelocity = 0;}});
+		FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut, startDelay: 3, onComplete: function (twn:FlxTween){textLol.angularVelocity = 0;}});
 		FlxTween.tween(textLol.scale, {x: 0.8,  y: 0.8}, 0.25, 
 		{
 			type: ONESHOT,

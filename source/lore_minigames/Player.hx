@@ -404,7 +404,7 @@ class Jump extends FlxFSMState<Player>
 			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
 			{
 				trace('jumpElapsed: ' + elapsed);
-				owner.velocity.y -= 250 * elapsed;
+				owner.velocity.y -= 250 * elapsed; //big bnuberes jsncbdnbjf
 				if (owner.maxVelocity.y != owner.GRAVITY * 0.5)
 				{
 					trace('FORCED FLOATY');
@@ -414,7 +414,7 @@ class Jump extends FlxFSMState<Player>
 			else if (FlxG.keys.pressed.DOWN && owner.velocity.y > -200)
 			{
 				trace('downElapsed: ' + elapsed);
-				owner.velocity.y += 500 * elapsed;
+				owner.velocity.y += 400 * elapsed; //big bnubmer bcuz yes
 				if (owner.maxVelocity.y != owner.GRAVITY * 2)
 				{
 					trace('FORCED DOWN');
@@ -430,9 +430,15 @@ class Jump extends FlxFSMState<Player>
 		}
 
 		if(jumpBuffer == null)
-			jumpBuffer = new FlxTimer().start(0.2666666666666667, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP);});
+		{
+			//trace('started jump buffer');
+			jumpBuffer = new FlxTimer().start(0.16666666666, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP); trace('removed jmpbfr');});
+		}
 		else if (jumpBuffer.active && FlxG.keys.justPressed.SPACE && !owner.queuedActions.contains(JUMP))
 		{
+			//trace('reset jump buffer');
+			jumpBuffer.cancel();
+			jumpBuffer = new FlxTimer().start(0.16666666666, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP); trace('removed jmpbfr');});
 			owner.queuedActions.push(JUMP);
 		}
 	}
@@ -584,6 +590,8 @@ class Falling extends FlxFSMState<Player>
 	{
 		//maybe this serves as both coyote and jumpbuffer
 		//nuh uh
+		//nonono!
+		//n a h~
 		coyoteTime = new FlxTimer().start(0.08333333333333333); //5 frames (in 60 fps) lol
 		//Falling anim and state maybe?
 	}
