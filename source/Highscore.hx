@@ -126,8 +126,6 @@ class Highscore
 				return 2;
 			case 'SDR':
 				return 3;
-			case 'BFC':
-				return 4;
 			case 'GFC':
 				return 5;
 			case 'PFC':

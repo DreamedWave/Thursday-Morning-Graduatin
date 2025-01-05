@@ -247,15 +247,17 @@ class PauseSubState extends MusicBeatSubstate
 
 	var mouseActive:Bool = false;
 	var mouseTimer:FlxTimer;
+	var frameTimeMult:Float = 1;
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		frameTimeMult = elapsed/PlayState.instance.targetFrameTime;
 
 		if (!didCountdownShit)
 		{
-			if (pauseMusic.volume <= 0.8)
-				pauseMusic.volume = FlxMath.lerp(0.8, pauseMusic.volume, CoolUtil.boundToInverted(1 - (elapsed / 24), 0, 1));				
+			if (pauseMusic.volume < 0.8)
+				pauseMusic.volume += 0.0002125 * frameTimeMult;
 		}
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;

@@ -84,6 +84,13 @@ class Player extends FlxSprite
 			quickTimer.start(timeInSecs);
 	}
 
+	public var frameTimeMult:Float = 1;
+	public function updateFrameTimeMult(fromPlayState:Float):Void
+	{
+		frameTimeMult = fromPlayState;
+	}
+
+
 	override public function hurt(damage:Float):Void
 	{
 		if (damage <= health)
@@ -101,6 +108,7 @@ class Player extends FlxSprite
 				fsm.transitions.add(Idle, Jump, Conditions.startJump);
 				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
 				fsm.transitions.add(Jump, Idle, Conditions.landFromAir);
+				fsm.transitions.add(Jump, Sneak, Conditions.landFromAirSneaked);
 
 				fsm.transitions.add(Idle, Falling, Conditions.startFall);
 				fsm.transitions.add(Falling, Jump, Conditions.startJump);
@@ -189,7 +197,10 @@ class Conditions
 		{return (Player.isTouching(FLOOR) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
 
 	public static function landFromAir(Player:Player):Bool
-		{return Player.isTouching(FLOOR);}
+		{return Player.isTouching(FLOOR) && !FlxG.keys.pressed.DOWN;}
+
+	public static function landFromAirSneaked(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN;}
 
 	public static function startSneak(Player:Player):Bool
 		{return Player.isTouching(FLOOR) && ((FlxG.keys.justPressed.DOWN && Player.curAction != RUN) || Player.queuedActions.contains(SNEAK));}
@@ -264,7 +275,7 @@ class Idle extends FlxFSMState<Player>
 			if (FlxG.keys.pressed.SHIFT && !owner.ranOutOfBreath) //RUN
 			{
 				owner.animation.play("run-mach1");
-				owner.animation.curAnim.frameRate = 12 + owner.velocity.x / (owner.facing != LEFT ? owner.maxVelocity.x : -owner.maxVelocity.x);
+				owner.animation.curAnim.frameRate = 12 + (owner.facing != LEFT ? owner.velocity.x/owner.maxVelocity.x : -owner.velocity.x/-owner.maxVelocity.x);
 				owner.maxVelocity.x = owner.defaultSpeedCaps[2];
 				owner.curAction = RUN;
 				if (FlxG.keys.pressed.RIGHT)
@@ -278,7 +289,7 @@ class Idle extends FlxFSMState<Player>
 					if (owner.velocity.x < owner.maxVelocity.x * 0.5)
 						owner.velocity.x = owner.maxVelocity.x * 0.5;
 					if (owner.acceleration.x < owner.maxVelocity.x)
-						owner.acceleration.x += owner.maxVelocity.x * 0.05;
+						owner.acceleration.x += owner.maxVelocity.x * 0.05 * owner.frameTimeMult;
 				}
 				else
 				{
@@ -288,10 +299,10 @@ class Idle extends FlxFSMState<Player>
 					if (owner.velocity.x > 0)
 						owner.velocity.x *= -0.8;
 	
-					if (owner.velocity.x > -owner.maxVelocity.x * 0.5)
+					if (owner.velocity.x > -owner.maxVelocity.x * 0.5 )
 						owner.velocity.x = -owner.maxVelocity.x * 0.5;
 					if (owner.acceleration.x > -owner.maxVelocity.x)
-						owner.acceleration.x += -owner.maxVelocity.x * 0.05;
+						owner.acceleration.x += -owner.maxVelocity.x * 0.05 * owner.frameTimeMult;
 				}
 			}
 			else //WALK
@@ -377,7 +388,7 @@ class Jump extends FlxFSMState<Player>
 		//owner.acceleration.x = 0;
 		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
 		{
-			owner.acceleration.x += FlxG.keys.pressed.LEFT ? -50 : 50;
+			owner.acceleration.x += (FlxG.keys.pressed.LEFT ? -50 : 50) * owner.frameTimeMult;
 			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
 			if (FlxG.keys.pressed.RIGHT)
 			{
@@ -398,13 +409,16 @@ class Jump extends FlxFSMState<Player>
 			owner.velocity.x *= 0.5;
 		}
 
+		//Jump cutting
+		if(FlxG.keys.justReleased.SPACE && owner.velocity.y < 0)
+			owner.velocity.y *= 0.5;
+
 		//Jump Hold
 		if (!jumpHoldTimer.active)
 		{
 			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
 			{
-				trace('jumpElapsed: ' + elapsed);
-				owner.velocity.y -= 250 * elapsed; //big bnuberes jsncbdnbjf
+				owner.velocity.y -= 1 * owner.frameTimeMult; //big bnuberes jsncbdnbjf
 				if (owner.maxVelocity.y != owner.GRAVITY * 0.5)
 				{
 					trace('FORCED FLOATY');
@@ -413,8 +427,8 @@ class Jump extends FlxFSMState<Player>
 			}
 			else if (FlxG.keys.pressed.DOWN && owner.velocity.y > -200)
 			{
-				trace('downElapsed: ' + elapsed);
-				owner.velocity.y += 400 * elapsed; //big bnubmer bcuz yes
+				//trace('downElapsed: ' + elapsed);
+				owner.velocity.y += 2.5 * owner.frameTimeMult; //big bnubmer bcuz yes
 				if (owner.maxVelocity.y != owner.GRAVITY * 2)
 				{
 					trace('FORCED DOWN');
@@ -429,17 +443,14 @@ class Jump extends FlxFSMState<Player>
 			owner.velocity.x *= 0.5;
 		}
 
-		if(jumpBuffer == null)
+		if(FlxG.keys.justPressed.SPACE)
 		{
 			//trace('started jump buffer');
+			if (jumpBuffer != null)
+				jumpBuffer.cancel();
+			if (!owner.queuedActions.contains(JUMP))
+				owner.queuedActions.push(JUMP);
 			jumpBuffer = new FlxTimer().start(0.16666666666, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP); trace('removed jmpbfr');});
-		}
-		else if (jumpBuffer.active && FlxG.keys.justPressed.SPACE && !owner.queuedActions.contains(JUMP))
-		{
-			//trace('reset jump buffer');
-			jumpBuffer.cancel();
-			jumpBuffer = new FlxTimer().start(0.16666666666, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP); trace('removed jmpbfr');});
-			owner.queuedActions.push(JUMP);
 		}
 	}
 
@@ -533,14 +544,14 @@ class Slide extends FlxFSMState<Player>
 				if (!oneShot)
 				{
 					owner.velocity.x = owner.maxVelocity.x;
-					owner.acceleration.x += 80;
+					owner.acceleration.x += 80 * owner.frameTimeMult;
 					oneShot = true;
 				}
 
 				if (owner.velocity.x > 0)
 				{
 					if (FlxG.keys.justPressed.RIGHT)
-						owner.acceleration.x += -5;
+						owner.acceleration.x += -5 * owner.frameTimeMult;
 					else
 						owner.acceleration.x = 0;
 				}
@@ -549,14 +560,14 @@ class Slide extends FlxFSMState<Player>
 				if (!oneShot)
 				{
 					owner.velocity.x = -owner.maxVelocity.x;
-					owner.acceleration.x -= 80;
+					owner.acceleration.x -= 80 * owner.frameTimeMult;
 					oneShot = true;
 				}
 					
 				if (owner.velocity.x < 0)
 				{
 					if (FlxG.keys.justPressed.RIGHT)
-						owner.acceleration.x += 5;
+						owner.acceleration.x += 5 * owner.frameTimeMult;
 					else
 						owner.acceleration.x = 0;
 				}
@@ -601,6 +612,22 @@ class Falling extends FlxFSMState<Player>
 		if (FlxG.keys.justPressed.SPACE && coyoteTime.active && !owner.queuedActions.contains(JUMP))
 		{
 			owner.queuedActions.push(JUMP);
+		}
+
+		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+		{
+			owner.acceleration.x += (FlxG.keys.pressed.LEFT ? -50 : 50) * owner.frameTimeMult;
+			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
+			if (FlxG.keys.pressed.RIGHT)
+			{
+				if (owner.velocity.x < 0)
+					owner.velocity.x *= -0.5 * owner.frameTimeMult;
+			}
+			if (FlxG.keys.pressed.LEFT)
+			{
+				if (owner.velocity.x > 0)
+					owner.velocity.x *= -0.5 * owner.frameTimeMult;
+			}
 		}
 	}
 

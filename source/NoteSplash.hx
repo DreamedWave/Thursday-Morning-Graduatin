@@ -66,9 +66,9 @@ class NoteSplash extends FlxSprite
 		//Making sure the rating isn't something the game doesn't recognise
 		switch(rating)
 		{
-			case 'sick' | 'good' | 'bad' | 'shit':
+			case 'sick' | 'good':
 				//do Nothin
-			case 'miss':
+			case 'miss'| 'bad' | 'shit':
 				wasMissed = true;
 			default:
 				rating = 'sick';
@@ -135,7 +135,7 @@ class NoteSplash extends FlxSprite
 			case "mine":
 				switch (rating)
 				{
-					case "sick" | "good" | "bad":
+					case "sick" | "good" | "bad" | 'shit':
 						visible = true;
 						alpha = 1;
 						animation.play('splash ' + animNum + ' mine', true);
@@ -168,7 +168,7 @@ class NoteSplash extends FlxSprite
 						animation.play('splash ' + animNum + ' ' + note, true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 28 + FlxG.random.int(-2, 2);
-					case "shit" | "miss":
+					case "bad" | "shit" | "miss":
 						if (FlxG.save.data.notesfxType != "chill")
 						{
 							visible = true;

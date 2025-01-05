@@ -170,6 +170,8 @@ class TitleState extends MusicBeatMenu
 			blackScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, bgColor);
 			credGroup.add(blackScreen);
 
+			createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
+
 			#if sys
 			if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/temp"))
 				sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/temp");
@@ -378,7 +380,7 @@ class TitleState extends MusicBeatMenu
 			textGroup.add(coolText);
 		}
 		else
-			trace("can't add do something that doesn't exist");
+			trace("can't add to something that doesn't exist");
 	}
 
 	function deleteCoolText()
@@ -441,7 +443,6 @@ class TitleState extends MusicBeatMenu
 			switch (curBeat)
 			{
 				case 0:
-					deleteCoolText();
 					createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
 					jkSpr.visible = false;
 					ptSpr.visible = false;

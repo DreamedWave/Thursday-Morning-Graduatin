@@ -383,7 +383,7 @@ class LoadingState extends MusicBeatMenu
 						{
 							stopMusic = true;
 							loadAndSwitchState(target, stopMusic, false);
-						});
+						}); 
 				});
 
 			default:

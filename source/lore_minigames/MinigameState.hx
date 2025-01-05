@@ -30,6 +30,9 @@ import flixel.util.FlxStringUtil;
 
 class MinigameState extends MusicBeatState
 {
+	var targetFrameTime:Float = 1/60;
+	var frameTimeMult:Float = 1;
+
 	public static var player:Player;
 	var map:FlxOgmo3Loader;
 
@@ -95,6 +98,8 @@ class MinigameState extends MusicBeatState
 			DiscordClient.changePresence("Testing the Minigames!!!", null, "apppresence-strange");
 		//DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
 		#end
+
+		targetFrameTime = 1 / FlxG.save.data.fpsCap;
 		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -341,6 +346,10 @@ class MinigameState extends MusicBeatState
 	override public function update(elapsed:Float)
 	{		
 		super.update(elapsed);
+
+		frameTimeMult = elapsed/targetFrameTime;
+		player.updateFrameTimeMult(frameTimeMult);
+		FlxG.watch.addQuick("frameTimeMult", frameTimeMult);
 
 		if (FlxG.keys.justPressed.ONE)
 		{

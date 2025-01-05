@@ -34,8 +34,8 @@ class Ratings
                         ranking = "PFC";
                     else if (misses == 0 && slips == 0 && bads == 0 && goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
                         ranking = "GFC";
-                    else if (misses == 0 && slips == 0 && bads >= 1) // Regular FC
-                        ranking = "BFC";
+                    //else if (misses == 0 && slips == 0 && bads >= 1) // Regular FC
+                        //ranking = "BFC";
                     else if (misses < 10) // Single Digit Combo Breaks
                         ranking = "SDR";
                     else if (misses < 30) // Double Digit Combo Breaks

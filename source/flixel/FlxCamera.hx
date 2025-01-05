@@ -1432,8 +1432,8 @@ class FlxCamera extends FlxBasic
 						frameRateCap--;
 						//Different Lerp for camShake
 						//im going through it ok dont judge me
-						scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
-						scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+						scrollShakeX = CoolUtil.freyaLerp(scrollShakeX, nextScrollShakeX, 50 / _fxShakeHoldFor, elapsed);
+						scrollShakeY = CoolUtil.freyaLerp(scrollShakeY, nextScrollShakeY, 50 / _fxShakeHoldFor, elapsed);
 					}
 					else
 					{
@@ -1445,10 +1445,10 @@ class FlxCamera extends FlxBasic
 								nextScrollShakeX = FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1);
 							else
 								nextScrollShakeX = FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							nextScrollShakeX /= 2;
+							nextScrollShakeX /= 1.5;
 							nextScrollShakeX /= zoom;
 							nextScrollShakeX *= FlxG.width / 1280;
-							scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+							scrollShakeX = CoolUtil.freyaLerp(scrollShakeX, nextScrollShakeX, 50 / _fxShakeHoldFor, elapsed);
 						}
 
 						if (_fxShakeAxes != FlxAxes.X)
@@ -1457,10 +1457,10 @@ class FlxCamera extends FlxBasic
 								nextScrollShakeY = FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1);
 							else
 								nextScrollShakeY = FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							nextScrollShakeY /= 2;
+							nextScrollShakeY /= 1.5;
 							nextScrollShakeY /= zoom;
 							nextScrollShakeY *= FlxG.height / 720;
-							scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+							scrollShakeY = CoolUtil.freyaLerp(scrollShakeY, nextScrollShakeY, 50 / _fxShakeHoldFor, elapsed);
 						}
 					}
 

@@ -455,7 +455,8 @@ class Note extends FlxSprite
 					if (noteType != 'mine')
 						blend = ADD;
 				}
-				else if (withinCompensation && color != 0xFFBDFCFF && alpha > 0.65)
+				
+				if (withinCompensation && color != 0xFFBDFCFF)
 				{
 					color = 0xFFBDFCFF;
 					baseAlpha *= 0.65;

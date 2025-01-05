@@ -69,6 +69,8 @@ using StringTools;
 class PlayState extends MusicBeatState
 {
 	public static var instance:PlayState;
+	public var targetFrameTime:Float = 1/60;
+	var lagSpikeTime:Float = 0.5;
 	public var allowDeaths:Bool = false; //crash prevention
 
 	public static var curStage:String = '';
@@ -405,7 +407,6 @@ class PlayState extends MusicBeatState
 	var enemyCanFail:Bool = true;//temp, change to false later
 
 	var compensationTimer:FlxTimer;
-	var compensationTime:Float;
 
 	var songLowercase = StringTools.replace(SONG.song, " ", "-").toLowerCase();
 
@@ -436,6 +437,8 @@ class PlayState extends MusicBeatState
 	override public function create():Void
 	{
 		instance = this;
+		targetFrameTime = 1 / FlxG.save.data.fpsCap;
+		lagSpikeTime = targetFrameTime * ((FlxG.save.data.fpsCap / 60) * 8);
 		
 		//FlxG.game.soundTray.silent = true;
 
@@ -568,11 +571,15 @@ class PlayState extends MusicBeatState
 			//Paths.voices(key);
 		
 		//NoteHitSFX
-		noteHitSFX = new FlxSound();
-		noteHitSustainSFX = new FlxSound();
+		if (FlxG.save.data.notesfx)
+		{
+			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
+			noteHitSFX = new FlxSound();
+			noteHitSustainSFX = FlxG.sound.load(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, noteHitSFXGroup);
+			FlxG.sound.list.add(noteHitSFX);
+			FlxG.sound.list.add(noteHitSustainSFX);
+		}
 		specialNoteHitSFX = new FlxSound();
-		FlxG.sound.list.add(noteHitSFX);
-		FlxG.sound.list.add(noteHitSustainSFX);
 		FlxG.sound.list.add(specialNoteHitSFX);
 
 		lowHPHeartBeat = new FlxSound();
@@ -591,9 +598,6 @@ class PlayState extends MusicBeatState
 		//specilNoteHitSFXGroup = new FlxSoundGroup(soundsVolume);
 		if(FlxG.save.data.missSounds)
 			missSoundGroup = new FlxSoundGroup(soundsVolume);
-		if (FlxG.save.data.notesfx)
-		//{
-			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
 			//susNoteHitSFXGroup = new FlxSoundGroup(noteHitVolume * soundsVolume);
 		//}
 
@@ -606,7 +610,6 @@ class PlayState extends MusicBeatState
 		Conductor.changeBPM(SONG.bpm);
 		fakeCrochet = (60 / SONG.bpm) * 1000;
 		idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-		compensationTime = Conductor.crochet * 2 / 1000;
 
 		defaultScroll = SONG.speed * FlxG.save.data.scrollSpeed;
 		defaultScroll += (storyDifficulty - 2) * 0.1;
@@ -846,7 +849,7 @@ class PlayState extends MusicBeatState
 					//Y [UP or DOWN]: Negative is UP, while positive is DOWN. (Inverted as the Cartesian Plane's)
 
 					//                                 X    Y
-					var bg:FlxSprite = new FlxSprite(-140, -80).loadGraphic(Paths.image('theCity/sky', 'week3'));
+					var bg:FlxSprite = new FlxSprite(-200, -80).loadGraphic(Paths.image('theCity/sky', 'week3'));
 					bg.scrollFactor.set(0.1, 0.1);
 					bg.antialiasing = FlxG.save.data.antialiasing;
 					bg.active = false;
@@ -878,7 +881,7 @@ class PlayState extends MusicBeatState
 						cityLights.add(light);
 					}
 
-					var streetBehind:FlxSprite = new FlxSprite(-160, 0).loadGraphic(Paths.image('theCity/behindStreet', 'week3'));
+					var streetBehind:FlxSprite = new FlxSprite(-180, 0).loadGraphic(Paths.image('theCity/behindStreet', 'week3'));
 					streetBehind.scrollFactor.set(0.65, 0.65);
 					streetBehind.setGraphicSize(Std.int(streetBehind.width * 1.1));
 					//streetBehind.updateHitbox();
@@ -939,7 +942,7 @@ class PlayState extends MusicBeatState
 					//Y [UP or DOWN]: Negative is UP, while positive is DOWN. (Inverted as the Cartesian Plane's)
 
 					//                                 X    Y
-					var bg:FlxSprite = new FlxSprite(-140, -80).loadGraphic(Paths.image('theCityPortalOpen/sky_variegated', 'week3'));
+					var bg:FlxSprite = new FlxSprite(-200, -80).loadGraphic(Paths.image('theCityPortalOpen/sky_variegated', 'week3'));
 					bg.scrollFactor.set(0.1, 0.1);
 					bg.antialiasing = FlxG.save.data.antialiasing;
 					bg.active = false;
@@ -1267,7 +1270,7 @@ class PlayState extends MusicBeatState
 		hurtVignette = new FlxSprite().loadGraphic(Paths.image('gotShot', 'week3'));
 		hurtVignette.scale.x *= 0.75;
 		hurtVignette.scale.y *= 0.75;
-		hurtVignette.scrollFactor.set();
+		hurtVignette.scrollFactor.set(0, 0);
 		hurtVignette.updateHitbox();
 		hurtVignette.antialiasing = FlxG.save.data.antialiasing;
 		if(!FlxG.save.data.distractions)
@@ -1329,6 +1332,8 @@ class PlayState extends MusicBeatState
 
 		if (PlayStateChangeables.useDownscroll)
 			strumLine.y = FlxG.height - 165;
+
+		laggerGrp = new FlxSpriteGroup();
 
 		grpStrumLine = new FlxSpriteGroup();
 		grpStrumLine.alpha = 0.4;
@@ -2255,8 +2260,7 @@ class PlayState extends MusicBeatState
 						case "variegated-skylines":
 							camShake(false, false, 'camGame', 2, 0.0075, idleCamShakeTimer);
 							camShake(false, false, 'camHUD', 2, 0.002, idleCamShakeTimer);
-							if (swagCounter == 0 || swagCounter == 2)
-								createStageParticle('theCityPortalOpen/effects/stageParticle');
+							createStageParticle('theCityPortalOpen/effects/stageParticle');
 							
 							if (gfSpeed > 0 && swagCounter % gfSpeed == 0)
 								gf.dance();
@@ -2392,11 +2396,15 @@ class PlayState extends MusicBeatState
 					{
 						if (!epicNote.delayedDeath && epicNote.enabled)
 						{
-							goodNoteHit(epicNote, true);
+							goodNoteHit(epicNote);
 							pressNotes.push(epicNote);
 							var noteDiff:Float = -(epicNote.strumTime - Conductor.songPosition);
-							trace('jack?');
+							//trace('jack?');
 						}
+					}
+					else
+					{
+						trace('jack?');
 					}
 				}
 			}
@@ -2999,7 +3007,7 @@ class PlayState extends MusicBeatState
 			var lowerDir:String = dataSuffix[i].toLowerCase();
 
 			babyArrow.animation.addByPrefix('static', 'arrow' + dataSuffix[i]);
-			babyArrow.animation.addByPrefix('pressed', lowerDir + ' press', 24, false);
+			babyArrow.animation.addByPrefix('pressed', lowerDir + ' press', Math.floor(20 + (6 * (Conductor.bpm * 0.01))), false);
 			babyArrow.animation.addByPrefix('confirm', lowerDir + ' confirm', 24, false);
 
 			babyArrow.x += Note.swagWidth * i;
@@ -3451,7 +3459,6 @@ class PlayState extends MusicBeatState
 				Conductor.changeBPM(curBPM);
 				fakeCrochet = (60 / curBPM) * 1000;
 				idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-				compensationTime = Conductor.crochet * 2 / 1000;
 				//trace('DAPEEPEEEM UPDATE: ' + Conductor.bpm);
 			},
 			
@@ -3461,7 +3468,6 @@ class PlayState extends MusicBeatState
 				Conductor.changeBPM(newBPM);
 				fakeCrochet = (60 / curBPM) * 1000;
 				idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-				compensationTime = Conductor.crochet * 2 / 1000;
 				trace('! DAPEEPEEEM FEENESH: ' + Conductor.bpm);
 				songBPMTween = null;
 			}
@@ -3470,6 +3476,9 @@ class PlayState extends MusicBeatState
 
 	var holdArray:Array<Bool> = [false, false, false, false];
 	var switchTest:Bool = false;
+	var lagger:FlxSprite;
+	var lagIntensity:Int = 1000;//
+	var laggerGrp:FlxSpriteGroup;
 	//var tempDisableResyncVocals:Bool = false;
 
 	override public function update(elapsed:Float)
@@ -3555,7 +3564,6 @@ class PlayState extends MusicBeatState
 										Conductor.changeBPM(i.value, false);
 										fakeCrochet = (60 / i.value) * 1000;
 										idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
-										compensationTime = Conductor.crochet * 2 / 1000;
 								}
 							}
 						}
@@ -3685,6 +3693,25 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		if(FlxG.keys.pressed.THREE)
+		{
+			if (FlxG.keys.justPressed.FOUR)
+			{
+				trace('CAUSING LAG SPIKE!');
+				for (i in 0...lagIntensity)
+				{
+					lagger = new FlxSprite().makeGraphic(FlxG.width * lagIntensity, FlxG.height * lagIntensity);
+					laggerGrp.add(lagger);
+				}
+				laggerGrp.forEach(function(lagger:FlxSprite)
+				{
+					laggerGrp.remove(lagger);
+					lagger.destroy();
+				});
+				trace('DONE!');
+			}
+		}
+
 		#if debug
 		if (FlxG.keys.justPressed.ONE)
 		{
@@ -3737,7 +3764,7 @@ class PlayState extends MusicBeatState
 			//Updating of alphas
 			if (FlxG.save.data.lagCompensation) //Prevents crash if lag compensation is off
 				if (lagCompIcon.alpha != 0)
-					lagCompIcon.alpha = FlxMath.lerp(0, lagCompIcon.alpha, calculateLerpTime(elapsed, 5));
+					lagCompIcon.alpha = CoolUtil.freyaLerp(lagCompIcon.alpha, 0, 15, elapsed);
 
 			if (!paused && !endedSong)
 			{
@@ -4125,23 +4152,6 @@ class PlayState extends MusicBeatState
 							}
 						}
 					}
-		
-					if (!allowHealthModifiers && !daNote.withinCompensation && !daNote.delayedDeath && daNote.enabled && daNote.isOnScreen(camHUD))
-					{
-						daNote.withinCompensation = true;
-						if ((daNote.strumTime <= Conductor.songPosition - Conductor.safeZoneOffset * Conductor.timeScale))
-						{
-							if (daNote.isSustainNote && daNote.sustainActive && daNote.spotInLine != daNote.parent.children.length)
-							{
-								for (i in daNote.parent.children)
-								{
-									i.alpha = 0.1;
-									i.sustainActive = false;
-								}
-							}
-							daNote.enabled = false;
-						}
-					}
 				});
 				if (songStarted && !inCutscene)
 					keyShit();
@@ -4179,7 +4189,7 @@ class PlayState extends MusicBeatState
 				case 'cityskyline':
 					//this was once disabled, i enabled it to see what happens
 					//hehehe I made it work!!11!
-					cityLights.members[curLight].alpha = FlxMath.lerp(0, cityLights.members[curLight].alpha, calculateLerpTime(elapsed, 3 * (Conductor.bpm * 0.01)));
+					cityLights.members[curLight].alpha = CoolUtil.freyaLerp(cityLights.members[curLight].alpha, 0, 7 * (Conductor.bpm * 0.01), elapsed);
 				case 'cityskylineVariegated':
 					if (updateWiggleShader)
 						objectWiggleShader.update(elapsed);
@@ -4216,7 +4226,7 @@ class PlayState extends MusicBeatState
 				if (hurtVignette.alpha > 0)
 				{
 					resetHurtFxScale = false;
-					hurtVignette.alpha = FlxMath.lerp(0, hurtVignette.alpha, calculateLerpTime(elapsed, (Conductor.bpm * 0.01)));
+					hurtVignette.alpha = CoolUtil.freyaLerp(CoolUtil.freyaLerp(hurtVignette.alpha, 0, Conductor.bpm * 0.01, elapsed), hurtVignette.alpha, Conductor.bpm * 0.01, elapsed);
 					var hurtScaleAmt:Float = 0.75 - (0.07 * hurtVignette.alpha);
 					hurtVignette.scale.set(hurtScaleAmt, hurtScaleAmt);
 					hurtVignette.screenCenter();
@@ -4235,15 +4245,15 @@ class PlayState extends MusicBeatState
 
 			//Low-Health Suspense
 			lowHPEffectVol = 1 - health;
-			lowHPHeartBeat.volume = FlxMath.lerp(lowHPEffectVol, lowHPHeartBeat.volume, calculateLerpTime(elapsed, 15));
+			lowHPHeartBeat.volume = CoolUtil.freyaLerp(lowHPHeartBeat.volume, lowHPEffectVol, 15, elapsed);
 			
 			if (lowHPOverlay.alpha > 0)
 			{
 				
 				if (FlxG.save.data.flashing)
-					lowHPOverlay.alpha = FlxMath.lerp(0, lowHPOverlay.alpha, calculateLerpTime(elapsed, 4.5 * (Conductor.bpm * 0.01)));
+					lowHPOverlay.alpha = CoolUtil.freyaLerp(lowHPOverlay.alpha, 0, 4 * (Conductor.bpm * 0.01), elapsed);
 				else
-					lowHPOverlay.alpha = FlxMath.lerp(lowHPEffectVol, lowHPOverlay.alpha, calculateLerpTime(elapsed, 6 * (Conductor.bpm * 0.01)));
+					lowHPOverlay.alpha = CoolUtil.freyaLerp(lowHPOverlay.alpha, lowHPEffectVol, 4 * (Conductor.bpm * 0.01), elapsed);
 			}
 
 			//Low HP Effects
@@ -4262,8 +4272,8 @@ class PlayState extends MusicBeatState
 						{
 							if (health < 1)
 							{
-								FlxG.sound.music.volume = FlxMath.lerp((health - 0.3), FlxG.sound.music.volume, calculateLerpTime(elapsed, 15));
-								instLowHP.volume = FlxMath.lerp((lowHPEffectVol + 0.3), instLowHP.volume, calculateLerpTime(elapsed, 15));
+								FlxG.sound.music.volume = CoolUtil.freyaLerp(FlxG.sound.music.volume, (lowHPEffectVol - 0.3), 15, elapsed);
+								instLowHP.volume = CoolUtil.freyaLerp(instLowHP.volume, (lowHPEffectVol + 0.3), 15, elapsed);
 							}
 							else if (FlxG.sound.music.volume < 1)
 							{
@@ -4275,7 +4285,7 @@ class PlayState extends MusicBeatState
 				}
 			}
 
-			dummySongScore = FlxMath.lerp(dummySongScore, songScore, 0.15);
+			dummySongScore = CoolUtil.freyaLerp(dummySongScore, songScore, 15, elapsed);
 			scoreTxt.screenCenter(X);
 		}
 		//Might aswell update this every frame lmao
@@ -4288,11 +4298,11 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.save.data.distractions)
 		{
-			var mult1:Float = FlxMath.lerp(1, iconP1.scale.x, calculateLerpTime(elapsed, 7.5 * (Conductor.bpm * 0.01)));
+			var mult1:Float = CoolUtil.freyaLerp(iconP1.scale.x, 1, 7 * (Conductor.bpm * 0.01), elapsed);
 			iconP1.scale.set(mult1, mult1);
 			iconP1.updateHitbox();
 	
-			var mult2:Float = FlxMath.lerp(1, iconP2.scale.x, calculateLerpTime(elapsed, 7.5 * (Conductor.bpm * 0.01)));
+			var mult2:Float = CoolUtil.freyaLerp(iconP1.scale.x, 1, 7 * (Conductor.bpm * 0.01), elapsed);
 			iconP2.scale.set(mult2, mult2);
 			iconP2.updateHitbox();
 		}
@@ -4441,13 +4451,13 @@ class PlayState extends MusicBeatState
 			if (!paused && !showedResults)
 			{
 				//Health lerp shits
-				health = FlxMath.lerp(targetHealth, health, calculateLerpTime(elapsed, 16));
+				health = CoolUtil.freyaLerp(health, targetHealth, 12.5, elapsed);
 				if (Conductor.songPosition < FlxG.sound.music.length)
-					Conductor.songPosition += FlxG.elapsed * 1000;
+					Conductor.songPosition += elapsed * 1000;
 				//else if (Conductor.songPosition != songLength)
 					//Conductor.songPosition = songLength;
 
-				songPositionBar = FlxMath.lerp(Conductor.songPosition, songPositionBar, 0.965);
+				songPositionBar = CoolUtil.freyaLerp(songPositionBar, Conductor.songPosition, 20, elapsed);
 
 				if (FlxG.save.data.songPosition)
 				{
@@ -4475,13 +4485,16 @@ class PlayState extends MusicBeatState
 					{
 						//if (FlxG.updateFramerate < lagspikeDetectionThreshold && curBeat > 4 && !endedSong && allowHealthModifiers)
 						//A better way to check the fps
-						if (Main.fpsCounter.gameGoinThruIt)
+						//in retrospect, we coulda just used elapsed(); LMAO;;
+						//and that I did!
+						if (elapsed > lagSpikeTime || Main.fpsCounter.gameGoinThruIt)
 						{
 							if (!endedSong && allowHealthModifiers)
 							{
 								lagCompIcon.alpha = 1;
 								allowHealthModifiers = false;
 								compensatedViaLagSpike = true;
+								compensateNotesBefore(Conductor.songPosition + (lagSpikeTime * 2));
 							}
 						}
 						else if (!compensatedViaLagSpike && !allowHealthModifiers)
@@ -4494,7 +4507,7 @@ class PlayState extends MusicBeatState
 						if (compensationTimer != null && compensationTimer.active)
 							compensationTimer.cancel();
 
-						compensationTimer = new FlxTimer().start(compensationTime, function(tmr:FlxTimer)
+						compensationTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
 						{
 							allowHealthModifiers = true;
 						});
@@ -4503,16 +4516,19 @@ class PlayState extends MusicBeatState
 			}
 		}
 		else if (!endedSong && startedCountdown)
-			Conductor.songPosition += FlxG.elapsed * 1000;
+			Conductor.songPosition += elapsed * 1000;
 
 		if (!paused && camZooming && !camZoomUsesTween)
 		{
-			camGame.zoom = FlxMath.lerp(defaultCamZoom, camGame.zoom, calculateLerpTime(elapsed, 2.5 * (Conductor.bpm * 0.01)));
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, calculateLerpTime(elapsed, 3 * (Conductor.bpm * 0.01)));
+			camGame.zoom = CoolUtil.freyaLerp(camGame.zoom, defaultCamZoom, 2 * (Conductor.bpm * 0.01), elapsed);
+			camHUD.zoom = CoolUtil.freyaLerp(camHUD.zoom, 1, 2.5 * (Conductor.bpm * 0.01), elapsed);
 		}
 
 		#if debug
-		FlxG.watch.addQuick("Game is Going Thru It", Main.fpsCounter.gameGoinThruIt);
+		//FlxG.watch.addQuick("Game is Going Thru It", Main.fpsCounter.gameGoinThruIt);
+		FlxG.watch.addQuick("LagSpikeTime", lagSpikeTime);
+		FlxG.watch.addQuick("Elapsed", elapsed);
+		FlxG.watch.addQuick("FlxGElapsed", FlxG.elapsed);
 		FlxG.watch.addQuick("Allow Health Modifiers", allowHealthModifiers);
 		FlxG.watch.addQuick("Compensated Via Lagspike", compensatedViaLagSpike);
 		FlxG.watch.addQuick("Compensation Timer Active", (compensationTimer != null ? compensationTimer.active : "currently NULL!"));
@@ -4615,7 +4631,7 @@ class PlayState extends MusicBeatState
 		specialNoteHitSFX = FlxG.sound.load(Paths.sound('Note_Mine'), false);
 		specialNoteHitSFX.play();
 		camShake(true, false, 'camGame', 0.2, Conductor.crochet / 1000);
-		camShake(true, true, 'camHUD', 0.05, Conductor.crochet / 800, X);
+		camShake(true, true, 'camHUD', 0.075, Conductor.crochet / 900, X);
 		
 		//mmm complex system ahf h
 		if (!purelyVisual && allowHealthModifiers)
@@ -4749,8 +4765,8 @@ class PlayState extends MusicBeatState
 						singFollowOffset = [15, 2];
 				}
 			}
-			camShake(true, true, 0.035, Conductor.crochet / 1000);
-			camShake(true, true, 'camHUD', 0.01, Conductor.crochet / 1000);
+			camShake(true, true, 0.045, Conductor.crochet / 1000);
+			camShake(true, true, 'camHUD', 0.0075, Conductor.crochet / 900);
 
 			if (playDodgeSound)
 			{
@@ -5202,7 +5218,7 @@ class PlayState extends MusicBeatState
 				if (daRating == null)
 					return;
 
-				if (combo >= 20 && daRating != 'miss' && daRating != 'slip')
+				if (combo >= 20 && daRating != 'miss' && daRating != 'slip' && daRating != 'bad')
 					showNumShit = true;
 
 				if (allowHealthModifiers && !daNote.withinCompensation)
@@ -5309,7 +5325,7 @@ class PlayState extends MusicBeatState
 							i.parentWife = wife;
 				}
 		
-				if (combo >= 10 && daRating != 'miss' && daRating != 'slip')
+				if (combo >= 10 && daRating != 'miss' && daRating != 'slip' && daRating != 'bad')
 					showNumShit = true;
 		
 				if (allowHealthModifiers && !daNote.withinCompensation)
@@ -5646,7 +5662,7 @@ class PlayState extends MusicBeatState
 
 	function sploshThisShitUp(daNote:Note, daRating:String):Void
 	{
-		if ((allowHealthModifiers && !daNote.withinCompensation) || ((daRating != 'shit' && daRating != 'miss')))
+		if ((allowHealthModifiers && !daNote.withinCompensation) || ((daRating != 'shit' && daRating != 'miss' && daRating != 'bad')))
 		{
 			var sploosh:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 			sploosh.setupNoteSplash(!daNote.isSustainNote ? daNote.x : playerStrums.members[daNote.noteData].x, !daNote.isSustainNote ? daNote.y : playerStrums.members[daNote.noteData].y, daNote.rating, daNote.noteType, daNote.noteData, daBabyArrowY);
@@ -6121,49 +6137,62 @@ class PlayState extends MusicBeatState
 	}
 
 	//Making this void (5)
+	var lastLoadedSnd:String = '';
 	function playNoteHitSound(note:Note):Void
 	{
 		if (!note.isSustainNote)
 		{
-			var rating = note.rating;
 			//	SFX for hitting notes (such as SICK, GOOD, BAD, SHIT, and SPECIAL NOTEs);
 			if (!PlayStateChangeables.botPlay && !note.withinCompensation)
 			{
 				//Converted from nested if-else statements and 2 switch statements to a one switch! You're welcome!
-				switch (rating)
+				switch (note.rating)
 				{
 					case 'sick':
 						//For Sick Rating
-						if (noteHitSFX.playing)
-							noteHitSFX.stop();
-						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
+						if (lastLoadedSnd != 'sick')
+						{
+							lastLoadedSnd = 'sick';
+							if (noteHitSFX.playing)
+								noteHitSFX.stop();
+							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
+						}
 						//Vocal Shit
 						vocals.volume = vocalsVolume;
 
 					case 'good':
-						if (noteHitSFX.playing)
-							noteHitSFX.stop();
-						//For Good Rating
-						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
+						if (lastLoadedSnd != 'good')
+						{
+							lastLoadedSnd = 'good';
+							if (noteHitSFX.playing)
+								noteHitSFX.stop();
+							//For Good Rating
+							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
+						}
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.85;
 
 					case 'bad':
-						if (noteHitSFX.playing)
-							noteHitSFX.stop();
-						//For Bad Rating
-						noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+						if (lastLoadedSnd != 'bad')
+						{
+							lastLoadedSnd = 'bad';
+							if (noteHitSFX.playing)
+								noteHitSFX.stop();
+							//For Bad Rating
+							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+						}
 						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.55;
 
 					case 'shit':
-						if (noteHitSFX.playing)
-							noteHitSFX.stop();
-						//For Shit Rating
-						if (allowHealthModifiers && !note.withinCompensation)
-							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Crap"), false, noteHitSFXGroup);
-						else
+						if (lastLoadedSnd != 'shit')
+						{
+							lastLoadedSnd = 'shit';
+							if (noteHitSFX.playing)
+								noteHitSFX.stop();
+							//For Shit Rating
 							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+						}
 						//Vocal Shit
 						//if (FlxG.save.data.shitBreaksCombo)
 						vocals.volume = vocalsVolume * 0.1;
@@ -6175,24 +6204,26 @@ class PlayState extends MusicBeatState
 						//Vocal Shit
 						vocals.volume = 0;
 				}
-				noteHitSFX.play();
+				noteHitSFX.play(true);
 			}
 			else
 			{
-				if (noteHitSFX.playing)
-					noteHitSFX.stop();
-				noteHitSFX = FlxG.sound.load(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
-				noteHitSFX.play();
+				if (lastLoadedSnd != 'bot')
+				{
+					lastLoadedSnd = 'bot';
+					if (noteHitSFX.playing)
+						noteHitSFX.stop();
+					noteHitSFX = FlxG.sound.load(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
+				}
+				noteHitSFX.play(true);
 				vocals.volume = vocalsVolume;
 			}
 		}
-		else if (!PlayStateChangeables.botPlay)
+		else if (!PlayStateChangeables.botPlay && note.isSustainNote)
 		{
-			if (noteHitSustainSFX.playing)
-				noteHitSustainSFX.stop();
-			noteHitSustainSFX = FlxG.sound.load(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, noteHitSFXGroup);
-			noteHitSustainSFX.play();
-		}	
+			noteHitSustainSFX.play(true);
+			noteHitSustainSFX.volume = 0.9;
+		}
 	}
 
 	//Making this void (Copypaste of the above FUUUUU)
@@ -8257,11 +8288,12 @@ class PlayState extends MusicBeatState
     }
 
 	//This is here cuz the coolutil is a little confusing for me :33
-	function calculateLerpTime(timeElapsed:Float, durationMultiplier:Float, ?min:Int = 0, ?max:Int = 1):Float
+	//This is no longer here because the talk by Freya Holmér happened BYE BYE
+	/*function calculateLerpTime(timeElapsed:Float, durationMultiplier:Float, ?min:Int = 0, ?max:Int = 1):Float
 	{
 		var returnLerpTime:Float = CoolUtil.boundTo(1 - (timeElapsed * durationMultiplier), min, max);
 		return returnLerpTime;
-	}
+	}*/
 
 	//Functions From PsychEngine
 	public function clearAllNotes() 
@@ -8314,6 +8346,56 @@ class PlayState extends MusicBeatState
 				daNote.kill();
 				notes.remove(daNote, true);
 				daNote.destroy();
+			}
+			--i;
+		}
+	}
+
+	public function compensateNotesBefore(time:Float)
+	{
+		var i:Int = unspawnNotes.length - 1;
+		while (i >= 0) 
+		{
+			var daNote:Note = unspawnNotes[i];
+			if(daNote.strumTime - 500 < time)
+			{
+				if (!daNote.withinCompensation && !daNote.delayedDeath && daNote.enabled)
+				{
+					daNote.enabled = false;
+					daNote.withinCompensation = true;
+
+					if (daNote.isSustainNote && daNote.sustainActive && daNote.spotInLine != daNote.parent.children.length)
+					{
+						for (i in daNote.parent.children)
+						{
+							i.alpha = 0.1;
+							i.sustainActive = false;
+							i.withinCompensation = true;
+						}
+					}
+				}
+			}
+			--i;
+		}
+
+		i = notes.length - 1;
+		while (i >= 0) 
+		{
+			var daNote:Note = notes.members[i];
+			if (!daNote.withinCompensation && !daNote.delayedDeath && daNote.enabled)
+			{
+				daNote.withinCompensation = true;
+				daNote.enabled = false;
+
+				if (daNote.isSustainNote && daNote.sustainActive && daNote.spotInLine != daNote.parent.children.length)
+				{
+					for (i in daNote.parent.children)
+					{
+						i.alpha = 0.1;
+						i.sustainActive = false;
+						i.withinCompensation = true;
+					}
+				}
 			}
 			--i;
 		}
@@ -8394,22 +8476,29 @@ class PlayState extends MusicBeatState
 	//var beatCheck:Int = 0;
 	//For preventing double-beat accients
 
-	private function createStageParticle(particlePath, minFileNum:Int = 0, maxFileNum:Int = 9, minAmt:Int = 1, maxAmt:Int = 10, color:FlxColor = FlxColor.WHITE, nextColor:FlxColor = FlxColor.BLACK):Void
+	private function createStageParticle(particlePath, minFileNum:Int = 0, maxFileNum:Int = 9, minAmt:Int = 3, maxAmt:Int = 15, color:FlxColor = FlxColor.WHITE, nextColor:FlxColor = FlxColor.BLACK):Void
 	{
 		var particlesNum:Int = FlxG.random.int(minAmt, maxAmt);
 		var currentWeek:String = 'week' + storyWeek;
-		var width:Float = (2000 / particlesNum);
-		var particlePercentage:Float = 1;
-		for (j in 0...3)
-		{
+		//var width:Float = 300;
+		//for (j in 0...3)
+		//{
+		//var particlepercentagearray:Array<Float> = [];
 			for (i in 0...particlesNum)
 			{
-				particlePercentage = (i / particlesNum) * 10;
+				var particlePercentage:Float;
+				//shitty ass fix but oh whale
+				if (i >= particlesNum / 2)
+					particlePercentage = FlxMath.roundDecimal((i + 1) / particlesNum, 3);
+				else
+					particlePercentage = FlxMath.roundDecimal(i / particlesNum, 3);
 				var particle:PsychEngineFancyStageShit.FancyStageParticle = stageParticles.recycle(PsychEngineFancyStageShit.FancyStageParticle);
-				particle.initialize(particlePath, currentWeek, particlePercentage, minFileNum, maxFileNum, -400 + width * i + FlxG.random.float(-width / 5, width / 5), (cityStreets.y + 250) - (FlxG.random.float(0, 50)), color, nextColor);
+				particle.initialize(particlePath, currentWeek, particlePercentage, minFileNum, maxFileNum, -160 + ((1280 / particlesNum) * (i + 1)) + FlxG.random.float(-5, 5), (cityStreets.y + 240) - (FlxG.random.float(-50, 50)), color, nextColor);
 				stageParticles.add(particle);
+				//particlepercentagearray.push(particle.x);
 			}
-		}
+		//trace('parts: ' + particlepercentagearray);
+		//}
 	}
 	//end of psych engine codes
 
@@ -8544,8 +8633,8 @@ class PlayState extends MusicBeatState
 										camFollow.setPosition(dad.getMidpoint().x, dad.getMidpoint().y);
 										dad.playAnim('cheer', true);
 										changeSubtitles("ARGH, RED PING!!!", 0xffff0000);
-										camShake(true, true, 'camGame', Conductor.crochet * 2 / 1000, 0.05);
-										camShake(true, true, 'camHUD', Conductor.crochet * 1 / 1000, 0.025);
+										camShake(true, true, 'camGame', 0.3, 0.05);
+										camShake(true, true, 'camHUD', 0.2, 0.025);
 									case 98:
 										clearSubtitles();
 										boyfriend.playAnim('awkward', false);
@@ -9183,7 +9272,7 @@ class PlayState extends MusicBeatState
 								if (inSongClimax)
 								{
 									camShake(true, false, 'camGame', 1, 0.005, idleCamShakeTimer);
-									camShake(false, false, 'camHUD', 1, 0.002, idleCamShakeTimer);
+									camShake(false, false, 'camHUD', 2, 0.0025, idleCamShakeTimer);
 								}
 
 							case 'Kid With a Gun':
@@ -9456,16 +9545,16 @@ class PlayState extends MusicBeatState
 								{
 									if (!inSongClimax)
 									{
-										camShake(false, false, 'camGame', 2, 0.0075, idleCamShakeTimer);
-										camShake(false, false, 'camHUD', 2, 0.001, idleCamShakeTimer);
+										camShake(false, false, 'camGame', 1, 0.008, idleCamShakeTimer);
+										camShake(false, false, 'camHUD', 2, 0.0015, idleCamShakeTimer);
 									}
 									else
 									{
-										camShake(false, false, 'camGame', 2, 0.0115, idleCamShakeTimer);
-										camShake(false, false, 'camHUD', 2, 0.002, idleCamShakeTimer);
+										camShake(false, false, 'camGame', 1, 0.012, idleCamShakeTimer);
+										camShake(false, false, 'camHUD', 2, 0.003, idleCamShakeTimer);
 									}
 									
-									if (skipActive || (curBeat > (skipTo / Conductor.crochet)) && curBeat % 2 == 0)
+									if (skipActive || curBeat > (skipTo / Conductor.crochet))
 										createStageParticle('theCityPortalOpen/effects/stageParticle');
 								}
 
