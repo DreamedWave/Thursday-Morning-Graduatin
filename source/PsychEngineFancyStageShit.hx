@@ -11,8 +11,8 @@ class FancyStageParticle extends FlxSprite
 	var decay:Float = 1;
 	var originalScale:Float = 1;
 	var accelerationMultiplier:Float = 1;
-	var frameTimeMult:Float = 1;
-	var frameRateMult:Float = 1;
+	//var frameTimeMult:Float = 1;
+	//var frameRateMult:Float = 1;
 	var partPercent:Float = 0;
 	
 	public function new()
@@ -28,12 +28,12 @@ class FancyStageParticle extends FlxSprite
 		if (color != FlxColor.WHITE)
 			this.color = color;
 
-		frameRateMult = 1 / FlxG.save.data.fpsCap;
+		//frameRateMult = 1 / FlxG.save.data.fpsCap;
 
 		particleName = particleName + (min != max ? '_' + FlxG.random.int(min, max): '');
 		loadGraphic(Paths.image(particleName, currentWeek));
 		antialiasing = FlxG.save.data.hqnotesploosh;
-		lifeTime = FlxG.random.float(0.8, 1.5);
+		lifeTime = FlxG.random.float(1, 1.25);
 		angle = FlxG.random.float(0, 360);
 		angularVelocity = FlxG.random.float(-10, 10) * particlePercentage;
 		originalScale = FlxG.random.float(0.25, 1);
@@ -51,13 +51,13 @@ class FancyStageParticle extends FlxSprite
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
-		frameTimeMult = elapsed / frameRateMult;
+		//frameTimeMult = elapsed / frameRateMult;
 		//trace('e - ' + elapsed + ' | ftm: ' + frameTimeMult);
 
 		if(lifeTime <= 0)
 		{
 			lifeTime = 0;
-			velocity.y -= 0.1 * frameTimeMult;
+			velocity.y = CoolUtil.freyaLerp(velocity.y, -25, 3, elapsed);
 			if (!oneTimeBool)
 			{
 				oneTimeBool = true;
@@ -72,14 +72,13 @@ class FancyStageParticle extends FlxSprite
 			}
 			else
 			{
+				//Not a lerp because idk how to do an easeIn with lerps cuz im dumb
 				if (alphaTwn == null)
-					alphaTwn = FlxTween.num(alpha, 0, 1.25, {type: ONESHOT, ease: FlxEase.quartIn}, function(num:Float){alpha = num;});
-				if(alpha > 0)
-					scale.set(originalScale * alpha, originalScale * alpha);
+					alphaTwn = FlxTween.num(alpha, 0, 1.2, {type: ONESHOT, ease: FlxEase.quartIn}, function(num:Float){alpha = num; scale.set(originalScale * alpha, originalScale * alpha);});
 			}
 		}
 		else
-			lifeTime -= 0.05 * frameTimeMult;
+			lifeTime = CoolUtil.freyaLerp(Math.floor(lifeTime * 1000) / 1000, 0, 5, elapsed);
 	}
 }
 

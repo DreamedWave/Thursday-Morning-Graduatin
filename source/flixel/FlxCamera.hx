@@ -131,8 +131,7 @@ class FlxCamera extends FlxBasic
 	 * Used to smoothly track the camera as it follows:
 	 * The percent of the distance to the follow `target` the camera moves per 1/60 sec.
 	 * Value converted to use PsychEngine's isBoundTo lerps for it to be more straigntforward.
-	 *`1` being the default, `50` means the camera lerps twice as fast, and `100` being the max.
-	 * `100` means no camera easing. A value of `0` means the camera does not move.
+	 *`1` being the default, `2` means the camera lerps twice as fast, and `10` being the max.
 	 */
 	public var followLerp(default, set):Float = 1;
 
@@ -1296,15 +1295,15 @@ class FlxCamera extends FlxBasic
 				_lastTargetPosition.y = target.y;
 			}
 
-			if (followLerp == 100 || elapsed == 0)
+			if (followLerp == 10 || elapsed == 0)
 			{
 				scrollLerp.copyFrom(_scrollTarget);
 				scroll.copyFrom(_scrollTarget); // no easing
 			}
 			else
 			{
-				scrollLerp.x = FlxMath.lerp(_scrollTarget.x, scrollLerp.x, CoolUtil.boundTo(1 - (elapsed * (followLerp * 2.5)), 0, 1));
-				scrollLerp.y = FlxMath.lerp(_scrollTarget.y, scrollLerp.y, CoolUtil.boundTo(1 - (elapsed * (followLerp * 2.5)), 0, 1));
+				scrollLerp.x = CoolUtil.freyaLerp(scrollLerp.x, _scrollTarget.x, followLerp * 3, elapsed);
+				scrollLerp.y = CoolUtil.freyaLerp(scrollLerp.y, _scrollTarget.y, followLerp * 3, elapsed);
 				scroll.set(scrollLerp.x + scrollShakeX, scrollLerp.y + scrollShakeY);
 			}
 		}
@@ -2118,7 +2117,7 @@ class FlxCamera extends FlxBasic
 
 	function set_followLerp(Value:Float):Float
 	{
-		return followLerp = FlxMath.bound(Value, 0, 100);
+		return followLerp = FlxMath.bound(Value, 0, 10);
 	}
 
 	function set_width(Value:Int):Int

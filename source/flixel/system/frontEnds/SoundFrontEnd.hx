@@ -472,12 +472,12 @@ class SoundFrontEnd
 		#if FLX_SOUND_TRAY
 		if (!FlxG.game.soundTray.tempDisable)
 		{
-			if (FlxG.keys.anyJustReleased(muteKeys))
-				toggleMuted();
 			if(FlxG.keys.anyJustReleased(volumeUpKeys))
 				changeVolume(0.1);
 			else if (FlxG.keys.anyJustReleased(volumeDownKeys))
 				changeVolume(-0.1);
+			else if (FlxG.keys.anyJustReleased(muteKeys))
+				toggleMuted();
 		}
 		#end
 		#end

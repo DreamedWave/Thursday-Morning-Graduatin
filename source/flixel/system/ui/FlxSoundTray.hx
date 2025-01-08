@@ -235,7 +235,7 @@ class FlxSoundTray extends Sprite
 				FlxG.sound.load(sound).play();
 		}
 
-		_timer = 1.5; //in seconds
+		_timer = 1.2; //in seconds
 
 		//Only tween if shit is about to hide, otherwise, nothing happens
 		if (isRetreating)

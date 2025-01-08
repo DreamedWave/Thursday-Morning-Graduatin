@@ -88,7 +88,7 @@ class MinigameState extends MusicBeatState
 
 	var camGameFilters:Array<BitmapFilter> = [];
 
-	var chromAbb:ShaderFilter;
+	var noiseFilter:shaders.Grain;
 
 	override public function create()
 	{
@@ -100,6 +100,9 @@ class MinigameState extends MusicBeatState
 		#end
 
 		targetFrameTime = 1 / FlxG.save.data.fpsCap;
+		initSkipFrames = Math.round(FlxG.save.data.fpsCap / 60);
+		noiseSkipFrames = initSkipFrames;
+		trace('noiseSkipFrames: ' + initSkipFrames);
 		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -173,8 +176,11 @@ class MinigameState extends MusicBeatState
 		camGame.filters = camGameFilters;
 		//var bloom:ShaderFilter = new ShaderFilter(new shaders.BloomShader(0.3, 0.75, 3));
 		//camGameFilters.push(bloom);
-		chromAbb = new ShaderFilter(new shaders.ChromAbb(0.0015, 0, -0.0015));
-		camGameFilters.push(chromAbb);
+		//var poster = new ShaderFilter(new shaders.PosterizeShaderTest());
+		//camGameFilters.push(poster);
+		noiseFilter = new shaders.Grain();
+		camGameFilters.push(new ShaderFilter(noiseFilter));
+		camGameFilters.push(new ShaderFilter(new shaders.ChromAbb(0.0015, 0, -0.0015)));
 
 		//For CamHUD to fix itself after shake
 		/*var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
@@ -261,7 +267,7 @@ class MinigameState extends MusicBeatState
 		switch (entity.name)
 		{
 			case 'player':
-				player.setPosition(entity.x, (entity.y));
+				player.setPosition(entity.x, entity.y);
 				playerResetPos = [player.x, player.y];
 				doCamFollowing = true;
 			case 'portal_door':
@@ -343,9 +349,22 @@ class MinigameState extends MusicBeatState
 
 	var timeLeftChecker:Float = 4364;
 	var fatherElapsedCheck:Int = 0;
+	var noiseElapsed:Float = 0;
+	var noiseSkipFrames:Int = 1;
+	var initSkipFrames:Int = 1;
+
 	override public function update(elapsed:Float)
 	{		
 		super.update(elapsed);
+
+		if (noiseSkipFrames > 0)
+			noiseSkipFrames--;
+		else
+		{
+			noiseSkipFrames = initSkipFrames;
+			noiseElapsed += elapsed;
+			noiseFilter.uTime.value = [noiseElapsed];
+		}
 
 		frameTimeMult = elapsed/targetFrameTime;
 		player.updateFrameTimeMult(frameTimeMult);
@@ -930,8 +949,8 @@ class MinigameState extends MusicBeatState
 
 						//player.stopAction(true, true);
 						player.canMove = false;
-						player.setPosition(object.x, object.y - (player.height - object.height));
-						playerResetPos = [object.destination[0], object.destination[1] - (player.height - object.height)];
+						player.setPosition(object.x - (player.width - object.width), object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height)];
 						if (theManUpstairs != null && theManUpstairs.exists)
 						{
 							//he dont know what hit em
@@ -961,7 +980,7 @@ class MinigameState extends MusicBeatState
 							camMovementOffset[1] = 0;
 							camMovementLerp[0] = 0;
 							camMovementLerp[1] = 0;
-							player.setPosition(object.destination[0], object.destination[1] - (player.height - object.height));
+							player.setPosition(object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height));
 							camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
 							player.canMove = true;
 							lockTheNextDoorThePlayerOverlapsWith = true;
@@ -970,8 +989,8 @@ class MinigameState extends MusicBeatState
 					else
 					{
 						//player.stopAction(true, true);
-						player.setPosition(object.x, object.y - (player.height - object.height));
-						playerResetPos = [object.destination[0], object.destination[1] - (player.height - object.height)];
+						player.setPosition(object.x - (player.width - object.width), object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height)];
 						//if (theManUpstairs != null && theManUpstairs.exists)
 							//theManUpstairs.quellTheDemon(15, true, true);
 						player.canMove = false;
@@ -992,7 +1011,7 @@ class MinigameState extends MusicBeatState
 								camMovementOffset[1] = 0;
 								camMovementLerp[0] = 0;
 								camMovementLerp[1] = 0;
-								player.setPosition(object.destination[0], object.destination[1] - (player.height - object.height));
+								player.setPosition(object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height));
 								camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
 								/*if (theManUpstairs != null && theManUpstairs.exists)
 								{
@@ -1170,7 +1189,7 @@ class MinigameState extends MusicBeatState
 		textLol.alpha = 0;
 		textLol.antialiasing = true;
 		textLol.cameras = [camHUD];
-		textLol.angularVelocity = -randAngle;
+		textLol.angularVelocity = -randAngle * 1.5;
 		add(textLol);
 
 		FlxG.sound.play('assets/minigame/sounds/SND_GameOver.ogg', 1, false);
@@ -1187,7 +1206,6 @@ class MinigameState extends MusicBeatState
 				textLol.alpha = textAlpha;
 			},
 		});
-		FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut, startDelay: 3, onComplete: function (twn:FlxTween){textLol.angularVelocity = 0;}});
 		FlxTween.tween(textLol.scale, {x: 0.8,  y: 0.8}, 0.25, 
 		{
 			type: ONESHOT,
@@ -1212,6 +1230,8 @@ class MinigameState extends MusicBeatState
 					},
 				});
 				camHUD.stopFX();
+				textLol.angularVelocity = 0;
+				FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut});
 				camShake('camHUD', true, true, 2, 0.4, 0.5);
 				camHUD.flash(FlxColor.RED, 1);
 				camGame.visible = false;

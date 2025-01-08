@@ -284,12 +284,15 @@ class Idle extends FlxFSMState<Player>
 		
 					//Flip player (2)
 					if (owner.velocity.x < 0)
+					{
+						owner.acceleration.x = 10;
 						owner.velocity.x *= -0.8;
+					}
 	
 					if (owner.velocity.x < owner.maxVelocity.x * 0.5)
 						owner.velocity.x = owner.maxVelocity.x * 0.5;
 					if (owner.acceleration.x < owner.maxVelocity.x)
-						owner.acceleration.x += owner.maxVelocity.x * 0.05 * owner.frameTimeMult;
+						owner.acceleration.x = CoolUtil.freyaLerp(owner.acceleration.x, owner.maxVelocity.x, 12, elapsed);
 				}
 				else
 				{
@@ -297,12 +300,15 @@ class Idle extends FlxFSMState<Player>
 		
 					//Flip player (1)
 					if (owner.velocity.x > 0)
+					{
+						owner.acceleration.x = -10;
 						owner.velocity.x *= -0.8;
+					}
 	
 					if (owner.velocity.x > -owner.maxVelocity.x * 0.5 )
 						owner.velocity.x = -owner.maxVelocity.x * 0.5;
 					if (owner.acceleration.x > -owner.maxVelocity.x)
-						owner.acceleration.x += -owner.maxVelocity.x * 0.05 * owner.frameTimeMult;
+						owner.acceleration.x = CoolUtil.freyaLerp(owner.acceleration.x, -owner.maxVelocity.x, 12, elapsed);
 				}
 			}
 			else //WALK
@@ -393,12 +399,12 @@ class Jump extends FlxFSMState<Player>
 			if (FlxG.keys.pressed.RIGHT)
 			{
 				if (owner.velocity.x < 0)
-					owner.velocity.x *= -0.3;
+					owner.velocity.x *= -0.4;
 			}
 			if (FlxG.keys.pressed.LEFT)
 			{
 				if (owner.velocity.x > 0)
-					owner.velocity.x *= -0.3;
+					owner.velocity.x *= -0.4;
 			}
 		}
 
@@ -411,24 +417,24 @@ class Jump extends FlxFSMState<Player>
 
 		//Jump cutting
 		if(FlxG.keys.justReleased.SPACE && owner.velocity.y < 0)
-			owner.velocity.y *= 0.5;
+			owner.velocity.y *= 0.35;
 
 		//Jump Hold
 		if (!jumpHoldTimer.active)
 		{
 			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
 			{
-				owner.velocity.y -= 1 * owner.frameTimeMult; //big bnuberes jsncbdnbjf
-				if (owner.maxVelocity.y != owner.GRAVITY * 0.5)
+				owner.velocity.y -= 1.25 * owner.frameTimeMult; //big bnuberes jsncbdnbjf
+				if (owner.maxVelocity.y != owner.GRAVITY * 0.4)
 				{
 					trace('FORCED FLOATY');
-					owner.maxVelocity.y = owner.GRAVITY * 0.5;
+					owner.maxVelocity.y = owner.GRAVITY * 0.4;
 				}
 			}
-			else if (FlxG.keys.pressed.DOWN && owner.velocity.y > -200)
+			else if (owner.velocity.y > 0)
 			{
 				//trace('downElapsed: ' + elapsed);
-				owner.velocity.y += 2.5 * owner.frameTimeMult; //big bnubmer bcuz yes
+				owner.velocity.y += 3 + (2 * (FlxG.keys.pressed.DOWN ? 1 : 0)) * owner.frameTimeMult; //big bnubmer bcuz yes
 				if (owner.maxVelocity.y != owner.GRAVITY * 2)
 				{
 					trace('FORCED DOWN');
@@ -439,6 +445,7 @@ class Jump extends FlxFSMState<Player>
 
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
 		{
+			trace('stopHoriViaRelease');
 			owner.acceleration.x = 0.25;
 			owner.velocity.x *= 0.5;
 		}
@@ -458,10 +465,11 @@ class Jump extends FlxFSMState<Player>
 	{
 		jumpHoldTimer.cancel();
 		owner.maxVelocity.y = owner.GRAVITY;
-		if (!FlxG.keys.pressed.LEFT || !FlxG.keys.pressed.RIGHT)
+		if (!FlxG.keys.pressed.LEFT && !FlxG.keys.pressed.RIGHT)
 		{
 			owner.acceleration.x = 0;
 			owner.velocity.x *= 0.1;
+			trace('jumpvelocitystop');
 		}
 		//jump land animation here?
 		//walkSnd.stop();
@@ -491,16 +499,22 @@ class Sneak extends FlxFSMState<Player>
 			if (owner.velocity.x < 0)
 				owner.velocity.x *= -0.5;
 
+			if (owner.velocity.x < owner.maxVelocity.x * 0.35 )
+				owner.velocity.x = owner.maxVelocity.x * 0.35;
+
 			owner.facing = RIGHT;
-			owner.acceleration.x = 150;
+			owner.acceleration.x = 100;
 		}
 		else if (FlxG.keys.pressed.LEFT)
 		{
 			if (owner.velocity.x > 0)
 				owner.velocity.x *= -0.5;
 
+			if (owner.velocity.x > -owner.maxVelocity.x * 0.35 )
+				owner.velocity.x = -owner.maxVelocity.x * 0.35;
+
 			owner.facing = LEFT;
-			owner.acceleration.x = -150;
+			owner.acceleration.x = -100;
 		}
 
 		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)

@@ -17,6 +17,8 @@ import flixel.math.FlxMath;
 import flixel.FlxCamera;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxSprite;
+import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 
 using StringTools;
 
@@ -50,14 +52,19 @@ class GameOverSubstate extends MusicBeatSubstate
 	private var camHUD:FlxCamera; //For UI
 
 	var sinShit:Float = 0;
-
 	var tipTween:FlxTween;
+
+	var noiseFilter:shaders.Grain;
+	var coolFilters:Array<BitmapFilter> = [];
 
 	public function new(x:Float, y:Float)
 	{
-		if (FlxG.sound.music != null && FlxG.sound.music.playing)
+		if (FlxG.sound.music != null)
+		{
 			FlxG.sound.music.stop();
-
+			FlxG.sound.queuedUpMusic = false;
+		}
+		
 		camMain = new FlxCamera();
 		camOverlay = new FlxCamera();
 		camOverlay.bgColor.alpha = 0;
@@ -69,6 +76,11 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.cameras.add(camHUD);
 
 		FlxCamera.defaultCameras = [camMain];
+
+		camMain.filters = coolFilters;
+		noiseFilter = new shaders.Grain(1.5, 0.05, 0.45);
+		coolFilters.push(new ShaderFilter(noiseFilter));
+		coolFilters.push(new ShaderFilter(new shaders.ChromAbb(-0.00075, 0.00075, 0)));
 
 		var daStage = PlayState.curStage;
 		var daBf:String = '';
@@ -208,15 +220,24 @@ class GameOverSubstate extends MusicBeatSubstate
 	//Var to prevent pressing enter then going back to menu, I'm pretty sure this fixes a very rare crash that happens when the game loads and exits to the story menu at the same time but idk
 	var pressedConfirm:Bool = false;
 	var sineShit:Float = 0;
-
+	var noiseElapsed:Float = 0;
+	var noiseLoops:Int = 1;
 	override function update(elapsed:Float)
 	{
+		super.update(elapsed);
+
 		sineShit += 0.0025;
 		//NaN prevention-?
 		if (sineShit >= 1000000)
 			sineShit = 0;
 
-		super.update(elapsed);
+		if (noiseElapsed < (Conductor.stepCrochet * 0.0005) * noiseLoops)
+			noiseElapsed += elapsed;
+		else
+		{
+			noiseFilter.uTime.value = [noiseElapsed];
+			noiseLoops++;
+		}
 
 		if (!isEnding)
 		{
@@ -359,7 +380,6 @@ class GameOverSubstate extends MusicBeatSubstate
 	}
 
 	var gameOverCheckShit:Int = 0;
-	
 	override function beatHit()
 	{
 		super.beatHit();

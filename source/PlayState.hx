@@ -138,7 +138,10 @@ class PlayState extends MusicBeatState
 	//var specilNoteHitSFXGroup:FlxSoundGroup;
 
 	//Note Hit SFX
-	private var noteHitSFX:FlxSound;
+	private var noteHitSickSFX:FlxSound;
+	private var noteHitGoodSFX:FlxSound;
+	private var noteHitBadSFX:FlxSound;
+	private var noteHitSlipSFX:FlxSound;
 	private var noteHitSustainSFX:FlxSound;
 	private var specialNoteHitSFX:FlxSound;
 
@@ -210,6 +213,7 @@ class PlayState extends MusicBeatState
 	var grpRatingsBG = new FlxSpriteGroup();
 	var grpRatingsMG = new FlxSpriteGroup();
 	var grpRatingsFG = new FlxSpriteGroup();
+	var grayScaler:shaders.GrayScale;
 
 	public var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
 	public var playerStrums:FlxTypedGroup<FlxSprite> = null;
@@ -574,9 +578,18 @@ class PlayState extends MusicBeatState
 		if (FlxG.save.data.notesfx)
 		{
 			noteHitSFXGroup = new FlxSoundGroup(noteHitVolume);
-			noteHitSFX = new FlxSound();
+			if (PlayStateChangeables.botPlay)
+				noteHitSickSFX = FlxG.sound.load(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
+			else
+				noteHitSickSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
+			noteHitGoodSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
+			noteHitBadSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
+			noteHitSlipSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
 			noteHitSustainSFX = FlxG.sound.load(Paths.sound('Note_' + hitsoundType + '_Sustain'), false, noteHitSFXGroup);
-			FlxG.sound.list.add(noteHitSFX);
+			FlxG.sound.list.add(noteHitSickSFX);
+			FlxG.sound.list.add(noteHitGoodSFX);
+			FlxG.sound.list.add(noteHitBadSFX);
+			FlxG.sound.list.add(noteHitSlipSFX);
 			FlxG.sound.list.add(noteHitSustainSFX);
 		}
 		specialNoteHitSFX = new FlxSound();
@@ -1624,6 +1637,8 @@ class PlayState extends MusicBeatState
 		//else
 		loadingIcon.alpha = 0;
 		add(loadingIcon);
+
+		grayScaler = new shaders.GrayScale();
 
 		if (FlxG.save.data.lagCompensation)
 		{
@@ -3262,12 +3277,6 @@ class PlayState extends MusicBeatState
 	{
 		if (!endedSong && Conductor.songPosition < musicTimeCusp)
 		{
-			if (FlxG.sound.music.time - Conductor.songPosition > 150 && FlxG.save.data.lagCompensation && !endedSong && !PlayStateChangeables.botPlay)
-			{
-				allowHealthModifiers = false;
-				lagCompIcon.alpha = 0.5;
-			}
-
 			if (PauseSubState.resyncToLastPos && songStarted)
 			{
 				PauseSubState.resyncToLastPos = false;
@@ -3764,7 +3773,7 @@ class PlayState extends MusicBeatState
 			//Updating of alphas
 			if (FlxG.save.data.lagCompensation) //Prevents crash if lag compensation is off
 				if (lagCompIcon.alpha != 0)
-					lagCompIcon.alpha = CoolUtil.freyaLerp(lagCompIcon.alpha, 0, 15, elapsed);
+					lagCompIcon.alpha = CoolUtil.freyaLerp(lagCompIcon.alpha, 0, 5, elapsed);
 
 			if (!paused && !endedSong)
 			{
@@ -4056,7 +4065,7 @@ class PlayState extends MusicBeatState
 											{
 												daNote.rating = 'miss';
 
-												if (FlxG.save.data.notesplash)
+												if (FlxG.save.data.notesplash && showNumShit)
 													sploshThisShitUp(daNote, 'miss');
 												popUpScore('', daNote);
 												trace('failed sus popup');
@@ -4189,7 +4198,7 @@ class PlayState extends MusicBeatState
 				case 'cityskyline':
 					//this was once disabled, i enabled it to see what happens
 					//hehehe I made it work!!11!
-					cityLights.members[curLight].alpha = CoolUtil.freyaLerp(cityLights.members[curLight].alpha, 0, 7 * (Conductor.bpm * 0.01), elapsed);
+					cityLights.members[curLight].alpha = CoolUtil.freyaLerp(cityLights.members[curLight].alpha, 0, 2 * (Conductor.bpm * 0.01), elapsed);
 				case 'cityskylineVariegated':
 					if (updateWiggleShader)
 						objectWiggleShader.update(elapsed);
@@ -4245,7 +4254,7 @@ class PlayState extends MusicBeatState
 
 			//Low-Health Suspense
 			lowHPEffectVol = 1 - health;
-			lowHPHeartBeat.volume = CoolUtil.freyaLerp(lowHPHeartBeat.volume, lowHPEffectVol, 15, elapsed);
+			lowHPHeartBeat.volume = CoolUtil.freyaLerp(lowHPHeartBeat.volume, lowHPEffectVol, 6.5, elapsed);
 			
 			if (lowHPOverlay.alpha > 0)
 			{
@@ -4272,8 +4281,8 @@ class PlayState extends MusicBeatState
 						{
 							if (health < 1)
 							{
-								FlxG.sound.music.volume = CoolUtil.freyaLerp(FlxG.sound.music.volume, (lowHPEffectVol - 0.3), 15, elapsed);
-								instLowHP.volume = CoolUtil.freyaLerp(instLowHP.volume, (lowHPEffectVol + 0.3), 15, elapsed);
+								FlxG.sound.music.volume = CoolUtil.freyaLerp(FlxG.sound.music.volume, (lowHPEffectVol - 0.3), 6.5, elapsed);
+								instLowHP.volume = CoolUtil.freyaLerp(instLowHP.volume, (lowHPEffectVol + 0.3), 6.5, elapsed);
 							}
 							else if (FlxG.sound.music.volume < 1)
 							{
@@ -4489,7 +4498,7 @@ class PlayState extends MusicBeatState
 						//and that I did!
 						if (elapsed > lagSpikeTime || Main.fpsCounter.gameGoinThruIt)
 						{
-							if (!endedSong && allowHealthModifiers)
+							if (allowHealthModifiers)
 							{
 								lagCompIcon.alpha = 1;
 								allowHealthModifiers = false;
@@ -4497,7 +4506,7 @@ class PlayState extends MusicBeatState
 								compensateNotesBefore(Conductor.songPosition + (lagSpikeTime * 2));
 							}
 						}
-						else if (!compensatedViaLagSpike && !allowHealthModifiers)
+						else if (compensationTimer != null && !compensationTimer.active && !compensatedViaLagSpike && !allowHealthModifiers)
 							allowHealthModifiers = true;
 					}
 
@@ -5218,7 +5227,7 @@ class PlayState extends MusicBeatState
 				if (daRating == null)
 					return;
 
-				if (combo >= 20 && daRating != 'miss' && daRating != 'slip' && daRating != 'bad')
+				if (combo >= 10 && !daNote.isSustainTail && !daNote.isBeforeTail && daRating != 'miss' && daRating != 'slip' && daRating != 'bad')
 					showNumShit = true;
 
 				if (allowHealthModifiers && !daNote.withinCompensation)
@@ -5278,7 +5287,7 @@ class PlayState extends MusicBeatState
 						numScore.antialiasing = FlxG.save.data.antialiasing;
 						numScore.updateHitbox();
 						//guys are more heavy to avoid coverin up the top
-						numScore.acceleration.y = FlxG.random.int(750, 850);
+						numScore.acceleration.y = FlxG.random.int(550, 650) * (Conductor.bpm * 0.01);
 						numScore.velocity.y -= FlxG.random.int(140, 160);
 						numScore.velocity.x = FlxG.random.float(-2.5, 2.5);
 	
@@ -5390,12 +5399,16 @@ class PlayState extends MusicBeatState
 						prevRating.acceleration.y += 25 * (Conductor.bpm * 0.01);
 						if (prevRating.color != 0xFFD09A9C)
 						{
-							prevRating.color = 0xFFB1A9C3;
+							prevRating.shader = grayScaler;
+							//prevRating.color = 0xFFB1A9C3;
 							if (prevRating.alpha == 1)
 								prevRating.alpha = 0.5;
 						}
 						else
+						{
+							//prevRating.shader = grayScaler;
 							prevRating.color = 0xFFD09A9C;
+						}
 					});
 					
 					var rating:FlxSprite = new FlxSprite().loadGraphic(Paths.image("rating_" + daRating));
@@ -5408,12 +5421,12 @@ class PlayState extends MusicBeatState
 					{
 						//ratingStartDelay = Conductor.crochet * (0.001 * (daNote.children.length * 0.25));
 						ratingStartDelay += Conductor.stepCrochet * (0.001 * daNote.children.length);
-						rating.acceleration.y = 250 - (5 * daNote.children.length); //idfk lol
+						rating.acceleration.y = (250 - (5 * daNote.children.length)) * (Conductor.bpm * 0.01); //idfk lol
 						rating.velocity.y -= FlxG.random.int(90, 120); //idfk lol part 2
 					}
 					else
 					{
-						rating.acceleration.y = 650;
+						rating.acceleration.y = 450 * (Conductor.bpm * 0.01);
 						rating.velocity.y -= FlxG.random.int(170, 210);
 					}
 
@@ -5452,7 +5465,7 @@ class PlayState extends MusicBeatState
 		
 					if (showNumShit)
 					{
-						if (daRating != 'shit' && daRating != 'miss')
+						if (daRating != 'bad' && daRating != 'shit' && daRating != 'miss')
 						{
 							grpRatingsMG.forEachAlive(function(prevNum:FlxSprite)
 							{
@@ -5501,7 +5514,7 @@ class PlayState extends MusicBeatState
 							numScore.updateHitbox();
 							switch (daRating)
 							{
-								case 'shit' | 'miss':
+								case 'shit' | 'miss' | 'bad':
 									if (allowHealthModifiers && !daNote.withinCompensation)
 									{
 										//if (daRating != 'shit' || FlxG.save.data.shitBreaksCombo)
@@ -5518,7 +5531,7 @@ class PlayState extends MusicBeatState
 									}
 							}
 		
-							numScore.acceleration.y = FlxG.random.int(350, 450);
+							numScore.acceleration.y = FlxG.random.int(250, 350) * (Conductor.bpm * 0.01);
 							numScore.velocity.y -= FlxG.random.int(130, 150);
 							numScore.velocity.x = FlxG.random.float(-5, 5);
 							if (i != 0)
@@ -5595,6 +5608,9 @@ class PlayState extends MusicBeatState
 		//The cool 000 effect when breaking a combo
 		if (combo > 0 && showNumShit)
 		{
+			if (FlxG.save.data.songPosition && songPosDeathIndicator.x == 1000)
+				songPosDeathIndicator.x = songPosBar.x + (songPosBar.width * (songPosBar.percent * 0.01)) - (songPosDeathIndicator.width - 26) - 6;
+			
 			//Clears combo
 			grpRatingsBG.forEachAlive(function(prevRating:FlxSprite)
 			{
@@ -5619,7 +5635,7 @@ class PlayState extends MusicBeatState
 				numScore.antialiasing = FlxG.save.data.antialiasing;
 				numScore.updateHitbox();
 				numScore.color = FlxColor.RED;
-				numScore.acceleration.y = FlxG.random.int(400, 450);
+				numScore.acceleration.y = FlxG.random.int(300, 350) * (Conductor.bpm * 0.01);
 				numScore.velocity.y -= FlxG.random.int(130, 150);
 				numScore.velocity.x = FlxG.random.float(-5, 5);
 				numScore.angle = FlxG.random.float(-7.5, 7.5);
@@ -5928,7 +5944,7 @@ class PlayState extends MusicBeatState
 				popUpScore('', daNote);
 				//trace('noteMiss popupscore');
 			//}
-			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay)
+			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && showNumShit)
 				sploshThisShitUp(daNote, daNote.rating);
 
 			if (daNote != null)
@@ -6137,89 +6153,52 @@ class PlayState extends MusicBeatState
 	}
 
 	//Making this void (5)
-	var lastLoadedSnd:String = '';
+	var lastPlayedSnd:String = '';
 	function playNoteHitSound(note:Note):Void
 	{
 		if (!note.isSustainNote)
 		{
 			//	SFX for hitting notes (such as SICK, GOOD, BAD, SHIT, and SPECIAL NOTEs);
-			if (!PlayStateChangeables.botPlay && !note.withinCompensation)
+			if (!PlayStateChangeables.botPlay)
 			{
 				//Converted from nested if-else statements and 2 switch statements to a one switch! You're welcome!
+				//eh
+				if (lastPlayedSnd != note.rating)
+				{
+					lastPlayedSnd = note.rating;
+					noteHitSFXGroup.stop();					
+				}
+
 				switch (note.rating)
 				{
+					//Vocal and Notehit Shit
 					case 'sick':
-						//For Sick Rating
-						if (lastLoadedSnd != 'sick')
-						{
-							lastLoadedSnd = 'sick';
-							if (noteHitSFX.playing)
-								noteHitSFX.stop();
-							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Sick"), false, noteHitSFXGroup);
-						}
-						//Vocal Shit
 						vocals.volume = vocalsVolume;
+						noteHitSickSFX.play(true);
 
 					case 'good':
-						if (lastLoadedSnd != 'good')
-						{
-							lastLoadedSnd = 'good';
-							if (noteHitSFX.playing)
-								noteHitSFX.stop();
-							//For Good Rating
-							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Good"), false, noteHitSFXGroup);
-						}
-						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.85;
+						noteHitGoodSFX.play(true);
 
 					case 'bad':
-						if (lastLoadedSnd != 'bad')
-						{
-							lastLoadedSnd = 'bad';
-							if (noteHitSFX.playing)
-								noteHitSFX.stop();
-							//For Bad Rating
-							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
-						}
-						//Vocal Shit
 						vocals.volume = vocalsVolume * 0.55;
+						noteHitBadSFX.play(true);
 
 					case 'shit':
-						if (lastLoadedSnd != 'shit')
-						{
-							lastLoadedSnd = 'shit';
-							if (noteHitSFX.playing)
-								noteHitSFX.stop();
-							//For Shit Rating
-							noteHitSFX = FlxG.sound.load(Paths.sound("Note_" + hitsoundType + "_Bad"), false, noteHitSFXGroup);
-						}
-						//Vocal Shit
-						//if (FlxG.save.data.shitBreaksCombo)
 						vocals.volume = vocalsVolume * 0.1;
-						//else
-							//vocals.volume = vocalsVolume * 0.55;
+						noteHitSlipSFX.play(true);
 
 					case 'miss':
-						//For Miss Rating
-						//Vocal Shit
 						vocals.volume = 0;
 				}
-				noteHitSFX.play(true);
 			}
 			else
 			{
-				if (lastLoadedSnd != 'bot')
-				{
-					lastLoadedSnd = 'bot';
-					if (noteHitSFX.playing)
-						noteHitSFX.stop();
-					noteHitSFX = FlxG.sound.load(Paths.sound("Note_botplay"), false, noteHitSFXGroup);
-				}
-				noteHitSFX.play(true);
+				noteHitSickSFX.play(true);
 				vocals.volume = vocalsVolume;
 			}
 		}
-		else if (!PlayStateChangeables.botPlay && note.isSustainNote)
+		else if (!PlayStateChangeables.botPlay)
 		{
 			noteHitSustainSFX.play(true);
 			noteHitSustainSFX.volume = 0.9;
@@ -6296,10 +6275,10 @@ class PlayState extends MusicBeatState
 						if (intimidationBeats <= 0)
 						{
 							if (!note.isParent)
-								enemyMissRandomizer = FlxG.random.bool(accuracy / 4);
+								enemyMissRandomizer = accuracy > 0 ? FlxG.random.bool(100 - accuracy * 0.5) : false;
 							else
 							{
-								enemyMissRandomizer = FlxG.random.bool(accuracy / 8);
+								enemyMissRandomizer = accuracy > 0 ? FlxG.random.bool(100 - accuracy * 0.25) : false;
 								note.parentID = curEnemyNote;
 							}
 						}
@@ -6402,7 +6381,16 @@ class PlayState extends MusicBeatState
 				{
 					if (note.noteData == spr.ID)
 					{
-						spr.animation.play('confirm', true);
+						switch (note.rating)
+						{
+							case 'bad' | 'slip':
+								spr.animation.play('pressed', true);
+							default:
+								if (!note.isSustainTail && spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 0)
+									spr.animation.curAnim.curFrame = 2;
+								else
+									spr.animation.play('confirm', true);
+						}
 						spr.centerOffsets();
 						spr.offset.x -= 13;
 						spr.offset.y -= 13;
@@ -6469,7 +6457,7 @@ class PlayState extends MusicBeatState
 			{
 				if (note.noteType != 'mine')
 				{
-					if (note.rating != 'shit')
+					if (note.rating != 'shit' && note.rating != 'bad')
 					{
 						notesHitInSection++;
 						mashPressThreshold++;
@@ -6480,7 +6468,7 @@ class PlayState extends MusicBeatState
 					popUpScore('', note, noteDiff, isJack);
 					//trace('goodnotehit nonsustain popupscore');
 				}
-				else if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && allowHealthModifiers && !note.withinCompensation)
+				else if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && allowHealthModifiers && !note.withinCompensation && showNumShit)
 					sploshThisShitUp(note, note.rating);
 
 				note.startSpeeding = false;
@@ -6503,7 +6491,7 @@ class PlayState extends MusicBeatState
 				}
 
 				//sustain combo cuz why not :3
-				if (!note.isBehindParent && note.rating != 'shit' && note.tempRating != 'shit')
+				if (!note.isBehindParent && note.rating != 'shit' && note.tempRating != 'shit' && note.rating != 'bad' && note.tempRating != 'bad')
 					combo++;
 
 				//Experimental showing your numbers for sustain notes
@@ -6592,7 +6580,16 @@ class PlayState extends MusicBeatState
 				{
 					if (note.noteData == spr.ID)
 					{
-						spr.animation.play('confirm', true);
+						switch (note.rating)
+						{
+							case 'bad' | 'slip':
+								spr.animation.play('pressed', true);
+							default:
+								if (!note.isSustainTail && spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 0)
+									spr.animation.curAnim.curFrame = 2;
+								else
+									spr.animation.play('confirm', true);
+						}
 						preventBFIdleAnim = true;
 					}
 				});
@@ -8476,7 +8473,7 @@ class PlayState extends MusicBeatState
 	//var beatCheck:Int = 0;
 	//For preventing double-beat accients
 
-	private function createStageParticle(particlePath, minFileNum:Int = 0, maxFileNum:Int = 9, minAmt:Int = 3, maxAmt:Int = 15, color:FlxColor = FlxColor.WHITE, nextColor:FlxColor = FlxColor.BLACK):Void
+	private function createStageParticle(particlePath, minFileNum:Int = 0, maxFileNum:Int = 9, minAmt:Int = 3, maxAmt:Int = 12, color:FlxColor = FlxColor.WHITE, nextColor:FlxColor = FlxColor.BLACK):Void
 	{
 		var particlesNum:Int = FlxG.random.int(minAmt, maxAmt);
 		var currentWeek:String = 'week' + storyWeek;
@@ -9596,7 +9593,7 @@ class PlayState extends MusicBeatState
 										camGame.shake(0.05, 0.3, true, true);
 										miscs.volume = vocalsVolume;
 									case 896:
-										FlxTween.tween(boyfriend, {alpha: 1}, Conductor.crochet / 4000, {type: ONESHOT, ease: FlxEase.smoothStepOut});
+										FlxTween.tween(boyfriend, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.smoothStepOut});
 										camFollowSpeed = 0.5;
 										//FlxTween.tween(camHUD, {alpha: 1}, 3, {type: ONESHOT, ease: FlxEase.quadOut});
 									case 932:
