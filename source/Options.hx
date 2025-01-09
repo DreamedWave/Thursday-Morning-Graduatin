@@ -1508,6 +1508,7 @@ class LockWeeksOption extends Option
 			confirm = true;
 			display = updateDisplay();
 			FlxG.sound.play(Paths.sound("optionsResetPrompt"));
+			FlxG.camera.shake(1, 0.025, 0.25, true, true);
 			return true;
 		}
 		FlxG.save.data.weekUnlocked = 1;
@@ -1515,7 +1516,8 @@ class LockWeeksOption extends Option
 		confirm = false;
 		trace('Weeks Locked');
 		display = updateDisplay();
-		FlxG.sound.music.tapeStop(0.2, 0, function(twn:FlxTween){FlxG.sound.music.stop(); Conductor.changeBPM(102);});
+		FlxG.camera.shake(2, 0.025, 0.125, true, true);
+		FlxG.sound.music.tapeStop(0.125, 0, function(twn:FlxTween){FlxG.camera.shake(1, 0.045, 0.7, true, true); FlxG.sound.music.stop(); Conductor.changeBPM(102);});
 		FlxG.sound.play(Paths.sound("optionsResetConfirm"));
 		return true;
 	}
@@ -1555,6 +1557,7 @@ class ResetScoreOption extends Option
 			confirm = true;
 			display = updateDisplay();
 			FlxG.sound.play(Paths.sound("optionsResetPrompt"));
+			FlxG.camera.shake(1, 0.025, 0.25, true, true);
 			return true;
 		}
 		FlxG.save.data.songScores = null;
@@ -1570,6 +1573,8 @@ class ResetScoreOption extends Option
 		confirm = false;
 		trace('Highscores Wiped');
 		display = updateDisplay();
+		FlxG.camera.shake(2, 0.025, 0.125, true, true);
+		new FlxTimer().start(0.125, function(tmr:FlxTimer){FlxG.camera.shake(1, 0.045, 0.7, true, true);});
 		FlxG.sound.play(Paths.sound("optionsResetConfirm"));
 		return true;
 	}
@@ -1609,6 +1614,7 @@ class ResetSettings extends Option
 			confirm = true;
 			display = updateDisplay();
 			FlxG.sound.play(Paths.sound("optionsResetPrompt"));
+			FlxG.camera.shake(1, 0.025, 0.25, true, true);
 			return true;
 		}
 		confirm = false;
@@ -1619,6 +1625,8 @@ class ResetSettings extends Option
 
 		trace('All settings have been reset');
 		display = updateDisplay();
+		FlxG.camera.shake(2, 0.025, 0.125, true, true);
+		new FlxTimer().start(0.125, function(tmr:FlxTimer){FlxG.camera.shake(1, 0.045, 0.7, true, true);});
 		FlxG.sound.play(Paths.sound("optionsResetConfirm"));
 		return true;
 	}

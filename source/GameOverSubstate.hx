@@ -80,7 +80,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		camMain.filters = coolFilters;
 		noiseFilter = new shaders.Grain(1.5, 0.05, 0.45);
 		coolFilters.push(new ShaderFilter(noiseFilter));
-		coolFilters.push(new ShaderFilter(new shaders.ChromAbb(-0.00075, 0.00075, 0)));
+		coolFilters.push(new ShaderFilter(new shaders.ChromAbb(-0.0003, 0.0003, 0)));
 
 		var daStage = PlayState.curStage;
 		var daBf:String = '';

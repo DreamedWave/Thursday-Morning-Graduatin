@@ -1158,7 +1158,6 @@ class MinigameState extends MusicBeatState
 				new FlxTimer().start(0.35, function(tmr:FlxTimer)
 				{
 					new FlxTimer().start(0.35, function(tmr:FlxTimer){jumpscareSprite.alpha = 0.15;});
-					camHUD.stopFX();
 					showGameoverScreen();
 				});
 			});
@@ -1229,10 +1228,10 @@ class MinigameState extends MusicBeatState
 						textLol.screenCenter();
 					},
 				});
-				camHUD.stopFX();
 				textLol.angularVelocity = 0;
 				FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut});
 				camShake('camHUD', true, true, 2, 0.4, 0.5);
+				camHUD.stopFX();
 				camHUD.flash(FlxColor.RED, 1);
 				camGame.visible = false;
 				new FlxTimer().start(3, function(tmr:FlxTimer)
@@ -1257,7 +1256,8 @@ class MinigameState extends MusicBeatState
 					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
 					//player.stopAction(true, true);
 					player.canMove = false;
-					FlxG.sound.music.fadeOut(3.8);
+					if (seqCheck != 3)
+						FlxG.sound.music.fadeOut(3.8);
 					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
 					{	
 						type: ONESHOT, 

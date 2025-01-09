@@ -141,7 +141,7 @@ class MusicBeatState extends FlxUIState
 
 	public function beatHit():Void
 	{
-		trace(curBeat);
+		//trace(curBeat);
 		//do literally nothing dumbass
 		//why so rude?
 	}

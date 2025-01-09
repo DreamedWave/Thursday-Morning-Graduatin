@@ -12,6 +12,7 @@ import polymod.format.ParseRules.TargetSignatureElement;
 
 using StringTools;
 
+//This whole thing is a mess, I can understand why FNF was rewritten from scratch gawdamn
 class Note extends FlxSprite
 {
 	public var strumTime:Float = 0;
@@ -93,11 +94,12 @@ class Note extends FlxSprite
 	public var toggledSurpriseNote:Bool = false;
 	public var triggeredNoteEvent:Bool = false;
 
+	public var altAnim:String = '';
 	public var baseAlpha:Float = 1;
 
 	var inCharter:Bool;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inCharter = false, noteType:String = 'normal')
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inCharter = false, noteType:String = 'normal', givenAltAnim:String = '')
 	{
 		super();
 
@@ -132,7 +134,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = PlayState.curStage;
+		altAnim = givenAltAnim;
 		
 		if (inCharter)
 		{
@@ -388,6 +390,14 @@ class Note extends FlxSprite
 
 		if (!inCharter)
 		{
+			if ((!enabled || tooLate) && y > 10)
+			{
+				visible = false;
+				kill();
+				destroy();
+				return;
+			}
+
 			if (mustPress)
 			{
 				if (startSpeeding)
@@ -430,8 +440,8 @@ class Note extends FlxSprite
 					}
 				}
 
-				if (!tooLate && !toggledSurpriseNote && !isSustainNote && animation.curAnim.name.endsWith('surpriseScroll'))
-					if (strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
+				if (noteType != 'normal')
+					if (!tooLate && !toggledSurpriseNote && !isSustainNote && animation.curAnim.name.endsWith('surpriseScroll') && strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
 						toggledSurpriseNote = true;
 
 				if (!delayedDeath)
@@ -446,7 +456,7 @@ class Note extends FlxSprite
 						tooLate = true;
 				}
 
-				if (!PlayState.instance.allowHealthModifiers && PlayState.instance.allowLagComp && isOnScreen(PlayState.instance.camHUD) && !withinCompensation)
+				if (!PlayState.instance.allowHealthModifiers && PlayState.instance.allowLagComp && y > -800 && y < 10 && !withinCompensation)
 					withinCompensation = true;
 				
 				if (toggledSurpriseNote)

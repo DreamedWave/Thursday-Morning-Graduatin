@@ -460,6 +460,9 @@ class TestState extends MusicBeatState
 		else if (FlxG.keys.justPressed.X)
 			changePage(true);
 
+		if (FlxG.keys.justPressed.V)
+			CoolGameFeelThings.HitStop.doHitStop(0.25);
+
 		super.update(elapsed);
 
 		if (loseControl)

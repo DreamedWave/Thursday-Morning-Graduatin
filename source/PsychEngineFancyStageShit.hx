@@ -1,3 +1,4 @@
+import shaders.WhiteOverlay;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 //import flixel.FlxG;
@@ -14,6 +15,7 @@ class FancyStageParticle extends FlxSprite
 	//var frameTimeMult:Float = 1;
 	//var frameRateMult:Float = 1;
 	var partPercent:Float = 0;
+	var whiteShaderFilter:shaders.WhiteOverlay;
 	
 	public function new()
 	{
@@ -44,9 +46,12 @@ class FancyStageParticle extends FlxSprite
 		velocity.set((-60 * particlePercentage) + 30, FlxG.random.float(-100, -150));
 		acceleration.set((-200 * particlePercentage) + 100, -200 * accelerationMultiplier);
 		partPercent = particlePercentage; //got lazy typing lol
+
+		whiteShaderFilter = new WhiteOverlay();
+		shader = whiteShaderFilter;
 	}
 
-	var alphaTwn:FlxTween;
+	var scaleTwn:FlxTween;
 	var oneTimeBool:Bool = false;
 	override function update(elapsed:Float)
 	{
@@ -64,17 +69,17 @@ class FancyStageParticle extends FlxSprite
 				acceleration.set((-400 * partPercent) + 200, -200 * accelerationMultiplier);
 			}
 
-			if (!isOnScreen(PlayState.instance.camGame))
+			if (y > 200) //guh cant fucking use isOnScreen with this shit GRAGGHHH
 			{
-				if (alphaTwn != null)
-					alphaTwn.cancel();
+				if (scaleTwn != null)
+					scaleTwn.cancel();
 				alpha = 0;
 			}
 			else
 			{
 				//Not a lerp because idk how to do an easeIn with lerps cuz im dumb
-				if (alphaTwn == null)
-					alphaTwn = FlxTween.num(alpha, 0, 1.2, {type: ONESHOT, ease: FlxEase.quartIn}, function(num:Float){alpha = num; scale.set(originalScale * alpha, originalScale * alpha);});
+				if (scaleTwn == null)
+					scaleTwn = FlxTween.num(1, 0, 1.2, {type: ONESHOT, ease: FlxEase.quartIn}, function(num:Float){whiteShaderFilter.progress.value = [1 - num]; scale.set(originalScale * num, originalScale * num);});
 			}
 		}
 		else
