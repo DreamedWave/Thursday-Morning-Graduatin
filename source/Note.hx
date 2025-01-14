@@ -390,7 +390,7 @@ class Note extends FlxSprite
 
 		if (!inCharter)
 		{
-			if ((!enabled || tooLate) && y > 10)
+			if ((!enabled || tooLate) && y < -5 && (!withinCompensation || y < 50))
 			{
 				visible = false;
 				kill();

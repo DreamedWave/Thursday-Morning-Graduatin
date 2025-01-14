@@ -68,20 +68,13 @@ class FlxSoundGroup
 	/**
 	 * Stops all sounds in this group. Only works on sounds that have been paused.
 	 * @since 4.3.0
-	 * @param	clearThresh The number of sounds that needs to exist within the group before it is stopped.
 	 */
-	 public function stop(?clearThresh:Int = 1):Void
-		{
-			if (sounds.length > clearThresh)
-			{
-				for (sound in sounds)
-					if (sound != null)
-						sound.stop();
-			}
-			else if (sounds.length == 1)
-				if (sounds[0] != null)
-					sounds[0].stop();
-		}
+	 public function stop():Void
+	{
+		for (sound in sounds)
+			if (sound != null)
+				sound.stop();
+	}
 	
 	/**
 	 * Unpauses all sounds in this group. Only works on sounds that have been paused.
