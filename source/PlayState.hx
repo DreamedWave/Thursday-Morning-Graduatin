@@ -69,7 +69,7 @@ using StringTools;
 class PlayState extends MusicBeatState
 {
 	public static var instance:PlayState;
-	public var targetFrameTime:Float = 1/60;
+	//public var targetFrameTime:Float = 1/60;
 	var lagSpikeTime:Float = 0.5;
 	public var allowDeaths:Bool = false; //crash prevention
 
@@ -443,8 +443,9 @@ class PlayState extends MusicBeatState
 	override public function create():Void
 	{
 		instance = this;
-		targetFrameTime = 1 / FlxG.save.data.fpsCap;
-		lagSpikeTime = targetFrameTime * ((FlxG.save.data.fpsCap / 60) * 8);
+		//targetFrameTime = 1 / FlxG.save.data.fpsCap;
+		//Lag spike not fps dependent anymore - basis is it skips 8 frames in 60 fps
+		lagSpikeTime = (1 / 60) * 8; //Why the fuck was this multiplied with [FlxG.save.data.fpsCap / 60]?!
 		
 		//FlxG.game.soundTray.silent = true;
 
@@ -544,7 +545,7 @@ class PlayState extends MusicBeatState
 				{
 					if (clearNumTwn != null)
 						clearNumTwn.cancel();
-					clearNumTwn = FlxTween.num(clearPercentage, 0, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.expoOut}, function(f:Float){clearPercentage = f;});
+					clearNumTwn = FlxTween.num(clearPercentage, 0, 0.3, {type: ONESHOT, ease: FlxEase.cubeOut}, function(f:Float){clearPercentage = f;});
 				}
 				else
 					clearPercentage = 0;
@@ -1711,7 +1712,7 @@ class PlayState extends MusicBeatState
 		camHUDFollow.screenCenter();
 		camHUD.focusOn(camHUDFollow.getPosition());
 		camHUD.follow(camHUDFollow, LOCKON);
-		camHUD.followLerp = 6;
+		camHUD.followLerp = 5.75;
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_UP, releaseInput);
@@ -1769,13 +1770,13 @@ class PlayState extends MusicBeatState
 				hasSubtitles = true;
 				if (isStoryMode && !playedCutscene)
 				{
-					//blackScreen.alpha = 1;
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
 					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
+						blackScreen.alpha = 1;
 						videoSprite.visible = false;
 						if (!PlayStateChangeables.Optimize)
 							desperationIntro();
@@ -1790,13 +1791,13 @@ class PlayState extends MusicBeatState
 				if (isStoryMode && !playedCutscene)
 				{
 					health = 1;
-					//blackScreen.alpha = 1;
 					inCutscene = true;
 					playedCutscene = true;
 					videoSprite.visible = true;	
 					video.playMP4(Paths.video(videoPathArray[videoArrayProgress]), false, videoSprite, false, false);
 					video.finishCallback = function()
 					{
+						blackScreen.alpha = 1;
 						videoSprite.visible = false;
 						startCountdown(true);
 					}
@@ -3510,7 +3511,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.mouse.visible && !paused)
 			FlxG.mouse.visible = false;
 
-		if (songStarted && !switchTest && FlxG.keys.justPressed.TAB && !FlxG.keys.pressed.ALT)
+		if (!endedSong && songStarted && !switchTest && FlxG.keys.justPressed.TAB && !FlxG.keys.pressed.ALT)
 		{
 			switchTest = true;
 			//tempDisableResyncVocals = true;
@@ -3627,7 +3628,7 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && !skippingIntro && !video.isPlaying && allowDeaths && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
 			pauseGame();
 
-		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 3) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
+		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 1) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
 		{
 			if (!showedResults && !video.isPlaying && allowDeaths && !PlayStateChangeables.botPlay)
 			{
@@ -4501,6 +4502,7 @@ class PlayState extends MusicBeatState
 						//A better way to check the fps
 						//in retrospect, we coulda just used elapsed(); LMAO;;
 						//and that I did!
+						//Ok this wasnt working cuz i fucking suck at math so ermm ermmmm
 						if (elapsed > lagSpikeTime || Main.fpsCounter.gameGoinThruIt)
 						{
 							if (allowHealthModifiers)
@@ -4508,7 +4510,7 @@ class PlayState extends MusicBeatState
 								lagCompIcon.alpha = 1;
 								allowHealthModifiers = false;
 								compensatedViaLagSpike = true;
-								compensateNotesBefore(Conductor.songPosition + (lagSpikeTime * 2));
+								compensateNotesBefore(Conductor.songPosition + (lagSpikeTime * 8));
 							}
 						}
 						else if (compensationTimer != null && !compensationTimer.active && !compensatedViaLagSpike && !allowHealthModifiers)
@@ -4521,7 +4523,7 @@ class PlayState extends MusicBeatState
 						if (compensationTimer != null && compensationTimer.active)
 							compensationTimer.cancel();
 
-						compensationTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
+						compensationTimer = new FlxTimer().start(0.1, function(tmr:FlxTimer)
 						{
 							allowHealthModifiers = true;
 						});
@@ -4547,12 +4549,12 @@ class PlayState extends MusicBeatState
 		FlxG.watch.addQuick("Allow Health Modifiers", allowHealthModifiers);
 		FlxG.watch.addQuick("Compensated Via Lagspike", compensatedViaLagSpike);
 		FlxG.watch.addQuick("Compensation Timer Active", (compensationTimer != null ? compensationTimer.active : "currently NULL!"));
-		FlxG.watch.addQuick("curBPM", Conductor.bpm);
 		//Broken for some hecking reason
 		FlxG.watch.addQuick("Nearest Note", (unspawnNotes.length > 0 ? unspawnNotes[0].strumTime - Conductor.songPosition : "No note"));
 		//FlxG.watch.addQuick("NearestNote CanBeHit", (unspawnNotes.length > 0 ? unspawnNotes[0].canBeHit : "No More Notes"));
 		//FlxG.watch.addQuick("Closest Can Hit", nearestNoteCanBeHit);
 		FlxG.watch.addQuick("scrollSpeed", curScroll);
+		FlxG.watch.addQuick("curBPM", Conductor.bpm);
 		FlxG.watch.addQuick("curBeat", curBeat);
 		//FlxG.watch.addQuick("curBeat (Decimal)", curDecimalBeat);
 		FlxG.watch.addQuick("curStep", curStep);
@@ -4692,6 +4694,8 @@ class PlayState extends MusicBeatState
 				{
 					if (!paused)
 						camGame.filtersEnabled = false;
+					if (causeOfDeath == 'ate-bullet')
+						causeOfDeath = '';
 					gotShotBlurTwn = null;
 				}
 			});
@@ -5443,7 +5447,7 @@ class PlayState extends MusicBeatState
 					{
 						//ratingStartDelay = Conductor.crochet * (0.001 * (daNote.children.length * 0.25));
 						ratingStartDelay += Conductor.stepCrochet * (0.001 * daNote.children.length);
-						rating.acceleration.y = (200 - (5 * daNote.children.length)) * (Conductor.bpm * 0.01); //idfk lol
+						rating.acceleration.y = 100 + (100 - (5 * daNote.children.length)) * (Conductor.bpm * 0.01); //idfk lol
 						rating.velocity.y -= FlxG.random.int(90, 120); //idfk lol part 2
 					}
 					else
@@ -5855,7 +5859,7 @@ class PlayState extends MusicBeatState
 			if (PlayStateChangeables.useDownscroll && daNote.y > strumLine.y || !PlayStateChangeables.useDownscroll && daNote.y < strumLine.y)
 			{
 				// Force good note hit regardless if it's too late to hit it or not as a fail safe
-				if (PlayStateChangeables.botPlay && daNote.canBeHit && daNote.mustPress || PlayStateChangeables.botPlay && daNote.tooLate && daNote.mustPress)
+				if (PlayStateChangeables.botPlay && (daNote.canBeHit || daNote.tooLate) && daNote.mustPress)
 				{
 					if (!daNote.delayedDeath && daNote.enabled)
 						goodNoteHit(daNote);
@@ -5886,7 +5890,7 @@ class PlayState extends MusicBeatState
 				spr.animation.play('static');
 				preventBFIdleAnim = false;
 			}
-			else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.finished && !camHUDFollowSettled)
+			else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 3 && !camHUDFollowSettled)
 			{	
 				camHUDFollowSettled = true;
 				camHUDFollow.screenCenter();
@@ -5951,12 +5955,12 @@ class PlayState extends MusicBeatState
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void
 	{
+		camShake(true, false, 'camHUD', 0.004, 0.12);
 		if (causeOfDeath != 'note-spam' && causeOfDeath != 'ate-bullet')
 			causeOfDeath = '';
 		singFollowOffset = [0, 0];
 		camHUDFollow.screenCenter();
 		camHUDFollowSettled = true;
-		camShake(true, false, 'camHUD', 0.1, 0.0075, Y);
 
 		if (allowHealthModifiers && !daNote.withinCompensation)
 		{
@@ -6703,6 +6707,7 @@ class PlayState extends MusicBeatState
 
 		camGame.stopFX();
 		camHUD.stopFX();
+		camGame.pauseVisualUpdates = true;
 
 		//specilNoteHitSFXGroup.volume *= 0.65;
 
@@ -6731,9 +6736,11 @@ class PlayState extends MusicBeatState
 				hitStopDur = 0.3;
 				CoolGameFeelThings.HitStop.doHitStop(hitStopDur);
 			default:
-				hitStopDur = 0.1;
+				hitStopDur = 0.075;
 				CoolGameFeelThings.HitStop.doHitStop(hitStopDur);
 		}
+
+		camGame.pauseVisualUpdates = false;
 
 		new FlxTimer().start(hitStopDur / 4, function (tmr:FlxTimer)
 			{
@@ -8682,8 +8689,8 @@ class PlayState extends MusicBeatState
 										camFollow.setPosition(dad.getMidpoint().x, dad.getMidpoint().y);
 										dad.playAnim('cheer', true);
 										changeSubtitles("ARGH, RED PING!!!", 0xffff0000);
-										camShake(true, true, 'camGame', 0.3, 0.05);
-										camShake(true, true, 'camHUD', 0.2, 0.025);
+										camShake(true, true, 'camGame', 1, 0.05);
+										camShake(true, true, 'camHUD', 0.9, 0.025);
 									case 98:
 										clearSubtitles();
 										boyfriend.playAnim('awkward', false);
@@ -9987,13 +9994,13 @@ class PlayState extends MusicBeatState
 
 								if (curBeat >= 160 && curBeat < 224)
 								{
-									camGame.zoom += 0.025;
-									camHUD.zoom += 0.015;	
+									camGame.zoom += 0.02;
+									camHUD.zoom += 0.01;	
 								}
 								else if (curBeat >= 354 && curBeat < 480)
 								{
-									camGame.zoom += 0.03;
-									camHUD.zoom += 0.02;
+									camGame.zoom += 0.025;
+									camHUD.zoom += 0.015;
 								}
 							}
 							else
@@ -10023,8 +10030,8 @@ class PlayState extends MusicBeatState
 
 								if (curBeat > 352 && curBeat < 416 && curBeat != 383)
 								{
-									camGame.zoom += 0.0255;
-									camHUD.zoom += 0.0155;
+									camGame.zoom += 0.0225;
+									camHUD.zoom += 0.0125;
 									if (PlayStateChangeables.Optimize)
 										if (stageOverlay1 != null && curBeat % 2 == 0 && FlxG.save.data.flashing && FlxG.save.data.distractions)
 											stageOverlay1.animation.play('singleFlash');

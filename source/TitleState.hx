@@ -170,8 +170,6 @@ class TitleState extends MusicBeatMenu
 			blackScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, bgColor);
 			credGroup.add(blackScreen);
 
-			createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
-
 			#if sys
 			if (!sys.FileSystem.exists(Sys.getCwd() + "/assets/temp"))
 				sys.FileSystem.createDirectory(Sys.getCwd() + "/assets/temp");
@@ -190,6 +188,7 @@ class TitleState extends MusicBeatMenu
 			#end
 
 			trace('Hello There!');
+			createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
 			//trace("Hello! Characters currently not working for Alphabet are: ` ~ @ # $ % ^ [ { ] } | : ; , / _"); //I cant add '\' here for some reason but yes that too
 		}
 
@@ -362,7 +361,7 @@ class TitleState extends MusicBeatMenu
 				textGroup.add(money);
 			}
 			createdCoolText = true;
-			trace ('created Text (' + curBeat + "<- CurBeat)");
+			trace ('created Text (' + curBeat + " <- CurBeat)");
 		}
 		else
 			trace ('credGroup and textGroup is NULL?!?!');
@@ -372,7 +371,7 @@ class TitleState extends MusicBeatMenu
 	{
 		if (createdCoolText)
 		{
-			trace ('added More Text (' + curBeat + "<- CurBeat)");
+			trace ('added More Text (' + curBeat + " <- CurBeat)");
 			var coolText:Alphabet = new Alphabet(0, 0, text, true);
 			coolText.screenCenter(X);
 			coolText.y += (textGroup.length * 60) + 200 + offset;

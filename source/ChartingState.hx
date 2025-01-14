@@ -1146,7 +1146,7 @@ class ChartingState extends MusicBeatState
 		altAnimThingy = new FlxUIInputText(10, 60, 100, "");
 		var altAnimThingyText = new FlxText(110, 60, 'Alt Animation (leave empty for default)');
 
-		//var applyLength:FlxButton = new FlxButton(10, 100, 'Apply Data');
+		var clearTXT:FlxButton = new FlxButton(10, 80, 'Clear TextBox', function(){altAnimThingy.text = '';});
 
 		tab_group_note.add(stepperSusLength);
 		tab_group_note.add(stepperSusLengthLabel);
@@ -1154,7 +1154,7 @@ class ChartingState extends MusicBeatState
 		tab_group_note.add(stepperSusLengthCurNoteLabel);
 		tab_group_note.add(altAnimThingy);
 		tab_group_note.add(altAnimThingyText);
-		//tab_group_note.add(applyLength);
+		tab_group_note.add(clearTXT);
 
 		UI_box.addGroup(tab_group_note);
 
@@ -2236,7 +2236,6 @@ class ChartingState extends MusicBeatState
 		updateGrid();
 		updateNoteUI();
 
-		altAnimThingy.text = '';
 		stepperSusLengthCurNote.value = 0;
 	}
 

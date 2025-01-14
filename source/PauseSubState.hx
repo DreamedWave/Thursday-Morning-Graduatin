@@ -65,14 +65,17 @@ class PauseSubState extends MusicBeatSubstate
 	public function new(x:Float, y:Float)
 	{
 		super();
-		PlayState.instance.camGame.filtersEnabled = true;
 
+		PlayState.instance.camGame.filtersEnabled = true;
 		playHUDPrevAlpha = PlayState.instance.camHUD.alpha; //here cuz we cannot guarantee that CamHUD will always be at 1 alpha
+
+		PlayState.instance.camGame.pauseVisualUpdates = true;
+		PlayState.instance.camHUD.pauseVisualUpdates = true;
 
 		//HUD Tween cuz cool
 		if (playHUDTwn != null)
 			playHUDTwn.cancel();
-		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.7, {ease: FlxEase.quadIn,
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.3, {ease: FlxEase.quadIn,
 			onComplete: function(twn:FlxTween) 
 			{
 				playHUDTwn = null;
@@ -671,6 +674,8 @@ class PauseSubState extends MusicBeatSubstate
 		PlayState.instance.pauseBlurLol.blurY = 0;
 		PlayState.instance.camGame.filtersEnabled = false;
 		PlayState.instance.camHUD.filtersEnabled = false;
+		PlayState.instance.camGame.pauseVisualUpdates = false;
+		PlayState.instance.camHUD.pauseVisualUpdates = false;
 
 		super.destroy();
 	}

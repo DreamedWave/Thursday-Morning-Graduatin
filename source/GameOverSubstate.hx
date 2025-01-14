@@ -123,7 +123,7 @@ class GameOverSubstate extends MusicBeatSubstate
 				painOverlay.alpha = 0.75;
 				add(painOverlay);
 				
-				camMain.shake(0.025, 1, true, true);
+				camMain.shake(0.05, 1, true, true);
 				FlxTween.tween(painOverlay, {alpha: 0}, 1);
 			case 'ate-many-bullets':
 				var painOverlay:FlxSprite = new FlxSprite().loadGraphic(Paths.image('lowHPOverlay'));
@@ -137,10 +137,10 @@ class GameOverSubstate extends MusicBeatSubstate
 				painOverlay.screenCenter();
 				add(painOverlay);
 				
-				camMain.shake(0.05, 1.3, true, true);
+				camMain.shake(0.1, 1, true, true);
 				FlxTween.tween(painOverlay, {alpha: 0}, 2);
 			default:
-				camMain.shake(0.015, 0.7, true, true);
+				camMain.shake(0.025, 0.75, true, true);
 		}
 
 		gameOver1 = new FlxSprite(0, 0).loadGraphic(Paths.image('Gameover_0'));

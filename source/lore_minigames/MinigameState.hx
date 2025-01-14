@@ -1230,8 +1230,8 @@ class MinigameState extends MusicBeatState
 				});
 				textLol.angularVelocity = 0;
 				FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut});
-				camShake('camHUD', true, true, 2, 0.4, 0.5);
 				camHUD.stopFX();
+				camShake('camHUD', true, true, 2, 0.4, 0.25);
 				camHUD.flash(FlxColor.RED, 1);
 				camGame.visible = false;
 				new FlxTimer().start(3, function(tmr:FlxTimer)

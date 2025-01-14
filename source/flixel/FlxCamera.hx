@@ -213,6 +213,12 @@ class FlxCamera extends FlxBasic
 	public var useBgAlphaBlending:Bool = false;
 
 	/**
+	 * Custom Var by Amiee! :3
+	 * Pauses or Plays the updates of effects within this - useful for stuff like pause screens or cutscenes
+	**/
+	public var pauseVisualUpdates:Bool = false;
+
+	/**
 	 * Used to render buffer to screen space.
 	 * NOTE: We don't recommend modifying this directly unless you are fairly experienced.
 	 * Uses include 3D projection, advanced display list modification, and more.
@@ -1184,19 +1190,20 @@ class FlxCamera extends FlxBasic
 		super.update(elapsed);
 		
 		// follow the target, if there is one
-		if (target != null)
+		if (!pauseVisualUpdates)
 		{
-			updateFollow(elapsed);
+			if (target != null)
+				updateFollow(elapsed);
+
+			updateScroll();
+			updateFlash(elapsed);
+			updateFade(elapsed);
+
+			flashSprite.filters = filtersEnabled ? filters : null;
+
+			updateFlashSpritePosition();
+			updateShake(elapsed);
 		}
-
-		updateScroll();
-		updateFlash(elapsed);
-		updateFade(elapsed);
-
-		flashSprite.filters = filtersEnabled ? filters : null;
-
-		updateFlashSpritePosition();
-		updateShake(elapsed);
 	}
 
 	/**
