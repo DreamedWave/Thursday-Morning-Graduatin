@@ -73,7 +73,7 @@ class FlxSound extends FlxBasic
 	/**
 	 * Whether to call `destroy()` when the sound has finished playing.
 	 */
-	public var autoDestroy:Bool;
+	public var autoDestroy:Bool = true;
 
 	/**
 	 * Tracker for sound complete callback. If assigned, will be called
@@ -733,13 +733,17 @@ class FlxSound extends FlxBasic
 			this.group = group;
 
 			if (oldGroup != null)
+			{
 				oldGroup.remove(this);
+				trace ('removed sound from: ' + oldGroup);
+			}
 
 			if (group != null)
 				group.add(this);
 
 			updateTransform();
 		}
+		trace ('added sound to: ' + group);
 		return group;
 	}
 

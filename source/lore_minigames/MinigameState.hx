@@ -30,7 +30,7 @@ import flixel.util.FlxStringUtil;
 
 class MinigameState extends MusicBeatState
 {
-	var targetFrameTime:Float = 1/60;
+	var targetFrameTime:Float = 1/120;
 	var frameTimeMult:Float = 1;
 
 	public static var player:Player;
@@ -99,7 +99,8 @@ class MinigameState extends MusicBeatState
 		//DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
 		#end
 
-		targetFrameTime = 1 / FlxG.save.data.fpsCap;
+		if (FlxG.save.data.fpsCap < 120)
+			targetFrameTime = 1 / FlxG.save.data.fpsCap;
 		initSkipFrames = Math.round(FlxG.save.data.fpsCap / 60);
 		noiseSkipFrames = initSkipFrames;
 		trace('noiseSkipFrames: ' + initSkipFrames);
@@ -240,12 +241,12 @@ class MinigameState extends MusicBeatState
 		staminaBar.cameras = [camHUD];
 		add(staminaBar);
 
-		var healthBar:FlxBar = new FlxBar(10, FlxG.height - 50, LEFT_TO_RIGHT, 120, 20, player, 'health', 0, 100);
+		/*var healthBar:FlxBar = new FlxBar(10, FlxG.height - 50, LEFT_TO_RIGHT, 120, 20, player, 'health', 0, 100);
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		healthBar.antialiasing = FlxG.save.data.antialiasing;
 		healthBar.angle = 2;
 		healthBar.cameras = [camHUD];
-		add(healthBar);
+		add(healthBar);*/
 		
 		super.create();
 
@@ -1066,24 +1067,24 @@ class MinigameState extends MusicBeatState
 	private function playerFell():Void
 	{
 		player.canMove = false;
-		player.hurt(10);
-		if (player.health <= 0)
-			playerDied();
-		else
-		{
+		//player.hurt(10);
+		//if (player.health <= 0)
+			//playerDied();
+		//else
+		//{
 			//placeholder snd
-			FlxG.sound.play(Paths.soundRandom('comboBreakBig', 1, 3), 0.75);
+			FlxG.sound.play('assets/minigame/sounds/playerDie.ogg', 0.75, false);
 			FlxTween.tween(darkenScreen, {alpha: 1}, 0.5, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
 				function(twn:FlxTween)
 				{
 					player.setPosition(playerResetPos[0], playerResetPos[1]);
-					camMovementLerp[0] *= -1;
 					camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 20);
-					FlxG.sound.play(Paths.sound("Note_Trigger"), 0.5, false);
+					camMovementLerp[1] *= -0.5;
+					FlxG.sound.play('assets/minigame/sounds/playerRespawn.ogg', 0.75, false);
 					FlxTween.tween(darkenScreen, {alpha: 0}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut});
 					player.canMove = true;
 				}});
-		}
+		//}
 	}
 
 	private function playerDied()
@@ -1101,7 +1102,7 @@ class MinigameState extends MusicBeatState
 		player.canMove = false;
 		var dedSound:FlxSound;
 		//placeholder snd
-		dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
+		dedSound = FlxG.sound.play('assets/minigame/sounds/playerDie.ogg', 0.75, false);
 		dedSound.pitch = 1.5;
 		new FlxTimer().start(0.5, function(tmr:FlxTimer)
 		{

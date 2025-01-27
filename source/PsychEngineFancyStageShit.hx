@@ -20,6 +20,8 @@ class FancyStageParticle extends FlxSprite
 	public function new()
 	{
 		super(x, y);
+		whiteShaderFilter = new WhiteOverlay();
+		shader = whiteShaderFilter;
 	}
 
 	public function initialize(particleName:String, currentWeek:String, particlePercentage:Float = 1, min:Int, max:Int, x:Float, y:Float, color:FlxColor, nextColor:FlxColor)
@@ -46,9 +48,6 @@ class FancyStageParticle extends FlxSprite
 		velocity.set((-60 * particlePercentage) + 30, FlxG.random.float(-100, -150));
 		acceleration.set((-200 * particlePercentage) + 100, -200 * accelerationMultiplier);
 		partPercent = particlePercentage; //got lazy typing lol
-
-		whiteShaderFilter = new WhiteOverlay();
-		shader = whiteShaderFilter;
 	}
 
 	var scaleTwn:FlxTween;

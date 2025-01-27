@@ -30,11 +30,15 @@ class Player extends FlxSprite
 	public var stamina:Float = 100;
 	public var ranOutOfBreath:Bool = false;
 
+	var walkSnd:FlxSound;
+
 	public var defaultSpeedCaps:Array<Float> = [75, 150, 400]; //In Order: Sneaking, Walking, Running
 
 	public function new(x:Float = 0, y:Float = 0)
 	{
 		super(x, y);
+		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
+		
 		loadGraphic("assets/minigame/images/guyPixel-Sheet.png", true, 64, 64);
 		setFacingFlip(LEFT, true, false);
 		setFacingFlip(RIGHT, false, false);
@@ -50,6 +54,8 @@ class Player extends FlxSprite
 		{
 			switch (animName)
 			{
+				case "walk":
+					walkSnd.play(true);
 				case "unsneak":
 					animation.play("idle");
 			}
@@ -60,7 +66,7 @@ class Player extends FlxSprite
 			}*/
 		};
 
-		health = 100;
+		//health = 100;
 
 		setSize(26, 60);
 		offset.set(19, -4);
@@ -91,13 +97,13 @@ class Player extends FlxSprite
 	}
 
 
-	override public function hurt(damage:Float):Void
+	/*override public function hurt(damage:Float):Void
 	{
 		if (damage <= health)
 			health -= damage;
 		else
 			health = 0;
-	}
+	}*/
 	
 	private function initializeFSM(moveset:String):Void
 	{
@@ -249,8 +255,6 @@ class StillIdle extends FlxFSMState<Player>
 
 class Idle extends FlxFSMState<Player>
 {
-	var walkSnd:FlxSound;
-
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
 		if (owner.curAction != JUMP)
@@ -259,7 +263,6 @@ class Idle extends FlxFSMState<Player>
 				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
 			owner.drag.x = owner.maxVelocity.x * 2;
 		}
-		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
 		owner.curAction = IDLE;
 		if (owner.animation.curAnim.name != 'unsneak')
 			owner.animation.play("idle");
@@ -270,8 +273,6 @@ class Idle extends FlxFSMState<Player>
 		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
 		{
 			//Placeholder SND and anims
-			walkSnd.play();
-			
 			if (FlxG.keys.pressed.SHIFT && !owner.ranOutOfBreath) //RUN
 			{
 				owner.animation.play("run-mach1");
@@ -424,6 +425,7 @@ class Jump extends FlxFSMState<Player>
 		{
 			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
 			{
+				//This is FPS dependent and that's BAD
 				owner.velocity.y -= 1.25 * owner.frameTimeMult; //big bnuberes jsncbdnbjf
 				if (owner.maxVelocity.y != owner.GRAVITY * 0.4)
 				{

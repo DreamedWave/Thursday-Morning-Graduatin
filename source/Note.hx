@@ -440,9 +440,14 @@ class Note extends FlxSprite
 					}
 				}
 
-				if (noteType != 'normal')
-					if (!tooLate && !toggledSurpriseNote && !isSustainNote && animation.curAnim.name.endsWith('surpriseScroll') && strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
+				if (noteType != 'normal' && !toggledSurpriseNote && !tooLate)
+				{
+					if (!isSustainNote && animation.curAnim.name.endsWith('surpriseScroll') && strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
+					{
 						toggledSurpriseNote = true;
+						animation.play(dataColor[noteData] + 'Scroll');
+					}
+				}
 
 				if (!delayedDeath)
 				{
@@ -459,18 +464,11 @@ class Note extends FlxSprite
 				if (!PlayState.instance.allowHealthModifiers && PlayState.instance.allowLagComp && y > -800 && y < 10 && !withinCompensation)
 					withinCompensation = true;
 				
-				if (toggledSurpriseNote)
-				{
-					animation.play(dataColor[noteData] + 'Scroll');
-					if (noteType != 'mine')
-						blend = ADD;
-				}
-				
-				if (withinCompensation && color != 0xFFBDFCFF)
+				if (noteType == 'normal' && withinCompensation && color != 0xFFBDFCFF)
 				{
 					color = 0xFFBDFCFF;
 					baseAlpha *= 0.65;
-					if (!isSustainNote && noteType != 'mine' && noteType != 'trigger')
+					if (!isSustainNote)
 					{
 						animation.play(dataColor[noteData] + 'SafeScroll');
 					}

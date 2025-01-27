@@ -236,7 +236,7 @@ class SoundFrontEnd
 			sound.play();
 		}
 
-		sound.group = (group == null) ? defaultSoundGroup : group;
+		sound.group = (group == null ? defaultSoundGroup : group);
 		return sound;
 	}
 

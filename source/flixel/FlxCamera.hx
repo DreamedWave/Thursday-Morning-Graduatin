@@ -1448,9 +1448,9 @@ class FlxCamera extends FlxBasic
 						if (_fxShakeAxes != FlxAxes.Y)
 						{
 							if (nextScrollShakeX < 0)
-								nextScrollShakeX = FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeX = CoolUtil.boundTo(FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1), 0, 360);
 							else
-								nextScrollShakeX = FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeX = CoolUtil.boundTo(FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1), -360, 0);
 							nextScrollShakeX /= 1.5;
 							nextScrollShakeX /= zoom;
 							nextScrollShakeX *= FlxG.width / 1280;
@@ -1460,9 +1460,9 @@ class FlxCamera extends FlxBasic
 						if (_fxShakeAxes != FlxAxes.X)
 						{
 							if (nextScrollShakeY < 0)
-								nextScrollShakeY = FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeY = CoolUtil.boundTo(FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1), 0, 360);
 							else
-								nextScrollShakeY = FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeY = CoolUtil.boundTo(FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1), -360, 0);
 							nextScrollShakeY /= 1.5;
 							nextScrollShakeY /= zoom;
 							nextScrollShakeY *= FlxG.height / 720;

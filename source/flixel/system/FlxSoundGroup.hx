@@ -66,7 +66,7 @@ class FlxSoundGroup
 	}
 
 	/**
-	 * Stops all sounds in this group. Only works on sounds that have been paused.
+	 * Stops all sounds in this group.
 	 * @since 4.3.0
 	 */
 	 public function stop():Void

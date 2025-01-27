@@ -1,3 +1,5 @@
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import haxe.Timer;
 
 //A class I made by myself (Amiee)!!! :3 :3 :3
@@ -22,5 +24,29 @@ class HitStop
     {
         FlxG.timeScale = 1;
         waiting = false;
+    }
+
+
+    public static function doSlowDown(duration:Float, slowDownAmt:Float, doTwn:Bool = true)// (in seconds)
+    {
+        trace('wah but not frozen'); //fucking liar BAHAHAHAH
+        if (waiting)
+            return;
+
+        waiting = true;
+        if (doTwn)
+        {
+            FlxTween.tween(FlxG, {timeScale: slowDownAmt}, duration/2, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
+                function(twn:FlxTween)
+                {
+                    FlxTween.tween(FlxG, {timeScale: 1}, duration/2, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                }
+            });
+        }
+        else
+        {
+            FlxG.timeScale = slowDownAmt;
+            Timer.delay(unFreeze, Math.floor(duration * 1000));
+        }
     }
 }
