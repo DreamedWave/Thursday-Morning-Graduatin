@@ -585,7 +585,7 @@ class FreeplayState extends MusicBeatMenu
 		else if (curSelected >= songs.length)
 			curSelected = 0;
 
-		trace("CurSelected = " + curSelected + " || Songs Length = " + songs.length);
+		trace("CurSelected = " + (curSelected + 1) + " || Songs Length = " + songs.length);
 
 		// selector.y = (70 * curSelected) + 30;
 		

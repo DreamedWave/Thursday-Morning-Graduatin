@@ -28,8 +28,8 @@ class GrayScale extends FlxShader
 			vec4 sample = flixel_texture2D(bitmap, openfl_TextureCoordv);
 			float gray = 0.21 * sample.r + 0.71 * sample.g + 0.07 * sample.b;
 			sample.r = sample.r * (1.0 - u_colorFactor) + (gray * u_colorFactor);
-			sample.b = sample.b * (1.0 - u_colorFactor) + ((gray * 1.15) * u_colorFactor);
-			sample.g = sample.g * (1.0 - u_colorFactor) + ((gray * 1.25) * u_colorFactor);
+			sample.b = sample.b * (1.0 - u_colorFactor) + ((gray * 1.25) * u_colorFactor);
+			sample.g = sample.g * (1.0 - u_colorFactor) + ((gray * 1.05) * u_colorFactor);
 			sample.rbg = sample.rgb * 0.55;
 			
 			gl_FragColor = sample;

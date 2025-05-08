@@ -3588,15 +3588,37 @@ class PlayState extends MusicBeatState
 								{
 									//To Do: move mid song anims and events here
 									//For example: case "Play Character Animation":x
-									case "Scroll Speed Change":
+									case "Scroll Speed Change" | "Scroll Change" | "SSC" | "SC":
 										prevScrollCheck = false;
 										prevScroll = newScroll;
 										newScroll = (i.value * diffSpeedMult) * FlxG.save.data.scrollSpeed;
 										tweenScroll();
-									case "BPM Change":
+
+									case "BPM Change" | "Tempo Change" | "BPMC" | "TC":
 										Conductor.changeBPM(i.value, false);
 										fakeCrochet = (60 / i.value) * 1000;
 										idleCamShakeTimer = Conductor.crochet / 1000 - 0.01;
+
+									case "Quick Time Event" | "Quick Time" | "QuickTime" | "QTE":
+										//QTE Shit here
+										//Make the quick time event shit not visible and reset
+										//Do cool effect or play cool sound
+										//Valie is an array that will contain [Key for QTE, Time window for QTE (in beats), and some other shit idk]
+									
+									case "Play Animation" | "Play Character Animation" | "PlayAnim" | "PA":
+										//An array, will contain in order: [Who the anim is for? (BF. OP, GF), What animation to play, some bools and shit (midsongcurscene) and how long this shit will last]
+										/*switch (i.value[0])
+										{
+											case "BF" | "Boyfriend" | "Player":
+												//anim shit here
+											case "OP" | "Opponent" | "Dad | "Enemy":											case "GF:"
+										}*/
+
+										//if (i.value[3])
+										/*{
+											midSongCutscene = true;
+											new FlxTimer().start(i.value[4], shit here lol, function() disable midsong cutscene here)
+										}*/
 								}
 							}
 						}
@@ -6560,16 +6582,20 @@ class PlayState extends MusicBeatState
 		songDeaths++;
 		hasReset = true;
 
-		var hitStopDur:Float = 0;
+		if (isBFTurn)
+			camGame.pauseVisualUpdates = false;
+
 		switch (causeOfDeath)
 		{
 			case 'intentional-reset':
-				//no hitstop :3
-			case 'ate-bullet':
-				hitStopDur = 0.2;
-				CoolGameFeelThings.HitStop.doHitStop(hitStopDur);
+				//No Hitstop
+				if (!PlayStateChangeables.Optimize)
+					openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				else
+					openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
 
-				camGame.pauseVisualUpdates = false;
+			case 'ate-bullet':
+				CoolGameFeelThings.HitStop.doHitStop(0.2);
 
 				new FlxTimer().start(0.05, function (tmr:FlxTimer)
 					{
@@ -6579,10 +6605,7 @@ class PlayState extends MusicBeatState
 							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
 					});
 			case 'ate-many-bullets':
-				hitStopDur = 0.3;
-				CoolGameFeelThings.HitStop.doHitStop(hitStopDur);
-
-				camGame.pauseVisualUpdates = false;
+				CoolGameFeelThings.HitStop.doHitStop(0.3);
 
 				new FlxTimer().start(0.075, function (tmr:FlxTimer)
 					{
@@ -6592,12 +6615,9 @@ class PlayState extends MusicBeatState
 							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
 					});
 			default:
-				hitStopDur = 0.05;
-				CoolGameFeelThings.HitStop.doSlowDown(hitStopDur, 0.25, true);
+				CoolGameFeelThings.HitStop.doSlowDown(0.1, 0.5, true);
 
-				camGame.pauseVisualUpdates = false;
-
-				new FlxTimer().start(hitStopDur, function (tmr:FlxTimer)
+				new FlxTimer().start(0.1, function (tmr:FlxTimer)
 					{
 						if (!PlayStateChangeables.Optimize)
 							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
@@ -6611,7 +6631,6 @@ class PlayState extends MusicBeatState
 	{
 		stageSound = FlxG.sound.play(Paths.soundRandom('glitch_', 1, 2, 'week2'), 0.85 - (0.05 * storyProgress));
 		stageSound.persist = true;
-		stageSound.autoDestroy = true;
 
 		if (FlxG.save.data.flashing)
 			theBorderBG.animation.play('lightning');

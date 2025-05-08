@@ -37,7 +37,7 @@ class TheManUpstairs extends FlxSprite
 	public function new(x:Float, y:Float, type:FinalChaserType)
 	{
 		super(x, y);
-		makeGraphic(48, 48, 0xFF640000);
+		makeGraphic(64, 64, 0xFF640000);
 		alpha = 0.75;
 		brain = new EnemyAI(idle);
 		idleTimer = 3;

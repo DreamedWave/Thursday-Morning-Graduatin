@@ -36,16 +36,25 @@ class HitStop
         waiting = true;
         if (doTwn)
         {
-            FlxTween.tween(FlxG, {timeScale: slowDownAmt}, duration/2, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
+            FlxTween.tween(FlxG, {timeScale: slowDownAmt}, duration * 0.75, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
                 function(twn:FlxTween)
                 {
-                    FlxTween.tween(FlxG, {timeScale: 1}, duration/2, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                    if (slowDownAmt > 0)
+                        FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.25, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                    else
+                        Timer.delay(
+                            function()
+                            {
+                                FlxG.timeScale = 0.025;
+                                FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.125, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                            },
+                        Math.floor((duration * 0.125) * 1000));
                 }
             });
         }
         else
         {
-            FlxG.timeScale = slowDownAmt;
+            FlxG.timeScale = slowDownAmt; 
             Timer.delay(unFreeze, Math.floor(duration * 1000));
         }
     }

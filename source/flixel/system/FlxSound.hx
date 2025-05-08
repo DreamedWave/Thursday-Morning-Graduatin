@@ -739,11 +739,13 @@ class FlxSound extends FlxBasic
 			}
 
 			if (group != null)
+			{
 				group.add(this);
+				trace ('group Added to length check: ' + group.sounds.length);
+			}
 
 			updateTransform();
 		}
-		trace ('added sound to: ' + group);
 		return group;
 	}
 
