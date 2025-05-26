@@ -530,7 +530,7 @@ class PauseSubState extends MusicBeatSubstate
 						randomMusicTime = false;
 						FlxTween.tween(bg, {alpha: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 
-						pauseMusic.tapeStop(0.3, 0.3, function(twn:FlxTween)
+						pauseMusic.tapeStop(0.1, 0.25, function(twn:FlxTween)
 							{
 								pauseMusic.stop();
 

@@ -67,7 +67,7 @@ class OptionsMenu extends MusicBeatMenu
 			new NightModeOption("Darkens UI and gameplay to prevent eye strain during night."),
 			new AutoNightModeOption("If on, dark-mode triggers automatically based the time of day."),
 			new NoteSplashingEffectsOption("Toggle the splashes when you hit a 'SICK!!' or miss a note."),
-			new CpuStrums("If on, the opponent's strumline will light up whenever the opponent hits a note."),
+			//new CpuStrums("If on, the opponent's strumline will light up whenever the opponent hits a note."),
 			new CamZoomOption("Toggle the camera zooming on-beat with the song."),
 			#if desktop
 			new FPSCapOption("Change your FPS Cap.")
@@ -177,7 +177,8 @@ class OptionsMenu extends MusicBeatMenu
 		currentDescription = "--";
 
 		//FIX THIS SO THAT IT IS ON TOP INSTEAD OF THE BOTTOM OF THE SCREEN
-		offsetNumberShit = new FlxText(5, -40, FlxG.width - 5, "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms');
+		offsetNumberShit = new FlxText(5, -40, FlxG.width - 5);
+		offsetNumberShit.text = getOffsetNumberText();
 		offsetNumberShit.scrollFactor.set();
 		offsetNumberShit.setFormat("VCR OSD Mono", 25, FlxColor.WHITE, LEFT);
 		offsetNumberShit.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2, 1);
@@ -265,6 +266,14 @@ class OptionsMenu extends MusicBeatMenu
 	var antiSpam:Int = 6;
 	var mouseActive:Bool = false;
 	var mouseTimer:FlxTimer;
+
+	private function getOffsetNumberText():String
+	{
+		return 
+			"Offset ([←] / [→], [SHIFT] to slow): " 
+			+ HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) 
+			+ '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+	}
 
 	//Add mouse compatabiitylyiy
 	override function update(elapsed:Float)
@@ -527,12 +536,12 @@ class OptionsMenu extends MusicBeatMenu
 					{
 						if (FlxG.keys.justPressed.RIGHT)
 						{
-							FlxG.save.data.offset += 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 0.5, 1);
 							FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 						}
 						else if (FlxG.keys.justPressed.LEFT)
 						{
-							FlxG.save.data.offset -= 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 0.5, 1);
 							FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 						}
 					}
@@ -540,7 +549,7 @@ class OptionsMenu extends MusicBeatMenu
 					{
 						if (antiSpam > 3)
 						{
-							FlxG.save.data.offset += 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 1, 1);
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 						}
@@ -551,7 +560,7 @@ class OptionsMenu extends MusicBeatMenu
 					{	
 						if (antiSpam > 3)
 						{
-							FlxG.save.data.offset -= 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 1, 1);
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 						}
@@ -559,7 +568,7 @@ class OptionsMenu extends MusicBeatMenu
 							antiSpam++;
 					}
 					
-					offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+					offsetNumberShit.text = getOffsetNumberText();
 					descriptionShit.text = currentDescription;
 				}
 			}
@@ -569,12 +578,12 @@ class OptionsMenu extends MusicBeatMenu
 				{
 					if (FlxG.keys.justPressed.RIGHT)
 					{
-						FlxG.save.data.offset += 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 0.5, 1);
 						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 					}
 					else if (FlxG.keys.justPressed.LEFT)
 					{
-						FlxG.save.data.offset -= 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 0.5, 1);
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 					}
 				}
@@ -582,7 +591,7 @@ class OptionsMenu extends MusicBeatMenu
 				{					
 					if (antiSpam > 3)
 					{
-						FlxG.save.data.offset += 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 1, 1);
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 					}
@@ -593,7 +602,7 @@ class OptionsMenu extends MusicBeatMenu
 				{		
 					if (antiSpam > 3)
 					{
-						FlxG.save.data.offset -= 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 1, 1);
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 					}
@@ -601,7 +610,7 @@ class OptionsMenu extends MusicBeatMenu
 						antiSpam++;
 				}
 				
-				offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+				offsetNumberShit.text = getOffsetNumberText();
 			}
 		
 
@@ -730,7 +739,7 @@ class OptionsMenu extends MusicBeatMenu
 			}
 			else
 			{
-				offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+				offsetNumberShit.text = getOffsetNumberText();
 				descriptionShit.text = currentDescription;
 			}
 			descriptionShit.updateHitbox();

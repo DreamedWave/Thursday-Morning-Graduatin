@@ -120,8 +120,8 @@ class SaveData
 		if (FlxG.save.data.botplay == null)
 			FlxG.save.data.botplay = false;
 
-		if (FlxG.save.data.cpuStrums == null)
-			FlxG.save.data.cpuStrums = false;
+		//if (FlxG.save.data.cpuStrums == null)
+			//FlxG.save.data.cpuStrums = false;
 
 		if (FlxG.save.data.strumline == null)
 			FlxG.save.data.strumline = true;
@@ -221,7 +221,7 @@ class SaveData
 		FlxG.save.data.flashing = null;
 		FlxG.save.data.resetButton = null;
 		FlxG.save.data.botplay = null;
-		FlxG.save.data.cpuStrums = null;
+		//FlxG.save.data.cpuStrums = null;
 		FlxG.save.data.strumline = null;
 		FlxG.save.data.camzoom = null;
 		FlxG.save.data.scoreScreen = null;

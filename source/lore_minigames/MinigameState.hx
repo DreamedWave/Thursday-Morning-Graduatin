@@ -1020,7 +1020,8 @@ class MinigameState extends MusicBeatState
 									theManUpstairs.y = player.y - ((theManUpstairs.height - player.height) / 2);
 									theManUpstairs.quellTheDemon(2, true);
 								}*/
-								theManUpstairs.quellTheDemon(1, true);
+								if (theManUpstairs != null && theManUpstairs.exists)
+									theManUpstairs.quellTheDemon(1, true);
 								new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
 								{
 									if (pseudoCamFade.alpha > 0)
@@ -1129,23 +1130,30 @@ class MinigameState extends MusicBeatState
 					DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
 				#end
 
+				CoolGameFeelThings.HitStop.doSlowDown(1, 0.125, true, function()
+					{
+						//After the slowdown finishes - ermm idk if this works -AWH
+						defaultCamZoom *= 1.5;
+						darkenScreen.alpha = 1;
+						var jumpScareSnd:FlxSound = FlxG.sound.play(Paths.sound('boh'), 0.5, false);
+						if (theManUpstairs != null && theManUpstairs.exists)
+							theManUpstairs.quellTheDemon(1, true);
+						camShake(true, false, 0.075, 1);
+						new FlxTimer().start(0.5, function (tmr:FlxTimer)
+						{
+							jumpScareSnd.stop();
+							him.kill();
+							him.destroy();
+							FlxG.sound.music.stop();
+							camGame.visible = false;
+							showGameoverScreen();
+						});
+					}
+				);
+
 				//camGame.shakeFlashSprite = false;
 				//camHUD.shakeFlashSprite = false;
-				defaultCamZoom *= 1.5;
-				darkenScreen.alpha = 1;
-				var jumpScareSnd:FlxSound = FlxG.sound.play(Paths.sound('boh'), 0.5, false);
-				theManUpstairs.quellTheDemon(1, true);
-				camShake(true, false, 0.075, 1);
-				CoolGameFeelThings.HitStop.doSlowDown(0.15, 0.25, true);
-				new FlxTimer().start(0.5, function (tmr:FlxTimer)
-				{
-					jumpScareSnd.stop();
-					him.kill();
-					him.destroy();
-					FlxG.sound.music.stop();
-					camGame.visible = false;
-					showGameoverScreen();
-				});
+
 				/*var dedSound:FlxSound;
 				dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
 				dedSound.pitch = 0.5;*/

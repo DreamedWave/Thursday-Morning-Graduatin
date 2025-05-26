@@ -71,9 +71,13 @@ class NoteSplash extends FlxSprite
 			case 'miss'| 'bad' | 'shit':
 				wasMissed = true;
 			default:
-				rating = 'sick';
+				kill();
+				return;
 				//"In the event that the programme slips up, I would rather reward the player rather than unfairly punishing them."
 				// - DreamedWave 2022
+
+				//"Girl,,, this is the note splash script wtf are you talking about"
+				// - AmieeWuzHere 2025
 		}
 		if (y < -10 && !wasMissed)
 			y = -10;
@@ -141,6 +145,9 @@ class NoteSplash extends FlxSprite
 						animation.play('splash ' + animNum + ' mine', true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+					default:
+						kill();
+						trace('nuh uh');
 				}
 			case "trigger":
 				switch (rating)
@@ -157,6 +164,9 @@ class NoteSplash extends FlxSprite
 						animation.play('splash ' + animNum + ' mine', true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+					default:
+						kill();
+						trace('nuh uh');
 				}
 			default:
 				switch (rating)
@@ -183,6 +193,7 @@ class NoteSplash extends FlxSprite
 						}
 					default:
 						kill();
+						trace('nuh uh');
 				}
 		}
 	}

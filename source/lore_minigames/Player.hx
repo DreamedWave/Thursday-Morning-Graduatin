@@ -16,6 +16,7 @@ enum PlayerActions
 	JUMP;
 	SNEAK;
 	SLIDE;
+	CLIMB;
 	NONE;
 }
 
@@ -68,8 +69,8 @@ class Player extends FlxSprite
 
 		//health = 100;
 
-		setSize(26, 60);
-		offset.set(19, -4);
+		setSize(24, 50);
+		offset.set(20, -14);
 
 		acceleration.y = GRAVITY;
 		maxVelocity.set(defaultSpeedCaps[1], GRAVITY);
@@ -111,15 +112,19 @@ class Player extends FlxSprite
 		{
 			default:
 				//                  From   To     Conditions
+				//Note: Jump will NEVER turn to Fall, but fall can turn to Jump
+				//Jump
 				fsm.transitions.add(Idle, Jump, Conditions.startJump);
 				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
 				fsm.transitions.add(Jump, Idle, Conditions.landFromAir);
 				fsm.transitions.add(Jump, Sneak, Conditions.landFromAirSneaked);
 
+				//Fall
 				fsm.transitions.add(Idle, Falling, Conditions.startFall);
 				fsm.transitions.add(Falling, Jump, Conditions.startJump);
 				fsm.transitions.add(Falling, Idle, Conditions.landFromAir);
 
+				//Sneak
 				fsm.transitions.add(Idle, Sneak, Conditions.startSneak);
 				fsm.transitions.add(Sneak, Idle, Conditions.endSneak);
 
@@ -132,6 +137,8 @@ class Player extends FlxSprite
 				fsm.transitions.add(Falling, StillIdle, Conditions.forceStillIdle);
 				fsm.transitions.add(Jump, StillIdle, Conditions.forceStillIdle);
 				fsm.transitions.add(Sneak, StillIdle, Conditions.forceStillIdle);
+
+				//HAVE NOT ADDED WALL CLUMB YET
 		}
 		fsm.transitions.start(Idle);
 	}
@@ -223,8 +230,11 @@ class Conditions
 	public static function endSlideSneaky(Player:Player):Bool
 		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN && (FlxG.keys.justReleased.SHIFT || ((Player.facing == RIGHT && Player.velocity.x < 90) || (Player.facing == LEFT && Player.velocity.x > -90))) && Player.curAction == SLIDE;}
 
-	public static function animationFinished(Player:Player):Bool
-		{return Player.animation.finished;}
+	//God i have not touched this script in so long LMFAO
+	public static function startWallClimb(Player:Player):Bool
+		{return !Player.isTouching(WALL) && FlxG.keys.pressed.SHIFT;}
+
+
 }
 
 class StillIdle extends FlxFSMState<Player>

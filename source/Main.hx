@@ -356,7 +356,7 @@ class Main extends Sprite
 			"Well, that just washes right off doesn't it?!",
 			"Kade's Fault not mine!!!",
 			"Now, this is what I call BUG FREE!",
-			"Technically bug free - I don't see any spiders!",
+			"Technically bug free - I don't see no spiders!",
 			"It's not a bug, it's a feature!",
 			"This isn't a beach, this is a BATHTUB!",
 			"Ugh whatever, I'm going back to roblox fnf obby.",

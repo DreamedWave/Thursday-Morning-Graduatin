@@ -27,7 +27,7 @@ class HitStop
     }
 
 
-    public static function doSlowDown(duration:Float, slowDownAmt:Float, doTwn:Bool = true)// (in seconds)
+    public static function doSlowDown(duration:Float, slowDownAmt:Float, doTwn:Bool = true, ?thisOnComplete:Void->Void)// (in seconds)
     {
         trace('wah but not frozen'); //fucking liar BAHAHAHAH
         if (waiting)
@@ -40,13 +40,13 @@ class HitStop
                 function(twn:FlxTween)
                 {
                     if (slowDownAmt > 0)
-                        FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.25, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                        FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.25, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false; if (thisOnComplete != null) thisOnComplete();}});
                     else
                         Timer.delay(
                             function()
                             {
                                 FlxG.timeScale = 0.025;
-                                FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.125, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;}});
+                                FlxTween.tween(FlxG, {timeScale: 1}, duration * 0.125, {type: ONESHOT, ease: FlxEase.quartIn, onComplete: function(twn:FlxTween){waiting = false;  if (thisOnComplete != null) thisOnComplete();}});
                             },
                         Math.floor((duration * 0.125) * 1000));
                 }

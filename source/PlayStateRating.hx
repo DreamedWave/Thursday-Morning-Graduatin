@@ -37,12 +37,12 @@ class Rating extends FlxSprite
 				//timer is longer if the note is a parent to multiple sustain children
 				if (isParent)
 				{
-					acceleration.y = 100 + (65 - (5 * susLength)) * (Conductor.bpm * 0.01); //idfk lol
+					acceleration.y = 100 + (30 - (5 * susLength)) * (Conductor.bpm * 0.01); //idfk lol
 					velocity.y -= 50 + (50 - (5 * susLength)) * (Conductor.bpm * 0.01) - (daRating != 'sick' && daRating != 'good' ? 30 : 0); //idfk lol //idfk lol part 2
 				}
 				else
 				{
-					acceleration.y = 400 + (50 * (Conductor.bpm * 0.01));
+					acceleration.y = 400 + (30 * (Conductor.bpm * 0.01));
 					velocity.y -= FlxG.random.int(170, 210) - (daRating != 'sick' && daRating != 'good' ? 30 : 0);
 				}
 
@@ -102,10 +102,15 @@ class Num extends FlxSprite
 		antialiasing = FlxG.save.data.antialiasing;
 		//guys are more heavy to avoid coverin up the top
 		if (!isSus)
-			acceleration.y = 300 + (50 * (Conductor.bpm * 0.01));
+		{
+			acceleration.y = 400 + (25 * (Conductor.bpm * 0.01));
+			velocity.y -= FlxG.random.int(120, 170);
+		}
 		else
-			acceleration.y = 400 + (50 * (Conductor.bpm * 0.01));
-		velocity.y -= FlxG.random.int(120, 170);
+		{
+			acceleration.y = 425 + (25 * (Conductor.bpm * 0.01));
+			velocity.y -= FlxG.random.int(80, 130);
+		}
 		velocity.x = FlxG.random.float(-2.5, 2.5);
 
 		leTwn = FlxTween.tween(this, {alpha: 0}, 0.15, {type: ONESHOT, startDelay: Conductor.crochet * (!isParent ? 0.00125 : 0.001)});
