@@ -5846,7 +5846,7 @@ class PlayState extends MusicBeatState
 			}
 
 			daNote.rating = 'miss';
-			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay && showNumShit)
+			if (FlxG.save.data.notesplash && !PlayStateChangeables.botPlay)
 				sploshThisShitUp(daNote, daNote.rating);
 			if (daNote.noteType != "trigger")
 				popUpScore('', daNote);
@@ -6360,7 +6360,7 @@ class PlayState extends MusicBeatState
 					i.tempRating = note.rating;
 				}
 
-				if (!PlayStateChangeables.botPlay && (note.noteType != 'normal' || (note.rating != 'sick' && note.rating != 'good' && showNumShit)))
+				if (!PlayStateChangeables.botPlay && (note.noteType != 'normal' || (note.rating != 'sick' && note.rating != 'good')))
 					sploshThisShitUp(note, note.rating);
 
 				if (note.noteType != 'mine')
