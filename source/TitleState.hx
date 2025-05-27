@@ -609,11 +609,11 @@ class TitleState extends MusicBeatMenu
 				FlxG.sound.play(Paths.sound('intro_bruh'), 0.55);
 				FlxG.log.add('Bruh Sound');
 
-			case 'theyarrive' | 'thecomezone' | 'youregonnacum' | 'broimcreaming':
+			case 'broimcreaming':
 				FlxG.sound.play(Paths.sound('intro_schplat'), 0.45);
 				FlxG.log.add('Splat Sound');		
 
-			case 'imposterfromamoger' | 'amongusjokes' | 'anentiregeneration' | 'theyweretoosus':
+			case 'anentiregeneration' | 'theyweretoosus':
 				FlxG.sound.play(Paths.sound('intro_sus'), 0.55);
 
 			case 'shitsaggressively' | 'aggressiveshitting' | 'goneinaninstant':
