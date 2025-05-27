@@ -62,6 +62,9 @@ class PauseSubState extends MusicBeatSubstate
 
 	var antiHoverRect:FlxSprite;
 
+	var topScrollRect:FlxSprite;
+	var bottomScrollRect:FlxSprite;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
@@ -223,10 +226,20 @@ class PauseSubState extends MusicBeatSubstate
 			grpMenuShit.add(item);
 		}
 
-		antiHoverRect = new FlxSprite(FlxG.width / 2.5, 0).makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height * 4), FlxColor.RED); //new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
-		antiHoverRect.alpha = 0.5;
+		antiHoverRect = new FlxSprite(FlxG.width * 0.75, 0).makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height * 4), FlxColor.RED); //new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
+		antiHoverRect.visible = false;
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
+
+		topScrollRect = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.15), FlxColor.GREEN);
+		antiHoverRect.visible = false;
+		//topScrollRect.screenCenter(Y);
+		add(topScrollRect);
+
+		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.85)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.15), FlxColor.GREEN);
+		antiHoverRect.visible = false;
+		//bottomScrollRect.screenCenter(Y);
+		add(bottomScrollRect);
 
 		if (!didCountdownShit)
 			changeSelection();
@@ -286,9 +299,29 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (!didCountdownShit)
 		{
+			//finna toby fox this shit
+			// was it this easy...? 
 			if (mouseActive && FlxG.mouse.justMoved && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
 			{
-				for (item in grpMenuShit.members)
+				if (FlxG.mouse.overlaps(topScrollRect) && curSelected > 0)
+				{
+					changeSelection(-1);
+					mouseActive = false;
+					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					{
+						mouseActive = true;
+					});
+				}
+				else if (FlxG.mouse.overlaps(bottomScrollRect) && curSelected < menuItems.length - 1)
+				{
+					changeSelection(1);
+					mouseActive = false;
+					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					{
+						mouseActive = true;
+					});
+				}
+				/*for (item in grpMenuShit.members)
 				{
 					if (FlxG.mouse.overlaps(item) && curSelected != item.ID)
 					{
@@ -300,7 +333,7 @@ class PauseSubState extends MusicBeatSubstate
 							mouseActive = true;
 						});
 					}
-				}
+				}*/
 			}
 			else
 			{

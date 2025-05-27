@@ -4603,7 +4603,7 @@ class PlayState extends MusicBeatState
 				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.finished))
 				{
 					spr.animation.play('static');
-					preventBFIdleAnim = false;
+					spr.centerOffsets();
 				}
 			});
 		//}
