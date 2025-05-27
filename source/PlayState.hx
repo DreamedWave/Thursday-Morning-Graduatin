@@ -3912,10 +3912,10 @@ class PlayState extends MusicBeatState
 							//Duplicate code - idc im tobying my fox rn
 							if (daNote.mustPress && daNote.parent.wasGoodHit && !holdArray[daNote.noteData] && daNote.sustainActive)
 							{
-								daNote.tempRating = 'miss';
-								daNote.rating = daNote.tempRating;
 								if (!daNote.isSustainTail && !daNote.isBeforeTail && !daNote.delayedDeath)
 								{
+									daNote.tempRating = 'miss';
+									daNote.rating = daNote.tempRating;
 									targetHealth += calculateHealth(2, targetHealth, accuracy);
 									sustainNoteMiss(daNote);
 									daNote.tooLate = true;
@@ -3986,13 +3986,12 @@ class PlayState extends MusicBeatState
 								}
 							}
 
-							//Sustain Hold Fail Detection
 							if (daNote.mustPress && daNote.parent.wasGoodHit && !holdArray[daNote.noteData] && daNote.sustainActive)
 							{
-								daNote.tempRating = 'miss';
-								daNote.rating = daNote.tempRating;
 								if (!daNote.isSustainTail && !daNote.isBeforeTail && !daNote.delayedDeath)
 								{
+									daNote.tempRating = 'miss';
+									daNote.rating = daNote.tempRating;
 									targetHealth += calculateHealth(2, targetHealth, accuracy);
 									sustainNoteMiss(daNote);
 									daNote.tooLate = true;
@@ -5558,11 +5557,7 @@ class PlayState extends MusicBeatState
 		return Math.abs(FlxMath.roundDecimal(value1, 1) - FlxMath.roundDecimal(value2, 1)) < unimportantDifference;
 	}
 
-	var upHold:Bool = false;
-	var downHold:Bool = false;
-	var rightHold:Bool = false;
-	var leftHold:Bool = false;
-
+	var strumArrSusCheckArray:Array<Bool> = [false, false, false, false];
 	private function keyShit():Void // I've invested in emma stocks
 	{
 		// control arrays, order L D R U
@@ -5723,26 +5718,33 @@ class PlayState extends MusicBeatState
 		{
 			if (keys[spr.ID])
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && (spr.animation.curAnim.name != 'pressed' && !spr.animation.curAnim.finished))
+				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && (spr.animation.curAnim.name != 'pressed' || !spr.animation.curAnim.finished))
+				{
 					spr.animation.play('pressed');
+					strumArrSusCheckArray[spr.ID] = false;
+				}
 			}
 			else if (!keys[spr.ID])
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.curFrame >= 6) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.finished))
+				if ((spr.animation.curAnim.name != 'confirm' || (spr.animation.curAnim.curFrame >= 6 && !strumArrSusCheckArray[spr.ID])) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.curFrame > 2))
 				{
 					spr.animation.play('static');
 					preventBFIdleAnim = false;
+					strumArrSusCheckArray[spr.ID] = false;
+				}
+				else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 3 && strumArrSusCheckArray[spr.ID])
+				{
+					spr.animation.play('pressed');
+					strumArrSusCheckArray[spr.ID] = false;
 				}
 			}
 
+			spr.centerOffsets();
 			if (spr.animation.curAnim.name.startsWith('confirm'))
 			{
-				spr.centerOffsets();
 				spr.offset.x -= 13;
 				spr.offset.y -= 13;
 			}
-			else
-				spr.centerOffsets();
 		});
 	}
 
@@ -5799,6 +5801,8 @@ class PlayState extends MusicBeatState
 		if (tobyFoxAssMethod < 1)
 		{
 			trace('didMissLol');
+			misses++;
+			missesInSection++;
 			popUpScore('', daNote);
 			if (FlxG.save.data.notesplash)
 				sploshThisShitUp(daNote, 'miss');
@@ -6519,7 +6523,7 @@ class PlayState extends MusicBeatState
 									spr.centerOffsets();
 								}
 							default:
-								if (!note.isSustainNote && spr.animation.curAnim.name != 'confirm')
+								if (spr.animation.curAnim.name != 'confirm' || !note.isSustainNote)
 								{
 									spr.animation.play('confirm');
 									spr.centerOffsets();
@@ -6529,6 +6533,7 @@ class PlayState extends MusicBeatState
 								else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 3)
 								{
 									spr.animation.curAnim.curFrame = 3;
+									strumArrSusCheckArray[spr.ID] = true;
 								}
 						}
 						preventBFIdleAnim = true;

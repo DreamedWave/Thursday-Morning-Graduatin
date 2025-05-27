@@ -231,12 +231,12 @@ class PauseSubState extends MusicBeatSubstate
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
 
-		topScrollRect = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		topScrollRect = new FlxSprite(0, -30).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25) + 30, FlxColor.GREEN);
 		topScrollRect.visible = false;
 		//topScrollRect.screenCenter(Y);
 		add(topScrollRect);
 
-		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.75)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.75)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25) , FlxColor.GREEN);
 		bottomScrollRect.visible = false;
 		//bottomScrollRect.screenCenter(Y);
 		add(bottomScrollRect);
@@ -307,7 +307,7 @@ class PauseSubState extends MusicBeatSubstate
 				{
 					changeSelection(-1);
 					mouseActive = false;
-					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					mouseTimer = new FlxTimer().start(0.15, function(tmr:FlxTimer)
 					{
 						mouseActive = true;
 					});
@@ -316,7 +316,7 @@ class PauseSubState extends MusicBeatSubstate
 				{
 					changeSelection(1);
 					mouseActive = false;
-					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					mouseTimer = new FlxTimer().start(0.15, function(tmr:FlxTimer)
 					{
 						mouseActive = true;
 					});
