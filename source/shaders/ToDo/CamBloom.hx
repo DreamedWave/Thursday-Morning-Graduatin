@@ -77,7 +77,7 @@ class Bloom extends FlxShader
 	{
 		super();
 
-        threshold.value = [0.4];
+        threshold.value = [0.75];
         intensity.value = [1.0];
         blurSize.value = [10.0];
 	}
@@ -173,7 +173,7 @@ class ChromaticAberration extends FlxShader
 
 
 
-class WhiteOverlayShader extends FlxGraphicsShader
+class WhiteOverlayShader extends FlxShader
 {
 	@:glFragmentSource("
 	#pragma header

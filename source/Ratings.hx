@@ -16,17 +16,31 @@ class Ratings
                     ranking = "[BotPlay]";
                 else
                 {
-                    if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads == 0 && PlayState.instance.goods == 0) // Perfect (SICK) Full Combo
+                    var sicks:Int = 0;
+                    var goods:Int = 0;
+                    var bads = 0;
+                    var slips = 0;
+                    var misses = 0;
+
+                    //lazygurl's way :3
+                    //For readability porpoises!!
+                    sicks = PlayState.instance.sicks + PlayState.campaignSicks;
+                    goods = PlayState.instance.goods + PlayState.campaignGoods;
+                    bads = PlayState.instance.bads + PlayState.campaignBads;
+                    slips = PlayState.instance.slips + PlayState.campaignSlips;
+                    misses = PlayState.instance.misses + PlayState.campaignMisses; 
+
+                    if (misses == 0 && slips == 0 && bads == 0 && goods == 0) // Perfect (SICK) Full Combo
                         ranking = "PFC";
-                    else if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads == 0 && PlayState.instance.goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
+                    else if (misses == 0 && slips == 0 && bads == 0 && goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
                         ranking = "GFC";
-                    else if (PlayState.instance.misses == 0 && PlayState.instance.slips == 0 && PlayState.instance.bads >= 1) // Regular FC
-                        ranking = "FC";
-                    else if (PlayState.instance.misses < 10) // Single Digit Combo Breaks
-                        ranking = "SDCB";
-                    else if (PlayState.instance.misses < 30) // Double Digit Combo Breaks
-                        ranking = "DDCB";
-                    else if ((PlayState.instance.misses < 50 && accuracy > 70) || accuracy > 20)
+                    //else if (misses == 0 && slips == 0 && bads >= 1) // Regular FC
+                        //ranking = "BFC";
+                    else if (misses + slips + bads < 10) // Single Digit Combo Breaks
+                        ranking = "SDR";
+                    else if (misses + slips + bads < 30) // Double Digit Combo Breaks
+                        ranking = "DDR";
+                    else if ((misses + slips + bads < 50 && accuracy > 70) || accuracy > 50)
                         ranking = "CLEAR";
                     else
                         ranking = "RETRY";
@@ -66,19 +80,6 @@ class Ratings
         return rating;
     }
 
-    public static function CalculateRanking(score:Int, NPS:Int, maxNPS:Int, accuracy:Float, ?keeledOver:Bool = false):String
-    {
-        return
-         (!PlayStateChangeables.botPlay ?
-         (FlxG.save.data.npsDisplay ? "NPS:" + NPS + "/" + maxNPS + " | " : "") //NPS
-         + "Score:" + score //Score
-         + (FlxG.save.data.accuracyDisplay ? //Accuracy																						 // Accuracy Toggle
-         " | RIPs:" + (PlayState.instance.misses + PlayState.instance.slips) + 																				         // Misses/Combo Breaks
-         " | Rating:" + GenerateLetterRank(accuracy, keeledOver) + //Rating				                                                         // Accuracy
-         " (" + HelperFunctions.truncateFloat(accuracy, 2) + "%)" : "") 													     // Letter Rank
-         : "(Press [1] to hide HUD) | Score: " + score); //BotplayScoreText
-    }
-
     public static function DetermineWeekRating(ratingArray:Array<String>):String
     {
         var weekRating:String = ratingArray[0];
@@ -89,10 +90,10 @@ class Ratings
             weekRating = 'GFC';
         if (ratingArray.contains('FC'))
             weekRating = 'FC';
-        if (ratingArray.contains('SDCB'))
-            weekRating = 'SDCB';
-        if (ratingArray.contains('DDCB'))
-            weekRating = 'DDCB';
+        if (ratingArray.contains('SDR'))
+            weekRating = 'SDR';
+        if (ratingArray.contains('DDR'))
+            weekRating = 'DDR';
         if (ratingArray.contains('Clear'))
             weekRating = 'Clear';
         if (ratingArray.contains('Fail!'))

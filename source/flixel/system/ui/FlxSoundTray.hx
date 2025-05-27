@@ -24,6 +24,7 @@ import flash.text.GridFitType;
 /**
  * The flixel sound tray, the little volume meter that pops down sometimes.
  * Accessed via `FlxG.game.soundTray` or `FlxG.sound.soundTray`.
+ * Customized for TMG by AmieeWuzHere!
  */
 class FlxSoundTray extends Sprite
 {
@@ -36,6 +37,11 @@ class FlxSoundTray extends Sprite
 	 * Helps us auto-hide the sound tray after a volume change.
 	 */
 	var _timer:Float;
+
+	/**
+	 * CUSTOM: Helps us keep track and save settings incase the soundtray does not hide.
+	 */
+	var forceSave:Bool = false;
 
 	/**
 	 * Tweens the sound tray.
@@ -80,7 +86,7 @@ class FlxSoundTray extends Sprite
 		visible = false;
 		scaleX = _defaultScale;
 		scaleY = _defaultScale;
-		var tmp:Bitmap = new Bitmap(new BitmapData(_width, 30, true, 0x7F000000));
+		var tmp:Bitmap = new Bitmap(new BitmapData(_width, 30, true, 0x7F000015));
 		screenCenter();
 		addChild(tmp);
 
@@ -99,7 +105,7 @@ class FlxSoundTray extends Sprite
 		var dtf:TextFormat = new TextFormat('Monsterrat', 10, 0xffffff);
 		dtf.align = TextFormatAlign.CENTER;
 		text.defaultTextFormat = dtf;
-		text.text = "- VOLUME +";
+		text.text = "VOLUME: " + globalVolume;
 		text.y = 16;
 		addChild(text);
 
@@ -126,7 +132,24 @@ class FlxSoundTray extends Sprite
 	 * This function just updates the soundtray object.
 	 */
 	 public function update(elapsedMS:Float):Void
-	{
+	{	
+		if (forceSave)
+		{
+			forceSave = false;
+			// Save sound preferences
+			if (FlxG.save.isBound)
+			{
+				FlxG.save.data.mute = FlxG.sound.muted;
+				FlxG.save.data.volume = FlxG.sound.volume;
+				FlxG.save.flush();
+			}
+		}
+
+		if (!isRetreating && y != 0 && (trayTween == null || !trayTween.active))
+		{
+			y = CoolUtil.freyaLerp(y, 0, 5, elapsedMS);
+		}
+
 		if (FlxG.sound.volume > 0 && globalVolume != 0 && !FlxG.sound.muted)
 		{
 			if (_timer > 0)
@@ -137,10 +160,10 @@ class FlxSoundTray extends Sprite
 			{
 				if (!isRetreating)
 				{
+					isRetreating = true;
 					if (trayTween != null)
 						trayTween.cancel();
 
-					isRetreating = true;
 					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
 						{
 							ease: FlxEase.cubeIn,
@@ -162,9 +185,9 @@ class FlxSoundTray extends Sprite
 				}
 				else if (visible && !trayTween.active)
 				{
-					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.5, 
+					trayTween = FlxTween.tween(this, {y: -60, alpha: 0}, 0.35, 
 						{
-							ease: FlxEase.smootherStepIn,
+							ease: FlxEase.linear,
 							onComplete: function(twn:FlxTween)
 							{
 								trayTween = null;
@@ -185,7 +208,7 @@ class FlxSoundTray extends Sprite
 		}
 	}
 
-	var globalVolume:Int = Math.round(FlxG.sound.volume * 10);
+	var globalVolume:Int = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 	var isRetreating:Bool = true;
 
 	/**
@@ -195,66 +218,76 @@ class FlxSoundTray extends Sprite
 	 */
 	public function show(up:Bool = false):Void
 	{
-		if (!tempDisable)
+		globalVolume = Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
+		
+		if (!silent && !FlxG.sound.muted && globalVolume > 0)
 		{
-			if (!silent)
+			var sound;
+			if (!FlxG.sound.muted && text.text != "MUTED")
 			{
-				var sound;
-				if (!FlxG.sound.muted && text.text != "0  MUTE  0")
+				if (globalVolume != 10)
 					sound = FlxAssets.getSound(up ? volumeUpSound : volumeDownSound);
 				else
-					sound = FlxAssets.getSound("assets/sounds/soundtray/volumeUnmute");
-
-				if (sound != null)
-					FlxG.sound.load(sound).play();
-			}
-
-			_timer = 1.5; //in seconds
-
-			//Only tween if shit is about to hide, otherwise, nothing happens
-			if (isRetreating)
-			{
-				//Cancel any tween that might be happening right meow
-				if (trayTween != null)
-					trayTween.cancel();
-
-				isRetreating = false;
-				visible = true;
-				active = true;
-
-				trayTween = FlxTween.tween(this, {y: 0, alpha: 1}, 0.75, 
-					{
-						ease: FlxEase.elasticOut, 
-						onComplete: function(twn:FlxTween)
-						{
-							trayTween = null;
-						}
-					});
-			}
-
-			globalVolume = Math.round(FlxG.sound.volume * 10);
-
-			if (FlxG.sound.muted)
-			{
-				globalVolume = 0;
-				if (text.text != "0  MUTE  0")
-					text.text = "0  MUTE  0";
+					sound = FlxAssets.getSound("assets/sounds/soundtray/volumeMax");
 			}
 			else
-				text.text = "- VOLUME +";
-
-			trace('Global Volume: ' + globalVolume);
-
-			for (i in 0..._bars.length)
 			{
-				if (i < globalVolume)
+				sound = FlxAssets.getSound("assets/sounds/soundtray/volumeUnmute");
+				forceSave = true; //Here so that it saves as soon as you unmute - incase you exit the app before the tween can save it
+			}
+
+			if (sound != null)
+				FlxG.sound.load(sound).play();
+		}
+
+		_timer = 1.2; //in seconds
+
+		//Only tween if shit is about to hide, otherwise, nothing happens
+		if (isRetreating)
+		{
+			//Cancel any tween that might be happening right meow
+			if (trayTween != null)
+				trayTween.cancel();
+
+			isRetreating = false;
+			visible = true;
+			active = true;
+
+			trayTween = FlxTween.tween(this, {y: 0, alpha: 1}, 0.75, 
 				{
-					_bars[i].alpha = 1;
-				}
-				else
-				{
-					_bars[i].alpha = 0.5;
-				}
+					ease: FlxEase.elasticOut, 
+					onComplete: function(twn:FlxTween)
+					{
+						trayTween = null;
+					}
+				});
+		}
+
+		if (FlxG.sound.muted)
+		{
+			forceSave = true; //here so that it saves when the app is muted - to prevent main the FlxG.sound.muted variable obsolete
+			globalVolume = 0;
+			if (text.text != "MUTED")
+				text.text = "MUTED";
+		}
+		else
+		{
+			text.text = "VOLUME: " + globalVolume;
+			if (globalVolume <= 0)
+				forceSave = true; //here so that it saves when the app's vol is set to 0
+		}
+
+		//trace('Global Volume: ' + globalVolume);
+
+		for (i in 0..._bars.length)
+		{
+			if (i < globalVolume)
+			{
+				_bars[i].alpha = 1;
+			}
+			else
+			{
+				_bars[i].alpha = 0.5;
 			}
 		}
 	}

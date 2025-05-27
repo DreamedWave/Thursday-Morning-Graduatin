@@ -2447,7 +2447,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 65560.9756097561,
     "mustHitSection": true
    },
@@ -2506,7 +2506,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 66731.7073170732,
     "mustHitSection": true
    },
@@ -2570,7 +2570,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 67902.4390243902,
     "mustHitSection": false
    },
@@ -2649,7 +2649,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 69073.1707317073,
     "mustHitSection": false
    },
@@ -2723,7 +2723,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 70243.9024390244,
     "mustHitSection": true
    },
@@ -2792,7 +2792,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 71414.6341463415,
     "mustHitSection": true
    },
@@ -2856,7 +2856,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 72585.3658536585,
     "mustHitSection": true
    },
@@ -2895,7 +2895,7 @@
      ]
     ],
     "lengthInSteps": 16,
-    "altAnim": true,
+    
     "startTime": 73756.0975609756,
     "mustHitSection": true
    },

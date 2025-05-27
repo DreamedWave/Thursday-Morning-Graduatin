@@ -12,6 +12,7 @@ import polymod.format.ParseRules.TargetSignatureElement;
 
 using StringTools;
 
+//This whole thing is a mess, I can understand why FNF was rewritten from scratch gawdamn
 class Note extends FlxSprite
 {
 	public var strumTime:Float = 0;
@@ -51,6 +52,7 @@ class Note extends FlxSprite
 
 	public var noteStyleCheck:String = 'normal';
 	public var noteType:String = 'normal';
+	//public var noteDifficulty:Int = 0; //2 (Hard - only shows up in Hard), 1 (Normal - Shows up only in Normal and Hard), 0 (Easy - Shows up only in every chart)
 
 	public static var swagWidth:Float = 160 * 0.7;
 	//public static var PURP_NOTE:Int = 0;
@@ -92,11 +94,12 @@ class Note extends FlxSprite
 	public var toggledSurpriseNote:Bool = false;
 	public var triggeredNoteEvent:Bool = false;
 
+	public var altAnim:String = '';
 	public var baseAlpha:Float = 1;
 
 	var inCharter:Bool;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inCharter = false, noteType:String = 'normal')
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inCharter = false, noteType:String = 'normal', givenAltAnim:String = '')
 	{
 		super();
 
@@ -131,7 +134,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var daStage:String = PlayState.curStage;
+		altAnim = givenAltAnim;
 		
 		if (inCharter)
 		{
@@ -387,6 +390,14 @@ class Note extends FlxSprite
 
 		if (!inCharter)
 		{
+			if ((!enabled || tooLate) && y < -5 && (!withinCompensation || y < 50))
+			{
+				visible = false;
+				kill();
+				destroy();
+				return;
+			}
+
 			if (mustPress)
 			{
 				if (startSpeeding)
@@ -429,9 +440,14 @@ class Note extends FlxSprite
 					}
 				}
 
-				if (!tooLate && !toggledSurpriseNote && !isSustainNote && animation.curAnim.name.endsWith('surpriseScroll'))
-					if (strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
+				if (noteType != 'normal' && !toggledSurpriseNote && !tooLate)
+				{
+					if (!isSustainNote && animation.curAnim.name.endsWith('surpriseScroll') && strumTime - 180 < Conductor.songPosition + Conductor.safeZoneOffset)
+					{
 						toggledSurpriseNote = true;
+						animation.play(dataColor[noteData] + 'Scroll');
+					}
+				}
 
 				if (!delayedDeath)
 				{
@@ -445,20 +461,14 @@ class Note extends FlxSprite
 						tooLate = true;
 				}
 
-				if (!PlayState.instance.allowHealthModifiers && PlayState.instance.allowLagComp && isOnScreen(PlayState.instance.camHUD) && !withinCompensation)
+				if (!PlayState.instance.allowHealthModifiers && PlayState.instance.allowLagComp && y > -800 && y < 10 && !withinCompensation)
 					withinCompensation = true;
 				
-				if (toggledSurpriseNote)
-				{
-					animation.play(dataColor[noteData] + 'Scroll');
-					if (noteType != 'mine')
-						blend = ADD;
-				}
-				else if (withinCompensation && color != 0xFFBDFCFF && alpha > 0.65)
+				if (noteType == 'normal' && withinCompensation && color != 0xFFBDFCFF)
 				{
 					color = 0xFFBDFCFF;
 					baseAlpha *= 0.65;
-					if (!isSustainNote && noteType != 'mine' && noteType != 'trigger')
+					if (!isSustainNote)
 					{
 						animation.play(dataColor[noteData] + 'SafeScroll');
 					}

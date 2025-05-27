@@ -98,7 +98,7 @@ class Main extends Sprite
 		// Use a customised save path that doesn't follow Project.xml bcuz we cool like that :3
 		//Format:      .SOL filename            .SOL location
 		//It still makes a new folder for some reason???
-		FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
+		//FlxG.save.bind('saveData', "AmieeMakesGames/Thursday-Morning-Graduatin");
 
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
@@ -119,6 +119,14 @@ class Main extends Sprite
 		game = new FlxGame(gameWidth, gameHeight, initialState, framerate, framerate, skipSplash, false);
 		#end
 		addChild(game);
+
+		
+		#if FLX_SOUND_TRAY
+		FlxG.game.soundTray.tempDisable = true;
+		#end
+
+
+		FlxG.fixedTimestep = false;
 
 
 		//Moved Save.Bind to Modified FlxG
@@ -145,7 +153,7 @@ class Main extends Sprite
 		if (Date.now().getUTCDate() <= 3 && curMonthString == "April")
 			aprilFools = true;
 
-		if (curDayString == 'Sunday' && FlxG.random.bool(30))
+		if (curDayString == 'Sunday' && FlxG.random.bool(10))
 			todayIsSunday = true;
 
 		
@@ -241,7 +249,7 @@ class Main extends Sprite
 
 	function onWindowFocusOut()
 	{
-		if (!FlxG.autoPause && doFocusShit)
+		if (!FlxG.autoPause && !FlxG.game.soundTray.tempDisable && doFocusShit)
 		{
 			trace('huh');
 			isFocused = false;
@@ -284,7 +292,7 @@ class Main extends Sprite
 
 	function onWindowFocusIn()
 	{
-		if (!FlxG.autoPause && doFocusShit)
+		if (!FlxG.autoPause && !FlxG.game.soundTray.tempDisable && doFocusShit)
 		{
 			if (Type.getClass(FlxG.state) != PlayState && Type.getClass(FlxG.state) != ChartingState && Type.getClass(FlxG.state) != lore_minigames.MinigameState && (Type.getClass(FlxG.state) != FunnySplash || !FlxG.save.data.fullscreen))
 			{
@@ -348,7 +356,7 @@ class Main extends Sprite
 			"Well, that just washes right off doesn't it?!",
 			"Kade's Fault not mine!!!",
 			"Now, this is what I call BUG FREE!",
-			"Technically bug free - I don't see any spiders!",
+			"Technically bug free - I don't see no spiders!",
 			"It's not a bug, it's a feature!",
 			"This isn't a beach, this is a BATHTUB!",
 			"Ugh whatever, I'm going back to roblox fnf obby.",
@@ -388,7 +396,7 @@ class Main extends Sprite
 
 		path = "./_logs/" + "TMG-CRASH_" + dateNow + ".txt";
 
-		errMsg = "Thursday Morning Graduatin' has crashed!\n(so here's what went wrong):\n\n";
+		errMsg = "Thursday Morning Graduatin' has crashed!\n(so here's roughly what went wrong:)\n\n";
 		errMsg += "TMG Version: " + gameVer + "\n";
 
 		for (stackItem in callStack)

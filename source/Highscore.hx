@@ -120,14 +120,12 @@ class Highscore
 	{
 		switch(combo)
 		{
-			case 'Clear':
+			case 'CLEAR':
 				return 1;
-			case 'DDCB':
+			case 'DDR':
 				return 2;
-			case 'SDCB':
+			case 'SDR':
 				return 3;
-			case 'FC':
-				return 4;
 			case 'GFC':
 				return 5;
 			case 'PFC':

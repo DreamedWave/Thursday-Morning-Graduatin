@@ -143,6 +143,7 @@ class MusicBeatState extends FlxUIState
 	{
 		//trace(curBeat);
 		//do literally nothing dumbass
+		//why so rude?
 	}
 
 	public function changeTime(time:Float = 0)

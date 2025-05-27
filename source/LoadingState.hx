@@ -64,13 +64,13 @@ class LoadingState extends MusicBeatMenu
 				
 				//if (!FlxG.save.data.cacheMusic)
 				//{
-				preloadList.set(PlayState.SONG.song, 'inst');
+				/*preloadList.set(PlayState.SONG.song, 'inst');
 				if (PlayState.SONG.needsVoices)
 					preloadList.set(PlayState.SONG.song, 'voices');
 				if (PlayState.SONG.needsMiscs)
 					preloadList.set(PlayState.SONG.song, 'miscs');
 				if (PlayState.SONG.needsAdaptiveMus)
-					preloadList.set(PlayState.SONG.song, 'adaptiveMus');
+					preloadList.set(PlayState.SONG.song, 'adaptiveMus');*/
 				//}
 
 				switch (songLowercase)
@@ -205,7 +205,7 @@ class LoadingState extends MusicBeatMenu
 
 				if (PlayState.dadSwaperoo != "")// && !FlxG.save.data.cacheImages)
 				{
-					trace('preloaded Dad Swaperoo!!!');
+					//trace('preloaded Dad Swaperoo!!!');
 					preloadList.set("characters/" + PlayState.dadSwaperoo, 'image');
 					var swaperooIconPath:String = 'icons/' + HealthIcon.getIconID(PlayState.dadSwaperoo);
 					preloadList.set(swaperooIconPath, 'image');
@@ -280,17 +280,17 @@ class LoadingState extends MusicBeatMenu
 				{
 					for (key => type in preloadList)
 					{
-						trace("Preloading " + key + " (" + type + ")");
+						//trace("Preloading " + key + " (" + type + ")");
 						switch(type)
 						{
 							case 'video':
-								trace('starting vid cache');
+								//trace('starting vid cache');
 								var video = new VideoHandler();
 								var vidSprite = new FlxSprite(0, 0);
 								video.finishCallback = null;
 								video.playMP4(Paths.video(key), false, vidSprite, false, false, false);
 								video.kill();
-								trace('finished vid cache');
+								//trace('finished vid cache');
 							case 'image':
 								Paths.image(key, 'shared');
 							case 'image-in-week-library':
@@ -301,31 +301,30 @@ class LoadingState extends MusicBeatMenu
 								Paths.sound(key, pathLibrary);
 							case 'music':
 								Paths.music(key, 'shared');
-								trace('WOAGH! PATH.MUSIC!');
+								//trace('WOAGH! PATH.MUSIC!');
 							case 'music-in-week-library':
 								Paths.music(key, pathLibrary);
 							case 'video-music':
 								Paths.videoMusic(key);
 							case 'inst':
 								Paths.inst(key);
-								trace('!!!! CaCHED INST ' + key);
+								//trace('!!!! CaCHED INST ' + key);
 							case 'voices':
 								Paths.voices(key);
-								trace('!!!! CaCHED VOICES ' + key);
+								//trace('!!!! CaCHED VOICES ' + key);
 							case 'miscs':
 								Paths.miscs(key);
-								trace('!!!! CaCHED MISCS ' + key);
+								//trace('!!!! CaCHED MISCS ' + key);
 							case 'adaptiveMus':
 								Paths.adaptiveMus(key);
 						}
 						//#if debug
-						trace("Preloaded " + key + " (" + type + ")");
+						//trace("Preloaded " + key + " (" + type + ")");
 						//#end
 						screen.done++;
 					}
 					
-					screen.fadeOutShits();
-					new FlxTimer().start(0.5, function(tmr:FlxTimer)
+					screen.fadeOutFunction(function(twn:FlxTween)
 					{
 						stopMusic = true;
 						loadAndSwitchState(target, stopMusic, false);
@@ -333,60 +332,58 @@ class LoadingState extends MusicBeatMenu
 				});
 			
 			//IN PAIN - TOO LAZY TO FIX UP PATHS.JSON TO WORK WITH THIS SHIT AUGHHHH
+			//TO DO - MAKE STAGE DEPENDENT LOADING SHIZ BUT FOR NOW SINCE WE TESTIN THIS ONLY LOADS EVERYTHING ALL AT ONCE FOR MAP 1
 			case lore_minigames.MinigameState:	
 				screen = new LoadingScreen(instantShow, inPlayState);
 				add(screen);
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/music'))
+				for (a in sys.FileSystem.readDirectory('assets/minigame/music'))
 					screen.toDo++;
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
+				for (b in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
 					screen.toDo++;
 
-				for (i in sys.FileSystem.readDirectory('assets/minigame/sounds'))
+				for (c in sys.FileSystem.readDirectory('assets/minigame/sounds'))
 					screen.toDo++;
 
+				FlxG.log.add('creating thread shit');
 				Thread.create(() ->
 				{
-					for (i in sys.FileSystem.readDirectory('assets/minigame/music'))
+					for (a in sys.FileSystem.readDirectory('assets/minigame/music'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (a.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/' + i;
-							FlxG.sound.load(i);
+							a = 'assets/minigame/music/' + a;
+							FlxG.sound.load(a);
 							screen.done++;
 						}
 					}
 
-					for (i in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
+					for (b in sys.FileSystem.readDirectory('assets/minigame/music/map_1'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (b.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/map_1/' + i;
-							FlxG.sound.load(i);
+							b = 'assets/minigame/music/map_1/' + b;
+							FlxG.sound.load(b);
 							screen.done++;
 						}
 					}
 
-					for (i in sys.FileSystem.readDirectory('assets/minigame/sounds'))
+					for (c in sys.FileSystem.readDirectory('assets/minigame/sounds'))
 					{
-						trace(i);
-						if (i.endsWith(".ogg"))
+						if (c.endsWith(".ogg"))
 						{
-							i = 'assets/minigame/music/sounds' + i;
-							FlxG.sound.load(i);
+							c = 'assets/minigame/music/sounds' + c;
+							FlxG.sound.load(c);
 							screen.done++;
 						}
 					}
 
-					screen.fadeOutShits();
-					new FlxTimer().start(0.5, function(tmr:FlxTimer)
-					{
-						stopMusic = true;
-						loadAndSwitchState(target, stopMusic, false);
-					});
+					screen.fadeOutFunction(function(twn:FlxTween)
+						{
+							stopMusic = true;
+							loadAndSwitchState(target, stopMusic, false);
+						}); 
 				});
 
 			default:
@@ -404,7 +401,7 @@ class LoadingState extends MusicBeatMenu
 		if (defineShitHere)
 			definePlayStateShit();
 
-		trace('uutopoz: ' + FlxG.autoPause);
+		//trace('uutopoz: ' + FlxG.autoPause);
 
 		FlxG.switchState(target);
 	}
@@ -444,6 +441,8 @@ class LoadingState extends MusicBeatMenu
 				PlayState.videoPathArray = ['week2/midcutscene1'];
 			case "Retaliation":
 				PlayState.videoPathArray = ['week2/midcutscene2', 'week2/endcutscene'];
+			case "Kid With a Gun":
+				PlayState.videoPathArray = ['week3/startcutscene'];
 		}
 
 		//for Gameover StageSuffix. Moved here to allow pre-caching of the sounds.

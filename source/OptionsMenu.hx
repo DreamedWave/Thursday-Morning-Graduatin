@@ -39,7 +39,6 @@ class OptionsMenu extends MusicBeatMenu
 			new Judgement("Change the amount of frames it takes before the note counts as a 'MISS'.\n([←] / [→] to change   |   [SHIFT] + [←] / [→] to speed up)"),
 			//new ShitBreaksCombo("If on, getting a 'SLIP' rating causes a miss and counts as a combo break."),
 			new ScrollSpeedOption("Change the chart's scroll speed multiplier.\n(0.5 is 50% speed, 2 is 200% speed, etc.)\n([←] / [→] to change   |   [SHIFT] + [←] / [→] to speed up)"),
-			new AccuracyDOption("Change how accuracy is calculated.\n(Simple: Rating-Based, Complex: Milisecond-Based)"),
 			new DownscrollOption("If on, notes will scroll DOWN rather than UP."),
 			new ShowStrumLine("Toggle the background for your strumline in-game."),
 			new PauseOnLostFocus("If on, auto-pauses the game when you switch to a different window."),
@@ -68,7 +67,7 @@ class OptionsMenu extends MusicBeatMenu
 			new NightModeOption("Darkens UI and gameplay to prevent eye strain during night."),
 			new AutoNightModeOption("If on, dark-mode triggers automatically based the time of day."),
 			new NoteSplashingEffectsOption("Toggle the splashes when you hit a 'SICK!!' or miss a note."),
-			new CpuStrums("If on, the opponent's strumline will light up whenever the opponent hits a note."),
+			//new CpuStrums("If on, the opponent's strumline will light up whenever the opponent hits a note."),
 			new CamZoomOption("Toggle the camera zooming on-beat with the song."),
 			#if desktop
 			new FPSCapOption("Change your FPS Cap.")
@@ -91,7 +90,7 @@ class OptionsMenu extends MusicBeatMenu
 		new OptionCategory("Saves and Data", [
 			new WatermarkOption("Toggle if you want to hide the faces of people (such as Guy or Priest.)\nThis DOES NOT work yet though! LMAO!"),
 			#if desktop
-			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Selected changes will apply when you press [ESC].)"),
+			new ShowPresenceOption("Toggle the 'NOW PLAYING' stuff on discord. (Selected changes will apply after you press [ESC].)"),
 			//new ReplayOption("View saved song replays."),
 			#end
 			new ResetScoreOption("Reset your scores on all songs and weeks.\n(This is irreversible!)"),
@@ -102,7 +101,7 @@ class OptionsMenu extends MusicBeatMenu
 		new OptionCategory("Miscellaneous", [
 			new LagCompensation("If on, will attempt to prevent you from taking damage or missing when your game freezes or lags."),
 			new ScoreScreen("If on, will show a score screen after the end of a freeplay song."),
-			new AccuracyOption("If on, will show your current Accuracy on the info bar."),
+			new ClearPercentOption("If on, will show your current Clear Percentage on the info bar."),
 			new NPSDisplayOption("If on, will show your current Notes Per Second on the info bar."),
 			new ShowInput("Whether to display every single input on the score screen."),
 			new BotPlay("While on, any song will have it's chart automatically played.\n(Scores and progress won't be saved while this is enabled.)"),
@@ -178,7 +177,8 @@ class OptionsMenu extends MusicBeatMenu
 		currentDescription = "--";
 
 		//FIX THIS SO THAT IT IS ON TOP INSTEAD OF THE BOTTOM OF THE SCREEN
-		offsetNumberShit = new FlxText(5, -40, FlxG.width - 5, "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms');
+		offsetNumberShit = new FlxText(5, -40, FlxG.width - 5);
+		offsetNumberShit.text = getOffsetNumberText();
 		offsetNumberShit.scrollFactor.set();
 		offsetNumberShit.setFormat("VCR OSD Mono", 25, FlxColor.WHITE, LEFT);
 		offsetNumberShit.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2, 1);
@@ -267,6 +267,14 @@ class OptionsMenu extends MusicBeatMenu
 	var mouseActive:Bool = false;
 	var mouseTimer:FlxTimer;
 
+	private function getOffsetNumberText():String
+	{
+		return 
+			"Offset ([←] / [→], [SHIFT] to slow): " 
+			+ HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) 
+			+ '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+	}
+
 	//Add mouse compatabiitylyiy
 	override function update(elapsed:Float)
 	{
@@ -349,7 +357,7 @@ class OptionsMenu extends MusicBeatMenu
 						for (leOptionne in currentSelectedCat.getOptions())
 						{
 							//Idk man there's no getName() and im too lazy to make one myself,,, (- ^ -)
-							if (leOptionne.getDisplay().contains('Reset'))
+							if (leOptionne.getDisplay().contains('[Reset'))
 							{
 								leOptionne.resetConfirmBool();
 								trace ('reset state of ' + leOptionne.getDisplay());
@@ -483,9 +491,9 @@ class OptionsMenu extends MusicBeatMenu
 							{
 								//update the option and alphabet text itself
 								currentSelectedCat.getOptions()[curSelected].right();
+								currentSelectedCat.getOptions()[curSelected].playSliderSnd(true);
 								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
-								FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 							}
 							else
 								antiSpam++;
@@ -496,9 +504,9 @@ class OptionsMenu extends MusicBeatMenu
 							{
 								//update the option and alphabet text itself
 								currentSelectedCat.getOptions()[curSelected].left();
+								currentSelectedCat.getOptions()[curSelected].playSliderSnd();
 								grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
 								antiSpam = 0;
-								FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 							}
 							else
 								antiSpam++;
@@ -507,16 +515,16 @@ class OptionsMenu extends MusicBeatMenu
 					else if (FlxG.keys.justPressed.RIGHT)
 					{
 						currentSelectedCat.getOptions()[curSelected].right();
+						currentSelectedCat.getOptions()[curSelected].playSliderSnd(true);
 						//update the alphabet text itself
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 					}
 					else if (FlxG.keys.justPressed.LEFT)
 					{
 						currentSelectedCat.getOptions()[curSelected].left();
+						currentSelectedCat.getOptions()[curSelected].playSliderSnd();
 						//update the alphabet text itself
 						grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 					}
 
 					offsetNumberShit.text = currentSelectedCat.getOptions()[curSelected].getValue();
@@ -528,12 +536,12 @@ class OptionsMenu extends MusicBeatMenu
 					{
 						if (FlxG.keys.justPressed.RIGHT)
 						{
-							FlxG.save.data.offset += 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 0.5, 1);
 							FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 						}
 						else if (FlxG.keys.justPressed.LEFT)
 						{
-							FlxG.save.data.offset -= 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 0.5, 1);
 							FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 						}
 					}
@@ -541,7 +549,7 @@ class OptionsMenu extends MusicBeatMenu
 					{
 						if (antiSpam > 3)
 						{
-							FlxG.save.data.offset += 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 1, 1);
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 						}
@@ -552,7 +560,7 @@ class OptionsMenu extends MusicBeatMenu
 					{	
 						if (antiSpam > 3)
 						{
-							FlxG.save.data.offset -= 0.1;
+							FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 1, 1);
 							antiSpam = 0;
 							FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 						}
@@ -560,7 +568,7 @@ class OptionsMenu extends MusicBeatMenu
 							antiSpam++;
 					}
 					
-					offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+					offsetNumberShit.text = getOffsetNumberText();
 					descriptionShit.text = currentDescription;
 				}
 			}
@@ -570,12 +578,12 @@ class OptionsMenu extends MusicBeatMenu
 				{
 					if (FlxG.keys.justPressed.RIGHT)
 					{
-						FlxG.save.data.offset += 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 0.5, 1);
 						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.55);
 					}
 					else if (FlxG.keys.justPressed.LEFT)
 					{
-						FlxG.save.data.offset -= 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 0.5, 1);
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.55);
 					}
 				}
@@ -583,7 +591,7 @@ class OptionsMenu extends MusicBeatMenu
 				{					
 					if (antiSpam > 3)
 					{
-						FlxG.save.data.offset += 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset + 1, 1);
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderUp"), 0.5);
 					}
@@ -594,7 +602,7 @@ class OptionsMenu extends MusicBeatMenu
 				{		
 					if (antiSpam > 3)
 					{
-						FlxG.save.data.offset -= 0.1;
+						FlxG.save.data.offset = FlxMath.roundDecimal(FlxG.save.data.offset - 1, 1);
 						antiSpam = 0;
 						FlxG.sound.play(Paths.sound("optionsSliderDown"), 0.5);
 					}
@@ -602,7 +610,7 @@ class OptionsMenu extends MusicBeatMenu
 						antiSpam++;
 				}
 				
-				offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+				offsetNumberShit.text = getOffsetNumberText();
 			}
 		
 
@@ -621,7 +629,8 @@ class OptionsMenu extends MusicBeatMenu
 						if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
 						{
 							//Placeholder - flash this and do sum cool shit with it!
-							grpControls.members[curSelected].color = 0xFFC77070;
+							FlxG.log.add('changed color to red');
+							grpControls.members[curSelected].color = 0xFFFF0000;
 						}
 					}
 				}
@@ -672,10 +681,10 @@ class OptionsMenu extends MusicBeatMenu
 						controlLabel.y += 70 * i;
 						controlLabel.targetY = i;
 						controlLabel.ID = i;
-						if (currentSelectedCat.getOptions()[i].getDisplay().contains('Reset'))
+						if (currentSelectedCat.getOptions()[i].getDisplay().contains('[Reset'))
 						{
 							if (DisclaimerState.wentOptions)
-								controlLabel.color = 0xFFC77070;
+								controlLabel.color = 0xFF7E7070;
 						}
 						grpControls.add(controlLabel);
 					}
@@ -696,24 +705,22 @@ class OptionsMenu extends MusicBeatMenu
 		// NGio.logEvent("Fresh");
 		#end
 
-		if (isCat)
+		if (change != 0)
 		{
-			//trace('pls work;;;');
-			if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('|['))
+			FlxG.sound.play(Paths.sound("scrollMenu"));
+
+			if (isCat)
 			{
-				//trace('omg???');
-				currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
-				grpControls.members[curSelected].color = 0xFFFFFFFF;
+				//resets the 'reset story/scores/settings' options to default upon scrolling
+				if (currentSelectedCat.getName() == 'Saves and Data' && currentSelectedCat.getOptions()[curSelected].getDisplay().contains('?'))
+				{
+					FlxG.log.add('changed back color and reset confirm bool');
+					currentSelectedCat.getOptions()[curSelected].resetConfirmBool();
+					grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
+					grpControls.members[curSelected].color = 0xFFFFFFFF;
+				}
 			}
 		}
-		/*if (currentSelectedCat.getOptions()[curSelected].getDisplay().contains('Reset'))
-		{
-			grpControls.members[curSelected].set_text(currentSelectedCat.getOptions()[curSelected].getDisplay());
-			grpControls.members[curSelected].color = 0xFFFFFFFF;
-		}*/
-
-		if (change != 0)
-			FlxG.sound.play(Paths.sound("scrollMenu"));
 
 		curSelected += change;
 
@@ -732,7 +739,7 @@ class OptionsMenu extends MusicBeatMenu
 			}
 			else
 			{
-				offsetNumberShit.text = "Offset ([←] / [→], [SHIFT] to slow): " + HelperFunctions.truncateFloat(FlxG.save.data.offset, 2) + '${FlxMath.getDecimals(HelperFunctions.truncateFloat(FlxG.save.data.offset, 2)) != 0 ? '' : '.0'} ms';
+				offsetNumberShit.text = getOffsetNumberText();
 				descriptionShit.text = currentDescription;
 			}
 			descriptionShit.updateHitbox();

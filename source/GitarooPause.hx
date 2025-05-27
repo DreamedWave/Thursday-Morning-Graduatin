@@ -78,9 +78,15 @@ class GitarooPause extends MusicBeatSubstate
 		super.destroy();
 	}
 
-
+	var frameTimeMult:Float = 1;
 	override function update(elapsed:Float)
 	{
+		super.update(elapsed);
+
+		frameTimeMult = elapsed/PlayState.instance.targetFrameTime;
+		if (pauseMusic.volume < 0.8)
+			pauseMusic.volume += 0.0002125 * frameTimeMult;
+
 		if (controls.LEFT_P || controls.RIGHT_P)
 			changeThing();
 
@@ -101,10 +107,6 @@ class GitarooPause extends MusicBeatSubstate
 					FlxG.switchState(new FreeplayState());
 			}
 		}
-
-		super.update(elapsed);
-
-		pauseMusic.volume = FlxMath.lerp(0.65, pauseMusic.volume, CoolUtil.boundToInverted(1 - (elapsed / 24), 0, 1));
 	}
 
 	function changeThing():Void

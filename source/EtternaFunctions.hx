@@ -74,7 +74,7 @@ class EtternaFunctions
         if (maxms <= ridic) // anything below this (judge scaled) threshold is counted as full pts
             return max_points;
         else if (maxms <= zero) // ma/pa region, exponential
-                return max_points * erf((zero - maxms) / dev);
+            return max_points * erf((zero - maxms) / dev);
         else if (maxms <= max_boo_weight)// cb region, linear
             return (maxms - zero) * miss_weight / (max_boo_weight - zero);
         else

@@ -23,6 +23,9 @@ class PauseSubState extends MusicBeatSubstate
 	public static var resyncToLastPos:Bool = false;
 	public static var randomMusicTime:Bool = false;
 
+	var playHUDPrevAlpha:Float;
+	var playHUDTwn:FlxTween;
+
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Toggle Practice Mode', 'Skip Song', 'Exit to menu'];
@@ -57,17 +60,34 @@ class PauseSubState extends MusicBeatSubstate
 	var blurTweenGoBrr:FlxTween = null;
 	var funnyBlur:Float;
 
-	var antiHoverRect:FlxObject;
+	var antiHoverRect:FlxSprite;
+
+	var topScrollRect:FlxSprite;
+	var bottomScrollRect:FlxSprite;
 
 	public function new(x:Float, y:Float)
 	{
 		super();
+
 		PlayState.instance.camGame.filtersEnabled = true;
+		playHUDPrevAlpha = PlayState.instance.camHUD.alpha; //here cuz we cannot guarantee that CamHUD will always be at 1 alpha
+
+		PlayState.instance.camGame.pauseVisualUpdates = true;
+		PlayState.instance.camHUD.pauseVisualUpdates = true;
+
+		//HUD Tween cuz cool
+		if (playHUDTwn != null)
+			playHUDTwn.cancel();
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: 0}, 0.3, {ease: FlxEase.quadIn,
+			onComplete: function(twn:FlxTween) 
+			{
+				playHUDTwn = null;
+			}
+		});
 
 		//Blur Tween cuz cool
 		if (blurTweenGoBrr != null)
 			blurTweenGoBrr.cancel();
-
 		blurTweenGoBrr = FlxTween.tween(this, {funnyBlur: 3}, 1, {ease: FlxEase.cubeOut,
 			onUpdate: function(twn:FlxTween) 
 			{
@@ -206,9 +226,20 @@ class PauseSubState extends MusicBeatSubstate
 			grpMenuShit.add(item);
 		}
 
-		antiHoverRect = new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
+		antiHoverRect = new FlxSprite(FlxG.width * 0.75, 0).makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height * 4), FlxColor.RED); //new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
+		antiHoverRect.visible = false;
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
+
+		topScrollRect = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		topScrollRect.visible = false;
+		//topScrollRect.screenCenter(Y);
+		add(topScrollRect);
+
+		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.75)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		bottomScrollRect.visible = false;
+		//bottomScrollRect.screenCenter(Y);
+		add(bottomScrollRect);
 
 		if (!didCountdownShit)
 			changeSelection();
@@ -233,15 +264,17 @@ class PauseSubState extends MusicBeatSubstate
 
 	var mouseActive:Bool = false;
 	var mouseTimer:FlxTimer;
+	var frameTimeMult:Float = 1;
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
+		frameTimeMult = elapsed/PlayState.instance.targetFrameTime;
 
 		if (!didCountdownShit)
 		{
-			if (pauseMusic.volume <= 0.8)
-				pauseMusic.volume = FlxMath.lerp(0.8, pauseMusic.volume, CoolUtil.boundToInverted(1 - (elapsed / 24), 0, 1));				
+			if (pauseMusic.volume < 0.8)
+				pauseMusic.volume += 0.0002125 * frameTimeMult;
 		}
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
@@ -266,9 +299,29 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (!didCountdownShit)
 		{
-			if (mouseActive && FlxG.mouse.justMoved && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
+			//finna toby fox this shit
+			// was it this easy...? 
+			if (mouseActive && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
 			{
-				for (item in grpMenuShit.members)
+				if (FlxG.mouse.overlaps(topScrollRect) && curSelected > 0)
+				{
+					changeSelection(-1);
+					mouseActive = false;
+					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					{
+						mouseActive = true;
+					});
+				}
+				else if (FlxG.mouse.overlaps(bottomScrollRect) && curSelected < menuItems.length - 1)
+				{
+					changeSelection(1);
+					mouseActive = false;
+					mouseTimer = new FlxTimer().start(0.2, function(tmr:FlxTimer)
+					{
+						mouseActive = true;
+					});
+				}
+				/*for (item in grpMenuShit.members)
 				{
 					if (FlxG.mouse.overlaps(item) && curSelected != item.ID)
 					{
@@ -280,7 +333,7 @@ class PauseSubState extends MusicBeatSubstate
 							mouseActive = true;
 						});
 					}
-				}
+				}*/
 			}
 			else
 			{
@@ -381,7 +434,7 @@ class PauseSubState extends MusicBeatSubstate
 						//FlxG.game.soundTray.silent = true;
 						randomMusicTime = true;
 						resyncToLastPos = true;
-						if (doFancyCountdownShit && PlayState.songStarted) //(FlxG.save.data.pauseCountdown)
+						if (doFancyCountdownShit && PlayState.instance.songStarted) //(FlxG.save.data.pauseCountdown)
 						{
 							//Blur Tween cuz cool electric boogaloo
 							if (blurTweenGoBrr != null)
@@ -404,10 +457,18 @@ class PauseSubState extends MusicBeatSubstate
 							doCountdownShit();
 						}
 						else
+						{
+							FlxG.sound.play(Paths.sound('returnMenu'));
+							if (playHUDTwn != null)
+								playHUDTwn.cancel();
+							PlayState.instance.camHUD.alpha = playHUDPrevAlpha;
 							close();
+						}
 					case "Restart Song":
 						PlayState.instance.subtitleText.visible = false;
 						PlayState.instance.subtitleBackground.visible = false;
+
+						FlxG.sound.play(Paths.sound('returnMenu'));
 						
 						if (blurTweenGoBrr != null)
 							blurTweenGoBrr.cancel();
@@ -424,6 +485,7 @@ class PauseSubState extends MusicBeatSubstate
 						FlxG.resetState();
 						Paths.clearUnusedMemory();
 						FlxTransitionableState.skipNextTransOut = true;
+						FlxTransitionableState.skipNextTransIn = false;
 						if (!PlayState.songsCheatedOn.contains(true))
 							PlayState.toggledPracticeMode = false;
 					case "Toggle Practice Mode":
@@ -473,11 +535,11 @@ class PauseSubState extends MusicBeatSubstate
 								PlayState.instance.remove(PlayState.instance.videoSprite);
 								PlayState.instance.removedVideo = true;
 							}*/
-							FlxTransitionableState.skipNextTransOut = true;
+							FlxTransitionableState.skipNextTransIn = true;
 							skippedSong = true;
 							trace("Skipped song");
 							PlayState.instance.camGame.alpha = 0;
-							PlayState.instance.camHUD.alpha = 0;
+							//PlayState.instance.camHUD.alpha = 0;
 							FlxG.sound.music.volume = 0;
 							FlxG.sound.music.pause();
 							PlayState.instance.vocals.volume = 0;
@@ -490,19 +552,27 @@ class PauseSubState extends MusicBeatSubstate
 						}
 						else
 						{
-							FlxG.sound.play(Paths.sound('scrollMenuFail'), 0.7);
+							FlxG.sound.play(Paths.sound('scrollMenuFail'), 0.5);
 							trace("Cannot Skip");
 							skippedSong = false;
 						}
 					case "Exit to menu":
+						FlxTransitionableState.skipNextTransOut = false;
+						FlxG.sound.play(Paths.sound('returnMenu'));
 						PlayState.instance.subtitleText.visible = false;
 						PlayState.instance.subtitleBackground.visible = false;
 						randomMusicTime = false;
+						FlxTween.tween(bg, {alpha: 0}, 0.3, {type: ONESHOT, ease: FlxEase.smootherStepIn});
 
-						if (PlayState.isStoryMode)
-							FlxG.switchState(new StoryMenuState());
-						else
-							FlxG.switchState(new FreeplayState());
+						pauseMusic.tapeStop(0.1, 0.25, function(twn:FlxTween)
+							{
+								pauseMusic.stop();
+
+								if (PlayState.isStoryMode)
+									FlxG.switchState(new StoryMenuState());
+								else
+									FlxG.switchState(new FreeplayState());
+							});
 				}
 			}
 		}
@@ -524,6 +594,9 @@ class PauseSubState extends MusicBeatSubstate
 		didCountdownShit = true;
 
 		FlxTween.tween(bg, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
+		if (playHUDTwn != null)
+			playHUDTwn.cancel();
+		playHUDTwn = FlxTween.tween(PlayState.instance.camHUD, {alpha: playHUDPrevAlpha}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadOut});
 		#if cpp
 		#if debug
 		FlxTween.tween(perSongOffset, {y: FlxG.height + 21}, 0.9, {type: ONESHOT, ease: FlxEase.elasticInOut});
@@ -535,7 +608,8 @@ class PauseSubState extends MusicBeatSubstate
 			item.isMenuItem = false;
 			FlxTween.tween(item, {alpha: 0, y: item.y + 500}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.expoIn});
 		}
-		pauseMusic.fadeOut(Conductor.crochet / 1000);
+
+		pauseMusic.tapeStop(Conductor.crochet / 1000, 0.9);
 
 		new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 		{
@@ -619,13 +693,14 @@ class PauseSubState extends MusicBeatSubstate
 	override function destroy()
 	{
 		FlxG.mouse.visible = false;
-		if (pauseSound.playing)
-			pauseSound.stop();
-		if (!doFancyCountdownShit && !skippedSong)
-			FlxG.sound.play(Paths.sound('returnMenu'));
+		//if (!doFancyCountdownShit && !skippedSong)
+			//FlxG.sound.play(Paths.sound('returnMenu'));
 		if (PlayState.cannotDie)
 			PlayState.toggledPracticeMode = true;
-		pauseMusic.destroy();
+		if (pauseMusic != null)
+			if (pauseSound.playing)
+				pauseSound.stop();
+			pauseMusic.destroy();
 
 		if (blurTweenGoBrr != null)
 			blurTweenGoBrr.cancel();
@@ -633,6 +708,8 @@ class PauseSubState extends MusicBeatSubstate
 		PlayState.instance.pauseBlurLol.blurY = 0;
 		PlayState.instance.camGame.filtersEnabled = false;
 		PlayState.instance.camHUD.filtersEnabled = false;
+		PlayState.instance.camGame.pauseVisualUpdates = false;
+		PlayState.instance.camHUD.pauseVisualUpdates = false;
 
 		super.destroy();
 	}
