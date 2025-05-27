@@ -131,8 +131,7 @@ class FlxCamera extends FlxBasic
 	 * Used to smoothly track the camera as it follows:
 	 * The percent of the distance to the follow `target` the camera moves per 1/60 sec.
 	 * Value converted to use PsychEngine's isBoundTo lerps for it to be more straigntforward.
-	 *`1` being the default, `50` means the camera lerps twice as fast, and `100` being the max.
-	 * `100` means no camera easing. A value of `0` means the camera does not move.
+	 *`1` being the default, `2` means the camera lerps twice as fast, and `10` being the max.
 	 */
 	public var followLerp(default, set):Float = 1;
 
@@ -212,6 +211,12 @@ class FlxCamera extends FlxBasic
 	 * @see http://haxeflixel.com/demos/FlxBloom/
 	 */
 	public var useBgAlphaBlending:Bool = false;
+
+	/**
+	 * Custom Var by Amiee! :3
+	 * Pauses or Plays the updates of effects within this - useful for stuff like pause screens or cutscenes
+	**/
+	public var pauseVisualUpdates:Bool = false;
 
 	/**
 	 * Used to render buffer to screen space.
@@ -1185,19 +1190,20 @@ class FlxCamera extends FlxBasic
 		super.update(elapsed);
 		
 		// follow the target, if there is one
-		if (target != null)
+		if (!pauseVisualUpdates)
 		{
-			updateFollow(elapsed);
+			if (target != null)
+				updateFollow(elapsed);
+
+			updateScroll();
+			updateFlash(elapsed);
+			updateFade(elapsed);
+
+			flashSprite.filters = filtersEnabled ? filters : null;
+
+			updateFlashSpritePosition();
+			updateShake(elapsed);
 		}
-
-		updateScroll();
-		updateFlash(elapsed);
-		updateFade(elapsed);
-
-		flashSprite.filters = filtersEnabled ? filters : null;
-
-		updateFlashSpritePosition();
-		updateShake(elapsed);
 	}
 
 	/**
@@ -1296,15 +1302,15 @@ class FlxCamera extends FlxBasic
 				_lastTargetPosition.y = target.y;
 			}
 
-			if (followLerp == 100 || elapsed == 0)
+			if (followLerp == 10 || elapsed == 0)
 			{
 				scrollLerp.copyFrom(_scrollTarget);
 				scroll.copyFrom(_scrollTarget); // no easing
 			}
 			else
 			{
-				scrollLerp.x = FlxMath.lerp(_scrollTarget.x, scrollLerp.x, CoolUtil.boundTo(1 - (elapsed * (followLerp * 2.5)), 0, 1));
-				scrollLerp.y = FlxMath.lerp(_scrollTarget.y, scrollLerp.y, CoolUtil.boundTo(1 - (elapsed * (followLerp * 2.5)), 0, 1));
+				scrollLerp.x = CoolUtil.freyaLerp(scrollLerp.x, _scrollTarget.x, followLerp * 3, elapsed);
+				scrollLerp.y = CoolUtil.freyaLerp(scrollLerp.y, _scrollTarget.y, followLerp * 3, elapsed);
 				scroll.set(scrollLerp.x + scrollShakeX, scrollLerp.y + scrollShakeY);
 			}
 		}
@@ -1374,13 +1380,32 @@ class FlxCamera extends FlxBasic
 			_fxShakeDuration -= elapsed;
 			if (_fxShakeDuration <= 0)
 			{
-				if (!shakeFlashSprite)
+				if (scroll != null && !shakeFlashSprite) //We have to do this or else it causes a crash
 				{
 					if (scrollShakeTween != null)
 						scrollShakeTween.cancel();
 
-					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {type: ONESHOT, ease: FlxEase.circOut, 
-						onComplete: function (twn:FlxTween){scrollShakeTween = null;}});
+					scrollShakeTween = FlxTween.tween(this, {scrollShakeX: 0, scrollShakeY: 0}, 0.1 * _fxShakeHoldFor, {
+						type: ONESHOT, 
+						ease: FlxEase.circOut, 
+						onUpdate: function (twn:FlxTween)
+						{
+							if (scroll != null && target == null)
+							{
+								scroll.x = scrollShakeX;
+								scroll.y = scrollShakeY;
+							}
+						},
+						onComplete: function (twn:FlxTween)	
+						{	
+							if (scroll != null && target == null)
+							{
+								scroll.x = 0;
+								scroll.y = 0;
+							}
+							scrollShakeTween = null;
+						}
+					});
 					nextScrollShakeX = 0;
 					nextScrollShakeY = 0;
 				}
@@ -1403,7 +1428,7 @@ class FlxCamera extends FlxBasic
 			}
 			else 
 			{
-				if (target != null && !shakeFlashSprite)
+				if (scroll != null && !shakeFlashSprite)
 				{
 					if (scrollShakeTween != null && scrollShakeTween.active)
 						scrollShakeTween.cancel();
@@ -1413,8 +1438,8 @@ class FlxCamera extends FlxBasic
 						frameRateCap--;
 						//Different Lerp for camShake
 						//im going through it ok dont judge me
-						scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
-						scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+						scrollShakeX = CoolUtil.freyaLerp(scrollShakeX, nextScrollShakeX, 50 / _fxShakeHoldFor, elapsed);
+						scrollShakeY = CoolUtil.freyaLerp(scrollShakeY, nextScrollShakeY, 50 / _fxShakeHoldFor, elapsed);
 					}
 					else
 					{
@@ -1423,30 +1448,43 @@ class FlxCamera extends FlxBasic
 						if (_fxShakeAxes != FlxAxes.Y)
 						{
 							if (nextScrollShakeX < 0)
-								nextScrollShakeX = FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeX = CoolUtil.boundTo(FlxG.random.float(0, _fxShakeIntensity * width) * (decayCamShake ? shakeDecayFactor : 1), 0, 360);
 							else
-								nextScrollShakeX = FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							nextScrollShakeX /= 2;
+								nextScrollShakeX = CoolUtil.boundTo(FlxG.random.float(-_fxShakeIntensity * width, 0) * (decayCamShake ? shakeDecayFactor : 1), -360, 0);
+							nextScrollShakeX /= 1.5;
 							nextScrollShakeX /= zoom;
 							nextScrollShakeX *= FlxG.width / 1280;
-							scrollShakeX = FlxMath.lerp(nextScrollShakeX, scrollShakeX, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+							scrollShakeX = CoolUtil.freyaLerp(scrollShakeX, nextScrollShakeX, 50 / _fxShakeHoldFor, elapsed);
 						}
 
 						if (_fxShakeAxes != FlxAxes.X)
 						{
 							if (nextScrollShakeY < 0)
-								nextScrollShakeY = FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1);
+								nextScrollShakeY = CoolUtil.boundTo(FlxG.random.float(0, _fxShakeIntensity * height) * (decayCamShake ? shakeDecayFactor : 1), 0, 360);
 							else
-								nextScrollShakeY = FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1);
-							nextScrollShakeY /= 2;
+								nextScrollShakeY = CoolUtil.boundTo(FlxG.random.float(-_fxShakeIntensity * height, 0) * (decayCamShake ? shakeDecayFactor : 1), -360, 0);
+							nextScrollShakeY /= 1.5;
 							nextScrollShakeY /= zoom;
 							nextScrollShakeY *= FlxG.height / 720;
-							scrollShakeY = FlxMath.lerp(nextScrollShakeY, scrollShakeY, CoolUtil.boundTo(1 - (elapsed * (80 / _fxShakeHoldFor)), 0, 1));
+							scrollShakeY = CoolUtil.freyaLerp(scrollShakeY, nextScrollShakeY, 50 / _fxShakeHoldFor, elapsed);
 						}
+					}
+
+					//Manually Shake the follow here if target is null
+					if (target == null)
+					{
+						scroll.x = scrollShakeX;
+						scroll.y = scrollShakeY;
 					}
 				}
 				else
 				{
+					if (scroll != null && (scroll.x != 0 || scroll.y != 0) && target == null)
+					{
+						scroll.x = 0;
+						scroll.y = 0;
+					}
+					
 					if (_fxShakeAxes != FlxAxes.Y)
 						flashSprite.x += (FlxG.random.float(-_fxShakeIntensity * 0.5 * width, _fxShakeIntensity * 0.5 * width) / 2) * (decayCamShake ? shakeDecayFactor : 1) * (FlxG.width / 1280);
 
@@ -2086,7 +2124,7 @@ class FlxCamera extends FlxBasic
 
 	function set_followLerp(Value:Float):Float
 	{
-		return followLerp = FlxMath.bound(Value, 0, 100);
+		return followLerp = FlxMath.bound(Value, 0, 10);
 	}
 
 	function set_width(Value:Int):Int

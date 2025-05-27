@@ -13,6 +13,7 @@ import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.system.FlxAssets.FlxSoundAsset;
 import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import flixel.util.FlxStringUtil;
 import openfl.Assets;
 #if flash11
@@ -72,7 +73,7 @@ class FlxSound extends FlxBasic
 	/**
 	 * Whether to call `destroy()` when the sound has finished playing.
 	 */
-	public var autoDestroy:Bool;
+	public var autoDestroy:Bool = true;
 
 	/**
 	 * Tracker for sound complete callback. If assigned, will be called
@@ -539,6 +540,26 @@ class FlxSound extends FlxBasic
 	}
 
 	/**
+	 * CUSTOM Helper function that imitates a tape-stop effect - an alternate version of fadeOut()!
+	 *
+	 * @param	Duration	The amount of time the tapes-top operation should take.
+	 * @param	ToPitch		The pitch to tween to, 0.5 by default.
+	 */
+
+	public inline function tapeStop(Duration:Float = 1, ?ToPitch:Float = 0.5, ?onComplete:FlxTween->Void):FlxSound
+	{
+		//var twnPitch:Float = get_pitch();
+
+		if (fadeTween != null)
+			fadeTween.cancel();
+		//it dont hurt to set another tween here since we're fading out, right? right???
+		FlxTween.tween(this, {volume: 0}, (Duration * 0.7), {startDelay: (Duration * 0.3)});
+		fadeTween = FlxTween.tween(this, {pitch: ToPitch}, Duration, {onComplete: onComplete});
+
+		return this;
+	}
+
+	/**
 	 * Helper function that tweens this sound's volume.
 	 *
 	 * @param	Duration	The amount of time the fade-in operation should take.
@@ -561,7 +582,7 @@ class FlxSound extends FlxBasic
 	{
 		volume = f;
 	}
-
+	
 	/**
 	 * Returns the currently selected "real" volume of the sound (takes fades and proximity into account).
 	 *
@@ -712,10 +733,16 @@ class FlxSound extends FlxBasic
 			this.group = group;
 
 			if (oldGroup != null)
+			{
 				oldGroup.remove(this);
+				trace ('removed sound from: ' + oldGroup);
+			}
 
 			if (group != null)
+			{
 				group.add(this);
+				trace ('group Added to length check: ' + group.sounds.length);
+			}
 
 			updateTransform();
 		}
@@ -745,10 +772,12 @@ class FlxSound extends FlxBasic
 	}
 	
 	//Makin this public!!
-	public function set_pitch(v:Float):Float
+	//nevermind!!! LMAO
+	function set_pitch(v:Float):Float
 	{
 		#if FLX_PITCH
 		if (_channel != null)
+		{
 			#if openfl_legacy
 			_channel.pitch = v;
 			#else
@@ -756,6 +785,7 @@ class FlxSound extends FlxBasic
 			if (_channel.__source != null)
 				_channel.__source.pitch = v;
 			#end
+		}
 		#else
 		if (_channel != null)
 		{

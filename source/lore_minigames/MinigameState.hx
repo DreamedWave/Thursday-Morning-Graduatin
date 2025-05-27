@@ -1,6 +1,7 @@
-//IN PAIN - TOO LAZY TO FIX UP PATHS.JSON TO WORK WITH THIS SHIT AUGHHHH
 package lore_minigames;
 
+import flixel.math.FlxPoint;
+import flixel.math.FlxRandom;
 import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.FlxCamera;
@@ -8,7 +9,6 @@ import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.editors.ogmo.FlxOgmo3Loader;
 import flixel.tile.FlxTilemap;
-//import flixel.FlxG;
 import flixel.ui.FlxBar;
 import flixel.util.FlxTimer;
 import flixel.util.FlxAxes;
@@ -19,6 +19,8 @@ import flixel.group.FlxSpriteGroup;
 import flixel.system.FlxSoundGroup;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import openfl.filters.BitmapFilter;
+import openfl.filters.ShaderFilter;
 
 import flixel.util.FlxStringUtil;
 
@@ -28,12 +30,15 @@ import flixel.util.FlxStringUtil;
 
 class MinigameState extends MusicBeatState
 {
+	var targetFrameTime:Float = 1/120;
+	var frameTimeMult:Float = 1;
+
 	public static var player:Player;
 	var map:FlxOgmo3Loader;
 
 	var walls:FlxTilemap;
 	var interactiblesGroup:FlxTypedGroup<Interactibles>;
-	var doorsLocationMap:Map<String, Array<Float>> = new Map<String, Array<Float>>(); //Format ([PortalID, PortalDestination], [PortalX, PortalY])
+	var doorsLocationMap:Map<String, Array<Float>> = new Map<String, Array<Float>>(); //Format (PortalID_PortalDestination, [PortalX, PortalY])
 	var clatterGroup:FlxTypedGroup<Clatterer>;
 	var collectiblesGroup:FlxTypedGroup<Collectibles>;
 	//var deadliesGroup:FlxTypedGroup<Enemies>;
@@ -52,7 +57,7 @@ class MinigameState extends MusicBeatState
 
 	public static var camGame:FlxCamera;
 	public static var camHUD:FlxCamera;
-	var defaultCamZoom = 6;
+	var defaultCamZoom:Float = 5;
 	var camFollow:FlxObject;
 	var doCamFollowing:Bool = false;
 
@@ -61,11 +66,11 @@ class MinigameState extends MusicBeatState
 
 	//SoundStuff
 	var preEscMusGroup:FlxSoundGroup;
-	var preSuspenseMusGroup:FlxSoundGroup;
+	var preSusMusGroup:FlxSoundGroup;
 
 	var escapeTimer:FlxTimer;
 	var escapeTimerTween:FlxTween;
-	var defaultEscapeTime:Int = 120;
+	var defaultEscapeTime:Int = 170;
 	var escapeTimerGroup:FlxSpriteGroup = null;
 	var escapeTimerText:FlxText;
 	var escTimeBG:FlxSprite;
@@ -78,20 +83,37 @@ class MinigameState extends MusicBeatState
 
 	public static var weekNum:Int = 0;
 
+	var killDepth:Float = 720; //what height to kill the player in
+	var playerResetPos:Array<Float> = [];
+
+	var camGameFilters:Array<BitmapFilter> = [];
+
+	var noiseFilter:shaders.Grain;
+
 	override public function create()
 	{
 		#if windows
 		// Updating Discord Rich Presence
 		if (FlxG.save.data.showPresence)
-			DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
+			DiscordClient.changePresence("Testing the Minigames!!!", null, "apppresence-strange");
+		//DiscordClient.changePresence("Somewhere Familiar...", null, "apppresence-strange");
 		#end
+
+		if (FlxG.save.data.fpsCap < 120)
+			targetFrameTime = 1 / FlxG.save.data.fpsCap;
+		initSkipFrames = Math.round(FlxG.save.data.fpsCap / 60);
+		noiseSkipFrames = initSkipFrames;
+		trace('noiseSkipFrames: ' + initSkipFrames);
 		
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		Conductor.changeBPM(115);
+
+		//FlxG.fixedTimestep = true;
 		
-		preEscMusGroup = new FlxSoundGroup(1);
-		preSuspenseMusGroup = new FlxSoundGroup(1);
+		//Volume shits
+		preEscMusGroup = new FlxSoundGroup(FlxG.sound.defaultMusicGroup.volume);
+		preSusMusGroup = new FlxSoundGroup(FlxG.sound.defaultMusicGroup.volume);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -138,6 +160,7 @@ class MinigameState extends MusicBeatState
 		add(collectiblesGroup);
 
 		player = new Player();
+		//player.shader = new shaders.TestShader();
 		map.loadEntities(placeEntities, "entities");
 
 		add(player);
@@ -151,6 +174,14 @@ class MinigameState extends MusicBeatState
 		camGame.follow(camFollow, LOCKON);
 		//camGame.followLerp = camFollowSpeed;
 		camGame.followLerp = 50;
+		camGame.filters = camGameFilters;
+		//var bloom:ShaderFilter = new ShaderFilter(new shaders.BloomShader(0.3, 0.75, 3));
+		//camGameFilters.push(bloom);
+		//var poster = new ShaderFilter(new shaders.PosterizeShaderTest());
+		//camGameFilters.push(poster);
+		noiseFilter = new shaders.Grain(2.5, 0.05, 0.3);
+		camGameFilters.push(new ShaderFilter(noiseFilter));
+		camGameFilters.push(new ShaderFilter(new shaders.ChromAbb(0.0015, 0, -0.0015)));
 
 		//For CamHUD to fix itself after shake
 		/*var camHUDFollow:FlxObject = new FlxObject(0, 0, 1, 1);
@@ -167,7 +198,7 @@ class MinigameState extends MusicBeatState
 		pseudoCamFade.cameras = [camHUD];
 		add(pseudoCamFade);
 		
-		darkenScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFFFFFFFF);
+		darkenScreen = new FlxSprite(-FlxG.width, -FlxG.height).makeGraphic(FlxG.width * 4, FlxG.height * 4, FlxColor.WHITE);
 		darkenScreen.scrollFactor.set();
 		darkenScreen.alpha = 0;
 		darkenScreen.cameras = [camGame];
@@ -202,11 +233,23 @@ class MinigameState extends MusicBeatState
 		escapeTimerGroup.add(escapeTimerText);
 
 		escapeTimerGroup.y -= 100;
-		
+
+		var staminaBar:FlxBar = new FlxBar(10, FlxG.height - 30, LEFT_TO_RIGHT, 120, 20, player, 'stamina', 0, 100);
+		staminaBar.createFilledBar(0xFF5A003C, 0xFF33FFE4);
+		staminaBar.antialiasing = FlxG.save.data.antialiasing;
+		staminaBar.angle = 2;
+		staminaBar.cameras = [camHUD];
+		add(staminaBar);
+
+		/*var healthBar:FlxBar = new FlxBar(10, FlxG.height - 50, LEFT_TO_RIGHT, 120, 20, player, 'health', 0, 100);
+		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
+		healthBar.antialiasing = FlxG.save.data.antialiasing;
+		healthBar.angle = 2;
+		healthBar.cameras = [camHUD];
+		add(healthBar);*/
 		
 		super.create();
 
-		heartBeatLevel = 0;
 		FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
 		FlxG.sound.music.looped = true;
 		FlxG.sound.music.autoDestroy = false;
@@ -225,16 +268,17 @@ class MinigameState extends MusicBeatState
 		switch (entity.name)
 		{
 			case 'player':
-				player.setPosition(entity.x, (entity.y + 32) - 28);
+				player.setPosition(entity.x, entity.y);
+				playerResetPos = [player.x, player.y];
 				doCamFollowing = true;
 			case 'portal_door':
 				//definitely make a class for this
 				var door:Interactibles = new Interactibles(entity.x, entity.y, DOOR);
-				door.destinationID = entity.values.destinationInt;
+				door.destProgInt = entity.values.destinationInt;
 				door.specialAnimType = entity.values.specialAnimType;
-				door.locationID = entity.values.portal_ID + '_' + entity.values.destinationInt;
+				door.doorID = entity.values.portal_ID;
 				door.isLocked = entity.values.isLocked;
-				doorsLocationMap.set(door.locationID, [entity.x, entity.y]);
+				doorsLocationMap.set(door.doorID + "_" + door.destProgInt, [entity.x, entity.y]);
 				interactiblesGroup.add(door);
 			case 'interactibles':
 				var interactibles:Interactibles = new Interactibles(entity.x, entity.y, OTHER);
@@ -257,6 +301,9 @@ class MinigameState extends MusicBeatState
 				clatterGroup.add(clatterers);
 			case 'enemy':
 				//enemyType
+			case 'out-of-bounds-checker':
+				//this is TEMP!!!
+				killDepth = entity.y;
 		}
 		totalDone++;
 
@@ -269,23 +316,28 @@ class MinigameState extends MusicBeatState
 		{
 			if (bobuxDoors.type == DOOR)
 			{
-				//get Location ID and split
-				var split:Array<String> = bobuxDoors.locationID.split('_');
-				//THEN invert the shit
-				var loadID:String = '';
-				if (Std.parseInt(split[1]) == 0)
-					loadID = split[0] + '_1';
-				else if (Std.parseInt(split[1]) == 1)
-					loadID = split[0] + '_0';
+				//Swap destProgInt values
+				//Wait so why do we need to do this when we have destProgInt
+				//Ok so im gonna try something
+				//SURELY we can just make destination and location separate RIGHT?!
+				//heh,,,, it crashed,,,
+				//Oki trying it again
+				//              stringifyier
+				var loadID:String = "" + bobuxDoors.doorID;
+				if (bobuxDoors.destProgInt == 0)
+					loadID += "_1";
+				else if (bobuxDoors.destProgInt == 1)
+					loadID += "_0";
 
 				//Then retrieve the coords to place the player in!
+				//Gurl I know I wrote the code but this is lowk making my head spin LMFAO
 				var locationArray:Array<Float> = doorsLocationMap.get(loadID);
-				switch (Std.parseInt(split[1]))
+				switch (bobuxDoors.destProgInt)
 				{
 					case 0 | 1:
 						bobuxDoors.destination[0] = Std.int(locationArray[0]);
 						bobuxDoors.destination[1] = Std.int(locationArray[1]);
-						trace ('set door ' + bobuxDoors.locationID + "'s tp coords to [" + locationArray[0] + ', ' + locationArray[1] + '].');
+						trace ('set door ' + bobuxDoors.doorID + "'s tp coords to [" + locationArray[0] + ', ' + locationArray[1] + '].');
 				}
 			}
 		});
@@ -295,21 +347,29 @@ class MinigameState extends MusicBeatState
 	var camMovementLerp:Array<Float> = [0, 0];//the value tht gets tweened
 	var camMovementOffset:Array<Float> = [0, 0]; //the ACTUAL value that instantly gets updated
 	var camHoldShakeAdditive:Array<Float> = [0, 0];
-	private function followPlayer(elapsed:Float):Void
-	{
-		camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
-		camMovementOffset[1] = (0.05 * player.velocity.y) + camHoldShakeAdditive[1];
-		camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
-		camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
-
-		camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 5 + camMovementLerp[1]);
-	}
 
 	var timeLeftChecker:Float = 4364;
 	var fatherElapsedCheck:Int = 0;
+	var noiseElapsed:Float = 0;
+	var noiseSkipFrames:Int = 1;
+	var initSkipFrames:Int = 1;
+
 	override public function update(elapsed:Float)
 	{		
 		super.update(elapsed);
+
+		if (noiseSkipFrames > 0)
+			noiseSkipFrames--;
+		else
+		{
+			noiseSkipFrames = initSkipFrames;
+			noiseElapsed += elapsed;
+			noiseFilter.uTime.value = [noiseElapsed];
+		}
+
+		frameTimeMult = elapsed/targetFrameTime;
+		player.updateFrameTimeMult(frameTimeMult);
+		FlxG.watch.addQuick("frameTimeMult", frameTimeMult);
 
 		if (FlxG.keys.justPressed.ONE)
 		{
@@ -331,28 +391,40 @@ class MinigameState extends MusicBeatState
 
 		//Collides
 		FlxG.collide(player, walls);
-
 		//Overlaps
 		if (FlxG.keys.justPressed.UP)
 			FlxG.overlap(player, interactiblesGroup, interactFunct);
-		if (player.status != SNEAKING && !player.forceSneak)
+		if (player.curAction != SNEAK && player.curAction != SLIDE)
 			FlxG.overlap(player, clatterGroup, clatterFunct);
 		FlxG.overlap(player, collectiblesGroup, pickupFunct);
+
+		//EVIL ASS FUNCTION!!! FIX AND REMOVE THIS ASAP!!!!!
+		if (lockTheNextDoorThePlayerOverlapsWith)
+			FlxG.overlap(player, interactiblesGroup, uglyEvilWorkaroundFunction);
 		
 		if (doCamFollowing)
-			followPlayer(elapsed);
+		{
+			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
+			camMovementOffset[1] = (player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1];
+			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
+			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
+	
+			camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 5 + camMovementLerp[1]);
+		}
 
 		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq)
 		{
 			//this updates every frame - is that alright??
 			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
 			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
-			{
-				camShake(false, false, 3, 0.05 * theManUpstairs.dadSNDNear.getActualVolume(), 0.05);
-				trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
-			}
+			//{
+				camShake(false, false, 3, 0.1 * theManUpstairs.dadSNDNear.getActualVolume() * 0.75, 0.05);
+				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
+			//}
 
 			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
+			
+			//FlxG.overlap(player, theManUpstairs, playerDied);
 			if (fatherElapsedCheck < 1)
 			{
 				theManUpstairs.playerPosition = player.getMidpoint();
@@ -362,7 +434,7 @@ class MinigameState extends MusicBeatState
 				fatherElapsedCheck--;
 		}
 
-		if (jumpscaredPlayer)
+		/*if (jumpscaredPlayer)
 		{
 			if (jumpscareSprite != null && jumpscareSprite.exists)
 			{
@@ -375,7 +447,7 @@ class MinigameState extends MusicBeatState
 			}
 			else
 				trace('hey, if you turned on this bool before making the jumpscare sprite then you messed up buddy!! :D');
-		}
+		}*/
 
 		if (inEscSeq && escapeTimer != null)
 		{
@@ -400,28 +472,12 @@ class MinigameState extends MusicBeatState
 			}
 		}
 
-		/*if (FlxG.keys.justPressed.P)
-		{
-			camShake(true, false, 0.05, 1);
-		}*/
+		if (player.y >= killDepth && player.canMove)
+			playerFell();
 
 		if (controls.BACK && !movedBack)
 		{
-			//Week dependent Cancel Menu Sounds
-			switch (FlxG.save.data.weekUnlocked)
-			{
-				case 2:
-					FlxG.sound.play(Paths.sound('cancelMenu'));
-				case 3:
-					FlxG.sound.play(Paths.sound('cancelMenu'));
-				case 6:
-					FlxG.sound.play(Paths.sound('cancelMenu'));
-				default:
-					if (!FreeplayState.freeplayMusicPlaying)
-						FlxG.sound.play(Paths.sound('cancelMenu'));
-					else
-						FlxG.sound.play(Paths.sound('cancelMenu'));
-			}
+			FlxG.sound.play(Paths.sound('cancelMenu'));
 			movedBack = true;
 			new FlxTimer().start(0.5, function(tmr:FlxTimer)
 			{
@@ -436,8 +492,8 @@ class MinigameState extends MusicBeatState
 			FlxG.resetState();
 		}
 		
-		if (clatter > 7)
-			clatter = 7;
+		if (clatter > 8)
+			clatter = 8;
 
 		if (seqCheck > 1 && !stopActiveTweening)
 		{
@@ -446,14 +502,12 @@ class MinigameState extends MusicBeatState
 		}
 	}
 
-	var droneDeterminator:Int = 1;
-	var uniformDeterminator:Int = 1;
-	var additionsDeterminator:Int = 1;
-	var flavourDeterminator:Int = 0;
-	var fakeBeat:Int = 0;
+	var stopActiveTweening:Bool = false;
 
-	var beatOffset:Int = 0;
-	var beatFlavoured:Int = 0;
+	//var fakeBeat:Int = 0;
+
+	//var beatOffset:Int = 0;
+	//var beatFlavoured:Int = 0;
 	
 	//Ripped from playstate???\
 	//stfu im very prouc of this function it is cool
@@ -492,84 +546,72 @@ class MinigameState extends MusicBeatState
 	{
 		super.beatHit();
 
-		trace('realBeat ' + curBeat + ' | fakeBeat ' + fakeBeat);
-
 		switch (seqCheck)
 		{
 			//Normal
 			case 0:
-				if (!inEscSeq && clatter >= 0)
+				//trace('realBeat ' + curBeat + ' | fakeBeat ' + fakeBeat);
+				if (curBeat % 4 == 0)
 				{
-					if (fakeBeat % 2 == 0)
-					{
-						camHoldShakeAdditive[0] = FlxG.random.int(-clatter, clatter) / 8;
-						camHoldShakeAdditive[1] = FlxG.random.int(-clatter, clatter) / 8;
-					}
+					camHoldShakeAdditive[0] = FlxG.random.float(0.5, -0.5) * clatter;
+					camHoldShakeAdditive[1] = FlxG.random.float(-0.5, 0.5) * clatter;
+				}
 
-					if (fakeBeat % 32 == 0)
+				if (curBeat % 32 == 0)
+				{
+					FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_Layer' + heartBeatLevel + '.ogg', 1, false, preEscMusGroup);
+					switch (heartBeatLevel)
 					{
-						//Randomise Tracks
-						switch (clatter)
-						{
-							case 0:
-								droneDeterminator = 1;
-								additionsDeterminator = 1;
-								uniformDeterminator = 0;
-							case 1 | 2:
-								uniformDeterminator = 1;
+						case 1:
+							if (FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
+							else if (FlxG.random.bool(10))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.5, false, preEscMusGroup);
+
+
+						case 2 | 3:
+							if (FlxG.random.bool(30))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
+							else if (FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.6, false, preEscMusGroup);
+
+							if (heartBeatLevel == 3 && FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+
+
+						case 4 | 5:
+							if (FlxG.random.bool(40))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.7, false, preEscMusGroup);
+							else if (FlxG.random.bool(50))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.8, false, preEscMusGroup);
+
+							if (FlxG.random.bool(30))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.75, false, preEscMusGroup);
+							else if (heartBeatLevel == 5 && FlxG.random.bool(20))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.65, false, preEscMusGroup);
+
+
+							case 6 | 7:
+							if (heartBeatLevel == 6)
+							{
 								if (FlxG.random.bool(50))
-									droneDeterminator = FlxG.random.int(1, 2);
-				
-								if (FlxG.random.bool(50))
-									additionsDeterminator = FlxG.random.int(1, 2);
-							case 3:
-								uniformDeterminator = 1;
-								if (FlxG.random.bool(80))
-									droneDeterminator = FlxG.random.int(1, 2);
-								
-								if (FlxG.random.bool(80))
-									additionsDeterminator = FlxG.random.int(1, 2);
-							case 4:
-								uniformDeterminator = 2;
-								droneDeterminator = FlxG.random.int(1, 2);
-								additionsDeterminator = FlxG.random.int(1, 2);
-							default:
-								uniformDeterminator = 2;
-								droneDeterminator = 2;
-								additionsDeterminator = 2;
-						}
+									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue1.ogg', 0.5, false, preEscMusGroup);
+								else if (FlxG.random.bool(60))
+									FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 0.5, false, preEscMusGroup);
+							}
 
-						FlxG.sound.play('assets/minigame/music/map_1/PadsDrone' + droneDeterminator + '.ogg', 1, false, preEscMusGroup);
-						if (uniformDeterminator > 0)
-							FlxG.sound.play('assets/minigame/music/map_1/BackingPads' + uniformDeterminator + '.ogg', 0.75, false, preEscMusGroup);
-						FlxG.sound.play('assets/minigame/music/map_1/Additions' + additionsDeterminator + '.ogg', 1, false, preEscMusGroup);
-					}
+							if (FlxG.random.bool(50))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 1, false, preEscMusGroup);
+							else if (heartBeatLevel == 7 && FlxG.random.bool(35))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_ChiptuneCue0.ogg', 0.9, false, preEscMusGroup);
 
-					switch (clatter)
-					{
-						case 0:
-							flavourDeterminator = 0;
-						case 1 | 2 | 3:
-							if (FlxG.random.bool(50))
-								flavourDeterminator = FlxG.random.int(1, 2);
-			
-							if (FlxG.random.bool(50))
-								flavourDeterminator = FlxG.random.int(1, 2);
+
 						default:
-							flavourDeterminator = FlxG.random.int(1, 4);
-					}
-
-					if (flavourDeterminator > 0)
-					{
-						if(FlxG.random.bool(0.85) && fakeBeat >= beatFlavoured + beatOffset)
-						{
-							beatFlavoured = fakeBeat;
-							beatOffset = FlxG.random.int(0, 16);
-							FlxG.sound.play('assets/minigame/music/map_1/FlavourSFX' + flavourDeterminator + '.ogg', FlxG.random.float(0.5, 0.8), false, preEscMusGroup);
-						}
+							if (FlxG.random.bool(30))
+								FlxG.sound.play('assets/minigame/music/map_1/AmbTheme_PianoCue0.ogg', 1, false, preEscMusGroup);
 					}
 				}
-				fakeBeat++;
+				//fakeBeat++;
 			case 2 | 3:
 				//camShake(false, false, 0.01 * timerMult, Conductor.crochet / 1200);
 				if (curBeat % 4 == 0)
@@ -580,7 +622,6 @@ class MinigameState extends MusicBeatState
 						darkenScreen.alpha = 0.25 * FlxG.sound.music.volume;
 					}
 				}
-				fakeBeat++;
 		}
 	}
 
@@ -589,16 +630,16 @@ class MinigameState extends MusicBeatState
 	var timerMultTween:FlxTween;
 
 	var finalCollectLocation:Array<Float> = [];
+	var tempCamAngleEscTwn:FlxTween;
 
 	function triggerEscapeSeq():Void
 	{
 		if (!inEscSeq)
 		{
 			inEscSeq = true;
-			player.primeForEscSeq();
 			trace('run for your life');
 			FlxG.sound.music.stop();
-			FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeIntro.ogg', 1, false, preSuspenseMusGroup);
+			FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeIntro.ogg', 1, false, preSusMusGroup);
 			FlxG.sound.music.looped = false;
 			FlxG.sound.music.onComplete = checkAndSwapMusic;
 			trace('seqCheck ' + seqCheck);
@@ -614,26 +655,26 @@ class MinigameState extends MusicBeatState
 			});
 
 			curBeat = 0;
-			fakeBeat = 0;
+			//fakeBeat = 0;
 			Conductor.songPosition = 0;
 			seqCheck = 1;
 
 			escapeTimerGroup.visible = true;
 			FlxTween.tween(escapeTimerGroup, {y: timerGroupTargetY}, 3, {type: ONESHOT, ease: FlxEase.elasticOut});
 
-			#if windows
+			//#if windows
 			// Updating Discord Rich Presence
-			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going.)", "apppresence-strange");
-			#end
+			//if (FlxG.save.data.showPresence)
+				//DiscordClient.changePresence("The Clock is Ticking...", "(You might want to get going.)", "apppresence-strange");
+			//#end
 
 			escapeTimer = new FlxTimer().start(defaultEscapeTime, function(tmr:FlxTimer)
 				{
-					#if windows
+					//#if windows
 					// Updating Discord Rich Presence
-					if (FlxG.save.data.showPresence)
-						DiscordClient.changePresence("Time's Up!", "(Good luck.)", "apppresence-strange");
-					#end
+					//if (FlxG.save.data.showPresence)
+						//DiscordClient.changePresence("Time's Up!", "(Good luck.)", "apppresence-strange");
+					//#end
 
 					//Times Up Function
 					timesUp = true;
@@ -655,13 +696,16 @@ class MinigameState extends MusicBeatState
 					trace('SUMMONED THE BIG BAD :CC');
 				});
 
-			FlxTween.tween(camGame, {angle: -1.25, zoom: camGame.zoom + 0.45}, Conductor.crochet * 16 / 1000, 
+			//incase of secquence breaking shit
+			if (tempCamAngleEscTwn != null)
+				tempCamAngleEscTwn.cancel();
+			tempCamAngleEscTwn = FlxTween.tween(camGame, {angle: -1.25, zoom: camGame.zoom + 0.45}, Conductor.crochet * 16 / 1000, 
 			{
 				type: ONESHOT,
 				ease: FlxEase.smoothStepOut,
 				onComplete: function(twn:FlxTween)
 				{
-					FlxTween.tween(camGame, {angle: 1.25}, Conductor.crochet * 16 / 1000, {type: PINGPONG, ease: FlxEase.smoothStepOut});
+					tempCamAngleEscTwn = FlxTween.tween(camGame, {angle: 1.25}, Conductor.crochet * 16 / 1000, {type: PINGPONG, ease: FlxEase.smoothStepOut});
 				}
 			});
 			FlxTween.tween(darkenScreen, {alpha: 0.15}, Conductor.crochet * 6 / 1000, {type: ONESHOT, ease: FlxEase.smoothStepOut, startDelay: Conductor.crochet * 6 / 1000});
@@ -670,38 +714,45 @@ class MinigameState extends MusicBeatState
 
 	private function checkAndSwapMusic()
 	{
-		trace('sequenceCheck' + seqCheck);
-		if (!inEscSeq && clatter < 7)
+		if (!inEscSeq)
 		{
-			if (heartBeatLevel < clatter)
+			if (clatter < 8)
 			{
-				trace('increased heartrate');
-				heartBeatLevel = clatter;
-				FlxG.sound.music.stop();
-				FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
-				FlxG.sound.music.looped = true;
-				FlxG.sound.music.onComplete = checkAndSwapMusic;
+				if (heartBeatLevel < clatter)
+				{
+					trace('sequenceCheck' + seqCheck);
+					trace('increased heartrate');
+					heartBeatLevel = clatter;
+					FlxG.sound.music.stop();
+					FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
+					FlxG.sound.music.looped = true;
+					FlxG.sound.music.onComplete = checkAndSwapMusic;
+				}
+			}
+			else
+			{
+				//chromAbb.setValues(0.2, 0, 0.25);
+				//Moved to a funct for easy??
+				defaultEscapeTime = 60;
+				escTimeBar.setRange(0, defaultEscapeTime);
+				FlxG.sound.play('assets/minigame/sounds/MaxClatter.ogg', 1, false);
+				FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 4 / 1000, 
+				{	
+					type: ONESHOT, 
+					ease: FlxEase.smoothStepOut,
+					onComplete: function(twn:FlxTween)
+					{
+						preEscMusGroup.stop();
+					}
+				});
+				triggerEscapeSeq();
 			}
 		}
 		else
 		{
+			trace('sequenceCheck' + seqCheck);
 			switch (seqCheck)
 			{
-				case 0:
-					//Moved to a funct for easy??
-					defaultEscapeTime = 60;
-					escTimeBar.setRange(0, defaultEscapeTime);
-					FlxG.sound.play('assets/minigame/sounds/MaxClatter.ogg', 1, false);
-					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 4 / 1000, 
-					{	
-						type: ONESHOT, 
-						ease: FlxEase.smoothStepOut,
-						onComplete: function(twn:FlxTween)
-						{
-							preEscMusGroup.stop();
-						}
-					});
-					triggerEscapeSeq();
 				case 1:
 					trace('SKIBIDI !!!!!');
 					if (timerMultTween != null)
@@ -711,9 +762,9 @@ class MinigameState extends MusicBeatState
 					FlxG.sound.music.stop();
 					Conductor.changeBPM(180);
 					curBeat = 0;
-					fakeBeat = 0;
+					//fakeBeat = 0;
 					Conductor.songPosition = 0;
-					FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeLoop.ogg', 1, false, preSuspenseMusGroup);
+					FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeLoop.ogg', 1, false, preSusMusGroup);
 					FlxG.sound.music.looped = true;
 					FlxG.sound.music.onComplete = checkAndSwapMusic;
 					if (FlxG.random.bool(50))
@@ -722,6 +773,7 @@ class MinigameState extends MusicBeatState
 		}
 	}
 
+	//check id - just a counter for this function to allow reusability
 	var cid:Int = 0;
 	private function getTheFuckOutMusic()
 	{
@@ -744,13 +796,13 @@ class MinigameState extends MusicBeatState
 
 				if (FlxG.sound.music.playing)
 				{
-					musicTween = FlxTween.tween(preSuspenseMusGroup, {volume: 0}, Conductor.crochet * 16 / 1000, 
+					musicTween = FlxTween.tween(preSusMusGroup, {volume: 0}, Conductor.crochet * 16 / 1000, 
 					{	
 						type: ONESHOT, 
 						ease: FlxEase.smoothStepOut,
 						onComplete: function(twn:FlxTween)
 						{
-							preSuspenseMusGroup.stop();
+							preSusMusGroup.stop();
 							musicTween = null;
 						}
 					});
@@ -758,26 +810,42 @@ class MinigameState extends MusicBeatState
 				
 				cid = 2;
 
-				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1);
+				suspenseEscMusicIntro = FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseIntro.ogg', 1, FlxG.sound.defaultMusicGroup);
+				FlxTween.tween(this, {defaultCamZoom: 4.5}, Conductor.crochet * 8 / 1000, {type: ONESHOT, ease: FlxEase.smoothStepOut});
 				suspenseEscMusicIntro.onComplete = getTheFuckOutMusic;
 			case 2:
 				trace ('HAUR?????');
 				if (timerMultTween != null)
 				{
 					timerMultTween.cancel();
-					timerMult = 1;
 				}
 				if (musicTween != null)
 					musicTween.cancel();
+				timerMult = 1;
 				seqCheck = 3;
 				FlxG.sound.music.stop();
 				Conductor.changeBPM(240);
 				curBeat = 0;
-				fakeBeat = 0;
+				//fakeBeat = 0;
 				Conductor.songPosition = 0;
-				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false);
+				FlxG.sound.playMusic('assets/minigame/music/ExitSequenceThemeSuspenseDrop.ogg', 1, false, FlxG.sound.defaultMusicGroup);
 				FlxG.sound.music.looped = false;
 				FlxG.sound.music.onComplete = checkAndSwapMusic;
+				defaultCamZoom = 3.8;
+		}
+	}
+
+	var lockTheNextDoorThePlayerOverlapsWith:Bool = false; //absolutely EVIL and MISCHEVIOUS ASS BOOL!!!
+	//followed by an ABSOLUTELY VILE AND DISGUSTING FUNCTION
+	private function uglyEvilWorkaroundFunction(player:Player, object:Interactibles)
+	{
+		if (object.type == DOOR)
+		{
+			lockTheNextDoorThePlayerOverlapsWith = false;
+			object.isLocked = true;
+			doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
+			doorCloseSound.pitch = FlxG.random.float(0.4, 0.6);
+			doorCloseSound.play(true);
 		}
 	}
 
@@ -787,53 +855,194 @@ class MinigameState extends MusicBeatState
 		switch (object.type)
 		{
 			case DOOR:
-				if (player.canMove)
+				if (player.canMove && !object.isLocked)
 				{
-					player.stopAction(true, true);
-					player.setPosition(object.x + 7, object.y + 3);
-					//if (theManUpstairs != null && theManUpstairs.exists)
-						//theManUpstairs.quellTheDemon(15, true, true);
-					player.canMove = false;
-					//DoorSounds
-					if (doorCloseSound != null && doorCloseSound.playing)
-						doorCloseSound.stop();
-					//Open
-					doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
-					doorOpenSound.set_pitch(FlxG.random.float(0.8, 1.2));
-					doorOpenSound.play(true);
-					new FlxTimer().start(Conductor.stepCrochet / 1000, function(tmr:FlxTimer)
+					//Room-dependent Door Shit
+					//Maybe turn this into switch(){case:} one day
+					if (object.doorID == 0 && inEscSeq)
 					{
-						if (pseudoCamFade.alpha < 1)
-							pseudoCamFade.alpha += 0.25;
-						else
+						//A check to allow us to play the correct ending sound - default to true cuz there's only 1 if statement for false - meaning lesser vars to set for me, meaning less writing, meaning more time to do other stuff, meaning- 
+						var musicWasSuspense:Bool = true;
+
+						//FadeOut esc musics - whicheverthefuck is currently playing
+						//Not elseIfs because multiple of them can play atOnce
+						//dontAsk me why imTyping thisWay
+						//guh, so much if statements just to fade out music - it's not gunna tank performance much but it is a lil hard to read :3
+						//eitherway, it works (i think) - and hey we get sick ass adaptive music for it so yea why not :3
+						if (cid == 2 && seqCheck == 3)
 						{
+							//Stops suspense loop
+							FlxTween.tween(FlxG.sound.music, {volume: 0}, 2.5, 
+							{	
+								type: ONESHOT, 
+								ease: FlxEase.smoothStepOut,
+								onComplete: function(twn:FlxTween)
+								{
+									FlxG.sound.music.stop();
+									musicTween = null;
+								}
+							});
+						}
+						else //Stops normal and suspense intro escape music
+						{
+							if (preSusMusGroup.containsPlaying())
+							{
+								if (musicTween != null)
+									musicTween.cancel();
+								musicTween = FlxTween.tween(preSusMusGroup, {volume: 0}, 2.5, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smoothStepOut,
+									onComplete: function(twn:FlxTween)
+									{
+										preSusMusGroup.stop();
+										musicTween = null;
+									}
+								});
+
+								musicWasSuspense = false;
+							}
+
+							if (suspenseEscMusicIntro != null && suspenseEscMusicIntro.playing)
+							{
+								FlxTween.tween(suspenseEscMusicIntro, {volume: 0}, 2.5, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smoothStepOut,
+									onComplete: function(twn:FlxTween)
+									{
+										suspenseEscMusicIntro.stop();
+										preSusMusGroup.stop();
+										musicTween = null;
+									}
+								});
+							}
+						}
+
+						if (!timesUp)
+						{
+							//Stop timer and tween timer thingy
+							if (escapeTimer != null)
+								escapeTimer.cancel();
+							FlxTween.tween(escapeTimerGroup, {y: -100}, 1.5, 
+								{	
+									type: ONESHOT, 
+									ease: FlxEase.smootherStepIn,
+									onComplete: function(twn:FlxTween)
+									{
+										escapeTimerGroup.visible = false;
+									},
+									startDelay: 0.5
+								});
+						}
+
+						//then wes plays the sound s
+						if (musicWasSuspense)
+							FlxG.sound.play('assets/minigame/music/ExitSequenceThemeSuspenseEnd.ogg', 1, FlxG.sound.defaultMusicGroup);
+						else
+							FlxG.sound.play('assets/minigame/music/ExitSequenceThemeEnd.ogg', 1, FlxG.sound.defaultMusicGroup);
+
+						//then we actually do shits LMFAO
+						object.isLocked = true;
+						//we should change the doorID system to something more robust
+						//something like object.otherDoor or sum shit like that so that they're actually linked to eachj other
+						//for now, have this shitty horrible ass fix LMFAOOO
+
+						//player.stopAction(true, true);
+						player.canMove = false;
+						player.setPosition(object.x - (player.width - object.width), object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height)];
+						if (theManUpstairs != null && theManUpstairs.exists)
+						{
+							//he dont know what hit em
+							theManUpstairs.quellTheDemon(100, true, true);
+							//a whopping 4 FLXTWEENS!!! AGAIN!!!!
+							FlxTween.tween(theManUpstairs.dadSuspenseMusFar, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSuspenseMusNear, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSNDFar, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+							FlxTween.tween(theManUpstairs.dadSNDNear, {volume: 0}, 2.5, {type: ONESHOT, ease: FlxEase.smoothStepInOut});
+						}
+						//DoorSounds
+						if (doorCloseSound != null && doorCloseSound.playing)
+							doorCloseSound.stop();
+						//Open
+						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
+						doorOpenSound.pitch = FlxG.random.float(0.35, 0.55);
+						doorOpenSound.play(true);
+						camHUD.fade(FlxColor.WHITE, 2.5, false, function()
+						{
+							camHUD.stopFX();
+							camHUD.flash(FlxColor.WHITE, 1);
+							if (tempCamAngleEscTwn != null)
+								tempCamAngleEscTwn.cancel();
+							camGame.angle = 0;
+							darkenScreen.alpha = 0;
 							camMovementOffset[0] = 0;
 							camMovementOffset[1] = 0;
 							camMovementLerp[0] = 0;
 							camMovementLerp[1] = 0;
-							player.setPosition(object.destination[0] + 7, object.destination[1] + 3);
+							player.setPosition(object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height));
 							camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
-							/*if (theManUpstairs != null && theManUpstairs.exists)
+							player.canMove = true;
+							lockTheNextDoorThePlayerOverlapsWith = true;
+						}, true);
+					}
+					else
+					{
+						//player.stopAction(true, true);
+						player.setPosition(object.x - (player.width - object.width), object.y - (player.height - object.height));
+						playerResetPos = [object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height)];
+						//if (theManUpstairs != null && theManUpstairs.exists)
+							//theManUpstairs.quellTheDemon(15, true, true);
+						player.canMove = false;
+						//DoorSounds
+						if (doorCloseSound != null && doorCloseSound.playing)
+							doorCloseSound.stop();
+						//Open
+						doorOpenSound = FlxG.sound.load('assets/minigame/sounds/doorOpen-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.9, 1));
+						doorOpenSound.pitch = FlxG.random.float(0.8, 1.2);
+						doorOpenSound.play(true);
+						new FlxTimer().start(Conductor.stepCrochet / 1000, function(tmr:FlxTimer)
+						{
+							if (pseudoCamFade.alpha < 1)
+								pseudoCamFade.alpha += 0.25;
+							else
 							{
-								theManUpstairs.x = player.x - (theManUpstairs.width - player.width / 2);
-								theManUpstairs.y = player.y - ((theManUpstairs.height - player.height) / 2);
-								theManUpstairs.quellTheDemon(2, true);
-							}*/
-							new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
-							{
-								if (pseudoCamFade.alpha > 0)
-									pseudoCamFade.alpha -= 0.25;
-								else
+								camMovementOffset[0] = 0;
+								camMovementOffset[1] = 0;
+								camMovementLerp[0] = 0;
+								camMovementLerp[1] = 0;
+								player.setPosition(object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height));
+								camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
+								/*if (theManUpstairs != null && theManUpstairs.exists)
 								{
-									player.canMove = true;
-									//Close
-									doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
-									doorCloseSound.set_pitch(FlxG.random.float(0.8, 1.2));
-									doorCloseSound.play(true);
-								}
-							}, 5);
-						}
-					}, 5);
+									theManUpstairs.x = player.x - (theManUpstairs.width - player.width / 2);
+									theManUpstairs.y = player.y - ((theManUpstairs.height - player.height) / 2);
+									theManUpstairs.quellTheDemon(2, true);
+								}*/
+								if (theManUpstairs != null && theManUpstairs.exists)
+									theManUpstairs.quellTheDemon(1, true);
+								new FlxTimer().start(Conductor.stepCrochet / 2 / 1000, function(tmr:FlxTimer)
+								{
+									if (pseudoCamFade.alpha > 0)
+										pseudoCamFade.alpha -= 0.25;
+									else
+									{
+										player.canMove = true;
+										//Close
+										doorCloseSound = FlxG.sound.load('assets/minigame/sounds/doorClose-wood_' + FlxG.random.int(1, 4) + '.ogg', FlxG.random.float(0.6, 0.75));
+										doorCloseSound.pitch = FlxG.random.float(0.8, 1.2);
+										doorCloseSound.play(true);
+									}
+								}, 5);
+							}
+						}, 5);
+					}
+				}
+				else if (player.canMove)
+				{
+					//Replace with locked door sound!!!!!
+					FlxG.sound.play(Paths.sound('confirmMenuLocked'), 0.5);
 				}
 			case OTHER:
 				var placeholderTXT:FlxText = new FlxText(0, FlxG.height - 80, FlxG.width - 100, '', 25);
@@ -856,150 +1065,134 @@ class MinigameState extends MusicBeatState
 				}, object.dialogueArray.length + 1);
 		}
 	}
-
-	function pickupFunct(player:Player, object:Collectibles)
+	
+	private function playerFell():Void
 	{
-		if (object.isActive)
-		{
-			object.isActive = false;
-			switch (object.type)
-			{
-				case FINAL:
-					object.kill();
-					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
-					player.stopAction(true, true);
-					player.canMove = false;
-					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
-					{	
-						type: ONESHOT, 
-						ease: FlxEase.smoothStepOut,
-						onComplete: function(twn:FlxTween)
-						{
-							preEscMusGroup.stop();
-						}
-					});
-					FlxTween.tween(this, {defaultCamZoom: 8}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut,
-					onComplete: function(twn:FlxTween)
-						{
-							defaultCamZoom = 7;
-							player.canMove = true;
-							FlxG.camera.flash(DisclaimerState.flashColor, Conductor.crochet * 4 / 1000);
-							triggerEscapeSeq();
-						}});
-				case SECRET:
-					object.kill();
-					FlxG.sound.play('assets/minigame/sounds/doorSND_Placeholder.ogg', 0.5);
-			}
-		}
-	}
-
-	function clatterFunct(player:Player, clatterer:Clatterer)
-	{
-		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
-		{
-			if (clatterCoyote != null && clatterCoyote.active)
-				clatterCoyote.cancel();
-			
-			clatterCoyote = new FlxTimer().start(0.01, function(tmr:FlxTimer)
-			{
-				if (player.status != SNEAKING && !player.forceSneak)
+		player.canMove = false;
+		//player.hurt(10);
+		//if (player.health <= 0)
+			//playerDied();
+		//else
+		//{
+			//placeholder snd
+			FlxG.sound.play('assets/minigame/sounds/playerDie.ogg', 0.75, false);
+			FlxTween.tween(darkenScreen, {alpha: 1}, 0.5, {type: ONESHOT, ease: FlxEase.cubeOut, onComplete: 
+				function(twn:FlxTween)
 				{
-					clatterer.canClatter = false;
-					clatter += clatterer.clatterAmt;
-					clatterer.playerMadeNoise();
-					new FlxTimer().start(3, function(tmr:FlxTimer)
-					{
-						clatterer.canClatter = true;
-						clatterer.alpha = 0.25;
-					});
-		
-					//Subtract some time from the timer
-					if (inEscSeq)
-					{
-						if (escapeTimer.timeLeft >= 75)
-						{
-							escapeTimer.reset(escapeTimer.timeLeft - 15 > 0 ? escapeTimer.timeLeft - 15 : 3);
-							if (escapeTimerTween != null)
-								escapeTimerTween.cancel();				
-							escapeTimerTween = FlxTween.color(escapeTimerText, 1.5, FlxColor.RED, 0xFFFFFFFF, 
-							{
-								type: ONESHOT,
-								ease: FlxEase.smoothStepOut,
-								onComplete: function(twn:FlxTween)
-								{
-									escapeTimerTween = null;
-								}
-							});
-						}
-					}
-				}
-				else
-					trace ('saved by the clatter coyote time');
-			});
-		}
+					player.setPosition(playerResetPos[0], playerResetPos[1]);
+					camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 20);
+					camMovementLerp[1] *= -0.5;
+					FlxG.sound.play('assets/minigame/sounds/playerRespawn.ogg', 0.75, false);
+					FlxTween.tween(darkenScreen, {alpha: 0}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut});
+					player.canMove = true;
+				}});
+		//}
 	}
 
-	var stopActiveTweening:Bool = false;
+	private function playerDied()
+	{
+		if (theManUpstairs != null && theManUpstairs.exists)
+		{
+			theManUpstairs.aiStatus = 'inactive';
+			theManUpstairs.kill();
+			theManUpstairs.destroy();
+		}
+		FlxG.sound.music.stop();
+		preSusMusGroup.stop();
+		preEscMusGroup.stop();
+		darkenScreen.alpha = 0.15;
+		player.canMove = false;
+		var dedSound:FlxSound;
+		//placeholder snd
+		dedSound = FlxG.sound.play('assets/minigame/sounds/playerDie.ogg', 0.75, false);
+		dedSound.pitch = 1.5;
+		new FlxTimer().start(0.5, function(tmr:FlxTimer)
+		{
+			showGameoverScreen();
+		});
+	}
+
 	var jumpscareSprite:FlxSprite;
 	var jumpscaredPlayer:Bool = false;
 	function jumpscareGameOver(player:Player, him:TheManUpstairs)
 	{
-		if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
+		if (!jumpscaredPlayer)
 		{
-			#if windows
-			// Updating Discord Rich Presence
-			if (FlxG.save.data.showPresence)
-				DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
-			#end
-
-			//camGame.shakeFlashSprite = false;
-			//camHUD.shakeFlashSprite = false;
-			him.aiStatus = 'inactive';
-			him.kill();
-			him.destroy();
-			FlxG.sound.music.stop();
-			darkenScreen.alpha = 1;
-			player.canMove = false;
-			camGame.visible = false;
-			var dedSound:FlxSound;
-			dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
-			dedSound.set_pitch(0.5);
-
-			//Jumpscare Shit
-			jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
-			jumpscareSprite.angle = -6;
-			jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
-			jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
-			jumpscareSprite.scrollFactor.set(1, 1);
-			jumpscareSprite.updateHitbox();
-			jumpscareSprite.screenCenter();
-			jumpscareSprite.cameras = [camHUD];
-			jumpscareSprite.visible = false;
-			add(jumpscareSprite);
-
-			var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
-
-			new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
+			trace('whuh');
+			if (him.aiStatus == 'chase' && player.canMove) //gotta make it fair lol
 			{
-				FlxG.sound.play(Paths.sound('boh'), 1, false);
-				jumpscareSprite.visible = true;
 				jumpscaredPlayer = true;
-				//camHUD.focusOn(jumpscareSprite.getPosition());
-				camHUD.shake(0.075, 2, true);
-				new FlxTimer().start(0.35, function(tmr:FlxTimer)
+				player.canMove = false;
+
+				#if windows
+				// Updating Discord Rich Presence
+				if (FlxG.save.data.showPresence)
+					DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
+				#end
+
+				CoolGameFeelThings.HitStop.doSlowDown(1, 0.125, true, function()
+					{
+						//After the slowdown finishes - ermm idk if this works -AWH
+						defaultCamZoom *= 1.5;
+						darkenScreen.alpha = 1;
+						var jumpScareSnd:FlxSound = FlxG.sound.play(Paths.sound('boh'), 0.5, false);
+						if (theManUpstairs != null && theManUpstairs.exists)
+							theManUpstairs.quellTheDemon(1, true);
+						camShake(true, false, 0.075, 1);
+						new FlxTimer().start(0.5, function (tmr:FlxTimer)
+						{
+							jumpScareSnd.stop();
+							him.kill();
+							him.destroy();
+							FlxG.sound.music.stop();
+							camGame.visible = false;
+							showGameoverScreen();
+						});
+					}
+				);
+
+				//camGame.shakeFlashSprite = false;
+				//camHUD.shakeFlashSprite = false;
+
+				/*var dedSound:FlxSound;
+				dedSound = FlxG.sound.play(Paths.sound("damageAlert_fail"), 0.75, false);
+				dedSound.pitch = 0.5;*/
+
+				//Jumpscare Shit
+				/*jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
+				jumpscareSprite.angle = -6;
+				jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
+				jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
+				jumpscareSprite.scrollFactor.set(1, 1);
+				jumpscareSprite.updateHitbox();
+				jumpscareSprite.screenCenter();
+				jumpscareSprite.cameras = [camHUD];
+				jumpscareSprite.visible = false;
+				add(jumpscareSprite);
+
+				var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
+
+				new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
 				{
-					showGameoverScreen();
-				});
-			});
+					FlxG.sound.play(Paths.sound('boh'), 1, false);
+					jumpscareSprite.visible = true;
+					jumpscaredPlayer = true;
+					//camHUD.focusOn(jumpscareSprite.getPosition());
+					camHUD.shake(0.075, 2, true);
+					new FlxTimer().start(0.35, function(tmr:FlxTimer)
+					{
+						new FlxTimer().start(0.35, function(tmr:FlxTimer){jumpscareSprite.alpha = 0.15;});
+						showGameoverScreen();
+					});
+				});*/
+			}
 		}
 	}
-	
+
 	var textAlpha:Float = 0;
 	private function showGameoverScreen()
 	{
-		//PLACE OF HOLDER SDKBSFKB
-		//jumpscareSprite.visible = false;
-		//camHUD.stopFX();
+		player.visible = false;
 
 		var dummyBlackScreen:FlxSprite = new FlxSprite(-FlxG.width * defaultCamZoom,
 			-FlxG.height * defaultCamZoom).makeGraphic(FlxG.width * 4, FlxG.height * 4, 0xFF160025);
@@ -1008,6 +1201,8 @@ class MinigameState extends MusicBeatState
 		dummyBlackScreen.screenCenter();
 		dummyBlackScreen.cameras = [camHUD];
 		add(dummyBlackScreen);
+
+		var randAngle:Float = FlxG.random.float(3, -5);
 
 		var textLol:FlxText = new FlxText(0, 0, 0, "GAME OVER!", 80);
 		textLol.setFormat(Paths.font("Times New Roman"), 100, FlxColor.WHITE, CENTER);
@@ -1018,11 +1213,12 @@ class MinigameState extends MusicBeatState
 		textLol.alpha = 0;
 		textLol.antialiasing = true;
 		textLol.cameras = [camHUD];
+		textLol.angularVelocity = -randAngle * 1.5;
 		add(textLol);
 
 		FlxG.sound.play('assets/minigame/sounds/SND_GameOver.ogg', 1, false);
 
-		//a Whopping 3 TWEENS!!!
+		//a Whopping 4 TWEENS!!!
 		FlxTween.tween(dummyBlackScreen, {alpha: 0.5}, 0.35, {type: ONESHOT, ease: FlxEase.cubeOut, startDelay: 0.25});
 		FlxTween.tween(this, {textAlpha: 1}, 0.35,
 		{
@@ -1047,7 +1243,6 @@ class MinigameState extends MusicBeatState
 
 			onComplete: function(twn:FlxTween)
 			{
-				jumpscareSprite.visible = false;
 				dummyBlackScreen.alpha = 0.25;
 				FlxTween.tween(textLol.scale, {x: 1, y: 1}, 0.35,
 				{
@@ -1058,9 +1253,12 @@ class MinigameState extends MusicBeatState
 						textLol.screenCenter();
 					},
 				});
+				textLol.angularVelocity = 0;
+				FlxTween.tween(textLol, {angle: randAngle}, 0.5, {type: ONESHOT, ease: FlxEase.elasticOut});
 				camHUD.stopFX();
-				camShake('camHUD', true, true, 5, 0.5, 0.35);
+				camShake('camHUD', true, true, 2, 0.4, 0.25);
 				camHUD.flash(FlxColor.RED, 1);
+				camGame.visible = false;
 				new FlxTimer().start(3, function(tmr:FlxTimer)
 				{
 					Conductor.songPosition = 0;
@@ -1069,6 +1267,91 @@ class MinigameState extends MusicBeatState
 				});
 			}
 		});
+	}
+
+	function pickupFunct(player:Player, object:Collectibles)
+	{
+		if (object.isActive)
+		{
+			object.isActive = false;
+			switch (object.type)
+			{
+				case FINAL:
+					object.kill();
+					FlxG.sound.play('assets/minigame/sounds/getFinalPickup.ogg', 1);
+					//player.stopAction(true, true);
+					player.canMove = false;
+					if (seqCheck != 3)
+						FlxG.sound.music.fadeOut(3.8);
+					FlxTween.tween(preEscMusGroup, {volume: 0}, Conductor.crochet * 8 / 1000, 
+					{	
+						type: ONESHOT, 
+						ease: FlxEase.smoothStepOut,
+						onComplete: function(twn:FlxTween)
+						{
+							preEscMusGroup.stop();
+						}
+					});
+					FlxTween.tween(this, {defaultCamZoom: 6}, 4, {type: ONESHOT, ease: FlxEase.smoothStepOut,
+					onComplete: function(twn:FlxTween)
+						{
+							defaultCamZoom = 4;
+							player.canMove = true;
+							FlxG.camera.flash(DisclaimerState.flashColor, Conductor.crochet * 4 / 1000);
+							triggerEscapeSeq();
+						}});
+				case SECRET:
+					object.kill();
+					FlxG.sound.play(Paths.sound('confirmMenu'), 0.5);
+			}
+		}
+	}
+
+	function clatterFunct(player:Player, clatterer:Clatterer)
+	{
+		if ((player.velocity.x > 15 || player.velocity.x < -15) && clatterer.canClatter)
+		{
+			clatterer.canClatter = false;
+			/*if (clatterCoyote != null && clatterCoyote.active)
+			{
+				trace('le cancel');
+				clatterCoyote.cancel();
+			}*/
+			
+			clatterCoyote = new FlxTimer().start(0.1, function(tmr:FlxTimer)
+			{
+				if (player.curAction != SNEAK && player.curAction != SLIDE)
+				{
+					clatter += clatterer.clatterAmt;
+					clatterer.playerMadeNoise();
+		
+					//Subtract some time from the timer
+					if (inEscSeq)
+					{
+						if (escapeTimer.timeLeft >= 75)
+						{
+							escapeTimer.reset(escapeTimer.timeLeft - 15 > 0 ? escapeTimer.timeLeft - 15 : 3);
+							if (escapeTimerTween != null)
+								escapeTimerTween.cancel();				
+							escapeTimerTween = FlxTween.color(escapeTimerText, 1.5, FlxColor.RED, 0xFFFFFFFF, 
+							{
+								type: ONESHOT,
+								ease: FlxEase.smoothStepOut,
+								onComplete: function(twn:FlxTween)
+								{
+									escapeTimerTween = null;
+								}
+							});
+						}
+					}
+				}
+				else
+				{
+					clatterer.canClatter = true;
+					trace ('saved by the clatter coyote time');
+				}
+			});
+		}
 	}
 
 	//Copied from playstate :33
@@ -1081,11 +1364,16 @@ class MinigameState extends MusicBeatState
 	var isResetting:Bool = false;
 	override function destroy()
 	{
-		FlxG.sound.music.stop();
 		if (!isResetting)
 		{
+			FlxG.sound.music.stop();
+
 			transIn.camera = FlxCamera.defaultCameras[FlxCamera.defaultCameras.length];
 			transOut.camera = FlxCamera.defaultCameras[FlxCamera.defaultCameras.length];
+
+			//Dumping of cache
+			Paths.clearStoredMemory();
+			Paths.clearUnusedMemory();
 		}
 	}
 }

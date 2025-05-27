@@ -176,11 +176,9 @@ class HealthIcon extends FlxSprite
 
 	 public static function getIconID(charName:String = ''):String
     {
-        var iconName:String = '';
+        var iconName:String = charName;
         if (charName.startsWith('table'))
             iconName = 'holy-cross';
-        else if (charName.startsWith('demon-dad'))
-            iconName = 'demon-dad';
         else
         {
             switch (charName)
@@ -193,8 +191,6 @@ class HealthIcon extends FlxSprite
                     iconName = 'priest-annoyed';
                 case 'priest-theborderangry':
                     iconName = 'priest-cicatrix';
-                default:
-                    iconName = charName;
             }
         }
         return iconName;

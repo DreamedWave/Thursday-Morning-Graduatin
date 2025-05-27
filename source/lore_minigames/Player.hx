@@ -1,438 +1,664 @@
 package lore_minigames;
 
+import flixel.system.FlxSound;
+import flixel.FlxG;
 import flixel.FlxSprite;
-//import flixel.FlxG;
-import flixel.FlxObject;
+import flixel.addons.util.FlxFSM;
 import flixel.util.FlxTimer;
-import flixel.util.FlxDirectionFlags;
 
 using StringTools;
 
-//I DISCOVERED HOW ENUMS WORK IM GONNA OVERUSE THEM NOW !!!!! MUAHAHAHAHHAA >:3>
-//Gurl just use an FSM smh
-enum AnimType
-{
-	NORMAL;
-	SCARED;
-	PANICKED;
-	ANGRY;
-}
-
-enum MovementState
+enum PlayerActions
 {
 	IDLE;
-	WALKING;
-	RUNNING;
-	STOPPING;
-	SNEAKING;
-	FALLING;
-	DASHING;
+	WALK;
+	RUN;
+	JUMP;
+	SNEAK;
+	SLIDE;
+	CLIMB;
 	NONE;
-}
-
-enum MovementDirections
-{
-	LEFT;
-	RIGHT;
-	UP;
-	DOWN;
 }
 
 class Player extends FlxSprite
 {
+	public var GRAVITY:Float = 750;
+	public var fsm:FlxFSM<Player>;
+	public var chosenMoveset:String = 'default';//Making this changable so that we can add custom abilities in the future if ever
+	public var queuedActions:Array<PlayerActions> = [];
+	public var curAction:PlayerActions = IDLE;
 	public var canMove:Bool = true;
-	public var status:MovementState = IDLE;
-	var heldStatus:MovementState = NONE;
-	var animType:AnimType = NORMAL;
-	var defaultSpeedCaps:Array<Float> = [65, 100, 300]; //In Order: Sneaking, Walking, Running, Dashing
-	public var forceSneak:Bool = false; //Bool to force the player to sneak
-	var isOnFloor:Bool = true;
-	var initialised:Bool = false;
+	public var stamina:Float = 100;
+	public var ranOutOfBreath:Bool = false;
 
-	//Redoing The Char Movement From Scratch
+	var walkSnd:FlxSound;
+
+	public var defaultSpeedCaps:Array<Float> = [75, 150, 400]; //In Order: Sneaking, Walking, Running
+
 	public function new(x:Float = 0, y:Float = 0)
 	{
 		super(x, y);
-		loadGraphic('assets/minigame/images/player.png', true, 32, 32);
-		//ANY, CEILING, DOWN, FLOOR, LEFT, NONE, RIGHT, UP, WALL
+		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
+		
+		loadGraphic("assets/minigame/images/guyPixel-Sheet.png", true, 64, 64);
 		setFacingFlip(LEFT, true, false);
 		setFacingFlip(RIGHT, false, false);
-		animation.add("idle", [2, 2, 1, 0, 0, 1], 6, true);
-		animation.add("idle_static", [2], 1, false);
-		animation.add("walkLEFT", [3, 4], 3, false);
-		animation.add("walkRIGHT", [5, 6], 3, false);
-		animation.add("runMach1", [3, 3, 4, 4], 10, false);
-		animation.add("runMach2", [5, 6, 7], 10, false);
-		animation.add("jump_full", [7, 8, 10], 48, false);
-		animation.add("jump_start", [7, 8], 13, false);
-		animation.add("jump_hold", [9, 8], 15, true);
-		animation.add("jump_midAir", [10], 1, true);
-		animation.add("jump_falling", [11], 1, false);
-		animation.add("jump_land", [13, 0, 1, 2], 16, false);
-		animation.add("jump_landHARD", [12, 12, 13, 0, 1, 1, 2], 17, false);
-		setSize(18, 28);
-		offset.set(7, 2);
-		y -= 7;
-		acceleration.y = 620; //Gravity
-		maxVelocity.set(defaultSpeedCaps[1], 1000);
-		drag.set(maxVelocity.x * 2, maxVelocity.y * 2);
+		facing = RIGHT;
+		animation.add("idle", [0, 1, 2, 3, 4, 5], 12);
+		//animation.add("jump", [0, 1, 2, 3, 4, 5], 12, false);
+		animation.add("sneak", [6, 7, 8, 9], 16, false);
+		animation.add("unsneak", [10, 11, 12], 14, false);
+		animation.add("walk", [13, 14, 15, 16, 17, 18, 19, 20], 8);
+		animation.add("run-mach1", [13, 14, 15, 16, 17, 18, 19, 20], 12);
 		animation.play("idle");
-
-		new FlxTimer().start(0.25, function(tmr:FlxTimer)
+		animation.finishCallback = (animName:String)->
 		{
-			initialised = true;
-		});
-		
-		//Finish Callbacks per animation
-		animation.finishCallback = (animationName:String)->
-		{
-			if(animationName == "jump_land" || animationName == "jump_landHARD")
+			switch (animName)
+			{
+				case "walk":
+					walkSnd.play(true);
+				case "unsneak":
+					animation.play("idle");
+			}
+			/*if(animationName == "jump_land" || animationName == "jump_landHARD")
 			{
 				trace('WOOOOO');
 				animation.play("idle");
-			}
+			}*/
 		};
+
+		//health = 100;
+
+		setSize(24, 50);
+		offset.set(20, -14);
+
+		acceleration.y = GRAVITY;
+		maxVelocity.set(defaultSpeedCaps[1], GRAVITY);
+		drag.set(maxVelocity.x * 2, 0);
+
+		fsm = new FlxFSM(this);
+		initializeFSM(chosenMoveset);
 	}
 
-	var walkBool:Bool = false;
-	function move(direction:MovementDirections, triggerSneak:Bool)
+	public var quickTimer:FlxTimer = new FlxTimer();
+	public var quickTimeCaller:PlayerActions = NONE;
+	public function startQuickTimer(timeInSecs:Float, ?onComplete:FlxTimer -> Void):Void
 	{
-		if (!triggerSneak)
-		{
-			status = WALKING;
-			maxVelocity.x = defaultSpeedCaps[1];
-		}
+		quickTimeCaller = curAction;
+		if (onComplete != null)
+			quickTimer.start(timeInSecs, onComplete);
 		else
-		{
-			status = SNEAKING;
-			maxVelocity.x = defaultSpeedCaps[0];
-		}
-		switch(direction)
-		{
-			case LEFT:
-				facing = LEFT;
-
-				if (velocity.x > 0)
-					velocity.x *= -0.75;
-
-				if (velocity.x > -maxVelocity.x / 2)
-					velocity.x = -maxVelocity.x / 2;
-				acceleration.x = -maxVelocity.x * 2;
-
-
-			case RIGHT:
-				facing = RIGHT;
-
-				if (velocity.x < 0)
-					velocity.x *= -0.75;
-
-				if (velocity.x < maxVelocity.x / 2)
-					velocity.x = maxVelocity.x / 2;
-				acceleration.x = maxVelocity.x * 2;
-
-
-			default:
-				//do nada
-		}
-
-		//Walking anim here - fps of animj dependent on playerspeed
-		if ((animation.curAnim.name == 'idle' || animation.curAnim.finished) && !isTouching(WALL))
-		{
-			trace('walking ' + direction);
-
-			walkBool = !walkBool;
-			if (isTouching(FLOOR))
-			{
-				switch (status)
-				{
-					case WALKING:
-						if (!walkBool)
-							animation.play("walkLEFT");
-						else
-							animation.play("walkRIGHT");
-						animation.curAnim.frameRate = 3 + velocity.x / (facing != LEFT ? maxVelocity.x : -maxVelocity.x);
-			
-						//WalkSound
-						FlxG.sound.play('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
-
-					case SNEAKING:
-						if (!walkBool)
-							animation.play("walkLEFT");
-						else
-							animation.play("walkRIGHT");
-						animation.curAnim.frameRate = 1.5 + velocity.x / (facing != LEFT ? maxVelocity.x : -maxVelocity.x);
-					
-						default:
-							//do nada
-				}
-			}
-		}	
+			quickTimer.start(timeInSecs);
 	}
 
-	function run(direction:MovementDirections)
+	public var frameTimeMult:Float = 1;
+	public function updateFrameTimeMult(fromPlayState:Float):Void
 	{
-		maxVelocity.x = defaultSpeedCaps[2];
-		status = RUNNING;
-		switch(direction)
-		{
-			case LEFT:
-				facing = LEFT;
-
-				//if we were going right a moment ago, do this
-				if (velocity.x > 0)
-					velocity.x *= -0.5;
-				
-				if (velocity.x > -defaultSpeedCaps[1] * 1.25)
-					velocity.x = -defaultSpeedCaps[1] * 1.25;
-
-				if (acceleration.x > 0)
-					acceleration.x = -defaultSpeedCaps[1] * 1.5;
-				else
-					acceleration.x -= 0.25;
-
-			case RIGHT:
-				facing = RIGHT;
-
-				//if we were going left a moment ago, do this
-				if (velocity.x < 0)
-					velocity.x *= -0.25;
-				
-				if (velocity.x < defaultSpeedCaps[1] * 1.25)
-					velocity.x = defaultSpeedCaps[1] * 1.25;
-
-				if (acceleration.x < 0)
-					acceleration.x = defaultSpeedCaps[1] * 1.5;
-				else
-					acceleration.x += 0.25;
-
-			default:
-				//do nada
-		}
-
-		//Running anim here - fps of animj dependent on playerspeed
-		if ((animation.curAnim.name == 'idle' || animation.curAnim.finished) || animation.curAnim.name.startsWith('walk'))
-		{
-			trace('running ' + direction);
-
-			if ((velocity.x < 250 && facing == RIGHT) || (velocity.x > -200 && facing == LEFT))
-				animation.play("runMach1");
-			else
-				animation.play("runMach2");
-
-			//RunSoundPlaceholder
-			FlxG.sound.play('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.75);
-		}
-
-		animation.curAnim.frameRate = 10 + velocity.x / (facing != LEFT ? maxVelocity.x : -maxVelocity.x);
-		trace('accel: ' + acceleration.x + ' | framRat: ' + animation.curAnim.frameRate);
+		frameTimeMult = fromPlayState;
 	}
 
-	var jumpHoldTimer:FlxTimer;
-	function jump(justJumped:Bool)
-	{
-		if (justJumped)
-		{
-			if (isTouching(FLOOR))
-			{
-				if (jumpBuffered)
-				{
-					trace('JUMP BUFFERING WORKING!!!!!');
-					if (jumpBuffTmr != null)
-						jumpBuffTmr.cancel();
-					jumpBuffered = false;
-				}
-				//Placeholder
-				animation.play("jump_full");
-				FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
-				velocity.y -= 150;
 
-				if (jumpHoldTimer != null)
-					jumpHoldTimer.cancel();
-				jumpHoldTimer = new FlxTimer().start(0.5, function(tmr:FlxTimer)
-					{
-						jumpHoldTimer = null;
-					});
-			}
-			else if (!jumpBuffered)
-			{
-				trace('le buff e r');
-				//Jump Buffer
-				jumpBuffered = true;
-				if (jumpBuffTmr != null)
-					jumpBuffTmr.cancel();
-				jumpBuffTmr = new FlxTimer().start(0.15, function(tmr:FlxTimer)
-					{
-						jumpBuffered = false;
-						jumpBuffTmr = null;
-					});
-			}
-		}
+	/*override public function hurt(damage:Float):Void
+	{
+		if (damage <= health)
+			health -= damage;
 		else
+			health = 0;
+	}*/
+	
+	private function initializeFSM(moveset:String):Void
+	{
+		switch (moveset)
 		{
-			//Jump holding
-			if (jumpHoldTimer != null)
-			{
-				var funnyJumpExtend:Float = 0;
-				funnyJumpExtend = -2 + (0.05 * (jumpHoldTimer.elapsedTime / 1000));
-				velocity.y += funnyJumpExtend;
-			}
+			default:
+				//                  From   To     Conditions
+				//Note: Jump will NEVER turn to Fall, but fall can turn to Jump
+				//Jump
+				fsm.transitions.add(Idle, Jump, Conditions.startJump);
+				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
+				fsm.transitions.add(Jump, Idle, Conditions.landFromAir);
+				fsm.transitions.add(Jump, Sneak, Conditions.landFromAirSneaked);
+
+				//Fall
+				fsm.transitions.add(Idle, Falling, Conditions.startFall);
+				fsm.transitions.add(Falling, Jump, Conditions.startJump);
+				fsm.transitions.add(Falling, Idle, Conditions.landFromAir);
+
+				//Sneak
+				fsm.transitions.add(Idle, Sneak, Conditions.startSneak);
+				fsm.transitions.add(Sneak, Idle, Conditions.endSneak);
+
+				fsm.transitions.add(Idle, Slide, Conditions.startSlide);
+				fsm.transitions.add(Slide, Idle, Conditions.endSlideNormal);
+				fsm.transitions.add(Slide, Sneak, Conditions.endSlideSneaky);
+
+				fsm.transitions.add(StillIdle, Idle, Conditions.exitStillIdle);
+				fsm.transitions.add(Idle, StillIdle, Conditions.forceStillIdle);
+				fsm.transitions.add(Falling, StillIdle, Conditions.forceStillIdle);
+				fsm.transitions.add(Jump, StillIdle, Conditions.forceStillIdle);
+				fsm.transitions.add(Sneak, StillIdle, Conditions.forceStillIdle);
+
+				//HAVE NOT ADDED WALL CLUMB YET
 		}
+		fsm.transitions.start(Idle);
 	}
 
-	var stoppinTimer:FlxTimer;
-
-	public function stopAction(?stopActAnim:String = '', stopVelocity:Bool= false, stopAcceleration:Bool = true)
+	override function update(elapsed:Float):Void
 	{
-		//don't try to stop an action if nothing is happening anyways
-		if (status != IDLE || status != STOPPING)
-		{
-			switch (stopActAnim)
-			{
-				case 'stop-run':
-					trace('stopping run');
-					status = STOPPING;
-					drag.x = maxVelocity.x / 2;
-					//Placeholder
-					animation.play("jump_LandHARD");
-					FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
-					stoppinTimer = new FlxTimer().start(0.3, function(tmr:FlxTimer)
-					{
-						trace('stoppedslinding');
-						status = IDLE;
-						animation.play("idle");
-						drag.x = maxVelocity.x * 2;
-						forceSneak = false;
-					});
-				default:
-					trace('set to idle');
-					status = IDLE;
-					animation.play("idle");
-					forceSneak = false;
-			}
-			if (stopVelocity)
-				velocity.x = 0;
-			if (stopAcceleration)
-				acceleration.x = 0;
+		fsm.update(elapsed);
+		super.update(elapsed);
 
-			maxVelocity.set(defaultSpeedCaps[1], 1000);
-		}
-	}
-
-	public function primeForEscSeq()
-	{
-		animType = PANICKED;
-		trace('hit the SLAY button!');
-	}
-
-	var jumpBuffered:Bool = false;
-	var jumpBuffTmr:FlxTimer;
-
-	override function update(elapsed:Float)
-	{
+		//Stamina gains/drains
 		if (canMove)
 		{
-			if (isTouching(FLOOR))
+			switch (curAction)
 			{
-				if (!isOnFloor)
-				{
-					//Land the jump
-					isOnFloor = true;
-					if (jumpHoldTimer != null)
-						jumpHoldTimer.cancel();
-					//Placeholder
-					FlxG.sound.play('assets/minigame/sounds/land-PLACEHOLDER.ogg', 0.5, false);
-					animation.play("jump_land");
-				}
-			}
-			else if (initialised)
-			{
-				if (velocity.y != 0)
-				{
-					isOnFloor = false;
-					trace('not on floor');
-					//PlaceholderAnims
-					if (animation.curAnim.name == 'jump_full' && animation.curAnim.finished)
-					{
-						if (velocity.y < 0 && animation.curAnim.name != "jump_midAir")
-							animation.play("jump_midAir");
-						else if (velocity.y > 0 && animation.curAnim.name != "jump_falling")
-							animation.play("jump_falling");
-					}
-				}
+				case RUN:
+					stamina -= elapsed * 20;
+				case SLIDE:
+					if (stamina < 100)
+						stamina += elapsed * 25;
+				case IDLE:
+					if (stamina < 100)
+						stamina += elapsed * 20;
+				case JUMP:
+					if (stamina < 100)
+						stamina += elapsed * 7.5;
+				default:
+					if (stamina < 100)
+						stamina += elapsed * 10;
 			}
 
-			//placeholder
-			if (FlxG.keys.pressed.SHIFT)
-				alpha = 0.75;
-			else if (alpha != 1)
-				alpha = 1;
-
-			//Priority on sneaking rather than running
-			if ((!FlxG.keys.pressed.CONTROL || FlxG.keys.pressed.SHIFT) && status != RUNNING && status != STOPPING)
+			if (stamina <= 0)
 			{
-				//Priority depends on which direction player needs to go
-				if (animType == NORMAL)
-				{
-					if (FlxG.keys.pressed.RIGHT)
-						move(RIGHT, FlxG.keys.pressed.SHIFT);
-					else if (FlxG.keys.pressed.LEFT)
-						move(LEFT, FlxG.keys.pressed.SHIFT);
-				}
-				else
-				{
-					if (FlxG.keys.pressed.RIGHT)
-						move(RIGHT, FlxG.keys.pressed.SHIFT);
-					else if (FlxG.keys.pressed.LEFT)
-						move(LEFT, FlxG.keys.pressed.SHIFT);
-				}
-			
-				if (FlxG.keys.anyJustReleased([LEFT, RIGHT]))
-					stopAction(true);
+				stamina = 0;//make sure we don't overdrain the player
+				ranOutOfBreath = true;
 			}
-			else
-			{
-				if (status != STOPPING)
-				{
-					if (FlxG.keys.pressed.RIGHT)
-						run(RIGHT);
-					else if (FlxG.keys.pressed.LEFT)
-						run(LEFT);
-
-					if (FlxG.keys.justReleased.CONTROL || ((FlxG.keys.justReleased.LEFT && FlxG.keys.pressed.RIGHT) && (FlxG.keys.justReleased.RIGHT && FlxG.keys.pressed.LEFT)) || FlxG.keys.justPressed.SHIFT)
-						stopAction('stop-run');
-				}
-				else
-				{
-					if (FlxG.keys.pressed.SHIFT && !forceSneak)
-					{
-						if (stoppinTimer != null && stoppinTimer.active)
-						{
-							forceSneak = true;
-							if ((facing == RIGHT && FlxG.keys.pressed.LEFT) || (facing == LEFT && FlxG.keys.pressed.RIGHT))
-								drag.x = maxVelocity.x * 4;
-							//Placeholder
-							FlxG.sound.play(Paths.sound('cancelMenu'), 0.25, false);
-							animation.play("jump_midAir");
-						}
-					}
-				}
-			}
-
-			/*if (FlxG.keys.justPressed.X)
-			{}*/
-
-			//Checks if jump is pressed so that you can end jumps early by letting go early
-			//This is so messy LMAO
-			if (FlxG.keys.justPressed.SPACE || jumpBuffered)
-				jump(true);
-			else if (FlxG.keys.pressed.SPACE)
-				jump(false);
-
-			if (FlxG.keys.justReleased.SPACE)
-				if (jumpHoldTimer != null)
-					jumpHoldTimer.cancel();
+			else if (ranOutOfBreath && stamina >= 25)
+				ranOutOfBreath = false;
+		}
+		else
+		{
+			if (stamina < 100)
+				stamina = 100;
 		}
 
-		super.update(elapsed);
+		if (!quickTimer.active && quickTimeCaller != NONE)
+			quickTimeCaller = NONE;
+	}
+
+	override function destroy():Void
+	{
+		fsm.destroy();
+		fsm = null;
+		super.destroy();
+	}
+}
+
+class Conditions
+{
+	public static function forceStillIdle(Player:Player):Bool
+		{return !Player.canMove;}
+
+	public static function exitStillIdle(Player:Player):Bool
+		{return Player.canMove;}
+
+	public static function startFall(Player:Player):Bool
+		{return !Player.isTouching(FLOOR);}
+
+	public static function startJump(Player:Player):Bool
+		{return (Player.isTouching(FLOOR) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
+
+	public static function landFromAir(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && !FlxG.keys.pressed.DOWN;}
+
+	public static function landFromAirSneaked(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN;}
+
+	public static function startSneak(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && ((FlxG.keys.justPressed.DOWN && Player.curAction != RUN) || Player.queuedActions.contains(SNEAK));}
+
+	public static function endSneak(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && FlxG.keys.justReleased.DOWN;}
+
+	public static function startSlide(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && FlxG.keys.justPressed.DOWN && Player.curAction == RUN;}
+
+	public static function endSlideNormal(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && !FlxG.keys.pressed.DOWN && ((FlxG.keys.justReleased.SHIFT || FlxG.keys.justReleased.DOWN) || ((Player.facing == RIGHT && Player.velocity.x < 90) || (Player.facing == LEFT && Player.velocity.x > -90))) && Player.curAction == SLIDE;}
+
+	public static function endSlideSneaky(Player:Player):Bool
+		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN && (FlxG.keys.justReleased.SHIFT || ((Player.facing == RIGHT && Player.velocity.x < 90) || (Player.facing == LEFT && Player.velocity.x > -90))) && Player.curAction == SLIDE;}
+
+	//God i have not touched this script in so long LMFAO
+	public static function startWallClimb(Player:Player):Bool
+		{return !Player.isTouching(WALL) && FlxG.keys.pressed.SHIFT;}
+
+
+}
+
+class StillIdle extends FlxFSMState<Player>
+{
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		trace('entered!');
+		owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+		owner.drag.x = owner.maxVelocity.x * 2;
+		owner.velocity.x = 0;
+		owner.velocity.y = 0;
+		owner.acceleration.x = 0;
+		owner.curAction = NONE;
+		owner.animation.play("idle");
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		//doNothin
+	}
+
+	override function exit(owner:Player) 
+	{
+		trace("EXITED!!!");
+		super.exit(owner);
+	}
+}
+
+class Idle extends FlxFSMState<Player>
+{
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (owner.curAction != JUMP)
+		{
+			if (owner.curAction != SLIDE)
+				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+			owner.drag.x = owner.maxVelocity.x * 2;
+		}
+		owner.curAction = IDLE;
+		if (owner.animation.curAnim.name != 'unsneak')
+			owner.animation.play("idle");
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+		{
+			//Placeholder SND and anims
+			if (FlxG.keys.pressed.SHIFT && !owner.ranOutOfBreath) //RUN
+			{
+				owner.animation.play("run-mach1");
+				owner.animation.curAnim.frameRate = 12 + (owner.facing != LEFT ? owner.velocity.x/owner.maxVelocity.x : -owner.velocity.x/-owner.maxVelocity.x);
+				owner.maxVelocity.x = owner.defaultSpeedCaps[2];
+				owner.curAction = RUN;
+				if (FlxG.keys.pressed.RIGHT)
+				{
+					owner.facing = RIGHT;
+		
+					//Flip player (2)
+					if (owner.velocity.x < 0)
+					{
+						owner.acceleration.x = 10;
+						owner.velocity.x *= -0.8;
+					}
+	
+					if (owner.velocity.x < owner.maxVelocity.x * 0.5)
+						owner.velocity.x = owner.maxVelocity.x * 0.5;
+					if (owner.acceleration.x < owner.maxVelocity.x)
+						owner.acceleration.x = CoolUtil.freyaLerp(owner.acceleration.x, owner.maxVelocity.x, 12, elapsed);
+				}
+				else
+				{
+					owner.facing = LEFT;
+		
+					//Flip player (1)
+					if (owner.velocity.x > 0)
+					{
+						owner.acceleration.x = -10;
+						owner.velocity.x *= -0.8;
+					}
+	
+					if (owner.velocity.x > -owner.maxVelocity.x * 0.5 )
+						owner.velocity.x = -owner.maxVelocity.x * 0.5;
+					if (owner.acceleration.x > -owner.maxVelocity.x)
+						owner.acceleration.x = CoolUtil.freyaLerp(owner.acceleration.x, -owner.maxVelocity.x, 12, elapsed);
+				}
+			}
+			else //WALK
+			{
+				owner.animation.play("walk");
+				owner.animation.curAnim.frameRate = 8 + owner.velocity.x / (owner.facing != LEFT ? owner.maxVelocity.x : -owner.maxVelocity.x);
+				owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+				owner.curAction = WALK;
+				if (FlxG.keys.pressed.RIGHT)
+				{
+					owner.facing = RIGHT;
+		
+					//Flip player (2)
+					if (owner.velocity.x < 0)
+						owner.velocity.x *= -0.75;
+	
+					if (owner.velocity.x < owner.maxVelocity.x / 2)
+						owner.velocity.x = owner.maxVelocity.x / 2;
+					owner.acceleration.x = owner.maxVelocity.x * 2;
+				}
+				else
+				{
+					owner.facing = LEFT;
+		
+					//Flip player (1)
+					if (owner.velocity.x > 0)
+						owner.velocity.x *= -0.75;
+
+					if (owner.velocity.x > -owner.maxVelocity.x / 2)
+						owner.velocity.x = -owner.maxVelocity.x / 2;
+					owner.acceleration.x = -owner.maxVelocity.x * 2;
+				}
+			}
+		}
+		
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			owner.acceleration.x = 0;
+			owner.curAction = IDLE;
+			owner.animation.curAnim.frameRate = 12;
+			owner.animation.play("idle");
+			owner.velocity.x *= 0.1;
+		}
+	}
+
+	override function exit(owner:Player) 
+	{
+		//walkSnd.stop();
+		super.exit(owner);
+	}
+}
+
+class Jump extends FlxFSMState<Player>
+{
+	var jumpBuffer:FlxTimer;
+	var jumpHoldTimer:FlxTimer;
+
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (owner.queuedActions.contains(JUMP))
+			owner.queuedActions.remove(JUMP);
+
+		if (owner.curAction != RUN && (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT))
+			owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+
+		if (owner.curAction != SNEAK || !owner.quickTimer.active)
+			owner.velocity.y = -250;
+		else
+		{
+			owner.velocity.y = -400;
+			owner.stamina -= 10;
+		}
+
+		owner.curAction = JUMP;
+		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
+
+		jumpHoldTimer = new FlxTimer().start(0.14);
+		//owner.animation.play("jumping");
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		//owner.acceleration.x = 0;
+		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+		{
+			owner.acceleration.x += (FlxG.keys.pressed.LEFT ? -50 : 50) * owner.frameTimeMult;
+			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
+			if (FlxG.keys.pressed.RIGHT)
+			{
+				if (owner.velocity.x < 0)
+					owner.velocity.x *= -0.4;
+			}
+			if (FlxG.keys.pressed.LEFT)
+			{
+				if (owner.velocity.x > 0)
+					owner.velocity.x *= -0.4;
+			}
+		}
+
+		//Maybe this will stop the floatyt as fuck controls?
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			owner.acceleration.x *= 0.5;
+			owner.velocity.x *= 0.5;
+		}
+
+		//Jump cutting
+		if(FlxG.keys.justReleased.SPACE && owner.velocity.y < 0)
+			owner.velocity.y *= 0.35;
+
+		//Jump Hold
+		if (!jumpHoldTimer.active)
+		{
+			if (FlxG.keys.pressed.SPACE && owner.velocity.y < -5)
+			{
+				//This is FPS dependent and that's BAD
+				owner.velocity.y -= 1.25 * owner.frameTimeMult; //big bnuberes jsncbdnbjf
+				if (owner.maxVelocity.y != owner.GRAVITY * 0.4)
+				{
+					trace('FORCED FLOATY');
+					owner.maxVelocity.y = owner.GRAVITY * 0.4;
+				}
+			}
+			else if (owner.velocity.y > 0)
+			{
+				//trace('downElapsed: ' + elapsed);
+				owner.velocity.y += 3 + (2 * (FlxG.keys.pressed.DOWN ? 1 : 0)) * owner.frameTimeMult; //big bnubmer bcuz yes
+				if (owner.maxVelocity.y != owner.GRAVITY * 2)
+				{
+					trace('FORCED DOWN');
+					owner.maxVelocity.y = owner.GRAVITY * 2;
+				}
+			}
+		}
+
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			trace('stopHoriViaRelease');
+			owner.acceleration.x = 0.25;
+			owner.velocity.x *= 0.5;
+		}
+
+		if(FlxG.keys.justPressed.SPACE)
+		{
+			//trace('started jump buffer');
+			if (jumpBuffer != null)
+				jumpBuffer.cancel();
+			if (!owner.queuedActions.contains(JUMP))
+				owner.queuedActions.push(JUMP);
+			jumpBuffer = new FlxTimer().start(0.16666666666, function(tmr:FlxTimer){jumpBuffer = null; if(owner.queuedActions.contains(JUMP)) owner.queuedActions.remove(JUMP); trace('removed jmpbfr');});
+		}
+	}
+
+	override function exit(owner:Player) 
+	{
+		jumpHoldTimer.cancel();
+		owner.maxVelocity.y = owner.GRAVITY;
+		if (!FlxG.keys.pressed.LEFT && !FlxG.keys.pressed.RIGHT)
+		{
+			owner.acceleration.x = 0;
+			owner.velocity.x *= 0.1;
+			trace('jumpvelocitystop');
+		}
+		//jump land animation here?
+		//walkSnd.stop();
+		super.exit(owner);
+	}
+}
+
+class Sneak extends FlxFSMState<Player>
+{
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (owner.queuedActions.contains(SNEAK))
+			owner.queuedActions.remove(SNEAK);
+
+		owner.maxVelocity.x = owner.defaultSpeedCaps[0];
+		owner.drag.x = owner.defaultSpeedCaps[1] * 2;
+		owner.curAction = SNEAK;
+		owner.startQuickTimer(0.16666666666666666);
+		owner.animation.play("sneak");
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		owner.acceleration.x = 0;
+		if (FlxG.keys.pressed.RIGHT)
+		{
+			if (owner.velocity.x < 0)
+				owner.velocity.x *= -0.5;
+
+			if (owner.velocity.x < owner.maxVelocity.x * 0.35 )
+				owner.velocity.x = owner.maxVelocity.x * 0.35;
+
+			owner.facing = RIGHT;
+			owner.acceleration.x = 100;
+		}
+		else if (FlxG.keys.pressed.LEFT)
+		{
+			if (owner.velocity.x > 0)
+				owner.velocity.x *= -0.5;
+
+			if (owner.velocity.x > -owner.maxVelocity.x * 0.35 )
+				owner.velocity.x = -owner.maxVelocity.x * 0.35;
+
+			owner.facing = LEFT;
+			owner.acceleration.x = -100;
+		}
+
+		if (FlxG.keys.justReleased.LEFT || FlxG.keys.justReleased.RIGHT)
+		{
+			owner.acceleration.x = 0;
+			owner.velocity.x *= 0.5;
+		}
+	}
+
+	override function exit(owner:Player) 
+	{
+		owner.animation.play("unsneak");
+		super.exit(owner);
+	}
+}
+
+class Slide extends FlxFSMState<Player>
+{
+	var oneShot:Bool = false;
+	var slowTmr:FlxTimer;
+
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		owner.curAction = SLIDE;
+		owner.animation.play("sneak");
+		owner.stamina -= 10;
+		owner.drag *= 0.2;
+		slowTmr = new FlxTimer().start(0.2, function(tmr:FlxTimer){owner.drag.x = 400; trace ('player slowed'); owner.stamina -= 10;});
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (FlxG.keys.justPressed.DOWN && !owner.queuedActions.contains(SNEAK))
+			owner.queuedActions.push(SNEAK);
+		else if (FlxG.keys.justReleased.DOWN && owner.queuedActions.contains(SNEAK))
+			owner.queuedActions.remove(SNEAK);
+
+		switch(owner.facing)
+		{
+			case RIGHT:
+				if (!oneShot)
+				{
+					owner.velocity.x = owner.maxVelocity.x;
+					owner.acceleration.x += 80 * owner.frameTimeMult;
+					oneShot = true;
+				}
+
+				if (owner.velocity.x > 0)
+				{
+					if (FlxG.keys.justPressed.RIGHT)
+						owner.acceleration.x += -5 * owner.frameTimeMult;
+					else
+						owner.acceleration.x = 0;
+				}
+
+			case LEFT:
+				if (!oneShot)
+				{
+					owner.velocity.x = -owner.maxVelocity.x;
+					owner.acceleration.x -= 80 * owner.frameTimeMult;
+					oneShot = true;
+				}
+					
+				if (owner.velocity.x < 0)
+				{
+					if (FlxG.keys.justPressed.RIGHT)
+						owner.acceleration.x += 5 * owner.frameTimeMult;
+					else
+						owner.acceleration.x = 0;
+				}
+
+			default:
+				//do nothing lmao
+		}
+	}
+
+	override function exit(owner:Player) 
+	{
+		if (slowTmr != null && slowTmr.active)
+		{
+			slowTmr.cancel();
+			if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+				owner.velocity.x += (owner.facing == RIGHT ? 100 : -100);
+			owner.stamina += 5;
+		}
+		else
+			owner.acceleration.x = 0;
+		//unslide animation here
+		super.exit(owner);
+	}
+}
+
+class Falling extends FlxFSMState<Player>
+{
+	var coyoteTime:FlxTimer;
+
+	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		//maybe this serves as both coyote and jumpbuffer
+		//nuh uh
+		//nonono!
+		//n a h~
+		coyoteTime = new FlxTimer().start(0.08333333333333333); //5 frames (in 60 fps) lol
+		//Falling anim and state maybe?
+	}
+
+	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
+	{
+		if (FlxG.keys.justPressed.SPACE && coyoteTime.active && !owner.queuedActions.contains(JUMP))
+		{
+			owner.queuedActions.push(JUMP);
+		}
+
+		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
+		{
+			owner.acceleration.x += (FlxG.keys.pressed.LEFT ? -50 : 50) * owner.frameTimeMult;
+			owner.facing = FlxG.keys.pressed.RIGHT ? RIGHT : LEFT;
+			if (FlxG.keys.pressed.RIGHT)
+			{
+				if (owner.velocity.x < 0)
+					owner.velocity.x *= -0.5 * owner.frameTimeMult;
+			}
+			if (FlxG.keys.pressed.LEFT)
+			{
+				if (owner.velocity.x > 0)
+					owner.velocity.x *= -0.5 * owner.frameTimeMult;
+			}
+		}
+	}
+
+	override function exit(owner:Player) 
+	{
+		super.exit(owner);
 	}
 }

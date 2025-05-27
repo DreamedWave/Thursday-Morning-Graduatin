@@ -18,9 +18,12 @@ import lime.system.System;
 import lime.app.Application;
 import openfl.Lib;
 
-#if cpp
-import sys.thread.Thread;
-#end
+import openfl.filters.ShaderFilter;
+import openfl.filters.BitmapFilter;
+
+//#if cpp
+//import sys.thread.Thread;
+//#end
 
 using StringTools;
 
@@ -52,7 +55,6 @@ class TitleState extends MusicBeatMenu
 	var closeButton:FlxSprite;
 	
 	var transitioning:Bool = false;
-	var failSafeAugh:Bool = false;
 	var doCamZooming:Bool = true;
 	var skippedIntro:Bool = false;
 
@@ -186,6 +188,8 @@ class TitleState extends MusicBeatMenu
 			#end
 
 			trace('Hello There!');
+			createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
+			//trace("Hello! Characters currently not working for Alphabet are: ` ~ @ # $ % ^ [ { ] } | : ; , / _"); //I cant add '\' here for some reason but yes that too
 		}
 
 		FlxG.mouse.visible = true;
@@ -252,7 +256,7 @@ class TitleState extends MusicBeatMenu
 
 			jkSpr.visible = false;
 			ptSpr.visible = false;
-			createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
+			//createCoolText(["The FUNKIN' crew INC.", 'KadeDev', 'and DreamedWave']);
 		}
 	}
 
@@ -264,18 +268,9 @@ class TitleState extends MusicBeatMenu
 		if (FlxG.sound.music.volume < 0.65 && changedMenu && !FreeplayState.freeplayMusicPlaying)
 			FlxG.sound.music.volume = 0.65;
 
-		#if mobile
-		for (touch in FlxG.touches.list)
-			if (touch.justPressed)
-				pressedEnter = true;
-		#end
-
-		var pressedEnter:Bool = controls.ACCEPT;
-		var pressedBackspace:Bool = controls.BACK;
-
 		super.update(elapsed);
 
-		if (!FlxG.sound.music.playing && !didThePress)
+		if (!FlxG.sound.music.playing && !transitioning)
 		{
 			//Week-dependent Menu theme
 			switch (FlxG.save.data.weekUnlocked)
@@ -297,7 +292,7 @@ class TitleState extends MusicBeatMenu
 						FlxG.sound.playMusic(Paths.music('peacefulMenu'), 0.3);
 			}
 
-			FlxG.sound.music.fadeIn(5, 0.3, 0.65);
+			FlxG.sound.music.fadeIn(5, 0.3, 0.5);
 
 			if (!FreeplayState.freeplayMusicPlaying)
 				Conductor.changeBPM(102);
@@ -306,24 +301,25 @@ class TitleState extends MusicBeatMenu
 		if (initialized && FlxG.sound.music != null)
 		{
 			//Future sam here, yeah i know these suck LMAO
-			if ((pressedEnter || !FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed && !FlxG.mouse.justPressedRight && Main.isFocused) && !pressedBackspace && skippedIntro)
+			//sam is dead, Amiee here, we will make these better! :3
+			if ((controls.ACCEPT || !FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed && !FlxG.mouse.justPressedRight && Main.isFocused) && !controls.BACK && skippedIntro)
 			{
 				//Go to Main Menu
 				pressedAnything(1);
 			}
-			else if((pressedBackspace || (FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed || FlxG.mouse.justPressedRight) && Main.isFocused) && !pressedEnter && !transitioning && skippedIntro)
+			else if((controls.BACK || (FlxG.mouse.overlaps(closeButton) && FlxG.mouse.justPressed || FlxG.mouse.justPressedRight) && Main.isFocused) && !controls.ACCEPT && !transitioning && skippedIntro)
 			{
 				//Exit
 				pressedAnything(2);
 			}
-			else if ((pressedEnter || FlxG.mouse.justPressed && Main.isFocused) && !skippedIntro && initialized)
+			else if ((controls.ACCEPT || FlxG.mouse.justPressed && Main.isFocused) && !skippedIntro && initialized)
 			{
 				//SkipIntro
 				pressedAnything(0);
 			}
 		}
 
-		if (!transitioning && !failSafeAugh && closeButton.y == 10)
+		if (!transitioning && closeButton.y == 10)
 		{
 			//trace('doin your mom');
 			if (FlxG.mouse.overlaps(closeButton) && Main.isFocused && !isHovering)
@@ -352,7 +348,8 @@ class TitleState extends MusicBeatMenu
 
 	function createCoolText(textArray:Array<String>, ?offset:Float = 0)
 	{
-		deleteCoolText();
+		deleteCoolText();//Delete previously created cool text
+		trace('text says: ' + textArray);
 		if(textGroup != null && credGroup != null) 
 		{
 			for (i in 0...textArray.length)
@@ -364,7 +361,7 @@ class TitleState extends MusicBeatMenu
 				textGroup.add(money);
 			}
 			createdCoolText = true;
-			trace ('created Text (' + curBeat + "<- CurBeat)");
+			trace ('created Text (' + curBeat + " <- CurBeat)");
 		}
 		else
 			trace ('credGroup and textGroup is NULL?!?!');
@@ -374,7 +371,7 @@ class TitleState extends MusicBeatMenu
 	{
 		if (createdCoolText)
 		{
-			trace ('added More Text (' + curBeat + "<- CurBeat)");
+			trace ('added More Text (' + curBeat + " <- CurBeat)");
 			var coolText:Alphabet = new Alphabet(0, 0, text, true);
 			coolText.screenCenter(X);
 			coolText.y += (textGroup.length * 60) + 200 + offset;
@@ -382,7 +379,7 @@ class TitleState extends MusicBeatMenu
 			textGroup.add(coolText);
 		}
 		else
-			trace("can't add do something that doesn't exist");
+			trace("can't add to something that doesn't exist");
 	}
 
 	function deleteCoolText()
@@ -445,7 +442,6 @@ class TitleState extends MusicBeatMenu
 			switch (curBeat)
 			{
 				case 0:
-					deleteCoolText();
 					createCoolText(["The FUNKIN' crew", 'KadeDev', 'and DreamedWave']);
 					jkSpr.visible = false;
 					ptSpr.visible = false;
@@ -554,7 +550,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.log.add('WackyText');
 
 			case 'ayearago':
-				wackyXtraText.text = 'holy shit wow--';
+				wackyXtraText.text = 'holy shit wow-';
 				wackyXtraText.visible = true;
 				FlxG.log.add('WackyText');
 
@@ -755,19 +751,20 @@ class TitleState extends MusicBeatMenu
 		}
 	}
 
-	var didThePress:Bool = false;
+	//var didThePress:Bool = false;
 
 	function pressedAnything(pressedWhat:Int)
 	{
 		switch (pressedWhat)
 		{
 			case 1:
-				if (!transitioning && !failSafeAugh)
+				if (!transitioning)
 				{
-					didThePress = true;
+					//didThePress = true;
 					//this is dummy code, achievements are not confirmed for TMG
 					//if (Main.curDayString == 'Thursday') doAchienvementshit()
-		
+					transitioning = true;
+
 					if (closeButtonTween != null)
 						closeButtonTween.cancel();
 					if(!closeButton.isOnScreen(FlxG.cameras.list[0]))
@@ -807,9 +804,8 @@ class TitleState extends MusicBeatMenu
 					confirmSound.persist = true;
 					confirmSound.autoDestroy = true;
 
-					FlxG.camera.shake(0.01, 1, true, true);
-		
-					transitioning = true;
+					FlxG.camera.shake(0.015, 0.7, true, true);
+							
 					changedMenu = true;
 		
 					transitionTimer = new FlxTimer().start(1.76, function(tmr:FlxTimer)
@@ -818,10 +814,12 @@ class TitleState extends MusicBeatMenu
 						FlxG.switchState(new MainMenuState());
 					});
 				}
-				else
+				else if (transitionTimer != null && transitionTimer.active)
 				{
-					if (!failSafeAugh)
+					var spedran:Bool = false;
+					if (!spedran)
 					{
+						spedran = true;
 						transitionTimer.active = false;
 						confirmSound.persist = false;
 						//Speedrun Skip
@@ -836,9 +834,11 @@ class TitleState extends MusicBeatMenu
 				DiscordClient.changePresence("[Goodbye, World]", null, 'apppresence-dark');
 				#end
 
-				didThePress = true;	
-				failSafeAugh = true;
-				transitioning = true;
+				FlxG.autoPause = false;
+				FlxG.mouse.visible = false;
+
+				//didThePress = true;
+				transitioning =true;
 
 				if (closeButtonTween != null)
 					closeButtonTween.cancel();
@@ -853,7 +853,13 @@ class TitleState extends MusicBeatMenu
 				menuEyeCandy.animation.play('disappear');
 				titleText.alpha = 0.25;
 				titleText.animation.play('press-static');
-				FlxTween.tween(titleText,{y: 720, alpha: 0}, 0.25, {type: ONESHOT, ease: FlxEase.expoInOut});
+				FlxTween.tween(titleText,{y: 720, alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.expoIn});
+
+				var effect = new shaders.MosaicEffect();
+				var mosaic = new ShaderFilter(effect.shader);
+				var camFilters:Array<BitmapFilter> = [];
+				camUI.filters = camFilters;
+				camFilters.push(mosaic);
 	
 				trace ('Closing Game...');
 	
@@ -863,8 +869,36 @@ class TitleState extends MusicBeatMenu
 				add(black);
 	
 				FlxG.sound.play(Paths.sound('exitMenu' + weekAdderThingy), 1);
+				FlxG.camera.shake(0.02, 1.25, true, true);
 
-				
+				var coolNumThing:Float = 1;
+				var counter:Int = 0;
+				new FlxTimer().start(1.3, function(tmr:FlxTimer)
+				{
+					new FlxTimer().start(0.025, function(tmr:FlxTimer)
+					{
+						effect.setStrength(coolNumThing, coolNumThing);
+						if (coolNumThing < 80)
+							coolNumThing += 2.5;
+						else if (coolNumThing < 185)
+						{
+							if (counter == 0)
+								coolNumThing += 13.125;
+							counter++;
+							if (counter > 1)
+								counter = 0;
+						}
+						else
+						{
+							if (counter == 0)
+								coolNumThing += 40;
+							counter++;
+							if (counter > 3)
+								counter = 0;
+						}
+					}, 200);
+				});
+
 				new FlxTimer().start(0.04, function(tmr:FlxTimer)
 				{
 					if (FlxG.save.data.camzoom)
@@ -872,18 +906,19 @@ class TitleState extends MusicBeatMenu
 						camUI.zoom -= 0.01;
 					}
 					FlxG.sound.music.stop();
-						closeButtonTween = FlxTween.tween(closeButton, {alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 2.5, onComplete:
-							function(twn:FlxTween) 
-							{
-								closeButtonTween = null;
-								logoTween = FlxTween.tween(logoBl, {y: -1000}, 1.4, {type: ONESHOT, ease: FlxEase.expoInOut});
-							}
-						});
-					camLoad.fade(FlxColor.BLACK, 5, false, function()
-					{
-						trace ('Goodbye');
-						System.exit(0);
-					}, true);
+					logoTween = FlxTween.tween(logoBl, {y: -1000}, 1.5, {type: ONESHOT, ease: FlxEase.expoInOut, startDelay: 2});
+					closeButtonTween = FlxTween.tween(closeButton, {alpha: 0}, 1, {type: ONESHOT, ease: FlxEase.sineInOut, startDelay: 1.5, onComplete:
+						function(twn:FlxTween) 
+						{
+							closeButtonTween = null;
+							camLoad.stopFX('fade');
+							camLoad.fade(FlxColor.BLACK, 1.1, false, function()
+								{
+									trace ('Goodbye');
+									System.exit(0);
+								}, true);
+						}
+					});
 				});
 
 			default:

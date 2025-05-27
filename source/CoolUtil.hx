@@ -19,9 +19,12 @@ class CoolUtil
 		return Math.max(min, Math.min(max, value));
 	}
 
-	inline public static function boundToInverted(value:Float, min:Float, max:Float):Float 
+	//Framerate indepentent lerp funct!
+	//TYSM Freya Holmér!!! THE GOAT!!!
+	//meow :3 meow :3 meow :3 meow :3 meow :3 
+	inline public static function freyaLerp(a:Float, b:Float, decay:Float = 16, deltaTime:Float):Float
 	{
-		return Math.min(max, Math.max(min, value));
+		return b + (a - b) * Math.exp(-decay * deltaTime);
 	}
 
 	//IDFK WHAT FLXMATH FUNCTUON THIS IS SO IM MAKING IT MYSELF !!!!

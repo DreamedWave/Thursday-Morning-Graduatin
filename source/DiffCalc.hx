@@ -20,6 +20,7 @@ class DiffCalc
 
     public static var lastDiffHandOne:Array<Float> = [];
     public static var lastDiffHandTwo:Array<Float> = [];
+    public static var totalPlayableNotes:Int = 0;
 
     public static function CalculateDiff(song:SwagSong, ?accuracy:Float = .93)
     {
@@ -35,16 +36,22 @@ class DiffCalc
         {
             for (ii in i.sectionNotes) // notes
             {
-                if (ii[5] != 'mine')
+                if (ii[3] != 'mine')
                 {
+                    //trace(ii[3]);
                     if (ii[1] > 3 && !i.mustHitSection)
-                        cleanedNotes.push(new SmallNote(ii[0],Math.floor(Math.abs(ii[1]))));
+                        cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                     else if (ii[1] < 4 && i.mustHitSection)
-                        cleanedNotes.push(new SmallNote(ii[0],Math.floor(Math.abs(ii[1]))));
+                        cleanedNotes.push(new SmallNote(ii[0], Math.floor(Math.abs(ii[1]))));
                 }
+                /*else
+                {
+                    trace('didnt count note cuz it is a mine note');
+                }*/
             }
         }
 
+        totalPlayableNotes = cleanedNotes.length;
         trace(cleanedNotes.length + " - playable notes");
 
         var handOne:Array<SmallNote> = [];

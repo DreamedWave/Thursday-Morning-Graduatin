@@ -66,14 +66,18 @@ class NoteSplash extends FlxSprite
 		//Making sure the rating isn't something the game doesn't recognise
 		switch(rating)
 		{
-			case 'sick' | 'good' | 'bad' | 'shit':
+			case 'sick' | 'good':
 				//do Nothin
-			case 'miss':
+			case 'miss'| 'bad' | 'shit':
 				wasMissed = true;
 			default:
-				rating = 'sick';
+				kill();
+				return;
 				//"In the event that the programme slips up, I would rather reward the player rather than unfairly punishing them."
 				// - DreamedWave 2022
+
+				//"Girl,,, this is the note splash script wtf are you talking about"
+				// - AmieeWuzHere 2025
 		}
 		if (y < -10 && !wasMissed)
 			y = -10;
@@ -135,12 +139,15 @@ class NoteSplash extends FlxSprite
 			case "mine":
 				switch (rating)
 				{
-					case "sick" | "good" | "bad":
+					case "sick" | "good" | "bad" | 'shit':
 						visible = true;
 						alpha = 1;
 						animation.play('splash ' + animNum + ' mine', true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+					default:
+						kill();
+						trace('nuh uh');
 				}
 			case "trigger":
 				switch (rating)
@@ -157,6 +164,9 @@ class NoteSplash extends FlxSprite
 						animation.play('splash ' + animNum + ' mine', true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 24 + FlxG.random.int(-2, 2);
+					default:
+						kill();
+						trace('nuh uh');
 				}
 			default:
 				switch (rating)
@@ -168,7 +178,7 @@ class NoteSplash extends FlxSprite
 						animation.play('splash ' + animNum + ' ' + note, true);
 						if(animation.curAnim != null)
 							animation.curAnim.frameRate = 28 + FlxG.random.int(-2, 2);
-					case "shit" | "miss":
+					case "bad" | "shit" | "miss":
 						if (FlxG.save.data.notesfxType != "chill")
 						{
 							visible = true;
@@ -183,6 +193,7 @@ class NoteSplash extends FlxSprite
 						}
 					default:
 						kill();
+						trace('nuh uh');
 				}
 		}
 	}
