@@ -17,7 +17,7 @@ To find out how to be able to build this mod, click [this](https://github.com/Dr
  - *[to be added]* **Unlockable Freeplay Songs**
       - Aside from all the songs within every Story Part, there will be more songs available for you to find and unlock within Freeplay!
  - **Adaptive Music**
-      - Most to playable story mode songs change and react to how well you're doing!
+      - Most of the playable story mode songs change and react to how well you're doing!
       - For example: some tracks' instrumentals become more suspenseful the more your health lowers.
  - *[to be added]* **Custom scoring and ranking system**
       - To keep the fun and casual aspect, this mod implements it's own take on a scoring and ranking system, mainly inspired by the system implemented in current day FNF!
