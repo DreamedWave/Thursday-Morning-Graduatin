@@ -231,13 +231,13 @@ class PauseSubState extends MusicBeatSubstate
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
 
-		topScrollRect = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.15), FlxColor.GREEN);
-		antiHoverRect.visible = false;
+		topScrollRect = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		topScrollRect.visible = false;
 		//topScrollRect.screenCenter(Y);
 		add(topScrollRect);
 
-		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.85)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.15), FlxColor.GREEN);
-		antiHoverRect.visible = false;
+		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.75)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25), FlxColor.GREEN);
+		bottomScrollRect.visible = false;
 		//bottomScrollRect.screenCenter(Y);
 		add(bottomScrollRect);
 
@@ -301,7 +301,7 @@ class PauseSubState extends MusicBeatSubstate
 		{
 			//finna toby fox this shit
 			// was it this easy...? 
-			if (mouseActive && FlxG.mouse.justMoved && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
+			if (mouseActive && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
 			{
 				if (FlxG.mouse.overlaps(topScrollRect) && curSelected > 0)
 				{
