@@ -60,7 +60,7 @@ class PauseSubState extends MusicBeatSubstate
 	var blurTweenGoBrr:FlxTween = null;
 	var funnyBlur:Float;
 
-	var antiHoverRect:FlxObject;
+	var antiHoverRect:FlxSprite;
 
 	public function new(x:Float, y:Float)
 	{
@@ -223,7 +223,8 @@ class PauseSubState extends MusicBeatSubstate
 			grpMenuShit.add(item);
 		}
 
-		antiHoverRect = new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
+		antiHoverRect = new FlxSprite(FlxG.width / 2.5, 0).makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height * 4), FlxColor.RED); //new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
+		antiHoverRect.alpha = 0.5;
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
 

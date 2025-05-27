@@ -37,12 +37,12 @@ class Rating extends FlxSprite
 				//timer is longer if the note is a parent to multiple sustain children
 				if (isParent)
 				{
-					acceleration.y = 100 + (30 - (5 * susLength)) * (Conductor.bpm * 0.01); //idfk lol
+					acceleration.y = 200 + (30 - (5 * susLength)) * (Conductor.bpm * 0.01); //idfk lol
 					velocity.y -= 50 + (50 - (5 * susLength)) * (Conductor.bpm * 0.01) - (daRating != 'sick' && daRating != 'good' ? 30 : 0); //idfk lol //idfk lol part 2
 				}
 				else
 				{
-					acceleration.y = 400 + (30 * (Conductor.bpm * 0.01));
+					acceleration.y = 500 + (30 * (Conductor.bpm * 0.01));
 					velocity.y -= FlxG.random.int(170, 210) - (daRating != 'sick' && daRating != 'good' ? 30 : 0);
 				}
 

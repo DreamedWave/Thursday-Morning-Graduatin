@@ -36,11 +36,11 @@ class Ratings
                         ranking = "GFC";
                     //else if (misses == 0 && slips == 0 && bads >= 1) // Regular FC
                         //ranking = "BFC";
-                    else if (misses < 10) // Single Digit Combo Breaks
+                    else if (misses + slips + bads < 10) // Single Digit Combo Breaks
                         ranking = "SDR";
-                    else if (misses < 30) // Double Digit Combo Breaks
+                    else if (misses + slips + bads < 30) // Double Digit Combo Breaks
                         ranking = "DDR";
-                    else if ((misses < 50 && accuracy > 70) || accuracy > 50)
+                    else if ((misses + slips + bads < 50 && accuracy > 70) || accuracy > 50)
                         ranking = "CLEAR";
                     else
                         ranking = "RETRY";
@@ -90,10 +90,10 @@ class Ratings
             weekRating = 'GFC';
         if (ratingArray.contains('FC'))
             weekRating = 'FC';
-        if (ratingArray.contains('SDCB'))
-            weekRating = 'SDCB';
-        if (ratingArray.contains('DDCB'))
-            weekRating = 'DDCB';
+        if (ratingArray.contains('SDR'))
+            weekRating = 'SDR';
+        if (ratingArray.contains('DDR'))
+            weekRating = 'DDR';
         if (ratingArray.contains('Clear'))
             weekRating = 'Clear';
         if (ratingArray.contains('Fail!'))

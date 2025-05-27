@@ -145,6 +145,11 @@ class FlxSoundTray extends Sprite
 			}
 		}
 
+		if (!isRetreating && y != 0 && (trayTween == null || !trayTween.active))
+		{
+			y = CoolUtil.freyaLerp(y, 0, 5, elapsedMS);
+		}
+
 		if (FlxG.sound.volume > 0 && globalVolume != 0 && !FlxG.sound.muted)
 		{
 			if (_timer > 0)
