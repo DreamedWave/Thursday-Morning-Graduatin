@@ -1,7 +1,7 @@
 ![Kade Engine logo](art/NewRevampedLogo/titleNewest.png)
 
 # Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [me](https://github.com/DreamedWave) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
+**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [me](https://en.pronouns.page/@AmieeWuzHere) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
