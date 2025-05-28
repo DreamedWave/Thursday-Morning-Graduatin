@@ -2464,12 +2464,7 @@ class PlayState extends MusicBeatState
 					songScore -= 50;
 					//uhh what happens if i-
 					if (allowHealthModifiers)
-					{
-						if (targetHealth >= 0.25)
-							targetHealth -= 0.05;
-						else
-							targetHealth -= 0.025;
-					}
+						targetHealth = calculateHealth(3);
 				}
 				else if (allowHealthModifiers && nearestNoteUpcoming)
 				{
@@ -2482,7 +2477,7 @@ class PlayState extends MusicBeatState
 					if (mashPresses > mashPressThreshold)
 					{
 						mashing = true;
-						targetHealth += calculateHealth(9);
+						targetHealth -= calculateHealth(9);
 						songScore -= 10;
 						//Starts filling your accuracy with duds, causing you to have issues with score and health
 						updateAccuracy(1 - (0.025 * mashPresses));
@@ -3916,7 +3911,7 @@ class PlayState extends MusicBeatState
 								{
 									daNote.tempRating = 'miss';
 									daNote.rating = daNote.tempRating;
-									targetHealth += calculateHealth(2, targetHealth, accuracy);
+									targetHealth -= calculateHealth(2, targetHealth, accuracy);
 									sustainNoteMiss(daNote);
 									daNote.tooLate = true;
 								}
@@ -3992,7 +3987,7 @@ class PlayState extends MusicBeatState
 								{
 									daNote.tempRating = 'miss';
 									daNote.rating = daNote.tempRating;
-									targetHealth += calculateHealth(2, targetHealth, accuracy);
+									targetHealth -= calculateHealth(2, targetHealth, accuracy);
 									sustainNoteMiss(daNote);
 									daNote.tooLate = true;
 								}
@@ -4109,7 +4104,7 @@ class PlayState extends MusicBeatState
 												{
 													// give a health punishment for failing an LN
 													//Heath Drain for Sustain Parent
-													targetHealth += calculateHealth(1, targetHealth, accuracy);
+													targetHealth -= calculateHealth(1, targetHealth, accuracy);
 
 													//trace("hold fell over at the start");
 													for (i in daNote.children)
@@ -4123,7 +4118,7 @@ class PlayState extends MusicBeatState
 												else
 												{
 													//Health Drain for Non-Sustain
-													targetHealth += calculateHealth(0, targetHealth, accuracy);
+													targetHealth -= calculateHealth(0, targetHealth, accuracy);
 													vocals.volume = 0;
 												}
 												noteMiss(daNote.noteData, daNote);
@@ -5350,7 +5345,7 @@ class PlayState extends MusicBeatState
 								missesInSection++;
 								//Health Drain
 							}
-							targetHealth += calculateHealth(4, targetHealth, accuracy);
+							targetHealth -= calculateHealth(4, targetHealth, accuracy);
 						case 'bad':
 							//Health Drain
 							if (!daNote.withinCompensation)
@@ -5359,7 +5354,7 @@ class PlayState extends MusicBeatState
 								bads++;
 								timingColour = FlxColor.YELLOW;
 							}
-							targetHealth += calculateHealth(5, targetHealth, accuracy);
+							targetHealth -= calculateHealth(5, targetHealth, accuracy);
 						case 'good':
 							bypassOppMissCheck--;
 							//Health Gain
@@ -5898,19 +5893,18 @@ class PlayState extends MusicBeatState
 			}
 			
 			if (healthBar.percent < 85)
-				targetHealth += calculateHealth(10, targetHealth, accuracy);
+				targetHealth += calculateHealth(10, targetHealth, accuracy) * 4;
+			else if (healthBar.percent < 20)
+				targetHealth += calculateHealth(10, targetHealth, accuracy) * 8;
 		}
 		else
 		{
 			if (curEnemyNote == curEnemyNoteCheck)
 			{	
 				if (healthBar.percent < 85)
-				{
-					if (!isSustain)
-						targetHealth -= calculateHealth(10, targetHealth, accuracy) * 4;
-					else
-						targetHealth -= calculateHealth(11, targetHealth, accuracy) * 2;
-				}
+					targetHealth += calculateHealth(11, targetHealth, accuracy) * 4;
+				else if (healthBar.percent < 20)
+					targetHealth += calculateHealth(11, targetHealth, accuracy) * 8;
 			}
 		}
 		dad.holdTimer = 0;
@@ -6204,6 +6198,19 @@ class PlayState extends MusicBeatState
 								}
 							enemyNoteMiss(dataSuffix[singData]);
 						}
+						else if (accuracy > 0 && FlxG.random.bool((100 - accuracy)))
+						{
+							//enemy combo break?!?!?!?!?!?
+							vocals.volume = vocalsVolume * 0.3;
+							targetHealth += calculateHealth(10, targetHealth, accuracy);
+							note.rating = (FlxG.random.int(0, 100) < 35 ? 'shit' : 'bad');
+							//trace('forced ' + note.rating);
+							if (note.isParent)
+								for (i in note.children)
+								{
+									i.rating = note.rating;
+								}
+						}
 					}
 					else if (note.forceMiss && note.isSustainNote)
 						enemyNoteMiss(dataSuffix[singData], true, note.parent.parentID);
@@ -6290,11 +6297,8 @@ class PlayState extends MusicBeatState
 						switch (note.rating)
 						{
 							case 'bad' | 'shit':
-								if (!note.isSustainNote)
-								{
-									spr.animation.play('pressed');
-									spr.centerOffsets();
-								}
+								spr.animation.play('pressed');
+								spr.centerOffsets();
 							default:
 								if (!note.isSustainNote && spr.animation.curAnim.name != 'confirm')
 								{
@@ -6597,13 +6601,6 @@ class PlayState extends MusicBeatState
 
 	function literallyFuckingDie():Void
 	{
-		if (songStarted)
-		{
-			vocals.stop();
-			miscs.stop();
-			musicGroup.stop();
-		}
-
 		if (resetTextTwn != null)
 			resetTextTwn.cancel();
 
@@ -6672,7 +6669,13 @@ class PlayState extends MusicBeatState
 				vocals.tapeStop(0.08, 0);
 				new FlxTimer().start(0.1, function (tmr:FlxTimer)
 					{
-						FlxG.sound.music.stop();
+						if (songStarted)
+						{
+							vocals.stop();
+							miscs.stop();
+							musicGroup.stop();
+						}
+
 						if (!PlayStateChangeables.Optimize)
 							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 						else
@@ -8023,19 +8026,19 @@ class PlayState extends MusicBeatState
                 {
                     case 0:
                         if (health <= 0.25)
-                            feedbackHealth = -0.1;
+                            feedbackHealth = 0.1;
                         else
-                            feedbackHealth = -0.175;
+                            feedbackHealth = 0.175;
                     case 1:
                         if (health <= 0.25)
-                            feedbackHealth = -0.125;
+                            feedbackHealth = 0.125;
                         else
-                            feedbackHealth = -0.2;
+                            feedbackHealth = 0.2;
                     default:
                         if (health <= 0.25)
-                            feedbackHealth = -0.15;
+                            feedbackHealth = 0.15;
                         else
-                            feedbackHealth = -0.225;
+                            feedbackHealth = 0.225;
                 }
             //Heath Drain for Sustain Parent
             case 1:
@@ -8044,19 +8047,19 @@ class PlayState extends MusicBeatState
                 {
                     case 0:
                         if (health <= 0.25)
-                            feedbackHealth = -0.175;
+                            feedbackHealth = 0.175;
                         else
-                            feedbackHealth = -0.25;
+                            feedbackHealth = 0.25;
                     case 1:
                         if (health <= 0.25)
-                            feedbackHealth = -0.2;
+                            feedbackHealth = 0.2;
                         else
-                            feedbackHealth = -0.275;
+                            feedbackHealth = 0.275;
                     default:
                         if (health <= 0.25)
-                            feedbackHealth = -0.225;
+                            feedbackHealth = 0.225;
                         else
-                            feedbackHealth = -0.3;
+                            feedbackHealth = 0.3;
                 }
             //Health Drain for Loss of Sustain Chain
             case 2:
@@ -8065,23 +8068,25 @@ class PlayState extends MusicBeatState
                 {
                     case 0:
                         if (health > 0.35)
-                            feedbackHealth = -0.025;
+                            feedbackHealth = 0.025;
                     case 1:
                         if (health <= 0.35)
-                            feedbackHealth = -0.025;
+                            feedbackHealth = 0.025;
                         else
-                            feedbackHealth = -0.035;
+                            feedbackHealth = 0.035;
                     default:
                         if (health <= 0.35)
-                            feedbackHealth = -0.035;
+                            feedbackHealth = 0.035;
                         else
-                            feedbackHealth = -0.05;
+                            feedbackHealth = 0.05;
                 }
 
-            //Health Drain Slot
+            //Health Drain for Spamming with GhostNotes Off
             case 3:
-                //Empty
-				//Used to be sustain children back when sustain worked differently
+				if (targetHealth >= 0.25)
+					feedbackHealth = -0.05;
+				else
+					feedbackHealth = -0.025;
 				
             //Shit Rating
             case 4:
@@ -8090,19 +8095,19 @@ class PlayState extends MusicBeatState
                 {
                     case 0:
                         if (accuracy < 50)
-                            feedbackHealth = -0.075;
+                            feedbackHealth = 0.075;
                         else
-                            feedbackHealth = -0.025;
+                            feedbackHealth = 0.025;
                     case 1:
                         if (accuracy < 60)
-                            feedbackHealth = -0.08;
+                            feedbackHealth = 0.08;
                         else
-                            feedbackHealth = -0.05;
+                            feedbackHealth = 0.05;
                     default:
                         if (accuracy < 70)
-                            feedbackHealth = -0.1;
+                            feedbackHealth = 0.1;
                         else
-                            feedbackHealth = -0.08;
+                            feedbackHealth = 0.08;
                 }
             //Bad Rating
             case 5:
@@ -8111,19 +8116,19 @@ class PlayState extends MusicBeatState
                 {
                     case 0:
                         if (accuracy < 50)
-                            feedbackHealth = -0.04;
+                            feedbackHealth = 0.04;
                         else
-                            feedbackHealth = -0.03;
+                            feedbackHealth = 0.03;
                     case 1:
                         if (accuracy < 60)
-                            feedbackHealth = -0.06;
+                            feedbackHealth = 0.06;
                         else
-                            feedbackHealth = -0.045;
+                            feedbackHealth = 0.045;
                     default:
                         if (accuracy < 70)
-                            feedbackHealth = -0.08;
+                            feedbackHealth = 0.08;
                         else
-                            feedbackHealth = -0.06;
+                            feedbackHealth = 0.06;
                 }
             //Good Rating
             case 6:
@@ -8133,17 +8138,13 @@ class PlayState extends MusicBeatState
                     case 0:
                         if (health < 0.7 && accuracy > 50)
                             feedbackHealth = 0.07;
-                        else if (accuracy < 50)
-                            feedbackHealth = -0.05;
                     case 1:
                         if (health < 0.7 && accuracy > 60)
                             feedbackHealth = 0.05;
-                        else if (accuracy < 60)
-                            feedbackHealth = -0.03;
                     default:
                         if (health < 0.7 && accuracy > 70)
                             feedbackHealth = 0.03;
-                        else if (accuracy < 70)
+                        else if (accuracy < 60)
                             feedbackHealth = -0.01;
                 }
             //Sick Rating

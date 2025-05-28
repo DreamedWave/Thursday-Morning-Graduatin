@@ -232,13 +232,15 @@ class PauseSubState extends MusicBeatSubstate
 		add(antiHoverRect);
 
 		topScrollRect = new FlxSprite(0, -30).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25) + 30, FlxColor.GREEN);
-		topScrollRect.visible = false;
+		//topScrollRect.visible = false;
 		//topScrollRect.screenCenter(Y);
+		topScrollRect.updateHitbox();
 		add(topScrollRect);
 
 		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.75)).makeGraphic(Std.int(FlxG.width * 0.75), Std.int(FlxG.height * 0.25) , FlxColor.GREEN);
-		bottomScrollRect.visible = false;
+		//bottomScrollRect.visible = false;
 		//bottomScrollRect.screenCenter(Y);
+		bottomScrollRect.updateHitbox();
 		add(bottomScrollRect);
 
 		if (!didCountdownShit)
@@ -301,7 +303,7 @@ class PauseSubState extends MusicBeatSubstate
 		{
 			//finna toby fox this shit
 			// was it this easy...? 
-			if (mouseActive && Main.isFocused && !FlxG.mouse.overlaps(antiHoverRect))
+			if (mouseActive && Main.isFocused && FlxG.mouse.justMoved && !FlxG.mouse.overlaps(antiHoverRect))
 			{
 				if (FlxG.mouse.overlaps(topScrollRect) && curSelected > 0)
 				{
@@ -335,15 +337,15 @@ class PauseSubState extends MusicBeatSubstate
 					}
 				}*/
 			}
-			else
-			{
+			//else
+			//{			
 				if (FlxG.keys.justPressed.UP || upPcontroller)
 				{
 					changeSelection(-1);
 					mouseActive = false;
 					if (mouseTimer.active)
 						mouseTimer.cancel();
-					mouseTimer = new FlxTimer().start(1, function(tmr:FlxTimer)
+					mouseTimer = new FlxTimer().start(1.5, function(tmr:FlxTimer)
 					{
 						mouseActive = true;
 					});
@@ -354,12 +356,13 @@ class PauseSubState extends MusicBeatSubstate
 					mouseActive = false;
 					if (mouseTimer.active)
 						mouseTimer.cancel();
-					mouseTimer = new FlxTimer().start(1, function(tmr:FlxTimer)
+					mouseTimer = new FlxTimer().start(1.5, function(tmr:FlxTimer)
 					{
 						mouseActive = true;
 					});
 				}
-			}
+			//}
+
 			#if cpp
 			#if debug
 			if ((controls.LEFT_P || leftPcontroller))
