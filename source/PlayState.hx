@@ -52,7 +52,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.BlendMode;
 import openfl.filters.BitmapFilter;
-import openfl.filters.BlurFilter;
+//import openfl.filters.BlurFilter;
 import openfl.filters.ShaderFilter;
 //import IndieCrossShaders;
 import openfl.events.KeyboardEvent;
@@ -298,9 +298,9 @@ class PlayState extends MusicBeatState
 	public var camGame:FlxCamera;
 	public var camHUD:FlxCamera;
 	public var camEXT:FlxCamera;
-	public var pauseBlurLol:BlurFilter;
-	var gotShotBlurLol:BlurFilter;
-	var gotShotBlurTwn:FlxTween;
+	//public var pauseBlurLol:BlurFilter;
+	// gotShotBlurLol:BlurFilter;
+	//var gotShotBlurTwn:FlxTween;
 	//public var testGLOWFILTER:GlowFilter;
 
 	public static var cannotDie = false;
@@ -510,7 +510,7 @@ class PlayState extends MusicBeatState
 
 		bgColor = 0xFF000000;
 
-		pauseBlurLol = new BlurFilter(0, 0, 2);
+		//pauseBlurLol = new BlurFilter(0, 0, 2);
 
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
@@ -568,9 +568,9 @@ class PlayState extends MusicBeatState
 
 		FlxCamera.defaultCameras = [camGame];
 
-		camGame.filters = camGameFilters;
-		camGameFilters.push(pauseBlurLol);
-		camGame.filtersEnabled = false;
+		//camGame.filters = camGameFilters;
+		//camGameFilters.push(pauseBlurLol);
+		//camGame.filtersEnabled = false;
 
 		//Preloading of music stuff becuz uhhh yes
 		//Paths.inst(key);
@@ -1143,8 +1143,8 @@ class PlayState extends MusicBeatState
 					add(gf);
 					add(cityStreets);
 
-					gotShotBlurLol = new BlurFilter(0, 0, 2);
-					camGameFilters.push(gotShotBlurLol);
+					//gotShotBlurLol = new BlurFilter(0, 0, 2);
+					//camGameFilters.push(gotShotBlurLol);
 				case 'house':
 					//do nada
 				default:
@@ -4627,7 +4627,7 @@ class PlayState extends MusicBeatState
 	}
 
 	var vignetteChecker:Int = 0;
-	var gotShotBlurVal:Float = 0;
+	//var gotShotBlurVal:Float = 0;
 	var iconTrailTimer:FlxTimer;
 	//Turned them into functions for consistency's sake :3
 	function getFuckingShot(purelyVisual:Bool = false):Void
@@ -4684,16 +4684,16 @@ class PlayState extends MusicBeatState
 
 			CoolGameFeelThings.HitStop.doHitStop(0.03334);
 
-			camGame.filtersEnabled = true;
-			gotShotBlurLol.blurX = 2;
-			gotShotBlurLol.blurY = 2;
-			gotShotBlurVal = 2;
+			//camGame.filtersEnabled = true;
+			//gotShotBlurLol.blurX = 2;
+			//gotShotBlurLol.blurY = 2;
+			//gotShotBlurVal = 2;
 			if (hurtDelay < 8)
 				hurtDelay += 2;
 
-			if (gotShotBlurTwn != null)
-				gotShotBlurTwn.cancel();
-			gotShotBlurTwn = FlxTween.tween(this, {gotShotBlurVal: 0}, Conductor.crochet * 8 / 1000,
+			//if (gotShotBlurTwn != null)
+				//gotShotBlurTwn.cancel();
+			/*gotShotBlurTwn = FlxTween.tween(this, {gotShotBlurVal: 0}, Conductor.crochet * 8 / 1000,
 			{
 				ease: FlxEase.cubeOut,
 				onUpdate: function(twn:FlxTween) 
@@ -4710,12 +4710,17 @@ class PlayState extends MusicBeatState
 						causeOfDeath = '';
 					gotShotBlurTwn = null;
 				}
+			});*/
+
+			causeOfDeath = 'ate-bullet';
+			new FlxTimer().start(Conductor.crochet * 8 / 1000, function(tmr:FlxTimer)
+			{
+				if (causeOfDeath == 'ate-bullet')
+					causeOfDeath = '';
 			});
 
 			timesShot++;
 			//trace("ate " + timesShot + ' bullet/s');
-
-			causeOfDeath = 'ate-bullet';
 			
 			//la health drain for failed specil	
 			//Minushealth - not instakill
@@ -5312,6 +5317,9 @@ class PlayState extends MusicBeatState
 						for (i in daNote.children)
 							i.parentWife = wife;
 				}
+
+				//if (daNote.noteType != 'normal')
+					//trace('bruh???');
 		
 				if (combo >= 10 && daRating != 'miss' && daRating != 'shit' && daRating != 'bad')
 					showNumShit = true;
@@ -6367,7 +6375,7 @@ class PlayState extends MusicBeatState
 				if (!PlayStateChangeables.botPlay && (note.noteType != 'normal' || (note.rating != 'sick' && note.rating != 'good')))
 					sploshThisShitUp(note, note.rating);
 
-				if (note.noteType != 'mine')
+				if (note.noteType == 'normal')
 				{
 					if (note.rating != 'shit' && note.rating != 'bad')
 					{
@@ -6380,6 +6388,7 @@ class PlayState extends MusicBeatState
 					popUpScore('', note, noteDiff, isJack);
 					//trace('goodnotehit nonsustain popupscore');
 				}
+				//else {play boolet whizz/ricochet noise or something idk}
 
 				note.startSpeeding = false;
 				note.missAdditiveY = 0;
@@ -6601,6 +6610,9 @@ class PlayState extends MusicBeatState
 
 	function literallyFuckingDie():Void
 	{
+		FlxG.sound.music.onComplete = function stopEndSong(){trace('stoppedSongFromBeingFinished');};
+		vocals.volume = 0;
+
 		if (resetTextTwn != null)
 			resetTextTwn.cancel();
 
@@ -6636,6 +6648,13 @@ class PlayState extends MusicBeatState
 		{
 			case 'intentional-reset':
 				//No Hitstop
+				if (songStarted)
+				{
+					vocals.stop();
+					miscs.stop();
+					musicGroup.stop();
+				}
+
 				if (!PlayStateChangeables.Optimize)
 					openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				else
@@ -6643,53 +6662,70 @@ class PlayState extends MusicBeatState
 
 			case 'ate-bullet':
 				camGame.alpha = 0.8;
-				CoolGameFeelThings.HitStop.doHitStop(0.2);
-
-				new FlxTimer().start(0.05, function (tmr:FlxTimer)
+				CoolGameFeelThings.HitStop.doHitStop(0.25,
+					function finishFunction()
 					{
+						if (songStarted)
+						{
+							vocals.stop();
+							miscs.stop();
+							musicGroup.stop();
+						}
+
 						if (!PlayStateChangeables.Optimize)
+						{
 							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+						}
 						else
 							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
-					});
+					}
+				);
 			case 'ate-many-bullets':
 				camGame.alpha = 0.8;
-				CoolGameFeelThings.HitStop.doHitStop(0.3);
-
-				new FlxTimer().start(0.075, function (tmr:FlxTimer)
+				CoolGameFeelThings.HitStop.doHitStop(0.35,
+					function finishFunction()
 					{
+						if (songStarted)
+						{
+							vocals.stop();
+							miscs.stop();
+							musicGroup.stop();
+						}
+
 						if (!PlayStateChangeables.Optimize)
 							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 						else
 							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
-					});
+					}
+				);
 			default:
 				//SMALLSEST TWEAK I MADE BUT IM ACTUALLY SO PROUD AT HOW THIS TURNED OUT HELLO???????
 				CoolGameFeelThings.HitStop.doSlowDown(0.15, 0.5, true, 
-				function waitingFunction()
-				{
-					if (FlxG.sound.music.pitch > 0)
+					function waitingFunction()
 					{
-						FlxG.sound.music.pitch -= 0.01 / FlxG.timeScale;
-						instLowHP.pitch = FlxG.sound.music.pitch;
-						vocals.pitch = FlxG.sound.music.pitch;
-						miscs.pitch = FlxG.sound.music.pitch;
-					}
-				},
-				function finishFunction()
-				{
-					if (songStarted)
+						if (FlxG.sound.music.pitch > 0)
+						{
+							FlxG.sound.music.pitch -= 0.01 / FlxG.timeScale;
+							instLowHP.pitch = FlxG.sound.music.pitch;
+							//vocals.pitch = FlxG.sound.music.pitch;
+							miscs.pitch = FlxG.sound.music.pitch;
+							coolSoundFilter.gainHF = FlxG.sound.music.pitch;
+						}
+					},
+					function finishFunction()
 					{
-						vocals.stop();
-						miscs.stop();
-						musicGroup.stop();
-					}
+						if (songStarted)
+						{
+							vocals.stop();
+							miscs.stop();
+							musicGroup.stop();
+						}
 
-					if (!PlayStateChangeables.Optimize)
-						openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-					else
-						openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
-				}
+						if (!PlayStateChangeables.Optimize)
+							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+						else
+							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
+					}
 				);
 		}
 	}

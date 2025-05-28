@@ -11,13 +11,16 @@ class HitStop
     //Feel free to implement this in your own stuff - and change it to be better because I am not a coder!!! I just do this shit for fun!!!
     //If you're gonna do that, please make sure to credit me tho!!! And LMK if you did use this in a project becuz I'd love to see it !!!!! WAHH!!!
    static var waiting:Bool = false;
+   static var thisOnComplete:Void->Void;
 
-    public static function doHitStop(duration:Float)// (in seconds)
+    public static function doHitStop(duration:Float, ?onComplete:Void->Void)// (in seconds)
     {
-        trace('wah');
         if (waiting)
             return;
+
         waiting = true;
+        if (onComplete != null && thisOnComplete == null)
+          thisOnComplete = onComplete;
         FlxG.timeScale = 0;
         Timer.delay(unFreeze, Math.floor(duration * 1000));
     }
@@ -26,6 +29,8 @@ class HitStop
     {
         FlxG.timeScale = 1;
         waiting = false;
+        if (thisOnComplete != null)
+            thisOnComplete();
     }
 
 

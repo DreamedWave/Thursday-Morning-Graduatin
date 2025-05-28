@@ -623,7 +623,7 @@ class TitleState extends MusicBeatMenu
 				FlxG.sound.play(Paths.sound('intro_vine'), 0.65);
 				FlxG.log.add('Vine Thud');
 
-			case 'notsafe' | 'somebodyhelp' | 'help' | 'ok':
+			case 'notsafe' | 'somebodyhelp' | 'help' | 'ok' | 'whatuare':
 				FlxG.sound.music.volume = 0;
 
 			case 'inchat':

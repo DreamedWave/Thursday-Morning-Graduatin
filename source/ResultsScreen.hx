@@ -55,12 +55,12 @@ class ResultsScreen extends MusicBeatSubstate
     var songPlayed:String = '';
     var camZoomValues:Array<Float> = [0, 0];
 
-    var blurTweenGoBrr:FlxTween = null;
-    var funnyBlur:Float;
+    //var blurTweenGoBrr:FlxTween = null;
+    //var funnyBlur:Float;
 
 	override function create()
 	{
-        if (blurTweenGoBrr != null)
+       /* if (blurTweenGoBrr != null)
 			blurTweenGoBrr.cancel();
 
         PlayState.instance.camGame.filtersEnabled = true;
@@ -75,7 +75,7 @@ class ResultsScreen extends MusicBeatSubstate
 			{
 				blurTweenGoBrr = null;
 			}
-		});
+		});*/
 
         var guide:FlxSprite = new FlxSprite().loadGraphic(Paths.image('resultsScreen/guide'));
         guide.antialiasing = FlxG.save.data.antialiasing;
