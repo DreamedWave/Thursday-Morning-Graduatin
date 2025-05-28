@@ -6664,23 +6664,33 @@ class PlayState extends MusicBeatState
 							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
 					});
 			default:
-				CoolGameFeelThings.HitStop.doSlowDown(0.15, 0.5, true);
-				FlxG.sound.music.tapeStop(0.08, 0);
-				vocals.tapeStop(0.08, 0);
-				new FlxTimer().start(0.1, function (tmr:FlxTimer)
+				//SMALLSEST TWEAK I MADE BUT IM ACTUALLY SO PROUD AT HOW THIS TURNED OUT HELLO???????
+				CoolGameFeelThings.HitStop.doSlowDown(0.15, 0.5, true, 
+				function waitingFunction()
+				{
+					if (FlxG.sound.music.pitch > 0)
 					{
-						if (songStarted)
-						{
-							vocals.stop();
-							miscs.stop();
-							musicGroup.stop();
-						}
+						FlxG.sound.music.pitch -= 0.01 / FlxG.timeScale;
+						instLowHP.pitch = FlxG.sound.music.pitch;
+						vocals.pitch = FlxG.sound.music.pitch;
+						miscs.pitch = FlxG.sound.music.pitch;
+					}
+				},
+				function finishFunction()
+				{
+					if (songStarted)
+					{
+						vocals.stop();
+						miscs.stop();
+						musicGroup.stop();
+					}
 
-						if (!PlayStateChangeables.Optimize)
-							openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-						else
-							openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
-					});
+					if (!PlayStateChangeables.Optimize)
+						openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+					else
+						openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
+				}
+				);
 		}
 	}
 
