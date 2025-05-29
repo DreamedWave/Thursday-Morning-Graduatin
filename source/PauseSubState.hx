@@ -227,24 +227,24 @@ class PauseSubState extends MusicBeatSubstate
 		}
 
 		antiHoverRect = new FlxSprite(FlxG.width * 0.75, 0).makeGraphic(Std.int(FlxG.width / 2), Std.int(FlxG.height * 4), FlxColor.RED); //new FlxObject(FlxG.width / 2, 0, FlxG.width / 2, FlxG.height * 4);
-		//antiHoverRect.visible = false;
-		antiHoverRect.alpha = 0.3;
+		antiHoverRect.visible = false;
+		//antiHoverRect.alpha = 0.3;
 		antiHoverRect.scrollFactor.set();
 		antiHoverRect.screenCenter(Y);
 		add(antiHoverRect);
 
 		topScrollRect = new FlxSprite(0, -30).makeGraphic(Std.int(FlxG.width * 0.80), Std.int(FlxG.height * 0.20) + 30, FlxColor.GREEN);
-		//topScrollRect.visible = false;
+		topScrollRect.visible = false;
 		//topScrollRect.screenCenter(Y);
-		topScrollRect.alpha = 0.3;
+		//topScrollRect.alpha = 0.3;
 		topScrollRect.scrollFactor.set();
 		topScrollRect.updateHitbox();
 		add(topScrollRect);
 
 		bottomScrollRect = new FlxSprite(0, (FlxG.height * 0.80)).makeGraphic(Std.int(FlxG.width * 0.80), Std.int(FlxG.height * 0.20) , FlxColor.BLUE);
-		//bottomScrollRect.visible = false;
+		bottomScrollRect.visible = false;
 		//bottomScrollRect.screenCenter(Y);
-		bottomScrollRect.alpha = 0.3;
+		//bottomScrollRect.alpha = 0.3;
 		bottomScrollRect.scrollFactor.set();
 		bottomScrollRect.updateHitbox();
 		add(bottomScrollRect);
