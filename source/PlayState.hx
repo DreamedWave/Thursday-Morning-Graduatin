@@ -4268,7 +4268,7 @@ class PlayState extends MusicBeatState
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
 		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
-		//scoreTxt.text = 'timesShot: ' + timesShot + '/' + (timesShot < 5 ? (5 - storyDifficulty) + (mechanicPityDeaths - 2) : 5) + ' | timesClutched: ' + timesClutched + ' | mechanicPity: ' + mechanicPityDeaths;
+		//scoreTxt.text = 'timesShot: ' + timesShot + '/' + ((5 - storyDifficulty) + (mechanicPityDeaths - 2) < 5 ? (5 - storyDifficulty) + (mechanicPityDeaths - 2) : 5) + ' | timesClutched: ' + timesClutched + ' | mechanicPity: ' + mechanicPityDeaths;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -4657,21 +4657,21 @@ class PlayState extends MusicBeatState
 			if (timesShot <= (5 - storyDifficulty) + (mechanicPityDeaths - 2) && timesShot <= 5 && timesClutched <= 5 + mechanicPityDeaths - 2)
 			{
 				//I redid this cuz the previous way was effing convoluted as heck LMFAO
-				if (health > 0.15)
+				if (health > 0.025)
 				{
-					if (timesShot <= 1) //Takes care of values lower than 1
+					if (timesShot <= 1 && health > 0.1) //Takes care of values lower than 1
 						targetHealth = 0.1;
-					else if (timesShot == 2) //Can only reach up to 2 anyway here
-						targetHealth = 0.025;
+					else if (timesShot == 2 && health > 0.05) //Can only reach up to 2 anyway here
+						targetHealth = 0.05;
 					else //We handle this then by subbing for values higher than 2
-						targetHealth -= 0.025;
+						targetHealth = 0.025;
 				}
 				else
 				{
-					if (health >= 0.125)
-						targetHealth -= 0.05;
-					else
+					if (health > 0.025)
 						targetHealth -= 0.025;
+					else
+						targetHealth -= 0.0125;
 				}
 			}
 			else //"""instakill""" if the player fails enough times
@@ -6645,7 +6645,7 @@ class PlayState extends MusicBeatState
 
 						if (FlxG.sound.music.pitch > 0)
 						{
-							FlxG.sound.music.pitch += 0.01 / FlxG.timeScale;
+							FlxG.sound.music.pitch += 0.025 / FlxG.timeScale;
 							instLowHP.pitch = FlxG.sound.music.pitch;
 							//vocals.pitch = FlxG.sound.music.pitch;
 							miscs.pitch = FlxG.sound.music.pitch;
@@ -6693,7 +6693,7 @@ class PlayState extends MusicBeatState
 
 						if (FlxG.sound.music.pitch > 0)
 						{
-							FlxG.sound.music.pitch += 0.02 / FlxG.timeScale;
+							FlxG.sound.music.pitch += 0.05 / FlxG.timeScale;
 							instLowHP.pitch = FlxG.sound.music.pitch;
 							//vocals.pitch = FlxG.sound.music.pitch;
 							miscs.pitch = FlxG.sound.music.pitch;
@@ -6703,7 +6703,7 @@ class PlayState extends MusicBeatState
 					},
 					function finishFunction()
 					{
-						if (doPityDeaths && mechanicPityDeaths < 7)
+						if (doPityDeaths && mechanicPityDeaths < 7 && timesClutched <= 3) //if you clutched more than 3 times, no pity for you >:3
 							mechanicPityDeaths++;
 
 						camGame.stopFX('shake');
