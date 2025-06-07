@@ -91,7 +91,7 @@ class PlayState extends MusicBeatState
 	public var goods:Int = 0;
 	public var sicks:Int = 0;
 
-	var camGameFilters:Array<BitmapFilter> = [];
+	var camFilters:Array<BitmapFilter> = [];
 	//var camHUDFilters:Array<BitmapFilter> = [];
 
 	// Less laggy controls
@@ -215,12 +215,11 @@ class PlayState extends MusicBeatState
 	//ratings
 	var grpRatingsRate:FlxTypedGroup<PlayStateRating.Rating>;
 	var grpRatingsNum:FlxTypedGroup<PlayStateRating.Num>;
-	//var grayScaler:shaders.GrayScale;
 
 	public var strumLineNotes:FlxTypedGroup<FlxSprite> = null;
 	public var playerStrums:FlxTypedGroup<FlxSprite> = null;
 	public var cpuStrums:FlxTypedGroup<FlxSprite> = null;
-	var grpStrumLine:FlxSpriteGroup = null;
+	var grpStrumlineBG:FlxSpriteGroup = null;
 	var strumLineBGTween:FlxTween;
 	var doStrumLineBGTweening:Bool = false;
 	public var grpNoteSplashes:FlxTypedGroup<NoteSplash>;
@@ -568,15 +567,13 @@ class PlayState extends MusicBeatState
 
 		FlxCamera.defaultCameras = [camGame];
 
-		//camGame.filters = camGameFilters;
-		//camGameFilters.push(pauseBlurLol);
-		//camGame.filtersEnabled = false;
+		camGame.filters = camFilters;
+		//camHUD.filters = camFilters;
+		camFilters.push(new ShaderFilter(new shaders.GrayScale())); //just transfer this to function literallyFuckingDie if you wanna add more shaders
+		//camFilters.push(pauseBlurLol);
+		camGame.filtersEnabled = false;
+		//camHUD.filtersEnabled = false;
 
-		//Preloading of music stuff becuz uhhh yes
-		//Paths.inst(key);
-		//if (PlayState.SONG.needsVoices)
-			//Paths.voices(key);
-		
 		//NoteHitSFX
 		if (FlxG.save.data.notesfx)
 		{
@@ -1144,7 +1141,7 @@ class PlayState extends MusicBeatState
 					add(cityStreets);
 
 					//gotShotBlurLol = new BlurFilter(0, 0, 2);
-					//camGameFilters.push(gotShotBlurLol);
+					//camFilters.push(gotShotBlurLol);
 				case 'house':
 					//do nada
 				default:
@@ -1351,9 +1348,9 @@ class PlayState extends MusicBeatState
 
 		laggerGrp = new FlxSpriteGroup();
 
-		grpStrumLine = new FlxSpriteGroup();
-		grpStrumLine.alpha = 0.4;
-		add(grpStrumLine);
+		grpStrumlineBG = new FlxSpriteGroup();
+		grpStrumlineBG.alpha = 0.4;
+		add(grpStrumlineBG);
 
 		//ratings
 		grpRatingsRate = new FlxTypedGroup<PlayStateRating.Rating>();
@@ -1447,18 +1444,10 @@ class PlayState extends MusicBeatState
 		subtitleBackground.cameras = [camHUD];
 		subtitleBackground.alpha = 0;
 
-		// Add Kade Engine watermark
-		/*songNameTXT = new FlxText(4, 0, 0,
-			SONG.song
-			+ " - "
-			+ CoolUtil.difficultyFromInt(storyDifficulty), 16);
-		songNameTXT.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
-		songNameTXT.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 1.3);
-		songNameTXT.y = (!PlayStateChangeables.useDownscroll ? FlxG.height - songNameTXT.height - 4 : songNameTXT.height - 10);
-		add(songNameTXT);*/
-
 		//Song-dependent tutorial cards
-		//also health icon trails
+		//also health icon 
+		//hOLY sphagetti code
+		//its ok im in my toby fox era
 		switch (songLowercase)
 		{
 			case 'mic-test':
@@ -1618,11 +1607,23 @@ class PlayState extends MusicBeatState
 					toggledPracticeMode = true;
 		}
 
+		//layering
+		//deez nuts
+		//your mom
+		//- cal and meo probably
+		if (FlxG.save.data.subtitles)
+		{
+			add(subtitleBackground);
+			add(subtitleText);
+		}
+
+		//Temp asset maybe unless i get too lazy lmfao
 		resetText = new FlxText(0, 0, 0, "[Double tap [R] to Reset]", 40);
-		resetText.setFormat(Paths.font("vcr.ttf"), 45, 0xFFFF0000, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		resetText.setFormat(Paths.font("vcr.ttf"), 50, 0xFFFF0000, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		resetText.scrollFactor.set();
 		resetText.borderSize = 4;
 		resetText.antialiasing = false;
+		resetText.scale.x = 0.8; //idk cuz i think it might look cool maybe - you won't be seeing this if not otherwise
 		resetText.screenCenter();
 		resetText.cameras = [camHUD];
 		resetText.updateHitbox();
@@ -1645,8 +1646,6 @@ class PlayState extends MusicBeatState
 		//else
 		loadingIcon.alpha = 0;
 		add(loadingIcon);
-
-		//grayScaler = new shaders.GrayScale();
 
 		if (FlxG.save.data.lagCompensation)
 		{
@@ -1672,7 +1671,7 @@ class PlayState extends MusicBeatState
 		hurtVignette.cameras = [camHUD];
 		lowHPOverlay.cameras = [camHUD];
 		safeVignette.cameras = [camHUD];
-		grpStrumLine.cameras = [camHUD];
+		grpStrumlineBG.cameras = [camHUD];
 		grpRatingsRate.cameras = [camHUD];
 		grpRatingsNum.cameras = [camHUD];
 		tutorialText.cameras = [camHUD];
@@ -1737,7 +1736,7 @@ class PlayState extends MusicBeatState
 
 		super.create();
 
-		timesShot = -mechanicPityDeaths;
+		//timesShot = -mechanicPityDeaths;
 
 		generateSong();
 
@@ -1889,12 +1888,7 @@ class PlayState extends MusicBeatState
 		}
 
 		if (FlxG.save.data.subtitles)
-		{
-			add(subtitleBackground);
-			add(subtitleText);
-
 			startVideoSubtitles(videoPathArray[videoArrayProgress]);
-		}
 	}
 
 	function set_camFollowSpeed(val:Float):Float
@@ -2205,10 +2199,7 @@ class PlayState extends MusicBeatState
 
 			allowDeaths = true;
 
-			#if windows
-			// Updating Discord Rich Presence
-			DiscordClient.changePresence("Get Ready-!", null);
-			#end
+			updateDiscordPresence('starting');
 
 			botPlayText.visible = true;
 
@@ -2774,20 +2765,7 @@ class PlayState extends MusicBeatState
 				strumLine.y -= 15;
 		}
 
-		/*if (useVideo)
-			GlobalVideo.get().resume();*/
-
-		#if windows
-		if (FlxG.save.data.showPresence)
-		{
-			// Updating Discord Rich Presence (with Time Left)
-			DiscordClient.changePresence(detailsText
-				+ SONG.song + " (" + storyDifficultyText + ")",
-				"Score:" + (songScore + campaignScore)
-				+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-				+ ", Clear:" + Math.floor(clearPercentage) + "%");
-		}
-		#end
+		updateDiscordPresence();
 
 		if (startTime > 0)
 		{
@@ -3101,7 +3079,7 @@ class PlayState extends MusicBeatState
 					if (PlayStateChangeables.useDownscroll)
 						strumlineBG.flipY = true;
 
-					grpStrumLine.add(strumlineBG);
+					grpStrumlineBG.add(strumlineBG);
 				}
 				playerStrums.add(babyArrow);
 				generatedArrows = true;
@@ -3173,7 +3151,7 @@ class PlayState extends MusicBeatState
 
 		if (FlxG.save.data.strumline)
 		{
-			grpStrumLine.forEach(function(strumlineBG:FlxSprite)
+			grpStrumlineBG.forEach(function(strumlineBG:FlxSprite)
 			{
 				strumlineBG.acceleration.y = 1100;
 				strumlineBG.velocity.y -= FlxG.random.int(20, 75);
@@ -3214,27 +3192,10 @@ class PlayState extends MusicBeatState
 								stageSound.pause();
 				}
 
-				#if windows
-				if (FlxG.save.data.showPresence)
-				{
-					DiscordClient.changePresence("[PAUSED] "
-						+ SONG.song + " (" + storyDifficultyText + ")",
-						"Score:" + (songScore + campaignScore)
-						+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-						+ ", Clear:" + Math.floor(clearPercentage) + "%");
-				}
-				#end
+				updateDiscordPresence('paused');
 			}
 			else if (paused && died)
-			{
-				#if windows
-				// Game Over doesn't get his own variable because it's only used here
-				if (FlxG.save.data.showPresence)
-				{
-					DiscordClient.changePresence("[GAME OVER] " + SONG.song + " (" + storyDifficultyText + ")", "Score: " + songScore + campaignScore, "apppresence-dark");
-				}
-				#end
-			}
+				updateDiscordPresence('game-over');
 		}
 
 		super.openSubState(SubState);
@@ -3268,20 +3229,7 @@ class PlayState extends MusicBeatState
 				}
 		
 				paused = false;
-		
-				#if windows
-				if (FlxG.save.data.showPresence)
-				{
-					if (startTimer != null && startTimer.finished && !paused)
-					{
-						DiscordClient.changePresence(detailsText
-							+ SONG.song + " (" + storyDifficultyText + ")",
-							"Score:" + (songScore + campaignScore)
-							+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-							+ ", Clear:" + Math.floor(clearPercentage) + "%");
-					}
-				}
-				#end
+				updateDiscordPresence();
 			}
 		}
 		
@@ -3711,10 +3659,7 @@ class PlayState extends MusicBeatState
 							//Natural Deaths
 							literallyFuckingDie();
 							if (doPityDeaths)
-							{
 								normalPityDeaths++;
-								mechanicPityDeaths++;
-							}
 						}
 					}
 				}
@@ -3747,7 +3692,7 @@ class PlayState extends MusicBeatState
 							healthBar.alpha = 0.8;
 							iconP1.color = 0xFFBEBEBE;
 							if (FlxG.save.data.strumline)
-								grpStrumLine.blend = MULTIPLY;
+								grpStrumlineBG.blend = MULTIPLY;
 						}
 					}
 				}
@@ -3967,7 +3912,7 @@ class PlayState extends MusicBeatState
 							//Note clipping Function that took me too goddamn long to figure out
 							if ((daNote.mustPress && ((daNote.parent.wasGoodHit && holdArray[daNote.noteData] && daNote.sustainActive) || PlayStateChangeables.botPlay)) || (!daNote.mustPress && !daNote.forceMiss))
 							{
-								tobyFoxAssMethod = 0;
+								tobyFoxAssMethod[daNote.noteData] = 0;
 								// Clip to strumline
 								if (daNote.y + daNote.offset.y * daNote.scale.y <= center)
 								{
@@ -4020,7 +3965,7 @@ class PlayState extends MusicBeatState
 						//horrible way(?) but it works i guess
 						//no actually it works wonders i will give myself a kiss and a pat
 						//for mashing check
-						if ((daNote.overlaps(grpStrumLine) && FlxG.save.data.ghost || daNote.overlaps(playerStrums) && !FlxG.save.data.ghost) && !daNote.isSustainNote)
+						if ((daNote.overlaps(grpStrumlineBG) && FlxG.save.data.ghost || daNote.overlaps(playerStrums) && !FlxG.save.data.ghost) && !daNote.isSustainNote)
 						{
 							nearestNoteUpcoming = true;
 							nearestNoteDecayBeat = 4;
@@ -4323,6 +4268,7 @@ class PlayState extends MusicBeatState
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
 		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
+		//scoreTxt.text = 'timesShot: ' + timesShot + '/' + (timesShot < 5 ? (5 - storyDifficulty) + (mechanicPityDeaths - 2) : 5) + ' | timesClutched: ' + timesClutched + ' | mechanicPity: ' + mechanicPityDeaths;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -4404,7 +4350,7 @@ class PlayState extends MusicBeatState
 				if (!PlayStateChangeables.Optimize)
 				{
 					dummyBlackScreen.alpha = 1;
-					grpStrumLine.visible = false;
+					grpStrumlineBG.visible = false;
 					playerStrums.forEach(function(playurShite:FlxSprite)
 					{
 						playurShite.visible = false;
@@ -4449,7 +4395,7 @@ class PlayState extends MusicBeatState
 					if (!PlayStateChangeables.Optimize)
 					{
 						dummyBlackScreen.alpha = 0;
-						grpStrumLine.visible = true;
+						grpStrumlineBG.visible = true;
 						playerStrums.forEach(function(playurShite:FlxSprite)
 						{
 							playurShite.visible = true;
@@ -4521,7 +4467,7 @@ class PlayState extends MusicBeatState
 							}
 						}
 						else if (!allowHealthModifiers)
-							compensateNotesBefore(Conductor.songPosition + 25);
+							compensateNotesBefore(Conductor.songPosition + Conductor.bpm);
 					}
 
 					if (compensatedViaLagSpike)
@@ -4629,6 +4575,7 @@ class PlayState extends MusicBeatState
 	var vignetteChecker:Int = 0;
 	//var gotShotBlurVal:Float = 0;
 	var iconTrailTimer:FlxTimer;
+	var cancelCauseOfDeathTmr:FlxTimer;
 	//Turned them into functions for consistency's sake :3
 	function getFuckingShot(purelyVisual:Bool = false):Void
 	{
@@ -4640,7 +4587,11 @@ class PlayState extends MusicBeatState
 		coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
 			{
 				ease: FlxEase.smootherStepInOut,
-				startDelay: Conductor.crochet * (timesShot < 5 ? timesShot : 4) / 1000,
+				startDelay: (Conductor.stepCrochet * timesShot) / 10000,
+				/*onUpdate: function(twn:FlxTween)
+				{
+					trace('cool sound filter gain HF: ' + coolSoundFilter.gainHF);
+				},*/
 				onComplete: function(twn:FlxTween) 
 				{
 					coolSoundFilterTween = null;
@@ -4682,8 +4633,6 @@ class PlayState extends MusicBeatState
 			}
 			hurtVignette.alpha = 1;
 
-			CoolGameFeelThings.HitStop.doHitStop(0.03334);
-
 			//camGame.filtersEnabled = true;
 			//gotShotBlurLol.blurX = 2;
 			//gotShotBlurLol.blurY = 2;
@@ -4691,29 +4640,10 @@ class PlayState extends MusicBeatState
 			if (hurtDelay < 8)
 				hurtDelay += 2;
 
-			//if (gotShotBlurTwn != null)
-				//gotShotBlurTwn.cancel();
-			/*gotShotBlurTwn = FlxTween.tween(this, {gotShotBlurVal: 0}, Conductor.crochet * 8 / 1000,
-			{
-				ease: FlxEase.cubeOut,
-				onUpdate: function(twn:FlxTween) 
-				{
-					gotShotBlurLol.blurX = gotShotBlurVal;
-					gotShotBlurLol.blurY = gotShotBlurVal;
-				},
-				
-				onComplete: function(twn:FlxTween) 
-				{
-					if (!paused)
-						camGame.filtersEnabled = false;
-					if (causeOfDeath == 'ate-bullet')
-						causeOfDeath = '';
-					gotShotBlurTwn = null;
-				}
-			});*/
-
 			causeOfDeath = 'ate-bullet';
-			new FlxTimer().start(Conductor.crochet * 8 / 1000, function(tmr:FlxTimer)
+			if (cancelCauseOfDeathTmr != null && cancelCauseOfDeathTmr.active)
+				cancelCauseOfDeathTmr.cancel();
+			cancelCauseOfDeathTmr = new FlxTimer().start(Conductor.crochet * 4 / 1000, function(tmr:FlxTimer)
 			{
 				if (causeOfDeath == 'ate-bullet')
 					causeOfDeath = '';
@@ -4724,7 +4654,7 @@ class PlayState extends MusicBeatState
 			
 			//la health drain for failed specil	
 			//Minushealth - not instakill
-			if (timesShot <= 3 - storyDifficulty && timesClutched <= 5 + mechanicPityDeaths - 2)
+			if (timesShot <= (5 - storyDifficulty) + (mechanicPityDeaths - 2) && timesShot <= 5 && timesClutched <= 5 + mechanicPityDeaths - 2)
 			{
 				//I redid this cuz the previous way was effing convoluted as heck LMFAO
 				if (health > 0.15)
@@ -4744,17 +4674,22 @@ class PlayState extends MusicBeatState
 						targetHealth -= 0.025;
 				}
 			}
-			else //instakill if the player fails enough times
+			else //"""instakill""" if the player fails enough times
 			{
+				//clutchable """instakill"""
 				if (timesClutched < 5 + mechanicPityDeaths - 2 && timesClutched < 10) //Caps clutching to 10 so that it dont go up infinitely LMAO
 				{
+					CoolGameFeelThings.HitStop.doHitStop(0.03334);
+					
 					timesShot = 0;
 					timesClutched++;
 					//trace("clutched " + timesClutched + ' death/s');
 
-					targetHealth = 0;
-					health = FlxMath.lerp(health, 0, 0.6); //sets yo hp near to 0
-					//IDEA! MAKE IT DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
+					targetHealth = 0; //sets health to 0
+					//sets your visual health to half of what it is before it reaches 0 - giving you time to clutch
+					//the more you clutch, the harder it will be to do so
+					health = FlxMath.lerp(0, health, 0.75 - (timesClutched * 0.025) );
+					//IDEA! MAKE A SOUND DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
 					//LIKE Paths.sound('damageAlert_' + timesClutched)!! !!!
 					//d0ne HEHEHEHEHEHEH!!
 					FlxG.sound.play(Paths.sound('damageAlert_' + (timesClutched < 5 ? timesClutched : 5)), 0.65 + 0.05 * timesClutched, false);
@@ -4777,12 +4712,12 @@ class PlayState extends MusicBeatState
 						}
 					}
 				}
-				else if (!cannotDie)
+				else if (!cannotDie) //dawn no this one is literally an instakill, it's unsalvagable
 				{
 					causeOfDeath = 'ate-many-bullets';
 					FlxG.sound.play(Paths.sound('damageAlert_fail'), 0.7, false);
-					targetHealth = -100;
-					health = -100;
+					targetHealth = -999;
+					health = -999;
 				}
 			}
 		}
@@ -4832,11 +4767,13 @@ class PlayState extends MusicBeatState
 
 		if (Ratings.GenerateLetterRank(accuracy) == 'RETRY' && !cannotDie && !PauseSubState.skippedSong)
 		{
+			//kill if the results were ass
 			doCamFollowing = false;
 			if(doPityDeaths)
 			{
 				normalPityDeaths++;
-				mechanicPityDeaths++;
+				if (mechanicPityDeaths < 7)
+					mechanicPityDeaths++;
 			}
 			literallyFuckingDie();
 			return;
@@ -5253,9 +5190,17 @@ class PlayState extends MusicBeatState
 					if (combo <= 0)
 						return;
 					
+					//previous Num deletion in sus notes
 					for (prevNum in grpRatingsNum)
+					{
 						if (prevNum.alive)
-							prevNum.getRidOf();
+						{	
+							if (combo < 100)
+								prevNum.getRidOf();
+							else
+								prevNum.coolGetRidOf(combo);
+						}
+					}
 
 					var separatedScore:Array<Int> = [];
 					var daLoop2:Int = 0;
@@ -5380,10 +5325,17 @@ class PlayState extends MusicBeatState
 		
 				if (!PlayStateChangeables.botPlay)
 				{
-					//trace('huh????');
+					//previous Rate deletion
 					for (prevRating in grpRatingsRate)
+					{
 						if (prevRating.alive)
-							prevRating.getRidOf();
+						{	
+							if (combo < 100)
+								prevRating.getRidOf();
+							else
+								prevRating.coolGetRidOf(combo);
+						}
+					}
 					
 					var rating:PlayStateRating.Rating = grpRatingsRate.recycle(PlayStateRating.Rating);
 					var ratingStartDelay:Float = Conductor.crochet * 0.0005;
@@ -5418,10 +5370,20 @@ class PlayState extends MusicBeatState
 		
 					if (showNumShit)
 					{
+						//previous Num deletion
 						if (daRating != 'bad' && daRating != 'shit' && daRating != 'miss')
+						{
 							for (prevNum in grpRatingsNum)
+							{
 								if (prevNum.alive)
-									prevNum.getRidOf();
+								{	
+									if (combo < 100)
+										prevNum.getRidOf();
+									else
+										prevNum.coolGetRidOf(combo);
+								}
+							}
+						}
 						
 						var separatedScore:Array<Int> = [];
 						var daLoop:Int = 0;
@@ -5560,7 +5522,7 @@ class PlayState extends MusicBeatState
 		return Math.abs(FlxMath.roundDecimal(value1, 1) - FlxMath.roundDecimal(value2, 1)) < unimportantDifference;
 	}
 
-	var strumArrSusCheckArray:Array<Bool> = [false, false, false, false];
+	var strumArrSusCheckArray:Array<Bool> = [false, false, false, false]; //ohmygod holdArray probably already handles this but fukkit
 	private function keyShit():Void // I've invested in emma stocks
 	{
 		// control arrays, order L D R U
@@ -5729,13 +5691,13 @@ class PlayState extends MusicBeatState
 			}
 			else if (!keys[spr.ID])
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || (spr.animation.curAnim.curFrame >= 6 && !strumArrSusCheckArray[spr.ID])) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.curFrame > 2))
+				if ((spr.animation.curAnim.name != 'confirm' || (spr.animation.curAnim.curFrame >= 6 && !strumArrSusCheckArray[spr.ID]) || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.curFrame > 2))
 				{
 					spr.animation.play('static');
 					preventBFIdleAnim = false;
 					strumArrSusCheckArray[spr.ID] = false;
 				}
-				else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame > 3 && strumArrSusCheckArray[spr.ID])
+				else if (spr.animation.curAnim.name == 'confirm' && spr.animation.curAnim.curFrame <= 3 && strumArrSusCheckArray[spr.ID])
 				{
 					spr.animation.play('pressed');
 					strumArrSusCheckArray[spr.ID] = false;
@@ -5765,16 +5727,7 @@ class PlayState extends MusicBeatState
 						lagCompTimer.cancel();
 					allowLagComp = false;
 
-					#if windows
-					if (FlxG.save.data.showPresence)
-					{
-						DiscordClient.changePresence("[AUTO-PAUSED] "
-						+ SONG.song + " (" + storyDifficultyText + ")",
-						"Score:" + (songScore + campaignScore)
-						+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-						+ ", Clear:" + Math.floor(clearPercentage) + "%");
-					}
-					#end
+					updateDiscordPresence('focus-out');
 
 				//FocusIn
 				default:
@@ -5783,25 +5736,18 @@ class PlayState extends MusicBeatState
 						allowLagComp = true;
 					});
 
-					#if windows
-					if (FlxG.save.data.showPresence)
-					{
-						DiscordClient.changePresence(detailsText
-							+ SONG.song + " (" + storyDifficultyText + ")",
-							"Score:" + (songScore + campaignScore)
-							+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-							+ ", Clear:" + Math.floor(clearPercentage) + "%");
-					}
-					#end
+					updateDiscordPresence();
 			}
 		}
 	}
 
-	var tobyFoxAssMethod:Int; //IDFK!!! MAKE THINGS!!!!! IDC ANYMORE IM FREE NOW!!!!
+	//IDFK!!! MAKE THINGS!!!!! IDC ANYMORE IM FREE NOW!!!!
+	//Ok the first method suck but to give me the benifit of the doubt, it was an easy fix :3
+	var tobyFoxAssMethod:Array<Int> = [0, 0, 0, 0];
 	
 	function sustainNoteMiss(daNote:Note):Void
 	{
-		if (tobyFoxAssMethod < 1)
+		if (tobyFoxAssMethod[daNote.noteData] < 1)
 		{
 			trace('didMissLol');
 			misses++;
@@ -5824,7 +5770,7 @@ class PlayState extends MusicBeatState
 			});
 		}
 
-		tobyFoxAssMethod++; //THIS CODE IS ASS BUT IDC!!!! I JUST WANNA FINISH THIS!!! RAHHHH :3 :3
+		tobyFoxAssMethod[daNote.noteData]++; //THIS CODE IS ASS BUT IDC!!!! I JUST WANNA FINISH THIS!!! RAHHHH :3 :3
 	}
 
 	function noteMiss(direction:Int = 1, daNote:Note):Void
@@ -6349,7 +6295,8 @@ class PlayState extends MusicBeatState
 		//double-count prevention
 		if (!note.wasGoodHit)
 		{
-			if (accuracy > 50 || causeOfDeath != 'note-spam')
+			//set to skill issue
+			if (accuracy > 50 && causeOfDeath != 'note-spam' && causeOfDeath != 'ate-bullet' && causeOfDeath != 'ate-many-bullets')
 				causeOfDeath = '';
 
 			// Accessing the animation name directly to play it
@@ -6444,7 +6391,7 @@ class PlayState extends MusicBeatState
 					}
 				case 'trigger':
 					dodgeFuckingShot(note.noteData);
-					if (timesShot > 0 && note.rating == 'sick')
+					if (timesShot > storyDifficulty && note.rating == 'sick')
 						timesShot--;
 					targetHealth += calculateHealth(12, targetHealth, accuracy);
 				default:
@@ -6607,11 +6554,35 @@ class PlayState extends MusicBeatState
 	var resetButtonTimer:FlxTimer;
 	var resetText:FlxText;
 	var resetTextTwn:FlxTween;
+	var didDeathShake:Bool = false;
 
 	function literallyFuckingDie():Void
 	{
+		if (causeOfDeath != 'intentional-reset')
+		{
+			camGame.filtersEnabled = true;
+			grpStrumlineBG.visible = false;
+			songPosGroup.visible = false;
+			cpuStrums.forEach(function(spr:FlxSprite)
+			{
+				spr.x -= 720; //awful awful fix but yeah - as they say, out of sight, out of mind 
+			});
+		}
+
+		if (coolSoundFilterTween != null)
+			coolSoundFilterTween.cancel();
+
 		FlxG.sound.music.onComplete = function stopEndSong(){trace('stoppedSongFromBeingFinished');};
 		vocals.volume = 0;
+
+		//placeholder animation
+		switch(causeOfDeath)
+		{
+			case 'ate-bullet' | 'ate-many-bullets':
+				//nada for now
+			default:
+				boyfriend.playAnim('awkward', true);
+		}
 
 		if (resetTextTwn != null)
 			resetTextTwn.cancel();
@@ -6661,16 +6632,41 @@ class PlayState extends MusicBeatState
 					openSubState(new GameOverSubstate(FlxG.width / 2 - 100, FlxG.height / 3));
 
 			case 'ate-bullet':
-				camGame.alpha = 0.8;
-				CoolGameFeelThings.HitStop.doHitStop(0.25,
+				//be careful abt putting things above here cuz it acts like a waiting function for some unknowable goddamn reason
+				CoolGameFeelThings.HitStop.doSlowDown(0.225, 0.5, true, 
+					function waitingFunction()
+					{
+						if (!didDeathShake)
+						{
+							didDeathShake = true;
+							camShake(true, false, 'camGame', 0.004, 1);
+							camShake(true, false, 'camHUD', 0.008, 1);
+						}
+
+						if (FlxG.sound.music.pitch > 0)
+						{
+							FlxG.sound.music.pitch += 0.01 / FlxG.timeScale;
+							instLowHP.pitch = FlxG.sound.music.pitch;
+							//vocals.pitch = FlxG.sound.music.pitch;
+							miscs.pitch = FlxG.sound.music.pitch;
+							if (coolSoundFilter.gainHF > 0.1)
+								coolSoundFilter.gainHF -= FlxMath.roundDecimal(0.01 / FlxG.timeScale, 2);
+						}
+					},
 					function finishFunction()
 					{
+						if (doPityDeaths && mechanicPityDeaths < 7)
+							mechanicPityDeaths++;
+
 						if (songStarted)
 						{
 							vocals.stop();
 							miscs.stop();
 							musicGroup.stop();
 						}
+
+						camGame.stopFX('shake');
+						camHUD.stopFX('shake');
 
 						if (!PlayStateChangeables.Optimize)
 						{
@@ -6681,10 +6677,38 @@ class PlayState extends MusicBeatState
 					}
 				);
 			case 'ate-many-bullets':
-				camGame.alpha = 0.8;
-				CoolGameFeelThings.HitStop.doHitStop(0.35,
+				//be careful abt putting things above here cuz it acts like a waiting function for some unknowable goddamn reason
+				//this crashes - we should replace this with slowdown instead
+				//ok i figured out why it was crashing but im gonna test to see if this looks cooler or not
+				//if you see this then that means it was cool enough to keep lol
+				CoolGameFeelThings.HitStop.doSlowDown(0.35, 0.5, true, 
+					function waitingFunction()
+					{
+						if (!didDeathShake)
+						{
+							didDeathShake = true;
+							camShake(true, false, 'camGame', 0.008, 1);
+							camShake(true, false, 'camHUD', 0.016, 1);
+						}
+
+						if (FlxG.sound.music.pitch > 0)
+						{
+							FlxG.sound.music.pitch += 0.02 / FlxG.timeScale;
+							instLowHP.pitch = FlxG.sound.music.pitch;
+							//vocals.pitch = FlxG.sound.music.pitch;
+							miscs.pitch = FlxG.sound.music.pitch;
+							if (coolSoundFilter.gainHF > 0.1)
+								coolSoundFilter.gainHF -= FlxMath.roundDecimal(0.01 / FlxG.timeScale, 2);
+						}
+					},
 					function finishFunction()
 					{
+						if (doPityDeaths && mechanicPityDeaths < 7)
+							mechanicPityDeaths++;
+
+						camGame.stopFX('shake');
+						camHUD.stopFX('shake');
+
 						if (songStarted)
 						{
 							vocals.stop();
@@ -6700,6 +6724,7 @@ class PlayState extends MusicBeatState
 				);
 			default:
 				//SMALLSEST TWEAK I MADE BUT IM ACTUALLY SO PROUD AT HOW THIS TURNED OUT HELLO???????
+				//for those confused, i added this before the other slowdowns above so this was the gateway drug to the cool gameover effects above 
 				CoolGameFeelThings.HitStop.doSlowDown(0.15, 0.5, true, 
 					function waitingFunction()
 					{
@@ -6810,7 +6835,7 @@ class PlayState extends MusicBeatState
 
 		//nudging the player to win to avoid frustration
 		if (healthBar.percent < 50 && normalPityDeaths - storyDifficulty > 0 && targetHealth > 0)
-			targetHealth += (normalPityDeaths * 0.00025);
+			targetHealth += (normalPityDeaths * 0.00005);
 
 		if (hurtDelay > 0)
 			hurtDelay--;
@@ -6824,7 +6849,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = false;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.6}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: FlxEase.smootherStepOut, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0.6}, (Conductor.stepCrochet / 1000), {type: ONESHOT, ease: FlxEase.smootherStepOut, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -6839,7 +6864,7 @@ class PlayState extends MusicBeatState
 					strumTweenToggle = true;
 					if (strumLineBGTween != null)
 						strumLineBGTween.cancel();
-					strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
+					strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0.4}, Conductor.crochet * 2 / 1000, {type: ONESHOT, ease: FlxEase.quadOut, startDelay: Conductor.crochet * 2 / 1000, onComplete:
 						function (twn:FlxTween)
 						{
 							strumLineBGTween = null;
@@ -6951,22 +6976,6 @@ class PlayState extends MusicBeatState
 			}
 			
 			//camFollowShit();
-
-			// yes this updates every ~~step~~ beat.
-			// yes this is bad (but less bad compared to updating every step)
-			// but i'm doing it to update misses and accuracy (bro it's discord, nobody would mind)
-			//I have learned why it needs to be every step, I have reverted this change.
-			#if windows
-			// Updating Discord Rich Presence (with Time Left)
-			if (FlxG.save.data.showPresence && !paused && !showedResults && !endedSong)
-			{
-				DiscordClient.changePresence(detailsText
-					+ SONG.song + " (" + storyDifficultyText + ")",
-					"Score:" + (songScore + campaignScore)
-					+ ", RIPs:" + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
-					+ ", Clear:" + Math.floor(clearPercentage) + "%");
-			}
-			#end
 		}
 		//camFollowShit();
 		//DC.endProfile("stepShit");
@@ -8370,6 +8379,10 @@ class PlayState extends MusicBeatState
 
 	public function compensateNotesBefore(time:Float)
 	{
+		trace ('compensatedNotesBefore: ' + time);
+
+		allowHealthModifiers = true;
+
 		var i:Int = unspawnNotes.length - 1;
 		while (i >= 0) 
 		{
@@ -8518,6 +8531,63 @@ class PlayState extends MusicBeatState
 	}
 	//end of psych engine codes
 
+	//put it in a handy dandy (DANDy'S WORLD?!?! AYOO?????) function for ease of use
+	private function updateDiscordPresence(?type:String = ''):Void
+	{
+		#if windows
+		switch (type)
+		{
+			case 'starting':
+				// Updating Discord Rich Presence
+				DiscordClient.changePresence("Get Ready-!", null);
+
+			case 'paused':
+				if (FlxG.save.data.showPresence)
+				{
+					DiscordClient.changePresence("[PAUSED] "
+						+ SONG.song + " (" + storyDifficultyText + ")",
+						"Score: " + (songScore + campaignScore)
+						+ ", RIPs: " + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+						+ ", Clear: " + Math.floor(clearPercentage) + "%");
+				}
+
+			case 'focus-out':
+				if (FlxG.save.data.showPresence)
+				{
+					DiscordClient.changePresence("[AUTO-PAUSED] "
+					+ SONG.song + " (" + storyDifficultyText + ")",
+					"Score: " + (songScore + campaignScore)
+					+ ", RIPs: " + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+					+ ", Clear: " + Math.floor(clearPercentage) + "%");
+				}
+
+			case 'game-over':
+				// Game Over doesn't get his own variable because it's only used here
+				if (FlxG.save.data.showPresence)
+				{
+					DiscordClient.changePresence("[GAME OVER] " + SONG.song + " (" + storyDifficultyText + ")", "Score: " + songScore + campaignScore, "apppresence-dark");
+				}
+
+			default:
+				// yes this updates every ~~step~~ beat.
+				// yes this is bad (but less bad compared to updating every step)
+				// but i'm doing it to update misses and accuracy (bro it's discord, nobody would mind)
+				// I have learned why it needs to be every step, I have reverted this change.
+				// HAHA NVM FUCK YOU!!!!!! I MADE IT SO THAT IT UPDATES EVERY 2 BEATS INSTEAD MUAHAHAHHAHA (i may regret this)
+				if (FlxG.save.data.showPresence && !paused && !showedResults && !endedSong)
+				{
+					DiscordClient.changePresence(detailsText
+						+ SONG.song + " (" + storyDifficultyText + ")",
+						"Score: " + (songScore + campaignScore)
+						+ ", RIPs: " + (misses + campaignMisses + slips + campaignSlips + bads + campaignBads) + " (" + Ratings.GenerateLetterRank(accuracy, keeledOver) + ")"
+						+ ", Clear: " + Math.floor(clearPercentage) + "%");
+				}
+		}
+		#else
+		trace("you;re are arent't on wdnindows lmol");
+		#end
+	}
+
 	private function altCamZoom(time:Float = 0, twnType:String = 'smoothStep')
 	{
 		if (time == 0)
@@ -8582,18 +8652,12 @@ class PlayState extends MusicBeatState
 	{
 		super.beatHit();
 
-		/*if (curBeat == dummyBeats + 1)
-			dummyBeats = curBeat;
-		else if (curBeat > dummyBeats && curBeat != 0 && curBeat != 1)
-		{
-			trace ('whoop- gotta catch up!');
-			catchUpBeats(Conductor.songPosition, dummyBeats);
-			dummyBeats = curBeat;
-		}*/
-
 		//DC.beginProfile("beatShit");
 		if (generatedSong && !loadingNextSong)
 		{	
+			if (curBeat % 2 == 4)
+				updateDiscordPresence();
+
 			if (nearestNoteDecayBeat > 0)
 				nearestNoteDecayBeat--;
 	
@@ -8902,7 +8966,7 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
-											grpStrumLine.alpha = 0;
+											grpStrumlineBG.alpha = 0;
 										}
 										playerStrums.forEach(function(strumNote:FlxSprite)
 										{
@@ -8932,7 +8996,7 @@ class PlayState extends MusicBeatState
 									case 260:
 										if (FlxG.save.data.strumline)
 										{
-											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut,
+											strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut,
 											onComplete: function (twn:FlxTween)
 											{
 												strumLineBGTween = null;
@@ -9003,7 +9067,7 @@ class PlayState extends MusicBeatState
 									case 190:
 										//VINE BOOM
 										strumLineNotes.visible = false;
-										grpStrumLine.visible = false;
+										grpStrumlineBG.visible = false;
 										iconP2.changeIcon('priest-annoyed');
 										dad.playAnim('gotPissed', true);
 										boyfriend.playAnim('awkward', true);
@@ -9020,7 +9084,7 @@ class PlayState extends MusicBeatState
 										swapDadForNewChar(dadSwaperoo, 100, 315);
 									case 192:
 										strumLineNotes.visible = true;
-										grpStrumLine.visible = true;
+										grpStrumlineBG.visible = true;
 										defaultCamZoom = 0.8;
 										camZooming = true;
 										midsongCutscene = false;
@@ -9033,7 +9097,7 @@ class PlayState extends MusicBeatState
 									case 256:
 										allowHeartBeatSounds = false;
 										if (isStoryMode)
-											camHUD.alpha = 0;
+											camHUD.visible = false;
 										camZooming = false;
 										if (FlxG.save.data.camzoom)
 										{
@@ -9399,7 +9463,7 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
-											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
+											strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0}, Conductor.crochet * 4 / 1000, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
 										}
 										camFollowSpeed = 0.875;
 									case 174:
@@ -9427,7 +9491,7 @@ class PlayState extends MusicBeatState
 										});
 										if (FlxG.save.data.strumline)
 										{
-											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete: 
+											strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete: 
 												function(twn:FlxTween)
 												{
 													strumLineBGTween = null;
@@ -9472,7 +9536,7 @@ class PlayState extends MusicBeatState
 										if (FlxG.save.data.strumline)
 										{
 											doStrumLineBGTweening = false;
-											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
+											strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0}, 0.2, {type: ONESHOT, ease: FlxEase.quadIn, onComplete: function(twn:FlxTween){strumLineBGTween = null;}});
 										}
 										dad.playAnim('gunSHOCKED', true);
 										gf.playAnim('singDOWN-alt', true);
@@ -9510,7 +9574,7 @@ class PlayState extends MusicBeatState
 										});
 										if (FlxG.save.data.strumline)
 										{
-											strumLineBGTween = FlxTween.tween(grpStrumLine, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete:
+											strumLineBGTween = FlxTween.tween(grpStrumlineBG, {alpha: 0.4}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.quadOut, onComplete:
 											function(twn:FlxTween)
 											{
 												strumLineBGTween = null;

@@ -1,6 +1,7 @@
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
+import flixel.util.FlxColor;
 
 
 //Im gonna be honest, I didn't wanna make this script but uhh it's to allow recycling so yea :3
@@ -8,6 +9,8 @@ import flixel.tweens.FlxEase;
 class Rating extends FlxSprite
 {
 	var leTwn:FlxTween;
+	var isDoingCoolKill:Bool = false;
+	
 	public function new()
 	{
 		super(x, y);
@@ -21,6 +24,7 @@ class Rating extends FlxSprite
 		alpha = 1;
 		active = true;
 		visible = true;
+		isDoingCoolKill = false;
 
 		switch (daRating)
 		{
@@ -42,8 +46,8 @@ class Rating extends FlxSprite
 				}
 				else
 				{
-					acceleration.y = 500 + (30 * (Conductor.bpm * 0.01));
-					velocity.y -= FlxG.random.int(170, 210) - (daRating != 'sick' && daRating != 'good' ? 30 : 0);
+					acceleration.y = 400 + (30 * (Conductor.bpm * 0.01));
+					velocity.y -= FlxG.random.int(100, 160) - (daRating != 'sick' && daRating != 'good' ? 30 : 0);
 				}
 
 				velocity.x -= FlxG.random.int(0, 10);
@@ -65,16 +69,71 @@ class Rating extends FlxSprite
 			getRidOf();
 	}
 
+	//this resets everything to normal then kills it
 	public function getRidOf()
 	{
-		if (alive)
+		if (alive && !isDoingCoolKill)
 		{
+			blend = NORMAL;
 			angle = 0;
 			velocity.set(0, 0);
+			acceleration.set(0, 0);
+			angularVelocity = 0;
 			if (leTwn != null)
 				leTwn.cancel();
 			color = 0x00FFFFFF;
 			kill();
+		}
+	}
+
+	//this adds a fade out transition but doesnt kill it itself - that is handled by update() lol :3
+	public function coolGetRidOf(combo:Int)
+	{
+		if (alive && !isDoingCoolKill)
+		{
+			isDoingCoolKill = true;
+			blend = ADD;
+			if (velocity.y < 0)
+				velocity.y = 0;
+			else
+				velocity.y += 20;
+			
+			if (combo < 200)
+			{
+				if (alpha > 0.25)
+				{
+					alpha = 0.25;
+
+					if (leTwn != null)
+						leTwn.cancel();
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.3, {type: ONESHOT});
+				}
+
+				color = 0xFFC08A39;
+				acceleration.y += 300;
+			}
+			else if (combo < 300)
+			{
+				if (alpha > 0.375)
+				{
+					alpha = 0.375;
+
+					if (leTwn != null)
+						leTwn.cancel();
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.5, {type: ONESHOT});
+				}
+
+				color = 0xFF2DC12A;
+				acceleration.y += 100;
+			}
+			else
+			{
+				if (alpha > 0.5)
+					alpha = 0.5;
+
+				color = 0xFF00CBCB;
+				acceleration.y += 50;
+			}
 		}
 	}
 }
@@ -82,6 +141,8 @@ class Rating extends FlxSprite
 class Num extends FlxSprite
 {
 	var leTwn:FlxTween;
+	var isDoingCoolKill:Bool = false;
+	
 	public function new()
 	{
 		super(x, y);
@@ -94,6 +155,7 @@ class Num extends FlxSprite
 		alpha = 1;
 		active = true;
 		visible = true;
+		isDoingCoolKill = false;
 
 		loadGraphic(Paths.image('num' + no));
 		if (no != 0)
@@ -104,7 +166,7 @@ class Num extends FlxSprite
 		if (!isSus)
 		{
 			acceleration.y = 400 + (25 * (Conductor.bpm * 0.01));
-			velocity.y -= FlxG.random.int(120, 170);
+			velocity.y -= FlxG.random.int(100, 150);
 		}
 		else
 		{
@@ -120,20 +182,73 @@ class Num extends FlxSprite
 	{
 		super.update(elapsed);
 
-		if (alpha == 0)
+		if (alpha <= 0)
 			getRidOf();
 	}
 
 	public function getRidOf()
 	{
-		if (alive)
+		if (alive && !isDoingCoolKill)
 		{
+			blend = NORMAL;
 			angle = 0;
 			velocity.set(0, 0);
+			acceleration.set(0, 0);
+			angularVelocity = 0;
 			if (leTwn != null)
 				leTwn.cancel();
 			color = 0x00FFFFFF;
 			kill();
+		}
+	}
+
+	public function coolGetRidOf(combo:Int)
+	{
+		if (alive && !isDoingCoolKill)
+		{
+			isDoingCoolKill = true;
+			blend = ADD;
+			if (velocity.y < 0)
+				velocity.y = 0;
+			else
+				velocity.y += 20;
+			
+			if (combo < 200)
+			{
+				if (alpha > 0.25)
+				{
+					alpha = 0.25;
+
+					if (leTwn != null)
+						leTwn.cancel();
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.3, {type: ONESHOT});
+				}
+
+				//color = 0xFFC08A39; //not coloured for now lets try it out cmon cmon yeeaaahhh cmon cmon yeahhhh
+				acceleration.y += 300;
+			}
+			else if (combo < 300)
+			{
+				if (alpha > 0.375)
+				{
+					alpha = 0.375;
+
+					if (leTwn != null)
+						leTwn.cancel();
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.5, {type: ONESHOT});
+				}
+
+				color = 0xFF2DC12A;
+				acceleration.y += 100;
+			}
+			else
+			{
+				if (alpha > 0.5)
+					alpha = 0.5;
+
+				color = 0xFF00CBCB;
+				acceleration.y += 50;
+			}
 		}
 	}
 }

@@ -733,16 +733,16 @@ class FlxSound extends FlxBasic
 			this.group = group;
 
 			if (oldGroup != null)
-			{
+			//{
 				oldGroup.remove(this);
-				trace ('removed sound from: ' + oldGroup);
-			}
+				//trace ('removed sound from: ' + oldGroup);
+			//}
 
 			if (group != null)
-			{
+			//{
 				group.add(this);
-				trace ('group Added to length check: ' + group.sounds.length);
-			}
+				//trace ('group Added to length check: ' + group.sounds.length);
+			//}
 
 			updateTransform();
 		}

@@ -871,32 +871,9 @@ class TitleState extends MusicBeatMenu
 				FlxG.sound.play(Paths.sound('exitMenu' + weekAdderThingy), 1);
 				FlxG.camera.shake(0.02, 1.25, true, true);
 
-				var coolNumThing:Float = 1;
-				var counter:Int = 0;
-				new FlxTimer().start(1.3, function(tmr:FlxTimer)
+				FlxTween.num(1, 200, 2.25, {startDelay: 1.25, ease: FlxEase.circIn, type: ONESHOT}, function(v)
 				{
-					new FlxTimer().start(0.025, function(tmr:FlxTimer)
-					{
-						effect.setStrength(coolNumThing, coolNumThing);
-						if (coolNumThing < 80)
-							coolNumThing += 2.5;
-						else if (coolNumThing < 185)
-						{
-							if (counter == 0)
-								coolNumThing += 13.125;
-							counter++;
-							if (counter > 1)
-								counter = 0;
-						}
-						else
-						{
-							if (counter == 0)
-								coolNumThing += 40;
-							counter++;
-							if (counter > 3)
-								counter = 0;
-						}
-					}, 200);
+					effect.setStrength(v, v);
 				});
 
 				new FlxTimer().start(0.04, function(tmr:FlxTimer)

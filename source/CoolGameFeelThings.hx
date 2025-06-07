@@ -30,7 +30,10 @@ class HitStop
         FlxG.timeScale = 1;
         waiting = false;
         if (thisOnComplete != null)
+        {
             thisOnComplete();
+            thisOnComplete = null;
+        }
     }
 
 

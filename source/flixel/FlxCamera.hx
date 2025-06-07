@@ -1765,18 +1765,21 @@ class FlxCamera extends FlxBasic
 	/**
 	 * Just turns off all the camera effects instantly.
 	 * But I, DreamedWave, customised it so that you can choose what to stop
+	 * DreamedWave is dead now so I, Amiee, am taking full credit muahahahaha
+	 * (note: before you cancel and dox me for this, DreamedWave is literally just my old username - so its just me against myself lolol)
 	 * @param	stopWhatFx	allows you to choose which specific effect to stop (flash, fade, and shake. leave empty for all)
 	 */
 	public function stopFX(stopWhatFX:String = 'all'):Void
 	{
 		switch(stopWhatFX)
 		{
-			case 'flash':
+			//user error adjustment lol idk man im dumb so im adding shit like this as a fail safe lol
+			case 'flash' | 'camFlash' | 'cameraFlash':
 				_fxFlashAlpha = 0.0;
-			case 'fade':
+			case 'fade' | 'camFade' | 'cameraFade' | 'fadeIn' | 'camFadeIn' | 'cameraFadeIn' | 'fadeOut' | 'camFadeOut' | 'cameraFadeOut':
 				_fxFadeAlpha = 0.0;
 				_fxFadeDuration = 0.0;
-			case 'shake':
+			case 'shake' | 'camShake' | 'cameraShake':
 				scrollShakeX = 0;
 				scrollShakeY = 0;
 				nextScrollShakeX = 0;
