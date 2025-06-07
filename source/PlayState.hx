@@ -1624,6 +1624,7 @@ class PlayState extends MusicBeatState
 		resetText.borderSize = 4;
 		resetText.antialiasing = false;
 		resetText.scale.x = 0.8; //idk cuz i think it might look cool maybe - you won't be seeing this if not otherwise
+		resetText.scale.y = 1.2;
 		resetText.screenCenter();
 		resetText.cameras = [camHUD];
 		resetText.updateHitbox();
@@ -3657,9 +3658,9 @@ class PlayState extends MusicBeatState
 						else
 						{
 							//Natural Deaths
-							literallyFuckingDie();
 							if (doPityDeaths)
 								normalPityDeaths++;
+							literallyFuckingDie();
 						}
 					}
 				}
@@ -3769,7 +3770,7 @@ class PlayState extends MusicBeatState
 		{
 			//Updating of alphas
 			if (FlxG.save.data.lagCompensation && !allowHealthModifiers) //Prevents crash if lag compensation is off
-				if (lagCompIcon.alpha != 0)
+				if (lagCompIcon.alpha >= 0)
 					lagCompIcon.alpha = CoolUtil.freyaLerp(lagCompIcon.alpha, 0, 5, elapsed);
 
 			if (!paused && !endedSong)
@@ -4268,7 +4269,7 @@ class PlayState extends MusicBeatState
 		//scoreTxt.text = 'fucking dearths: ' + FlxMath.roundDecimal(songDeaths, 5);
 		//scoreTxt.text = 'CurBeat: ' + curBeat + ' | CurStep: ' + curStep + ' |  curBPM: ' + Conductor.bpm;
 		//scoreTxt.text = 'ConductorPos: ' + Conductor.songPosition + ' | songPos: ' + FlxG.sound.music.time;
-		//scoreTxt.text = 'timesShot: ' + timesShot + '/' + ((5 - storyDifficulty) + (mechanicPityDeaths - 2) < 5 ? (5 - storyDifficulty) + (mechanicPityDeaths - 2) : 5) + ' | timesClutched: ' + timesClutched + ' | mechanicPity: ' + mechanicPityDeaths;
+		//scoreTxt.text = 'timesShot: ' + timesShot + '/' + ((5 - storyDifficulty) + (mechanicPityDeaths - 2) < 5 ? (5 - storyDifficulty) + (mechanicPityDeaths - 2) : 5) + ' | timesClutched: ' + timesClutched + '/' + (5 + mechanicPityDeaths - 2) + ' | mechanicPity: ' + mechanicPityDeaths;
 
 		if (FlxG.save.data.distractions)
 		{
@@ -4581,13 +4582,17 @@ class PlayState extends MusicBeatState
 	{
 		vocals.volume = 0;
 		//Cool Lowpass Shit
+
+		if (hurtDelay < 8)
+			hurtDelay += 1;
+
 		coolSoundFilter.gainHF = 0;
 		if (coolSoundFilterTween != null)
 			coolSoundFilterTween.cancel();
 		coolSoundFilterTween = FlxTween.tween(coolSoundFilter, {gainHF: 1}, Conductor.crochet * 8 / 1000,
 			{
 				ease: FlxEase.smootherStepInOut,
-				startDelay: (Conductor.stepCrochet * timesShot) / 10000,
+				startDelay: (Conductor.stepCrochet * hurtDelay) / 10000,
 				/*onUpdate: function(twn:FlxTween)
 				{
 					trace('cool sound filter gain HF: ' + coolSoundFilter.gainHF);
@@ -4637,8 +4642,6 @@ class PlayState extends MusicBeatState
 			//gotShotBlurLol.blurX = 2;
 			//gotShotBlurLol.blurY = 2;
 			//gotShotBlurVal = 2;
-			if (hurtDelay < 8)
-				hurtDelay += 2;
 
 			causeOfDeath = 'ate-bullet';
 			if (cancelCauseOfDeathTmr != null && cancelCauseOfDeathTmr.active)
@@ -4654,7 +4657,7 @@ class PlayState extends MusicBeatState
 			
 			//la health drain for failed specil	
 			//Minushealth - not instakill
-			if (timesShot <= (5 - storyDifficulty) + (mechanicPityDeaths - 2) && timesShot <= 5 && timesClutched <= 5 + mechanicPityDeaths - 2)
+			if (timesShot <= (5 - storyDifficulty) + (mechanicPityDeaths - 2) && timesShot <= 5 && timesClutched < 5 + mechanicPityDeaths - 2)
 			{
 				//I redid this cuz the previous way was effing convoluted as heck LMFAO
 				if (health > 0.025)
@@ -4679,7 +4682,7 @@ class PlayState extends MusicBeatState
 				//clutchable """instakill"""
 				if (timesClutched < 5 + mechanicPityDeaths - 2 && timesClutched < 10) //Caps clutching to 10 so that it dont go up infinitely LMAO
 				{
-					CoolGameFeelThings.HitStop.doHitStop(0.03334);
+					//CoolGameFeelThings.HitStop.doHitStop(0.03334);
 					
 					timesShot = 0;
 					timesClutched++;
@@ -4688,7 +4691,7 @@ class PlayState extends MusicBeatState
 					targetHealth = 0; //sets health to 0
 					//sets your visual health to half of what it is before it reaches 0 - giving you time to clutch
 					//the more you clutch, the harder it will be to do so
-					health = FlxMath.lerp(0, health, 0.75 - (timesClutched * 0.025) );
+					health = FlxMath.lerp(0, health, 1 - (timesClutched * 0.05) );
 					//IDEA! MAKE A SOUND DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
 					//LIKE Paths.sound('damageAlert_' + timesClutched)!! !!!
 					//d0ne HEHEHEHEHEHEH!!
@@ -4696,8 +4699,8 @@ class PlayState extends MusicBeatState
 					//Before you say "woAH, theres LORE hidden in the code!!!!11!!1!", only the city has the weird glitchy overlay thanng, no it aint lore i just dont wanna add that var on any other stage calm yoself lol
 					if (stageOverlay2 != null && stageOverlay2.exists)
 					{
-						vignetteChecker = (5 + mechanicPityDeaths - 2) - timesClutched;
-						//trace (vignetteChecker);
+						vignetteChecker = ((5 + mechanicPityDeaths - 2)) - timesClutched;
+						//trace ('vigCheck: ' + vignetteChecker);
 						//DONT JUDGE ME!!! THE CODE WORKS FINE!!!!
 						switch(vignetteChecker)
 						{
@@ -6645,7 +6648,7 @@ class PlayState extends MusicBeatState
 
 						if (FlxG.sound.music.pitch > 0)
 						{
-							FlxG.sound.music.pitch += 0.025 / FlxG.timeScale;
+							FlxG.sound.music.pitch += 0.03 / FlxG.timeScale;
 							instLowHP.pitch = FlxG.sound.music.pitch;
 							//vocals.pitch = FlxG.sound.music.pitch;
 							miscs.pitch = FlxG.sound.music.pitch;
@@ -6836,9 +6839,6 @@ class PlayState extends MusicBeatState
 		//nudging the player to win to avoid frustration
 		if (healthBar.percent < 50 && normalPityDeaths - storyDifficulty > 0 && targetHealth > 0)
 			targetHealth += (normalPityDeaths * 0.00005);
-
-		if (hurtDelay > 0)
-			hurtDelay--;
 
 		if (doStrumLineBGTweening)
 		{
@@ -8655,6 +8655,9 @@ class PlayState extends MusicBeatState
 		//DC.beginProfile("beatShit");
 		if (generatedSong && !loadingNextSong)
 		{	
+			if (hurtDelay > 0)
+				hurtDelay--;
+
 			if (curBeat % 2 == 4)
 				updateDiscordPresence();
 

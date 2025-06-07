@@ -242,7 +242,7 @@ class Note extends FlxSprite
 		if (isSustainNote && prevNote != null)
 		{
 			//noteScore * 0.2;
-			baseAlpha = 0.7;
+			//baseAlpha = 0.7;
 
 			x += width / 2;
 
@@ -403,6 +403,7 @@ class Note extends FlxSprite
 				if (startSpeeding)
 				{
 					//Speeding up notes when missing them (like in the new FNF update leak)
+					//turns out that feature was scrapped but i likey so i keepey
 					if (missSpeedSkippedFrames >= (!speedingSustainSlip ? 20 : 40))
 					{
 						missSpeedMultiplier++;
@@ -412,8 +413,8 @@ class Note extends FlxSprite
 						missSpeedSkippedFrames++;	
 					missAdditiveY += 2 + (1 * missSpeedMultiplier);
 
-					if (baseAlpha > 0.5 && tooLate)
-						baseAlpha *= 0.5;
+					if (baseAlpha > 0.75 && tooLate)
+						baseAlpha *= 0.75;
 				}
 
 				// ass
@@ -524,7 +525,7 @@ class Note extends FlxSprite
 
 			if (!sustainActive)
 			{
-				baseAlpha = 0.3;
+				baseAlpha = 0.5;
 			}
 		}
 	}

@@ -873,7 +873,8 @@ class TitleState extends MusicBeatMenu
 
 				FlxTween.num(1, 200, 2.25, {startDelay: 1.25, ease: FlxEase.circIn, type: ONESHOT}, function(v)
 				{
-					effect.setStrength(v, v);
+					var skib:Int = Math.round(v);
+					effect.setStrength(skib, skib);
 				});
 
 				new FlxTimer().start(0.04, function(tmr:FlxTimer)

@@ -124,15 +124,15 @@ class Rating extends FlxSprite
 				}
 
 				color = 0xFF2DC12A;
-				acceleration.y += 100;
+				acceleration.y += 150;
 			}
 			else
 			{
-				if (alpha > 0.5)
-					alpha = 0.5;
+				if (alpha > 0.425)
+					alpha = 0.425;
 
 				color = 0xFF00CBCB;
-				acceleration.y += 50;
+				acceleration.y += 100;
 			}
 		}
 	}
@@ -243,11 +243,11 @@ class Num extends FlxSprite
 			}
 			else
 			{
-				if (alpha > 0.5)
-					alpha = 0.5;
+				if (alpha > 0.425)
+					alpha = 0.425;
 
 				color = 0xFF00CBCB;
-				acceleration.y += 50;
+				acceleration.y += 100;
 			}
 		}
 	}
