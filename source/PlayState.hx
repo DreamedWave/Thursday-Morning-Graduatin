@@ -1623,11 +1623,11 @@ class PlayState extends MusicBeatState
 		resetText.scrollFactor.set();
 		resetText.borderSize = 4;
 		resetText.antialiasing = false;
-		resetText.scale.x = 0.8; //idk cuz i think it might look cool maybe - you won't be seeing this if not otherwise
+		//resetText.scale.x = 0.8; //idk cuz i think it might look cool maybe - you won't be seeing this if not otherwise
 		resetText.scale.y = 1.2;
+		resetText.updateHitbox();
 		resetText.screenCenter();
 		resetText.cameras = [camHUD];
-		resetText.updateHitbox();
 		resetText.alpha = 0;
 		add(resetText);
 
@@ -3615,7 +3615,7 @@ class PlayState extends MusicBeatState
 		if (controls.PAUSE && !skippingIntro && !video.isPlaying && allowDeaths && canPause && !paused && (FlxG.sound.music.time < musicTimeCusp || !FlxG.sound.music.playing))
 			pauseGame();
 
-		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 1) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
+		if ((FlxG.sound.music.playing && FlxMath.roundDecimal(health, 2) <= 0) || (FlxG.keys.justPressed.R && !skippingIntro && FlxG.save.data.resetButton))
 		{
 			if (!showedResults && !video.isPlaying && allowDeaths && !PlayStateChangeables.botPlay)
 			{
@@ -4691,6 +4691,7 @@ class PlayState extends MusicBeatState
 					targetHealth = 0; //sets health to 0
 					//sets your visual health to half of what it is before it reaches 0 - giving you time to clutch
 					//the more you clutch, the harder it will be to do so
+					//because the game is intentionally coded so that when the "visual" health goes to 0, you die, giving you some time
 					health = FlxMath.lerp(0, health, 1 - (timesClutched * 0.05) );
 					//IDEA! MAKE A SOUND DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
 					//LIKE Paths.sound('damageAlert_' + timesClutched)!! !!!
@@ -4771,7 +4772,6 @@ class PlayState extends MusicBeatState
 		if (Ratings.GenerateLetterRank(accuracy) == 'RETRY' && !cannotDie && !PauseSubState.skippedSong)
 		{
 			//kill if the results were ass
-			doCamFollowing = false;
 			if(doPityDeaths)
 			{
 				normalPityDeaths++;
@@ -5161,6 +5161,7 @@ class PlayState extends MusicBeatState
 	var endingSong:Bool = false;
 	var timeShown = 0;
 	var currentTimingShown:FlxText = null;
+	var currentTimingTween:FlxTween;
 	var showNumShit:Bool = false;
 	var nonSustainCombo:Int = 0;//Internal for ratings only - i dunno if this is gonna stay or not but slay
 
@@ -5347,7 +5348,10 @@ class PlayState extends MusicBeatState
 					grpRatingsRate.add(rating);
 		
 					if (currentTimingShown != null)
-						remove(currentTimingShown);
+						healthAndScoreGroup.remove(currentTimingShown);
+
+					if (currentTimingTween != null)
+						currentTimingTween.cancel();
 
 					if (daRating != 'miss')
 					{
@@ -5361,14 +5365,14 @@ class PlayState extends MusicBeatState
 						currentTimingShown.borderSize = 3;
 						currentTimingShown.borderColor = FlxColor.BLACK;
 						currentTimingShown.text = (msTiming > 0 ? " " : "") + msTiming + " ms";
-						currentTimingShown.size = 25;
+						currentTimingShown.size = 20;
 						currentTimingShown.x = FlxG.save.data.changedHitX + 115;
-						currentTimingShown.y = FlxG.save.data.changedHitY + 5 + 95;
+						currentTimingShown.y = FlxG.save.data.changedHitY + 80;
 						currentTimingShown.cameras = [camHUD];
 						if (currentTimingShown.alpha != 1)
 							currentTimingShown.alpha = 1;
 						if (currentTimingShown != null)
-							add(currentTimingShown);
+							healthAndScoreGroup.add(currentTimingShown);
 					}
 		
 					if (showNumShit)
@@ -5429,7 +5433,7 @@ class PlayState extends MusicBeatState
 		
 					if (daRating != 'miss')
 					{
-						FlxTween.tween(currentTimingShown, {alpha: 0}, 0.175, 
+						currentTimingTween = FlxTween.tween(currentTimingShown, {alpha: 0, y: currentTimingShown.y + FlxG.random.float(5, 10)}, 0.175, 
 						{
 							type: ONESHOT,
 							onComplete: 
@@ -5437,7 +5441,7 @@ class PlayState extends MusicBeatState
 								{
 									if (currentTimingShown != null && timeShown >= 20)
 									{
-										remove(currentTimingShown);
+										healthAndScoreGroup.remove(currentTimingShown);
 										currentTimingShown = null;
 									}
 								},
@@ -6561,9 +6565,11 @@ class PlayState extends MusicBeatState
 
 	function literallyFuckingDie():Void
 	{
+		doCamFollowing = false;
 		if (causeOfDeath != 'intentional-reset')
 		{
 			camGame.filtersEnabled = true;
+			camHUD.alpha = 0.5;
 			grpStrumlineBG.visible = false;
 			songPosGroup.visible = false;
 			cpuStrums.forEach(function(spr:FlxSprite)
@@ -6598,7 +6604,6 @@ class PlayState extends MusicBeatState
 
 		camGame.stopFX();
 		camHUD.stopFX();
-		camGame.pauseVisualUpdates = true;
 
 		//specilNoteHitSFXGroup.volume *= 0.65;
 
@@ -6606,8 +6611,6 @@ class PlayState extends MusicBeatState
 			boyfriend.stunned = true;
 		prevHealth = 1;
 
-		persistentUpdate = false;
-		persistentDraw = false;
 		paused = true;
 		died = true;
 
@@ -6615,13 +6618,14 @@ class PlayState extends MusicBeatState
 		songDeaths++;
 		hasReset = true;
 
-		if (isBFTurn)
-			camGame.pauseVisualUpdates = false;
-
 		switch (causeOfDeath)
 		{
 			case 'intentional-reset':
 				//No Hitstop
+				camGame.pauseVisualUpdates = true;
+				persistentUpdate = false;
+				persistentDraw = false;
+
 				if (songStarted)
 				{
 					vocals.stop();
@@ -6642,8 +6646,8 @@ class PlayState extends MusicBeatState
 						if (!didDeathShake)
 						{
 							didDeathShake = true;
-							camShake(true, false, 'camGame', 0.004, 1);
-							camShake(true, false, 'camHUD', 0.008, 1);
+							camShake(true, false, 'camGame', 0.01, 1);
+							camShake(true, false, 'camHUD', 0.02, 1);
 						}
 
 						if (FlxG.sound.music.pitch > 0)
@@ -6658,6 +6662,10 @@ class PlayState extends MusicBeatState
 					},
 					function finishFunction()
 					{
+						camGame.pauseVisualUpdates = true;
+						persistentUpdate = false;
+						persistentDraw = false;
+
 						if (doPityDeaths && mechanicPityDeaths < 7)
 							mechanicPityDeaths++;
 
@@ -6690,8 +6698,8 @@ class PlayState extends MusicBeatState
 						if (!didDeathShake)
 						{
 							didDeathShake = true;
-							camShake(true, false, 'camGame', 0.008, 1);
-							camShake(true, false, 'camHUD', 0.016, 1);
+							camShake(true, false, 'camGame', 0.02, 1);
+							camShake(true, false, 'camHUD', 0.04, 1);
 						}
 
 						if (FlxG.sound.music.pitch > 0)
@@ -6706,6 +6714,10 @@ class PlayState extends MusicBeatState
 					},
 					function finishFunction()
 					{
+						camGame.pauseVisualUpdates = true;
+						persistentUpdate = false;
+						persistentDraw = false;
+
 						if (doPityDeaths && mechanicPityDeaths < 7 && timesClutched <= 3) //if you clutched more than 3 times, no pity for you >:3
 							mechanicPityDeaths++;
 
@@ -6742,6 +6754,9 @@ class PlayState extends MusicBeatState
 					},
 					function finishFunction()
 					{
+						persistentUpdate = false;
+						persistentDraw = false;
+
 						if (songStarted)
 						{
 							vocals.stop();
@@ -8658,7 +8673,7 @@ class PlayState extends MusicBeatState
 			if (hurtDelay > 0)
 				hurtDelay--;
 
-			if (curBeat % 2 == 4)
+			if (curBeat % 4 == 2)
 				updateDiscordPresence();
 
 			if (nearestNoteDecayBeat > 0)

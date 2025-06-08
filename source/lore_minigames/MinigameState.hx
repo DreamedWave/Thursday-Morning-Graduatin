@@ -28,6 +28,14 @@ import flixel.util.FlxStringUtil;
 //import lore_minigames.Clatterer;
 //import lore_minigames.Collectibles;
 
+//Light 
+import flixel.util.FlxSpriteUtil;
+import flash.geom.Rectangle;
+import flash.geom.ColorTransform;
+import flash.geom.Point;
+import flash.display.BitmapData;
+import flash.display.BitmapDataChannel;
+
 class MinigameState extends MusicBeatState
 {
 	var targetFrameTime:Float = 1/120;
@@ -89,6 +97,10 @@ class MinigameState extends MusicBeatState
 	var camGameFilters:Array<BitmapFilter> = [];
 
 	var noiseFilter:shaders.Grain;
+
+	//Light Shit
+	var _stageDarkness:FlxSprite;
+	var _stageDarkRect:FlxSprite;
 
 	override public function create()
 	{
@@ -247,7 +259,20 @@ class MinigameState extends MusicBeatState
 		healthBar.angle = 2;
 		healthBar.cameras = [camHUD];
 		add(healthBar);*/
-		
+
+		//Light Shit
+		_stageDarkness = new FlxSprite();
+		_stageDarkness.makeGraphic(FlxG.stage.stageWidth, FlxG.stage.stageHeight, 0xFFFFFFFF);
+		_stageDarkness.blend = SUBTRACT;
+		_stageDarkness.alpha = 0.3;
+		_stageDarkness.antialiasing = true;
+		add(_stageDarkness);
+
+		_stageDarkRect = new FlxSprite();
+		_stageDarkRect.makeGraphic(0, 0, 0x00000000);
+		//_stageDarkRect.blend = ADD;
+		//add(_stageDarkRect);
+
 		super.create();
 
 		FlxG.sound.playMusic('assets/minigame/music/map_1/HeartbeatLoop' + heartBeatLevel + '.ogg', 1, false);
@@ -343,6 +368,19 @@ class MinigameState extends MusicBeatState
 		});
 	}
 
+	function camFollowFunction(objectToFollow:FlxObject):Void
+	{
+		if (objectToFollow != null)
+		{
+			camMovementOffset[0] = Math.round((0.05 * player.velocity.x) + camHoldShakeAdditive[0]);
+			camMovementOffset[1] = Math.round((player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1]);
+			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(FlxG.elapsed, 2.25, 0, 1));
+			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(FlxG.elapsed, 2.25, 0, 1));
+	
+			camFollow.setPosition(Math.round(player.getMidpoint().x) + camMovementLerp[0], Math.round(player.getMidpoint().y - 5) + camMovementLerp[1]);
+		}
+	}
+
 	//dont judge my var naming skills >:CC
 	var camMovementLerp:Array<Float> = [0, 0];//the value tht gets tweened
 	var camMovementOffset:Array<Float> = [0, 0]; //the ACTUAL value that instantly gets updated
@@ -358,14 +396,19 @@ class MinigameState extends MusicBeatState
 	{		
 		super.update(elapsed);
 
-		if (noiseSkipFrames > 0)
+		/*if (noiseSkipFrames > 0)
 			noiseSkipFrames--;
 		else
 		{
 			noiseSkipFrames = initSkipFrames;
 			noiseElapsed += elapsed;
 			noiseFilter.uTime.value = [noiseElapsed];
-		}
+		}*/
+
+		noiseElapsed += (elapsed / 8) * FlxG.timeScale;
+		noiseFilter.uTime.value = [noiseElapsed];
+
+		updateLighting();
 
 		frameTimeMult = elapsed/targetFrameTime;
 		player.updateFrameTimeMult(frameTimeMult);
@@ -403,24 +446,18 @@ class MinigameState extends MusicBeatState
 			FlxG.overlap(player, interactiblesGroup, uglyEvilWorkaroundFunction);
 		
 		if (doCamFollowing)
-		{
-			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
-			camMovementOffset[1] = (player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1];
-			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(elapsed, 2.25, 0, 1));
-			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(elapsed, 2.25, 0, 1));
-	
-			camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 5 + camMovementLerp[1]);
-		}
+			camFollowFunction(player);
 
 		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq)
 		{
 			//this updates every frame - is that alright??
 			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
 			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
-			//{
+			{
 				camShake(false, false, 3, 0.1 * theManUpstairs.dadSNDNear.getActualVolume() * 0.75, 0.05);
+				FlxG.timeScale = 1 - (0.25 * theManUpstairs.dadSNDNear.getActualVolume()); //celeste ttype sjhit
 				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
-			//}
+			}
 
 			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
 			
@@ -1129,8 +1166,13 @@ class MinigameState extends MusicBeatState
 				if (FlxG.save.data.showPresence)
 					DiscordClient.changePresence("(it wasn't your fault.)", null, "apppresence-dark");
 				#end
+				
+				him.kill();
+				him.destroy();
 
-				CoolGameFeelThings.HitStop.doSlowDown(1, 0.125, true, function()
+				camHUD.flash(FlxColor.RED, 0.125);
+
+				/*CoolGameFeelThings.HitStop.doSlowDown(1, 0.125, true, function()
 					{
 						//After the slowdown finishes - ermm idk if this works -AWH
 						defaultCamZoom *= 1.5;
@@ -1149,7 +1191,7 @@ class MinigameState extends MusicBeatState
 							showGameoverScreen();
 						});
 					}
-				);
+				);*/
 
 				//camGame.shakeFlashSprite = false;
 				//camHUD.shakeFlashSprite = false;
@@ -1159,7 +1201,7 @@ class MinigameState extends MusicBeatState
 				dedSound.pitch = 0.5;*/
 
 				//Jumpscare Shit
-				/*jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
+				jumpscareSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('jumpscare'));
 				jumpscareSprite.angle = -6;
 				jumpscareSprite.antialiasing = FlxG.save.data.antialiasing;
 				jumpscareSprite.setGraphicSize(Std.int(jumpscareSprite.width * 0.1));
@@ -1170,10 +1212,10 @@ class MinigameState extends MusicBeatState
 				jumpscareSprite.visible = false;
 				add(jumpscareSprite);
 
-				var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
+				//var randJumpTimeLol:Float = FlxG.random.float(2.5, 5);
 
-				new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
-				{
+				//new FlxTimer().start(randJumpTimeLol, function(tmr:FlxTimer)
+				//{
 					FlxG.sound.play(Paths.sound('boh'), 1, false);
 					jumpscareSprite.visible = true;
 					jumpscaredPlayer = true;
@@ -1184,7 +1226,7 @@ class MinigameState extends MusicBeatState
 						new FlxTimer().start(0.35, function(tmr:FlxTimer){jumpscareSprite.alpha = 0.15;});
 						showGameoverScreen();
 					});
-				});*/
+				//});
 			}
 		}
 	}
@@ -1360,6 +1402,56 @@ class MinigameState extends MusicBeatState
 		var returnLerpTime:Float = CoolUtil.boundTo(1 - (timeElapsed * durationMultiplier), min, max);
 		return returnLerpTime;
 	}
+
+	
+	//Lighting Shit Here
+	//Code by WY Leong
+	//But I was dumb enough to break it so I just did a work around involving blend modes...
+	function updateLighting():Void
+	{
+		// In each update, create a new stageDarkRect based on the original
+		// _stageDarkness's uncut rectangle, then cut a circle into it.
+		var newMask = new FlxSprite();
+ 
+		// Instead of cloning pixels (which will result in cached image)
+		// we copy the cached _stageDarkness's bitmapData, then directly "reset"
+		// the pixel data by drawing a fresh rectangle over it.
+		newMask.loadGraphicFromSprite(_stageDarkness);
+		newMask.pixels.fillRect(new Rectangle(0, 0, _stageDarkRect.width,_stageDarkRect.height), 0xFFFFFFFF);
+ 
+		//A fading light effect because i am dumb
+		FlxSpriteUtil.drawCircle(newMask, player.getMidpoint().x, player.getMidpoint().y, 60, 0xFFDCDCDC);
+		FlxSpriteUtil.drawCircle(newMask, player.getMidpoint().x, player.getMidpoint().y, 40, 0xFF5A5A5A);
+		FlxSpriteUtil.drawCircle(newMask, player.getMidpoint().x, player.getMidpoint().y, 30, 0xFF000000);
+ 
+		// Draw onto the _stageDarkRect
+		invertedAlphastageDarkRectFlxSprite(_stageDarkness, newMask, _stageDarkRect);
+	}
+
+
+	//Code also by WY Leong (bless them)
+	function invertedAlphastageDarkRectFlxSprite(sprite:FlxSprite, stageDarkRect:FlxSprite, output:FlxSprite):FlxSprite
+	{
+		// Solution based on the discussion here:
+		// https://groups.google.com/forum/#!topic/haxeflixel/fq7_Y6X2ngY
+ 
+		// NOTE: The code below is the same as FlxSpriteUtil.alphastageDarkRectFlxSprite(),
+		// except it has an EXTRA section below.
+ 
+		sprite.drawFrame();
+		var data:BitmapData = sprite.pixels.clone();
+		data.copyChannel(stageDarkRect.pixels, new Rectangle(0, 0, sprite.width, sprite.height), new Point(), BitmapDataChannel.ALPHA, BitmapDataChannel.ALPHA);
+ 
+		// EXTRA:
+		// this code applies a -1 multiplier to the alpha channel,
+		// turning the opaque circle into a transparent circle.
+		data.colorTransform(new Rectangle(0, 0, sprite.width, sprite.height), new ColorTransform(0,0,0,-1,0,0,0,255));
+		// end EXTRA
+ 
+		output.pixels = data;
+		return output;
+	}
+
 
 	var isResetting:Bool = false;
 	override function destroy()

@@ -27,6 +27,7 @@ class Player extends FlxSprite
 	public var chosenMoveset:String = 'default';//Making this changable so that we can add custom abilities in the future if ever
 	public var queuedActions:Array<PlayerActions> = [];
 	public var curAction:PlayerActions = IDLE;
+	public var wasRunning:Bool = false;
 	public var canMove:Bool = true;
 	public var stamina:Float = 100;
 	public var ranOutOfBreath:Bool = false;
@@ -38,6 +39,7 @@ class Player extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0)
 	{
 		super(x, y);
+		pixelPerfectPosition = true;
 		walkSnd = FlxG.sound.load('assets/minigame/sounds/walk' + FlxG.random.int(0, 5) + '.ogg', 0.5);
 		
 		loadGraphic("assets/minigame/images/guyPixel-Sheet.png", true, 64, 64);
@@ -70,7 +72,7 @@ class Player extends FlxSprite
 		//health = 100;
 
 		setSize(24, 50);
-		offset.set(20, -14);
+		offset.set(20, 8);
 
 		acceleration.y = GRAVITY;
 		maxVelocity.set(defaultSpeedCaps[1], GRAVITY);
@@ -210,10 +212,10 @@ class Conditions
 		{return (Player.isTouching(FLOOR) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
 
 	public static function landFromAir(Player:Player):Bool
-		{return Player.isTouching(FLOOR) && !FlxG.keys.pressed.DOWN;}
+		{return Player.isTouching(FLOOR) && (!FlxG.keys.pressed.DOWN || (FlxG.keys.pressed.SHIFT && Player.wasRunning));}
 
 	public static function landFromAirSneaked(Player:Player):Bool
-		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN;}
+		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN && (!FlxG.keys.pressed.SHIFT || !Player.wasRunning);}
 
 	public static function startSneak(Player:Player):Bool
 		{return Player.isTouching(FLOOR) && ((FlxG.keys.justPressed.DOWN && Player.curAction != RUN) || Player.queuedActions.contains(SNEAK));}
@@ -247,6 +249,7 @@ class StillIdle extends FlxFSMState<Player>
 		owner.velocity.x = 0;
 		owner.velocity.y = 0;
 		owner.acceleration.x = 0;
+		owner.acceleration.y = 0;
 		owner.curAction = NONE;
 		owner.animation.play("idle");
 	}
@@ -259,6 +262,7 @@ class StillIdle extends FlxFSMState<Player>
 	override function exit(owner:Player) 
 	{
 		trace("EXITED!!!");
+		owner.acceleration.y = owner.GRAVITY;
 		super.exit(owner);
 	}
 }
@@ -393,6 +397,9 @@ class Jump extends FlxFSMState<Player>
 			owner.stamina -= 10;
 		}
 
+		if (owner.curAction == RUN)
+			owner.wasRunning = true;
+		
 		owner.curAction = JUMP;
 		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
 
@@ -410,12 +417,12 @@ class Jump extends FlxFSMState<Player>
 			if (FlxG.keys.pressed.RIGHT)
 			{
 				if (owner.velocity.x < 0)
-					owner.velocity.x *= -0.4;
+					owner.velocity.x *= -0.5;
 			}
 			if (FlxG.keys.pressed.LEFT)
 			{
 				if (owner.velocity.x > 0)
-					owner.velocity.x *= -0.4;
+					owner.velocity.x *= -0.5;
 			}
 		}
 
