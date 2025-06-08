@@ -265,7 +265,7 @@ class MinigameState extends MusicBeatState
 		_stageDarkness.makeGraphic(FlxG.stage.stageWidth, FlxG.stage.stageHeight, 0xFFFFFFFF);
 		_stageDarkness.blend = SUBTRACT;
 		_stageDarkness.alpha = 0.3;
-		_stageDarkness.antialiasing = true;
+		//_stageDarkness.antialiasing = true;
 		add(_stageDarkness);
 
 		_stageDarkRect = new FlxSprite();
@@ -408,8 +408,6 @@ class MinigameState extends MusicBeatState
 		noiseElapsed += (elapsed / 8) * FlxG.timeScale;
 		noiseFilter.uTime.value = [noiseElapsed];
 
-		updateLighting();
-
 		frameTimeMult = elapsed/targetFrameTime;
 		player.updateFrameTimeMult(frameTimeMult);
 		FlxG.watch.addQuick("frameTimeMult", frameTimeMult);
@@ -428,6 +426,8 @@ class MinigameState extends MusicBeatState
 				triggerEscapeSeq();
 			}
 		}
+		if (!FlxG.keys.pressed.FIVE && player.velocity.x != 0 && player.velocity.y != 0)
+			updateLighting(); //This is really intensive so I'll probably just make it so that the player doesn't have a flashlight - or replace this with a regular mask thingy
 
 		if (FlxG.sound.music.playing)
 			Conductor.songPosition += FlxG.elapsed * 1000;
@@ -1019,7 +1019,7 @@ class MinigameState extends MusicBeatState
 							camMovementLerp[0] = 0;
 							camMovementLerp[1] = 0;
 							player.setPosition(object.destination[0] - (player.width - object.width), object.destination[1] - (player.height - object.height));
-							camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
+							//camFollow.setPosition(player.getMidpoint().x, player.getMidpoint().y - 5);
 							player.canMove = true;
 							lockTheNextDoorThePlayerOverlapsWith = true;
 						}, true);

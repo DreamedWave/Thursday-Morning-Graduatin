@@ -3587,7 +3587,7 @@ class PlayState extends MusicBeatState
 
 				notes.sort(FlxSort.byY, (PlayStateChangeables.useDownscroll ? FlxSort.ASCENDING : FlxSort.DESCENDING));
 
-				if (!PlayStateChangeables.Optimize && songStarted && generatedSong && !paused)
+				if (!PlayStateChangeables.Optimize && doCamFollowing && songStarted && generatedSong && !paused)
 					camFollowShit();
 
 				// reverse iterate to remove oldest notes first and not invalidate the iteration
@@ -6565,7 +6565,6 @@ class PlayState extends MusicBeatState
 
 	function literallyFuckingDie():Void
 	{
-		doCamFollowing = false;
 		if (causeOfDeath != 'intentional-reset')
 		{
 			camGame.filtersEnabled = true;
@@ -6574,8 +6573,12 @@ class PlayState extends MusicBeatState
 			songPosGroup.visible = false;
 			cpuStrums.forEach(function(spr:FlxSprite)
 			{
-				spr.x -= 720; //awful awful fix but yeah - as they say, out of sight, out of mind 
+				spr.x -= 720; //awful awful fix but i cant really hide cpustrums itself, thanks kengine! /sarc
 			});
+
+			doCamFollowing = false;
+			if (!PlayStateChangeables.Optimize)
+				camFollow.setPosition((boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0], (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1]);
 		}
 
 		if (coolSoundFilterTween != null)
@@ -7005,13 +7008,10 @@ class PlayState extends MusicBeatState
 	{	
 		if (SONG.notes[Std.int(curStep / 16)] != null)
 		{
-			if (doCamFollowing)
-			{
-				if (!isBFTurn && camFollow.x != (dad.getMidpoint().x + 150 + dadFollowOffset[0]) + singFollowOffset[0] && camFollow.y != (dad.getMidpoint().y - 100 + dadFollowOffset[1]) + singFollowOffset[1])
-					camFollow.setPosition((dad.getMidpoint().x + 150 + dadFollowOffset[0]) + singFollowOffset[0], (dad.getMidpoint().y - 100 + dadFollowOffset[1]) + singFollowOffset[1]);
-				else if (isBFTurn && camFollow.x != (boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0] && camFollow.y != (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1])
-					camFollow.setPosition((boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0], (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1]);
-			}
+			if (!isBFTurn && camFollow.x != (dad.getMidpoint().x + 150 + dadFollowOffset[0]) + singFollowOffset[0] && camFollow.y != (dad.getMidpoint().y - 100 + dadFollowOffset[1]) + singFollowOffset[1])
+				camFollow.setPosition((dad.getMidpoint().x + 150 + dadFollowOffset[0]) + singFollowOffset[0], (dad.getMidpoint().y - 100 + dadFollowOffset[1]) + singFollowOffset[1]);
+			else if (isBFTurn && camFollow.x != (boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0] && camFollow.y != (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1])
+				camFollow.setPosition((boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0], (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1]);
 		}
 	}
 	var lightningStrikeBeat:Int = 0;
