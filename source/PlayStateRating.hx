@@ -10,6 +10,7 @@ class Rating extends FlxSprite
 {
 	var leTwn:FlxTween;
 	var isDoingCoolKill:Bool = false;
+	var floatTime:Float = Conductor.stepCrochet * 2;
 	
 	public function new()
 	{
@@ -65,6 +66,12 @@ class Rating extends FlxSprite
 	{
 		super.update(elapsed);
 
+		
+		if (floatTime > 0)
+			floatTime -= elapsed;
+		else if (velocity.y > 0)
+			velocity.y = CoolUtil.freyaLerp(velocity.y, 0, 16, elapsed);
+
 		if (alpha == 0)
 			getRidOf();
 	}
@@ -91,6 +98,8 @@ class Rating extends FlxSprite
 	{
 		if (alive && !isDoingCoolKill)
 		{
+			var alphaCalc:Float;
+
 			isDoingCoolKill = true;
 			blend = ADD;
 			if (velocity.y < 0)
@@ -100,9 +109,11 @@ class Rating extends FlxSprite
 			
 			if (combo < 200)
 			{
-				if (alpha > 0.25)
+				alphaCalc = 0.25 + (0.125 * (combo * 0.01 - 2));
+
+				if (alpha > alphaCalc)
 				{
-					alpha = 0.25;
+					alpha = alphaCalc;
 
 					if (leTwn != null)
 						leTwn.cancel();
@@ -110,13 +121,15 @@ class Rating extends FlxSprite
 				}
 
 				color = 0xFFC08A39;
-				acceleration.y += 300;
+				acceleration.y += 200;
 			}
 			else if (combo < 300)
 			{
-				if (alpha > 0.375)
+				alphaCalc = 0.375 + (0.125 * (combo * 0.01 - 3));
+
+				if (alpha > alphaCalc)
 				{
-					alpha = 0.375;
+					alpha = alphaCalc;
 
 					if (leTwn != null)
 						leTwn.cancel();

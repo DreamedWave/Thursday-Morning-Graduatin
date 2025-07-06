@@ -448,15 +448,19 @@ class MinigameState extends MusicBeatState
 		if (doCamFollowing)
 			camFollowFunction(player);
 
-		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq)
+		if (theManUpstairs != null && theManUpstairs.exists && inEscSeq && !jumpscaredPlayer)
 		{
 			//this updates every frame - is that alright??
 			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
 			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
 			{
-				camShake(false, false, 3, 0.1 * theManUpstairs.dadSNDNear.getActualVolume() * 0.75, 0.05);
-				FlxG.timeScale = 1 - (0.25 * theManUpstairs.dadSNDNear.getActualVolume()); //celeste ttype sjhit
+				camShake(true, false, 3, 0.3 * theManUpstairs.dadSNDNear.getActualVolume() * 0.75, 0.05);
+				FlxG.timeScale = 1 - (0.5 * theManUpstairs.dadSNDNear.getActualVolume()); //celeste ttype sjhit
 				//trace('vol ' + theManUpstairs.dadSNDNear.getActualVolume());
+			}
+			else if (FlxG.timeScale != 1)
+			{
+				FlxG.timeScale = 1;
 			}
 
 			FlxG.overlap(player, theManUpstairs, jumpscareGameOver);
@@ -471,7 +475,7 @@ class MinigameState extends MusicBeatState
 				fatherElapsedCheck--;
 		}
 
-		/*if (jumpscaredPlayer)
+		if (jumpscaredPlayer)
 		{
 			if (jumpscareSprite != null && jumpscareSprite.exists)
 			{
@@ -484,7 +488,7 @@ class MinigameState extends MusicBeatState
 			}
 			else
 				trace('hey, if you turned on this bool before making the jumpscare sprite then you messed up buddy!! :D');
-		}*/
+		}
 
 		if (inEscSeq && escapeTimer != null)
 		{

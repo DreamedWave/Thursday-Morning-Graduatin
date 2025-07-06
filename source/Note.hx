@@ -138,7 +138,7 @@ class Note extends FlxSprite
 		
 		if (inCharter)
 		{
-			frames = Paths.getSparrowAtlas('charterNOTE_assets');
+			frames = Paths.getSparrowAtlas('notes/charterNOTE_assets');
 			for (i in 0...4)
 			{
 				switch(noteType)
@@ -175,7 +175,7 @@ class Note extends FlxSprite
 					switch(noteType)
 					{
 						case 'mine':
-							frames = Paths.getSparrowAtlas('mineNOTE_assets');
+							frames = Paths.getSparrowAtlas('notes/mineNOTE_assets');
 							for (i in 0...4)
 							{
 								animation.addByPrefix(dataColor[i] + 'surpriseScroll', dataColor[i] + ' camouflage'); // Camo notes
@@ -184,21 +184,21 @@ class Note extends FlxSprite
 								animation.addByPrefix(dataColor[i] + 'holdend', dataColor[i] + ' tail'); // Tails
 							}
 						case 'trigger':
-							frames = Paths.getSparrowAtlas('triggerNOTE_assets');
+							frames = Paths.getSparrowAtlas('notes/triggerNOTE_assets');
 							for (i in 0...4)
 							{
 								animation.addByPrefix(dataColor[i] + 'surpriseScroll', dataColor[i] + ' camouflage'); // Camo notes
-								animation.addByPrefix(dataColor[i] + 'Scroll', dataColor[i] + ' alone'); // Normal notes
+								animation.addByPrefix(dataColor[i] + 'Scroll', dataColor[i] + ' alone', 18, true); // Normal notes
 								animation.addByPrefix(dataColor[i] + 'hold', dataColor[i] + ' hold'); // Hold
 								animation.addByPrefix(dataColor[i] + 'holdend', dataColor[i] + ' tail'); // Tails
 							}
 						default:
-							frames = Paths.getSparrowAtlas('NOTE_assets');
+							frames = Paths.getSparrowAtlas('notes/NOTE_assets');
 							for (i in 0...4)
 							{
 								animation.addByPrefix(dataColor[i] + 'SafeScroll', dataColor[i] + ' comp'); // Compensated notes
 								animation.addByPrefix(dataColor[i] + 'Scroll', dataColor[i] + ' alone'); // Normal notes
-								animation.addByPrefix(dataColor[i] + 'hold', dataColor[i] + ' hold'); // Hold
+								animation.addByPrefix(dataColor[i] + 'hold', dataColor[i] + ' hold', 18, true); // Hold
 								animation.addByPrefix(dataColor[i] + 'holdend', dataColor[i] + ' tail'); // Tails
 							}
 					}

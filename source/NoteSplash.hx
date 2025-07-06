@@ -15,29 +15,8 @@ class NoteSplash extends FlxSprite
 
 		switch (FlxG.save.data.notesfxType)
 		{
-			case "chill":
-				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('NOTE_assets', 'shared');
-				frames = tex;
-				animation.addByPrefix('splash 0 0', 'left 1 splash', 25, false);
-				animation.addByPrefix('splash 0 1', 'down 1 splash', 25, false);
-				animation.addByPrefix('splash 0 2', 'up 1 splash', 25, false);
-				animation.addByPrefix('splash 0 3', 'right 1 splash', 25, false);
-				animation.addByPrefix('splash 1 0', 'left 2 splash', 24, false);
-				animation.addByPrefix('splash 1 1', 'down 2 splash', 24, false);
-				animation.addByPrefix('splash 1 2', 'up 2 splash', 24, false);
-				animation.addByPrefix('splash 1 3', 'right 2 splash', 24, false);
-				animation.addByPrefix('splash 2 0', 'left 2 splash', 26, false);
-				animation.addByPrefix('splash 2 1', 'down 2 splash', 26, false);
-				animation.addByPrefix('splash 2 2', 'up 2 splash', 26, false);
-				animation.addByPrefix('splash 2 3', 'right 2 splash', 26, false);
-				animation.addByPrefix('splash 0 mine', 'mine note 1 splash', 24, false);
-				animation.addByPrefix('splash 1 mine', 'mine note 2 splash', 25, false);
-				animation.addByPrefix('splash 2 mine', 'mine note 3 splash', 26, false);
-				animation.addByPrefix('splash 0 trigger', 'trigger note 1 splash', 24, false);
-				animation.addByPrefix('splash 1 trigger', 'trigger note 2 splash', 25, false);
-				animation.addByPrefix('splash 2 trigger', 'trigger note 3 splash', 26, false);
 			default:
-				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes', 'shared');
+				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('notes/noteSplashes', 'shared');
 				frames = tex;
 				animation.addByPrefix('splash 0 0', 'note impact 1 purple', 27, false);
 				animation.addByPrefix('splash 0 1', 'note impact 1 blue', 27, false);
@@ -92,31 +71,9 @@ class NoteSplash extends FlxSprite
 
 		switch (FlxG.save.data.notesfxType)
 		{
-			case "chill":
-				animNum = FlxG.random.int(0, 2);
-				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('NOTE_assets', 'shared');
-				frames = tex;
-				animation.addByPrefix('splash 0 0', 'left 1 splash', 25, false);
-				animation.addByPrefix('splash 0 1', 'down 1 splash', 25, false);
-				animation.addByPrefix('splash 0 2', 'up 1 splash', 25, false);
-				animation.addByPrefix('splash 0 3', 'right 1 splash', 25, false);
-				animation.addByPrefix('splash 1 0', 'left 2 splash', 24, false);
-				animation.addByPrefix('splash 1 1', 'down 2 splash', 24, false);
-				animation.addByPrefix('splash 1 2', 'up 2 splash', 24, false);
-				animation.addByPrefix('splash 1 3', 'right 2 splash', 24, false);
-				animation.addByPrefix('splash 2 0', 'left 2 splash', 26, false);
-				animation.addByPrefix('splash 2 1', 'down 2 splash', 26, false);
-				animation.addByPrefix('splash 2 2', 'up 2 splash', 26, false);
-				animation.addByPrefix('splash 2 3', 'right 2 splash', 26, false);
-				animation.addByPrefix('splash 0 mine', 'note impact 1 mine', 24, false);
-				animation.addByPrefix('splash 1 mine', 'note impact 2 mine', 23, false);
-				animation.addByPrefix('splash 0 trigger', 'note impact 1 trigger', 24, false);
-				animation.addByPrefix('splash 1 trigger', 'note impact 2 trigger', 23, false);
-				animation.addByPrefix('splash 0 shit', 'note impact 1 shit', 16, false);
-				animation.addByPrefix('splash 1 shit', 'note impact 2 shit', 16, false);
 			default:
 				animNum = FlxG.random.int(0, 1);
-				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('noteSplashes', 'shared');
+				var tex:flixel.graphics.frames.FlxAtlasFrames = Paths.getSparrowAtlas('notes/noteSplashes', 'shared');
 				frames = tex;
 				animation.addByPrefix('splash 0 0', 'note impact 1 purple', 27, false);
 				animation.addByPrefix('splash 0 1', 'note impact 1 blue', 27, false);

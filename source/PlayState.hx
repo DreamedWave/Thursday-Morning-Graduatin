@@ -205,7 +205,7 @@ class PlayState extends MusicBeatState
 	private var dadFollowOffset:Array<Float> = [0, 0];
 	private var bfFollowOffset:Array<Float> = [0, 0];
 	private var singFollowOffset:Array<Float> = [0, 0];
-	private var singFollowMultiplier:Float = 1;
+	private var singFollowMultiplier:Float = 0.5;
 	private var camFollowSpeed(default, set):Float = 1; //The higher the number is, the faster the camera moves
 	private var doCamFollowing:Bool = true;
 	private var camTween:FlxTween;
@@ -3016,7 +3016,7 @@ class PlayState extends MusicBeatState
 			if (PlayStateChangeables.Optimize && player)
 				continue;
 
-			babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+			babyArrow.frames = Paths.getSparrowAtlas('notes/strumlineNOTE_assets');
 			for (j in 0...4)
 			{
 				babyArrow.animation.addByPrefix(dataColor[j], 'arrow' + dataSuffix[j]);	
@@ -3026,6 +3026,7 @@ class PlayState extends MusicBeatState
 
 			babyArrow.animation.addByPrefix('static', 'arrow' + dataSuffix[i]);
 			babyArrow.animation.addByPrefix('pressed', lowerDir + ' press', Math.floor(20 + (6 * (Conductor.bpm * 0.01))), false);
+			babyArrow.animation.addByPrefix('missed', lowerDir + ' miss', Math.floor(20 + (6 * (Conductor.bpm * 0.01))), false);
 			babyArrow.animation.addByPrefix('confirm', lowerDir + ' confirm', 24, false);
 
 			babyArrow.x += Note.swagWidth * i;
@@ -4541,7 +4542,7 @@ class PlayState extends MusicBeatState
 		//{
 			cpuStrums.forEach(function(spr:FlxSprite)
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.finished))
+				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.curFrame >= 6) && spr.animation.curAnim.name != 'static' && ((spr.animation.curAnim.name != 'pressed' && spr.animation.curAnim.name != 'missed') || spr.animation.curAnim.finished))
 				{
 					spr.animation.play('static');
 					spr.centerOffsets();
@@ -4692,7 +4693,7 @@ class PlayState extends MusicBeatState
 					//sets your visual health to half of what it is before it reaches 0 - giving you time to clutch
 					//the more you clutch, the harder it will be to do so
 					//because the game is intentionally coded so that when the "visual" health goes to 0, you die, giving you some time
-					health = FlxMath.lerp(0, health, 1 - (timesClutched * 0.05) );
+					health = FlxMath.lerp(0, health, 1 - (timesClutched * 0.075) );
 					//IDEA! MAKE A SOUND DEPENDENT ON HOW CLOSE YOU ARE TO DYING!!!
 					//LIKE Paths.sound('damageAlert_' + timesClutched)!! !!!
 					//d0ne HEHEHEHEHEHEH!!
@@ -5690,15 +5691,23 @@ class PlayState extends MusicBeatState
 		{
 			if (keys[spr.ID])
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && (spr.animation.curAnim.name != 'pressed' || !spr.animation.curAnim.finished))
+				if (spr.animation.curAnim.name != 'missed')
 				{
-					spr.animation.play('pressed');
-					strumArrSusCheckArray[spr.ID] = false;
+					if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && (spr.animation.curAnim.name != 'pressed' || !spr.animation.curAnim.finished))
+					{
+						spr.animation.play('pressed');
+						strumArrSusCheckArray[spr.ID] = false;
+					}
+				}
+				else
+				{
+					if (spr.animation.curAnim.finished)
+						strumArrSusCheckArray[spr.ID] = false;
 				}
 			}
 			else if (!keys[spr.ID])
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || (spr.animation.curAnim.curFrame >= 6 && !strumArrSusCheckArray[spr.ID]) || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && (spr.animation.curAnim.name != 'pressed' || spr.animation.curAnim.curFrame > 2))
+				if ((spr.animation.curAnim.name != 'confirm' || (spr.animation.curAnim.curFrame >= 6 && !strumArrSusCheckArray[spr.ID]) || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && ((spr.animation.curAnim.name != 'missed' && spr.animation.curAnim.name != 'pressed') || spr.animation.curAnim.curFrame > 2))
 				{
 					spr.animation.play('static');
 					preventBFIdleAnim = false;
@@ -5773,7 +5782,7 @@ class PlayState extends MusicBeatState
 			playerStrums.forEach(function(spr:FlxSprite)
 			{
 				if (daNote.noteData == spr.ID)
-					spr.animation.play('pressed');
+					spr.animation.play('missed');
 			});
 		}
 
@@ -6258,7 +6267,7 @@ class PlayState extends MusicBeatState
 						switch (note.rating)
 						{
 							case 'bad' | 'shit':
-								spr.animation.play('pressed');
+								spr.animation.play('missed');
 								spr.centerOffsets();
 							default:
 								if (!note.isSustainNote && spr.animation.curAnim.name != 'confirm')
@@ -6440,29 +6449,29 @@ class PlayState extends MusicBeatState
 						case 0:
 							//Left
 							if (!note.isSustainNote)
-								camHUDFollow.x = defaultCamHUDFollowPos[0] + 2;
+								camHUDFollow.x = defaultCamHUDFollowPos[0] + 1;
 							else
-								camHUDFollow.x += 1;
+								camHUDFollow.x += 0.5;
 
 						case 1:
 							//Down
 							if (!note.isSustainNote)
-								camHUDFollow.y = defaultCamHUDFollowPos[1] - 2;
+								camHUDFollow.y = defaultCamHUDFollowPos[1] - 1;
 							else
-								camHUDFollow.y -= 1;
+								camHUDFollow.y -= 0.5;
 
 						case 2:
 							//Up
 							if (!note.isSustainNote)
-								camHUDFollow.y = defaultCamHUDFollowPos[1] + 2;
+								camHUDFollow.y = defaultCamHUDFollowPos[1] + 1;
 							else
-								camHUDFollow.y += 1;
+								camHUDFollow.y += 0.5;
 						case 3:
 							//Right
 							if (!note.isSustainNote)
-								camHUDFollow.x = defaultCamHUDFollowPos[0] - 2;
+								camHUDFollow.x = defaultCamHUDFollowPos[0] - 1;
 							else
-								camHUDFollow.x -= 1;
+								camHUDFollow.x -= 0.5;
 
 					}
 			}
@@ -6486,7 +6495,7 @@ class PlayState extends MusicBeatState
 							case 'bad' | 'shit':
 								if (!note.isSustainNote)
 								{
-									spr.animation.play('pressed');
+									spr.animation.play('missed');
 									spr.centerOffsets();
 								}
 							default:
@@ -6578,7 +6587,16 @@ class PlayState extends MusicBeatState
 
 			doCamFollowing = false;
 			if (!PlayStateChangeables.Optimize)
+			{
+				if (SONG.song.toLowerCase() != "mic test")
+					defaultCamZoom = 1.1;
+				else if (SONG.player1 == "selfsert-default")
+					defaultCamZoom = 0.95;
+				else
+					defaultCamZoom = 1.25;
+				camFollowSpeed = 4;
 				camFollow.setPosition((boyfriend.getMidpoint().x - 100 + bfFollowOffset[0]) + singFollowOffset[0], (boyfriend.getMidpoint().y - 100 + bfFollowOffset[1]) + singFollowOffset[1]);
+			}
 		}
 
 		if (coolSoundFilterTween != null)
@@ -9264,7 +9282,7 @@ class PlayState extends MusicBeatState
 										dadFollowOffset[1] = 15;
 										bfFollowOffset[1] += 20;
 										inSongClimax = true;
-										singFollowMultiplier = 1.25;
+										singFollowMultiplier = 0.75;
 										if (FlxG.save.data.flashing)
 										{
 											colourWash.alpha = 0;
@@ -9279,7 +9297,7 @@ class PlayState extends MusicBeatState
 										objectTrailShader.blend = NORMAL;
 										objectTrailShader.color = 0xffffff;
 										inSongClimax = false;
-										singFollowMultiplier = 1;
+										singFollowMultiplier = 0.5;
 										if (FlxG.save.data.flashing)
 											FlxTween.tween(colourWash, {alpha: stageAmbAlpha}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.smootherStepOut});
 									case 224:
@@ -9338,7 +9356,7 @@ class PlayState extends MusicBeatState
 										FlxTween.tween(bgBopper, {alpha: 0.8, y: 590 - (bgBopper.height - 80)}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
 										FlxTween.tween(theBorderBG, {alpha: 0.3}, 0.5, {type: ONESHOT, ease: FlxEase.quadOut});
 										inSongClimax = true;
-										singFollowMultiplier = 1.5;
+										singFollowMultiplier = 1;
 										if (FlxG.save.data.flashing)
 										{
 											colourWash.blend = ADD;
@@ -9365,7 +9383,7 @@ class PlayState extends MusicBeatState
 										theBorderBG.alpha += 0.0035;
 										dadFollowOffset[1] = -25;
 										inSongClimax = false;
-										singFollowMultiplier = 1.25;
+										singFollowMultiplier = 0.75;
 										if (FlxG.save.data.flashing)
 										{
 											colourWash.blend = SCREEN;
@@ -9630,22 +9648,22 @@ class PlayState extends MusicBeatState
 									case 96:
 										defaultCamZoom = 0.82;
 										inSongClimax = true;
-										singFollowMultiplier = 1.25;
+										singFollowMultiplier = 0.75;
 									case 128:
 										defaultCamZoom = 0.95;
 										inSongClimax = false;
-										singFollowMultiplier = 1;
+										singFollowMultiplier = 0.5;
 									case 192:
 										defaultCamZoom = 0.8;
 										inSongClimax = true;
-										singFollowMultiplier = 1.5;
+										singFollowMultiplier = 1;
 									case 223:
 										dad.blend = SUBTRACT;
 										FlxTween.tween(dummyBlackScreen, {alpha: 1}, Conductor.crochet / 900, {type: ONESHOT, ease: FlxEase.sineInOut});
 									case 224:
 										stageParticles.visible = false;
 										inSongClimax = false;
-										singFollowMultiplier = 1;
+										singFollowMultiplier = 0.5;
 										dad.blend = LIGHTEN;
 									case 256:
 										defaultCamZoom = 0.85;
@@ -9660,7 +9678,7 @@ class PlayState extends MusicBeatState
 										camZooming = false;
 									case 352:
 										inSongClimax = true;
-										singFollowMultiplier = 1.75;
+										singFollowMultiplier = 1.25;
 										defaultCamZoom = 0.8;
 									case 353:
 										camZooming = true;
@@ -9669,7 +9687,7 @@ class PlayState extends MusicBeatState
 										allowHeartBeatSounds = false;
 										camZooming = false;
 										inSongClimax = false;
-										singFollowMultiplier = 1;
+										singFollowMultiplier = 0.5;
 										camHUD.zoom = 1;
 									case 447:
 										FlxTween.tween(camGame, {zoom: 0.85}, Conductor.crochet / 1000, {type: ONESHOT, ease: FlxEase.expoIn});

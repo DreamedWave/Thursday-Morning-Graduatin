@@ -22,7 +22,7 @@ class GrayScale extends FlxShader
 	@:glFragmentSource('
 		#pragma header
 
-		uniform float u_colorFactor = 0.5;
+		uniform float u_colorFactor = 0.25;
 
 		void main() 
 		{
