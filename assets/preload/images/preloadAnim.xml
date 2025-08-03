@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<TextureAtlas imagePath="preloadAnim.png">
-    <SubTexture name="lilDance0000" x="0" y="0" width="684" height="720"/>
-    <SubTexture name="lilDance0001" x="684" y="0" width="684" height="720"/>
-    <SubTexture name="lilDance0002" x="0" y="720" width="684" height="720"/>
-    <SubTexture name="lilDance0003" x="684" y="720" width="684" height="720"/>
-</TextureAtlas>
