@@ -4542,7 +4542,7 @@ class PlayState extends MusicBeatState
 		//{
 			cpuStrums.forEach(function(spr:FlxSprite)
 			{
-				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.curFrame >= 6) && spr.animation.curAnim.name != 'static' && ((spr.animation.curAnim.name != 'pressed' && spr.animation.curAnim.name != 'missed') || spr.animation.curAnim.finished))
+				if ((spr.animation.curAnim.name != 'confirm' || spr.animation.curAnim.finished) && spr.animation.curAnim.name != 'static' && ((spr.animation.curAnim.name != 'pressed' && spr.animation.curAnim.name != 'missed') || spr.animation.curAnim.finished))
 				{
 					spr.animation.play('static');
 					spr.centerOffsets();
@@ -6576,13 +6576,14 @@ class PlayState extends MusicBeatState
 	{
 		if (causeOfDeath != 'intentional-reset')
 		{
+			//dummyBlackScreen.alpha += 0.1;
 			camGame.filtersEnabled = true;
-			camHUD.alpha = 0.5;
+			camHUD.alpha = 0.75;
 			grpStrumlineBG.visible = false;
 			songPosGroup.visible = false;
-			cpuStrums.forEach(function(spr:FlxSprite)
+			cpuStrums.forEach(function(opponentShite:FlxSprite)
 			{
-				spr.x -= 720; //awful awful fix but i cant really hide cpustrums itself, thanks kengine! /sarc
+				opponentShite.visible = true;
 			});
 
 			doCamFollowing = false;

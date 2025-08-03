@@ -248,7 +248,7 @@ class Num extends FlxSprite
 
 					if (leTwn != null)
 						leTwn.cancel();
-					leTwn = FlxTween.tween(this, {alpha: 0}, 0.5, {type: ONESHOT});
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.45, {type: ONESHOT});
 				}
 
 				color = 0xFF2DC12A;
@@ -257,10 +257,15 @@ class Num extends FlxSprite
 			else
 			{
 				if (alpha > 0.425)
+				{
 					alpha = 0.425;
 
+					if (leTwn != null)
+						leTwn.cancel();
+					leTwn = FlxTween.tween(this, {alpha: 0}, 0.5, {type: ONESHOT});
+				}
+
 				color = 0xFF00CBCB;
-				acceleration.y += 100;
 			}
 		}
 	}

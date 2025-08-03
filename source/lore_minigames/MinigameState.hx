@@ -372,12 +372,12 @@ class MinigameState extends MusicBeatState
 	{
 		if (objectToFollow != null)
 		{
-			camMovementOffset[0] = Math.round((0.05 * player.velocity.x) + camHoldShakeAdditive[0]);
-			camMovementOffset[1] = Math.round((player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1]);
+			camMovementOffset[0] = (0.05 * player.velocity.x) + camHoldShakeAdditive[0];
+			camMovementOffset[1] = (player.velocity.y > 0 ? 0.2 * player.velocity.y : 0.075 * player.velocity.y) + camHoldShakeAdditive[1];
 			camMovementLerp[0] = FlxMath.lerp(camMovementOffset[0], camMovementLerp[0], calculateLerpTime(FlxG.elapsed, 2.25, 0, 1));
 			camMovementLerp[1] = FlxMath.lerp(camMovementOffset[1], camMovementLerp[1], calculateLerpTime(FlxG.elapsed, 2.25, 0, 1));
 	
-			camFollow.setPosition(Math.round(player.getMidpoint().x) + camMovementLerp[0], Math.round(player.getMidpoint().y - 5) + camMovementLerp[1]);
+			camFollow.setPosition(player.getMidpoint().x + camMovementLerp[0], player.getMidpoint().y - 5 + camMovementLerp[1]);
 		}
 	}
 
@@ -452,7 +452,7 @@ class MinigameState extends MusicBeatState
 		{
 			//this updates every frame - is that alright??
 			//shit way but ermm ermmm LMFAOOO erRRMMM ERMMM
-			if (theManUpstairs.dadSNDNear.getActualVolume() > 0)
+			if (theManUpstairs.dadSNDNear.getActualVolume() > 0 && !jumpscaredPlayer)
 			{
 				camShake(true, false, 3, 0.3 * theManUpstairs.dadSNDNear.getActualVolume() * 0.75, 0.05);
 				FlxG.timeScale = 1 - (0.5 * theManUpstairs.dadSNDNear.getActualVolume()); //celeste ttype sjhit
@@ -473,6 +473,10 @@ class MinigameState extends MusicBeatState
 			}
 			else
 				fatherElapsedCheck--;
+		}
+		else if (FlxG.timeScale != 1) //bandaid fix lol
+		{
+			FlxG.timeScale = 1;
 		}
 
 		if (jumpscaredPlayer)
@@ -809,7 +813,14 @@ class MinigameState extends MusicBeatState
 					FlxG.sound.music.looped = true;
 					FlxG.sound.music.onComplete = checkAndSwapMusic;
 					if (FlxG.random.bool(50))
+					{
+						trace('SKIBIDI!!!');
+					}
+					else
+					{
+						trace('no skibidi :(');
 						FlxG.sound.music.time = FlxG.sound.music.length / 2;
+					}
 			}
 		}
 	}

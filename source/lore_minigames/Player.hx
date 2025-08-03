@@ -27,10 +27,11 @@ class Player extends FlxSprite
 	public var chosenMoveset:String = 'default';//Making this changable so that we can add custom abilities in the future if ever
 	public var queuedActions:Array<PlayerActions> = [];
 	public var curAction:PlayerActions = IDLE;
-	public var wasRunning:Bool = false;
+	public var prevAction:PlayerActions = NONE;
 	public var canMove:Bool = true;
 	public var stamina:Float = 100;
 	public var ranOutOfBreath:Bool = false;
+	public var doUngroundedJump:Bool = false;
 
 	var walkSnd:FlxSound;
 
@@ -117,12 +118,13 @@ class Player extends FlxSprite
 				//Note: Jump will NEVER turn to Fall, but fall can turn to Jump
 				//Jump
 				fsm.transitions.add(Idle, Jump, Conditions.startJump);
-				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
 				fsm.transitions.add(Jump, Idle, Conditions.landFromAir);
+				fsm.transitions.add(Sneak, Jump, Conditions.startJump);
 				fsm.transitions.add(Jump, Sneak, Conditions.landFromAirSneaked);
 
 				//Fall
 				fsm.transitions.add(Idle, Falling, Conditions.startFall);
+				fsm.transitions.add(Sneak, Falling, Conditions.startFall);
 				fsm.transitions.add(Falling, Jump, Conditions.startJump);
 				fsm.transitions.add(Falling, Idle, Conditions.landFromAir);
 
@@ -209,13 +211,13 @@ class Conditions
 		{return !Player.isTouching(FLOOR);}
 
 	public static function startJump(Player:Player):Bool
-		{return (Player.isTouching(FLOOR) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
+		{return ((Player.isTouching(FLOOR) || Player.doUngroundedJump) && (FlxG.keys.justPressed.SPACE)) || Player.queuedActions.contains(JUMP);}
 
 	public static function landFromAir(Player:Player):Bool
-		{return Player.isTouching(FLOOR) && (!FlxG.keys.pressed.DOWN || (FlxG.keys.pressed.SHIFT && Player.wasRunning));}
+		{return Player.isTouching(FLOOR) && (!FlxG.keys.pressed.DOWN || (FlxG.keys.pressed.SHIFT && Player.prevAction == RUN));}
 
 	public static function landFromAirSneaked(Player:Player):Bool
-		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN && (!FlxG.keys.pressed.SHIFT || !Player.wasRunning);}
+		{return Player.isTouching(FLOOR) && FlxG.keys.pressed.DOWN && (!FlxG.keys.pressed.SHIFT || Player.prevAction != RUN);}
 
 	public static function startSneak(Player:Player):Bool
 		{return Player.isTouching(FLOOR) && ((FlxG.keys.justPressed.DOWN && Player.curAction != RUN) || Player.queuedActions.contains(SNEAK));}
@@ -244,7 +246,11 @@ class StillIdle extends FlxFSMState<Player>
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
 		trace('entered!');
+		owner.prevAction == owner.curAction;
+
 		owner.maxVelocity.x = owner.defaultSpeedCaps[1];
+		owner.x = Math.round(owner.x);
+		owner.y = Math.round(owner.y);
 		owner.drag.x = owner.maxVelocity.x * 2;
 		owner.velocity.x = 0;
 		owner.velocity.y = 0;
@@ -271,6 +277,8 @@ class Idle extends FlxFSMState<Player>
 {
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		owner.prevAction == owner.curAction;
+
 		if (owner.curAction != JUMP)
 		{
 			if (owner.curAction != SLIDE)
@@ -284,6 +292,11 @@ class Idle extends FlxFSMState<Player>
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		if (owner.velocity.x == 0)
+			owner.x = Math.round(owner.x);
+		if (owner.velocity.y == 0)
+			owner.y = Math.round(owner.y);
+
 		if (FlxG.keys.pressed.LEFT || FlxG.keys.pressed.RIGHT)
 		{
 			//Placeholder SND and anims
@@ -383,6 +396,8 @@ class Jump extends FlxFSMState<Player>
 
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		owner.prevAction == owner.curAction;
+
 		if (owner.queuedActions.contains(JUMP))
 			owner.queuedActions.remove(JUMP);
 
@@ -396,9 +411,6 @@ class Jump extends FlxFSMState<Player>
 			owner.velocity.y = -400;
 			owner.stamina -= 10;
 		}
-
-		if (owner.curAction == RUN)
-			owner.wasRunning = true;
 		
 		owner.curAction = JUMP;
 		FlxG.sound.play('assets/minigame/sounds/jump' + FlxG.random.int(0, 5) + '.ogg', 0.75);
@@ -500,6 +512,8 @@ class Sneak extends FlxFSMState<Player>
 {
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		owner.prevAction == owner.curAction;
+
 		if (owner.queuedActions.contains(SNEAK))
 			owner.queuedActions.remove(SNEAK);
 
@@ -512,6 +526,11 @@ class Sneak extends FlxFSMState<Player>
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		if (owner.velocity.x == 0)
+			owner.x = Math.round(owner.x);
+		if (owner.velocity.y == 0)
+			owner.y = Math.round(owner.y);
+
 		owner.acceleration.x = 0;
 		if (FlxG.keys.pressed.RIGHT)
 		{
@@ -557,6 +576,7 @@ class Slide extends FlxFSMState<Player>
 
 	override function enter(owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		owner.prevAction == owner.curAction;
 		owner.curAction = SLIDE;
 		owner.animation.play("sneak");
 		owner.stamina -= 10;
@@ -566,6 +586,11 @@ class Slide extends FlxFSMState<Player>
 
 	override function update(elapsed:Float, owner:Player, fsm:FlxFSM<Player>):Void
 	{
+		if (owner.velocity.x == 0)
+			owner.x = Math.round(owner.x);
+		if (owner.velocity.y == 0)
+			owner.y = Math.round(owner.y);
+
 		if (FlxG.keys.justPressed.DOWN && !owner.queuedActions.contains(SNEAK))
 			owner.queuedActions.push(SNEAK);
 		else if (FlxG.keys.justReleased.DOWN && owner.queuedActions.contains(SNEAK))
@@ -637,6 +662,12 @@ class Falling extends FlxFSMState<Player>
 		//nonono!
 		//n a h~
 		coyoteTime = new FlxTimer().start(0.08333333333333333); //5 frames (in 60 fps) lol
+
+		if (owner.prevAction == SNEAK)
+		{
+			owner.doUngroundedJump = true;
+			//new FlxTimer().start(0.2499999999999, function(tmr:FlxTimer){owner.doUngroundedJump = false;});
+		}
 		//Falling anim and state maybe?
 	}
 
@@ -666,6 +697,7 @@ class Falling extends FlxFSMState<Player>
 
 	override function exit(owner:Player) 
 	{
+		owner.doUngroundedJump = false;
 		super.exit(owner);
 	}
 }
