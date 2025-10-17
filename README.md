@@ -1,39 +1,29 @@
 ![Kade Engine logo](art/NewRevampedLogo/titleNewest.png)
 
-# Thursday Morning Graduatin'
-**Thursday Morning Graduatin'** is a mod for Friday Night Funkin' that was created by [me](https://en.pronouns.page/@AmieeWuzHere) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project featuring many original tracks, new mechanics, a mostly new cast of characters, and a fully realised original story *(that is very much **NOT** at all intended to connect to the story of Friday Night Funkin')*. It is built from the 1.6 version of Kade Engine, which was *HEAVILY* modified to add some improvements and remove bloat.
+# Thursday Morning Graduatin' (Cancelled)
+**Thursday Morning Graduatin'** was a mod for Friday Night Funkin' that was created by [me](https://en.pronouns.page/@AmieeWuzHere) initially as a joke making fun of my scuffed graduation, but eventually evolved into a bigger project that ended up being too ambitious to be worked on. It was built from the 1.6 version of Kade Engine that was heavily modified.
 
 **REMEMBER**: This is a **mod** and is not associated with KadeDev or The Funkin' Crew. This was just created *PURELY* for fun by someone who was willing to dedicate 3 years of her life to a shitpost! Also like, I'm NOT a coder, so I'm warning *YOU* in advance, the source code may make any coders reading it weep, scream, and cry.
 
 To find out how to be able to build this mod, click [this](https://github.com/DreamedWave/Thursday-Morning-Graduatin/blob/main/BUILDING-GUIDE.md)!
 
-# This Mod Contains/Will Contain:
- - *[to be added]* **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
-      - All containing 3 or more songs, each fully charted in all difficulties (Easy, Normal, and Hard)!
- - *[to be added]* **Custom game mechanics**
-      - Some 'Weeks' change up the formula a little bit, and adds a few new mechanics that builds upon Friday Night Funkin's gameplay without jeopardizing it!
- - *[to be added]* **An *actual* Tutorial Level**
-      - That teaches any new players how to play without 100 or so lines of text!
- - *[to be added]* **Unlockable Freeplay Songs**
-      - Aside from all the songs within every Story Part, there will be more songs available for you to find and unlock within Freeplay!
+# Current Freatures:
  - **Adaptive Music**
       - Most of the playable story mode songs change and react to how well you're doing!
       - For example: some tracks' instrumentals become more suspenseful the more your health lowers.
- - *[to be added]* **Custom scoring and ranking system**
-      - To keep the fun and casual aspect, this mod implements it's own take on a scoring and ranking system, mainly inspired by the system implemented in current day FNF!
-      - Accuracy is now only an internal value, with it being only used to calculate gameplay-related events. Instead, your song clear percentage is determined by your note ratings!
-      - Your song clear percentage then determines a Letter Ranking (such as F, D, C A, etc.) - inspired by Pizza Tower!
-      - This makes it so that 100%ing a song is now ACTUALLY plausible, without requiring you to be a robot with complete accuracy!
-      - Full Comboing a song isn't in vein though, as *something cool will happen when you sucessfully do so! Guess you'll have to wait and see~ >:3*
  - **Quality of Life additions**
       - Note Hit Sounds! (for both normal and hold notes - akin to that of osu's)
       - A visual and auditory cue for when you break a combo! (to avoid beating a level thinking you Full Combo'd it, only to see that you missed 1 note somewhere... yeowch)
       - Night Mode and Photosensitive Mode!
  - **A few Backend Fixins/Rewrites**
-      - Removed unecessary features like Replays and LUA implementation, as it really isn't gonna be used by me and only gave me more things to worry about.
-      - Improved some backend stuff such as improving the look of the camera shake, adding a *stop();* function to *FlxSoundGroups*, and being able to choose what *FlxCamera* the transition takes place in!.
-      - `(Honestly like I will probably list all the features here at one point but I literally need to write a research paper dawg I- ADMJSOVGJDBSFB)`
- - **And many more!**
+<br></br>
+
+# Prevously Planned Features:
+ - *[tba]* **6 or so playable 'Weeks' (which are called 'Parts' in this mod)**
+ - *[tba]* **Custom game mechanics**
+ - *[tba]* **An *actual* Tutorial Level**
+ - *[tba]* **Unlockable Freeplay Songs**
+ - *[tba]* **Custom scoring and ranking system**
 <br></br>
 
 # Credits:
