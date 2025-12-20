@@ -7,9 +7,8 @@ import flixel.graphics.frames.FlxAtlasFrames;
 
 using StringTools;
 
-//PROFILER - REMOVE ONCE IN RELEASE!!!
-//import pgr.dconsole.DC;
-
+// PROFILER - REMOVE ONCE IN RELEASE!!!
+// import pgr.dconsole.DC;
 class Character extends FlxSprite
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
@@ -37,7 +36,7 @@ class Character extends FlxSprite
 		switch (curCharacter)
 		{
 			case 'table-default':
-				tex = Paths.getSparrowAtlas('table_default','shared',true);
+				tex = Paths.getSparrowAtlas('table_default', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('styleCheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
@@ -60,9 +59,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('danceRight');
 
-
 			case 'table-theborder':
-				tex = Paths.getSparrowAtlas('table_theBorder','shared',true);
+				tex = Paths.getSparrowAtlas('table_theBorder', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('styleCheer', 'GF Cheer', 20, false);
 				animation.addByPrefix('cheer', 'GF left note', 24, false);
@@ -87,9 +85,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('danceRight');
 
-
 			case 'demon-dad':
-				tex = Paths.getSparrowAtlas('demonDad','shared',true);
+				tex = Paths.getSparrowAtlas('demonDad', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
 
@@ -104,25 +101,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 
-
-			case 'joki-lmao':
-				tex = Paths.getSparrowAtlas('jokiFNF','shared', true);
-				frames = tex;
-				animation.addByPrefix('idle', 'jokiFNF idle', 12, false);
-
-				animation.addByPrefix('singUP', 'jokiFNF singUP', 14);
-				animation.addByPrefix('singRIGHT', 'jokiFNF singRIGHT', 14);
-				animation.addByPrefix('singDOWN', 'jokiFNF singDOWN', 14);
-				animation.addByPrefix('singLEFT', 'jokiFNF singLEFT', 14);
-
-				animation.addByPrefix('cheer', 'jokiFNF hey', 15, false);
-
-				loadOffsetFile(curCharacter);
-				playAnim('idle');
-
-
 			case 'priest-theborderpray':
-				tex = Paths.getSparrowAtlas('priest_theBorder','shared',true);
+				tex = Paths.getSparrowAtlas('priest_theBorder', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('singUP', 'Pray Up', 24, false);
 				animation.addByPrefix('singDOWN', 'Pray Down', 24, false);
@@ -139,9 +119,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('danceRight');
 
-
 			case 'priest-theborderannoyed':
-				tex = Paths.getSparrowAtlas('priest_theBorder','shared',true);
+				tex = Paths.getSparrowAtlas('priest_theBorder', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('singUP', 'Sing Annoyed Up', 24, false);
 				animation.addByPrefix('singDOWN', 'Sing Annoyed Down', 24, false);
@@ -156,9 +135,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 
-
 			case 'priest-theborderangry':
-				tex = Paths.getSparrowAtlas('priest_theBorderAngry','shared',true);
+				tex = Paths.getSparrowAtlas('priest_theBorderAngry', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('singUP', 'Sing Up', 24, false);
 				animation.addByPrefix('singDOWN', 'Sing Down', 24, false);
@@ -180,9 +158,8 @@ class Character extends FlxSprite
 				loadOffsetFile(curCharacter);
 				playAnim('idle');
 
-
 			case 'pico-default':
-				tex = Paths.getSparrowAtlas('pico_default','shared',true);
+				tex = Paths.getSparrowAtlas('pico_default', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('idle', "Pico Idle Dance", 24, false);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
@@ -216,9 +193,8 @@ class Character extends FlxSprite
 				flipX = true;
 				playAnim('idle');
 
-
 			case 'guy-default':
-				tex = Paths.getSparrowAtlas('guy_default','shared',true);
+				tex = Paths.getSparrowAtlas('guy_default', 'shared', true);
 				frames = tex;
 
 				animation.addByPrefix('idle', 'GUY idle dance', 12, false);
@@ -252,9 +228,8 @@ class Character extends FlxSprite
 				playAnim('idle');
 				flipX = true;
 
-
 			case 'guy-fail':
-				tex = Paths.getSparrowAtlas('guy_Fail','shared',true);
+				tex = Paths.getSparrowAtlas('guy_Fail', 'shared', true);
 				frames = tex;
 
 				trace(tex.frames.length);
@@ -267,9 +242,8 @@ class Character extends FlxSprite
 				playAnim('firstDeath');
 				flipX = true;
 
-
 			case 'guy-theborder':
-				tex = Paths.getSparrowAtlas('guy_theBorder','shared',true);
+				tex = Paths.getSparrowAtlas('guy_theBorder', 'shared', true);
 				frames = tex;
 
 				trace(tex.frames.length);
@@ -301,9 +275,8 @@ class Character extends FlxSprite
 				playAnim('idle');
 				flipX = true;
 
-				
 			case 'selfsert-default':
-				tex = Paths.getSparrowAtlas('selfsert_default','shared',true);
+				tex = Paths.getSparrowAtlas('selfsert_default', 'shared', true);
 				frames = tex;
 				animation.addByPrefix('idle', 'DreamedWave idle dance', 13, false);
 				animation.addByPrefix('idleAfterSing', 'DreamedWave idle hold', 13, false);
@@ -311,7 +284,7 @@ class Character extends FlxSprite
 				animation.addByPrefix('style', 'DreamedWave OHSHIT', 18, false);
 				if (!isPlayer)
 				{
-					//Inverted Left and Right
+					// Inverted Left and Right
 					animation.addByPrefix('singLEFT', 'DreamedWave NOTE RIGHT0', 14, false);
 					animation.addByPrefix('singRIGHT', 'DreamedWave NOTE LEFT0', 14, false);
 					animation.addByPrefix('singLEFTmiss', 'DreamedWave NOTE RIGHT MISS', 12, false);
@@ -379,7 +352,7 @@ class Character extends FlxSprite
 
 	override function update(elapsed:Float)
 	{
-		//DC.beginProfile("charShit");
+		// DC.beginProfile("charShit");
 		if (dodgetime > 0)
 			dodgetime--;
 		else if (dodgetime < 0)
@@ -403,13 +376,13 @@ class Character extends FlxSprite
 			}
 			if (holdTimer > Conductor.stepCrochet * dadVar * 0.001)
 			{
-				//trace('dance');
+				// trace('dance');
 				dance();
 				holdTimer = 0;
 			}
 		}
-		//DC.endProfile("charShit");
-		
+		// DC.endProfile("charShit");
+
 		super.update(elapsed);
 	}
 
@@ -425,7 +398,8 @@ class Character extends FlxSprite
 			switch (curCharacter)
 			{
 				case 'table-default' | 'table-theborder':
-					if ((!animation.curAnim.name.startsWith("sing") || animation.curAnim.finished) && (!animation.curAnim.name.startsWith("style") || animation.curAnim.curFrame >= 3))
+					if ((!animation.curAnim.name.startsWith("sing") || animation.curAnim.finished)
+						&& (!animation.curAnim.name.startsWith("style") || animation.curAnim.curFrame >= 3))
 					{
 						danced = !danced;
 
@@ -435,20 +409,20 @@ class Character extends FlxSprite
 							playAnim('danceLeft', forced);
 					}
 				case 'priest-theborderpray':
-					//if (!animation.curAnim.name.startsWith("sing") || animation.curAnim.curFrame >= 5)
-					//{
-						danced = !danced;
+					// if (!animation.curAnim.name.startsWith("sing") || animation.curAnim.curFrame >= 5)
+					// {
+					danced = !danced;
 
-						if (danced)
-							playAnim('danceRight', forced);
-						else
-							playAnim('danceLeft', forced);
-					//}
+					if (danced)
+						playAnim('danceRight', forced);
+					else
+						playAnim('danceLeft', forced);
+				// }
 				/*case 'demon-dad':
 					if (!animation.curAnim.name.startsWith("sing") || animation.curAnim.curFrame >= 6)
-						playAnim('idle', forced);*/
+						playAnim('idle', forced); */
 				default:
-					//if (!animation.curAnim.name.startsWith("sing") || animation.curAnim.curFrame >= 5)
+					// if (!animation.curAnim.name.startsWith("sing") || animation.curAnim.curFrame >= 5)
 					playAnim('idle', forced);
 			}
 		}

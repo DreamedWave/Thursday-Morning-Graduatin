@@ -1,6 +1,0 @@
-idle -13 -100
-singUP -13 -100
-singRIGHT -13 1-00
-singLEFT -13 -100
-singDOWN -13 -100
-hey -13 -100
